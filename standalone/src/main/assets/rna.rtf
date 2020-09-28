@@ -1,0 +1,291 @@
+* This file is parsed to obtain RNA residue bond information
+* Source:
+* https://en.wikipedia.org/wiki/CHARMM
+*    EDITED to adapt for RNA bonds
+
+* http://mackerell.umaryland.edu/charmm_ff.shtml
+
+RESI  G GUA         -1.00  !               O6
+ATOM P    P       1.50  !               ||   
+ATOM OP1  ON3    -0.78  !               C6    
+ATOM OP2  ON3    -0.78  !              /  \  
+ATOM O5'  ON2    -0.57  !          H1-N1   C5--N7\\
+ATOM C5'  CN8B   -0.08  !             |    ||     C8-H8
+ATOM H5'  HN8     0.09  !             C2   C4--N9/
+ATOM H5'' HN8     0.09  !            / \\ /      \
+GROUP                   !      H21-N2   N3        \
+ATOM C4'  CN7     0.16  !          |               \
+ATOM H4'  HN7     0.09  !         H22               \
+ATOM O4'  ON6B   -0.50  !                            \
+ATOM C1'  CN7B    0.16  !        OP1    H5' H4'  O4'  \
+ATOM H1'  HN7     0.09  !         |      |    \ /   \  \
+GROUP                   !        -P-O5'-C5'---C4'    C1'
+ATOM N9   NN2B   -0.02  !         |      |     \     / \
+ATOM C4   CN5     0.26  !        OP2    H5''   C3'--C2' H1'
+ATOM N2   NN1    -0.68  !                     / \   / \
+ATOM H21  HN1     0.32  !                  O3' H3' O2' H2'' 
+ATOM H22  HN1     0.35  !                   |       |
+ATOM N3   NN3G   -0.74  !                          H2'
+ATOM C2   CN2     0.75  
+ATOM N1   NN2G   -0.34  
+ATOM H1   HN2     0.26  
+ATOM C6   CN1     0.54 
+ATOM O6   ON1    -0.51
+ATOM C5   CN5G    0.00
+ATOM N7   NN4    -0.60
+ATOM C8   CN4     0.25
+ATOM H8   HN3     0.16
+GROUP
+ATOM C2'  CN7B    0.14
+ATOM H2'' HN7     0.09
+ATOM O2'  ON5    -0.66 
+ATOM H2'  HN5     0.43 
+GROUP
+ATOM C3'  CN7     0.01
+ATOM H3'  HN7     0.09
+ATOM O3'  ON2    -0.57 
+BOND P    OP1       P    OP2       P     O5'
+BOND O5'  C5'       C5'  C4'       C4'  O4'       C4'  C3'       O4'  C1'
+BOND C1'  N9        C1'  C2'       N9   C4        N9   C8        C4   N3
+BOND C2   N2        C2   N1        N2   H21
+BOND N2   H22       N1   H1        N1   C6        C6   C5
+BOND C5   N7        C2'  C3'       C3'  O3'       O3'  +P
+// BOND C2'  O2'       O2'  H2'
+BOND C2'  O2'       O2'  HO2'
+// BOND C1'  H1'       C2'  H2''      C3'  H3'       C4'  H4'       C5'  H5'
+BOND C1'  H1'       C2'  H2'      C3'  H3'       C4'  H4'       C5'  H5'
+BOND C5'  H5''      C8   H8
+DOUBLE   C2  N3     C4   C5        N7   C8        C6   O6
+
+ 
+RESI  A ADE         -1.00  !             H61  H62!
+ATOM P    P       1.50  !               \  /
+ATOM OP1  ON3    -0.78  !                N6
+ATOM OP2  ON3    -0.78  !                |
+ATOM O5'  ON2    -0.57  !                C6
+ATOM C5'  CN8B   -0.08  !              //  \
+ATOM H5'  HN8     0.09  !              N1   C5--N7\\
+ATOM H5'' HN8     0.09  !              |    ||     C8-H8
+GROUP                   !              C2   C4--N9/
+ATOM C4'  CN7     0.16  !             / \\ /     \
+ATOM H4'  HN7     0.09  !           H2   N3       \
+ATOM O4'  ON6B   -0.50  !                          \
+ATOM C1'  CN7B    0.16  !                           \
+ATOM H1'  HN7     0.09  !                            \
+GROUP                   !        OP1    H5' H4'  O4'  \
+ATOM N9   NN2    -0.05  !         |      |    \ /   \  \
+ATOM C5   CN5     0.28  !        -P-O5'-C5'---C4'    C1'
+ATOM N7   NN4    -0.71  !         |      |     \     / \
+ATOM C8   CN4     0.34  !        OP2    H5''   C3'--C2' H1'
+ATOM H8   HN3     0.12  !                     / \   / \
+ATOM N1   NN3A   -0.74  !                  O3' H3' O2' H2''
+ATOM C2   CN4     0.50  !                   |       |
+ATOM H2   HN3     0.13  !                          H2'
+ATOM N3   NN3A   -0.75  
+ATOM C4   CN5     0.43  
+ATOM C6   CN2     0.46  
+ATOM N6   NN1    -0.77  
+ATOM H61  HN1     0.38  
+ATOM H62  HN1     0.38  
+GROUP
+ATOM C2'  CN7B    0.14
+ATOM H2'' HN7     0.09
+ATOM O2'  ON5    -0.66 
+ATOM H2'  HN5     0.43 
+GROUP
+ATOM C3'  CN7     0.01
+ATOM H3'  HN7     0.09
+ATOM O3'  ON2    -0.57 
+BOND P    OP1       P    OP2       P     O5'
+BOND O5'  C5'       C5'  C4'       C4'  O4'       C4'  C3'       O4'  C1'
+BOND C1'  N9        C1'  C2'       N9   C4        N9   C8        C4   N3
+BOND C2   N1        C6   N6
+BOND N6   H61       N6   H62       C6   C5        C5   N7
+// BOND C2'  C3'       C2'  O2'       O2'  H2'       C3'  O3'       O3'  +P
+BOND C2'  C3'       C2'  O2'       O2'  HO2'       C3'  O3'       O3'  +P
+// BOND C1'  H1'       C2'  H2''      C3'  H3'       C4'  H4'       C5'  H5'
+BOND C1'  H1'       C2'  H2'      C3'  H3'       C4'  H4'       C5'  H5'
+BOND C5'  H5''      C8   H8        C2   H2
+DOUBLE  N1  C6      C2   N3        C4   C5        N7   C8
+ 
+RESI  C CYT         -1.00
+ATOM P    P       1.50  !
+ATOM OP1  ON3    -0.78  !                      H42  H41
+ATOM OP2  ON3    -0.78  !                        \  /    
+ATOM O5'  ON2    -0.57  !                         N4
+ATOM C5'  CN8B   -0.08  !                         |
+ATOM H5'  HN8     0.09  !                         C4
+ATOM H5'' HN8     0.09  !                        /  \\
+GROUP                   !                    H5-C5   N3
+ATOM C4'  CN7     0.16  !                       ||   |
+ATOM H4'  HN7     0.09  !                    H6-C6   C2
+ATOM O4'  ON6B   -0.50  !                        \  / \\
+ATOM C1'  CN7B    0.16  !                         N1   O2
+ATOM H1'  HN7     0.09  !                          \
+GROUP                   !                           \
+ATOM N1   NN2    -0.13  !                            \ 
+ATOM C6   CN3     0.05  !        OP1    H5' H4'  O4'  \
+ATOM H6   HN3     0.17  !         |      |    \ /   \  \
+ATOM C5   CN3    -0.13  !        -P-O5'-C5'---C4'    C1'
+ATOM H5   HN3     0.07  !         |      |     \     / \
+ATOM C2   CN1     0.52  !        OP2    H5''   C3'--C2' H1'
+ATOM O2   ON1C   -0.49  !                     / \   / \ 
+ATOM N3   NN3    -0.66  !                  O3' H3' O2' H2'' 
+ATOM C4   CN2     0.65  !                   |       |
+ATOM N4   NN1    -0.75  !                          H2'
+ATOM H41  HN1     0.37  
+ATOM H42  HN1     0.33  
+GROUP
+ATOM C2'  CN7B    0.14
+ATOM H2'' HN7     0.09
+ATOM O2'  ON5    -0.66
+ATOM H2'  HN5     0.43 
+GROUP
+ATOM C3'  CN7     0.01
+ATOM H3'  HN7     0.09
+ATOM O3'  ON2    -0.57 
+BOND P    OP1       P    OP2       P     O5'
+BOND O5'  C5'       C5'  C4'       C4'  O4'       C4'  C3'       O4'  C1'
+BOND C1'  N1        C1'  C2'       N1   C2        N1   C6
+BOND C2   N3        C4   N4        N4   H41       N4   H42
+BOND C4   C5        C2'  C3'       C3'  O3'       O3'  +P
+// BOND C2'  O2'       O2'  H2'
+BOND C2'  O2'       O2'  HO2'
+// BOND C1'  H1'       C2'  H2''      C3'  H3'       C4'  H4'       C5'  H5'
+BOND C1'  H1'       C2'  H2'       C3'  H3'       C4'  H4'       C5'  H5'
+BOND C5'  H5''      C5   H5        C6   H6
+DOUBLE   C2   O2    C5   C6        N3   C4
+ 
+RESI  T THY         -1.00  !                  H51    O4
+ATOM P    P       1.50  !                   |     ||
+ATOM OP1  ON3    -0.78  !               H52-C5M   C4    H3
+ATOM OP2  ON3    -0.78  !                   |  \ /  \  /
+ATOM O5'  ON2    -0.57  !                  H53  C5   N3
+ATOM C5'  CN8B   -0.08  !                       ||   |
+ATOM H5'  HN8     0.09  !                    H6-C6   C2
+ATOM H5'' HN8     0.09  !                        \  / \\  
+GROUP                   !                         N1   O2
+ATOM C4'  CN7     0.16  !                          \
+ATOM H4'  HN7     0.09  !                           \
+ATOM O4'  ON6B   -0.50  !                            \ 
+ATOM C1'  CN7B    0.16  !        OP1    H5' H4'  O4'  \
+ATOM H1'  HN7     0.09  !         |      |    \ /   \  \
+GROUP                   !        -P-O5'-C5'---C4'    C1'
+ATOM N1   NN2B   -0.34  !         |      |     \     / \
+ATOM C6   CN3     0.17  !        OP2    H5''   C3'--C2' H1'
+ATOM H6   HN3     0.17  !                     / \   / \
+ATOM C2   CN1T    0.51  !                  O3' H3' O2' H2''
+ATOM O2   ON1    -0.41  !                   |       | 
+ATOM N3   NN2U   -0.46  !                          H2'
+ATOM H3   HN2     0.36  !
+ATOM C4   CN1     0.50  !
+ATOM O4   ON1    -0.45  !
+ATOM C5   CN3T   -0.15
+ATOM C5M  CN9    -0.11
+ATOM H51  HN9     0.07
+ATOM H52  HN9     0.07
+ATOM H53  HN9     0.07
+GROUP
+ATOM C2'  CN7B    0.14
+ATOM H2'' HN7     0.09
+ATOM O2'  ON5    -0.66 
+ATOM H2'  HN5     0.43 
+GROUP
+ATOM C3'  CN7     0.01
+ATOM H3'  HN7     0.09
+ATOM O3'  ON2    -0.57 
+BOND P    OP1       P    OP2       P     O5'
+BOND O5'  C5'       C5'  C4'       C4'  O4'       C4'  C3'       O4'  C1'
+BOND C1'  N1        C1'  C2'       N1   C2        N1   C6
+BOND C2   N3        N3   H3        N3   C4       C4   C5
+BOND C5   C5M       C2'  C3'       C3'  O3'       O3'  +P
+// BOND C2'  O2'       O2'  H2'
+BOND C2'  O2'       O2'  HO2'
+// BOND C1'  H1'       C2'  H2''      C3'  H3'       C4'  H4'       C5'  H5'
+BOND C1'  H1'       C2'  H2'      C3'  H3'       C4'  H4'       C5'  H5'
+BOND C5'  H5''      C6   H6        C5M  H51       C5M  H52       C5M  H53
+DOUBLE  C2   O2     C4   O4        C5   C6
+ 
+RESI  U URA         -1.00  !                         O4
+ATOM P    P       1.50  !                         ||
+ATOM OP1  ON3    -0.78  !                         C4    H3
+ATOM OP2  ON3    -0.78  !                        /  \  /
+ATOM O5'  ON2    -0.57  !                    H5-C5   N3
+ATOM C5'  CN8B   -0.08  !                       ||   |
+ATOM H5'  HN8     0.09  !                    H6-C6   C2
+ATOM H5'' HN8     0.09  !                        \  / \\    
+GROUP                   !                         N1   O2
+ATOM C4'  CN7     0.16  !                          \
+ATOM H4'  HN7     0.09  !                           \
+ATOM O4'  ON6B   -0.50  !                            \ 
+ATOM C1'  CN7B    0.16  !        OP1    H5' H4'  O4'  \
+ATOM H1'  HN7     0.09  !         |      |    \ /   \  \
+GROUP                   !        -P-O5'-C5'---C4'    C1'
+ATOM N1   NN2B   -0.34  !         |      |     \     / \
+ATOM C6   CN3     0.20  !        OP2    H5''   C3'--C2' H1'
+ATOM H6   HN3     0.14  !                     / \   / \
+ATOM C2   CN1T    0.55  !                   O3' H3' O2' H2''
+ATOM O2   ON1    -0.45  !                    |       | 
+ATOM N3   NN2U   -0.46  !                           H2' 
+ATOM H3   HN2     0.36  !
+ATOM C4   CN1     0.53  !
+ATOM O4   ON1    -0.48  !
+ATOM C5   CN3    -0.15  !
+ATOM H5   HN3     0.10  !
+GROUP
+ATOM C2'  CN7B    0.14
+ATOM H2'' HN7     0.09
+ATOM O2'  ON5    -0.66 
+ATOM H2'  HN5     0.43 
+GROUP
+ATOM C3'  CN7     0.01
+ATOM H3'  HN7     0.09
+ATOM O3'  ON2    -0.57 
+BOND P    OP1       P    OP2       P     O5'
+BOND O5'  C5'       C5'  C4'       C4'  O4'       C4'  C3'       O4'  C1'
+BOND C1'  N1        C1'  C2'       N1   C2        N1   C6
+BOND C2   N3        N3   H3        N3   C4        C4   C5
+BOND C2'  C3'       C3'  O3'       O3'  +P
+// BOND C2'  O2'       O2'  H2'
+BOND C2'  O2'       O2'  HO2'
+// BOND C1'  H1'       C2'  H2''      C3'  H3'       C4'  H4'       C5'  H5'
+BOND C1'  H1'       C2'  H2'      C3'  H3'       C4'  H4'       C5'  H5'
+BOND C5'  H5''      C5   H5        C6   H6
+DOUBLE  C2   O2     C4   O4        C5   C6
+
+//***********************************************************
+//  variations                                
+
+RESI 8OG                                   O6
+//                                         ||   
+//                                         C6    
+//                                        /  \  
+//                                    H1-N1   C5--N7\\
+//                                       |    ||     C8-H8
+//                                       C2   C4--N9/
+//                                      / \\ /      \
+//                                H21-N2   N3        \
+//                                    |               \
+//                                   H22               \
+//                                                      \
+//                                  OP1    H5' H4'  O4'  \
+//                                   |      |    \ /   \  \
+//                                  -P-O5'-C5'---C4'    C1'
+//                                   |      |     \     / \
+//                                  OP2    H5''   C3'--C2' H1'
+//                                               / \   / \
+//                                            O3' H3' O2' H2'' 
+//                                             |       |
+//                                                    H2'
+//
+BOND P    OP1       P    OP2       P     O5'
+BOND O5'  C5'       C5'  C4'       C4'  O4'       C4'  C3'       O4'  C1'
+BOND C1'  N9        C1'  C2'       N9   C4        N9   C8        C4   N3
+BOND C2   N2        C2   N1        N2   H21
+BOND N2   H22       N1   H1        N1   C6        C6   C5
+BOND C5   N7        C2'  C3'       C3'  O3'       O3'  +P
+BOND C2'  O2'       O2'  H2'
+BOND C1'  H1'       C2'  H2''      C3'  H3'       C4'  H4'       C5'  H5'
+BOND C5'  H5''      C8   H8  
+DOUBLE   C2  N3     C4   C5        N7   C8        C6   O6
+

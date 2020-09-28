@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/frame_layout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
+		android:id="@+id/gl_surface_view"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" />
+	<LinearLayout		
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom|center_horizontal"
+		android:orientation="horizontal">
+		<Button
+			android:id="@+id/button_prev_obj"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_height="match_parent"					
+			android:text="@string/button_prev_obj"
+			tools:ignore="ButtonStyle" />
+		<Button
+			android:id="@+id/button_next_obj"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_height="match_parent"					
+			android:text="@string/button_next_obj"
+			tools:ignore="ButtonStyle" />
+		<Button
+			android:id="@+id/button_select"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_height="match_parent"					
+			android:text="@string/button_select"
+			tools:ignore="ButtonStyle" />
+		<Button
+			android:id="@+id/button_change_viewmode"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_height="match_parent"					
+			android:text="@string/button_change_view"
+			tools:ignore="ButtonStyle" />
+	</LinearLayout>
+
+	<ProgressBar
+		android:id="@+id/next_view_progress_circle"
+		style="?android:attr/progressBarStyleLarge"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="right|top"
+		android:indeterminate="true"
+		android:visibility="invisible"
+		tools:ignore="RtlHardcoded" />
+
+</FrameLayout>

@@ -1,0 +1,5 @@
+Notes on the project:
+
+CONECT - relies on CONECT records for HETATMs.   No attempt made to connect HETATM records by
+  atom spacing or templates.
+

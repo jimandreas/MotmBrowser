@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ActivityDisplayPdbFile">
+    <item
+        android:id="@+id/action_wireframe"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="@string/action_wireframe" />
+
+    <item
+        android:id="@+id/action_shading"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="@string/action_shading" />
+
+    <item
+        android:id="@+id/action_hydrogens"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="@string/action_hydrogens" />
+</menu>
