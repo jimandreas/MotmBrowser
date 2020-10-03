@@ -1,1 +1,1 @@
-include ':mollib', ':motmbrowser', ':standalone'
+include ':mollib', ':motmbrowser', ':standalone', ':captureimages'

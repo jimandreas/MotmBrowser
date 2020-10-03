@@ -16,7 +16,7 @@
  *
  */
 
-package com.bammellab.sandbox.display_pdb_file
+package com.bammellab.imagecap.display_pdb_file
 
 object MotmPdbNames {
 

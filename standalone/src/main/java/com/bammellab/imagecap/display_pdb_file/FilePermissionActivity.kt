@@ -1,4 +1,4 @@
-package com.bammellab.sandbox.display_pdb_file
+package com.bammellab.imagecap.display_pdb_file
 
 import android.Manifest
 import android.content.Intent
@@ -6,10 +6,9 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.bammellab.sandbox.R
+import com.bammellab.imagecap.R
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream

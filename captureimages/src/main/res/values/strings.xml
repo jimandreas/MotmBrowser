@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">3D Sandbox</string>
+
+    <!-- CURRENT stuff-->
+
+    <string name="activity_load_pdb_file_title">Load a PDB file</string>
+
+    <string name="button_next_obj">Next OBJ</string>
+    <string name="button_prev_obj">Prev OBJ</string>
+
+    <string name="button_change_view">Change View</string>
+
+    <string name="button_select">Select</string>
+
+    <!-- toolbar menu stuff -->
+    <string name="action_wireframe">Wire frame</string>
+    <string name="action_shading">Shading</string>
+    <string name="action_hydrogens">Hydros</string>
+
+    <!-- obsolete button labels stuff -->
+
+    <!-- previous work -->
+
+</resources>

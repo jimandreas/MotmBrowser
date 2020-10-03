@@ -1,14 +1,12 @@
 //@file:Suppress("unused", "FunctionName", "IllegalIdentifier")
 @file:Suppress("unused")
-package com.bammellab.sandbox.display_pdb_file
+package com.bammellab.imagecap.display_pdb_file
 
 import android.app.ActivityManager
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.*
 import android.os.Environment.DIRECTORY_PICTURES
-import android.os.Environment.getExternalStorageDirectory
 import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
@@ -18,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
 import com.bammellab.mollib.RendererDisplayPdbFile
 import com.bammellab.mollib.UpdateRenderFinished
-import com.bammellab.sandbox.R
+import com.bammellab.imagecap.R
 import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 import java.io.File
