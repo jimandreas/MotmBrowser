@@ -146,15 +146,15 @@ class ParserAtomInfo(activity: Activity) {
                     atomBlue = 255
                  */
 
-println("zzzAtomInfo(")
-println("zzzatomNumber = ${atomInfo.atomAtomicNumber},")
-println("zzzatomChemicalSymbol = \"${atomInfo.atomChemicalSymbol}\",")
-println("zzzatomElementName = \"${atomInfo.atomElementName}\",")
-println("zzzatomRed = ${Integer.valueOf(hexColor.substring(1, 3), 16)},")
-println("zzzatomGreen = ${Integer.valueOf(hexColor.substring(3, 5), 16)},")
-println("zzzatomBlue = ${Integer.valueOf(hexColor.substring(5, 7), 16)}")
-
-println("zzz),")
+//println("zzzAtomInfo(")
+//println("zzzatomNumber = ${atomInfo.atomAtomicNumber},")
+//println("zzzatomChemicalSymbol = \"${atomInfo.atomChemicalSymbol}\",")
+//println("zzzatomElementName = \"${atomInfo.atomElementName}\",")
+//println("zzzatomRed = ${Integer.valueOf(hexColor.substring(1, 3), 16)},")
+//println("zzzatomGreen = ${Integer.valueOf(hexColor.substring(3, 5), 16)},")
+//println("zzzatomBlue = ${Integer.valueOf(hexColor.substring(5, 7), 16)}")
+//
+//println("zzz),")
                 mAtomInfo.add(atomInfo)
                 atomNameToAtomInfoHash[atomInfo.atomChemicalSymbol] = atomInfo
                 line = reader.readLine()
@@ -167,7 +167,7 @@ println("zzz),")
                 Timber.e("IO exception at line number $lineNumber line: $line")
             }
         }
-println("zzzdone")
+//println("zzzdone")
 
     }
 

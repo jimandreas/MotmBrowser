@@ -49,7 +49,7 @@ import timber.log.Timber
 @SuppressLint("DefaultLocale")
 class ParserBondTemplate(activity: Activity) {
 
-    private val debugOutput = true
+    private val debugOutput = false
 
     val residueToBondHash = HashMap<String, ArrayListMultimap<String, String>>()
     // for debugging
@@ -184,7 +184,7 @@ class ParserBondTemplate(activity: Activity) {
                 Timber.i("res: ),")
             }
         }
-        println("res: PRINTLN")
+//        println("res: PRINTLN")
     }
 
     /*

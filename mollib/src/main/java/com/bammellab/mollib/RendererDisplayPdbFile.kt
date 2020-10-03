@@ -29,32 +29,28 @@ package com.bammellab.mollib
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
+import android.graphics.Bitmap
 import android.opengl.GLES20
+import android.opengl.GLES30.glReadPixels
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
 import android.os.Handler
 import android.os.Message
 import android.os.SystemClock
-
+import android.view.View
 import com.bammellab.mollib.common.math.Vector3
-import com.bammellab.mollib.objects.BufferManager
-import com.bammellab.mollib.objects.CubeHacked
-import com.bammellab.mollib.objects.ManagerViewmode
-import com.bammellab.mollib.objects.ParserPdbFile
-import com.bammellab.mollib.objects.Pointer
-import com.bammellab.mollib.objects.XYZ
+import com.bammellab.mollib.objects.*
 import com.bammellab.mollib.protein.AtomInfo
 import com.bammellab.mollib.protein.Molecule
 import com.bammellab.mollib.protein.PdbAtom
-
+import timber.log.Timber
 import java.io.InputStream
-import java.util.ArrayList
-
+import java.nio.IntBuffer
+import java.util.*
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
-
-import timber.log.Timber
 import kotlin.math.max
+
 
 /*
  *   Alt-Enter to disable annoying Lint warnings...
@@ -65,17 +61,25 @@ import kotlin.math.max
  *     P - View to Projection
  */
 
+interface UpdateRenderFinished {
+    fun updateActivity()
+}
+
 /**
  * This class implements our custom renderer. Note that the GL10 parameter passed in is unused for OpenGL ES 2.0
  * renderers -- the static class GLES20 is used instead.
  */
 class RendererDisplayPdbFile
-    /*
-     * Let's get started.
-     */
+/*
+ * Let's get started.
+ */
 (private val mActivity: Activity,
- private val mGlSurfaceView: GLSurfaceViewDisplayPdbFile,
- private val mHandler: Handler) : GLSurfaceView.Renderer {
+ private val mGlSurfaceView: GLSurfaceViewDisplayPdbFile
+ ) : GLSurfaceView.Renderer {
+
+    var listener: UpdateRenderFinished? = null
+
+
     private val mXYZ = XYZ()
 
     var mTouchX = 300f
@@ -91,16 +95,21 @@ class RendererDisplayPdbFile
     // These still work without volatile, but refreshes are not guaranteed to happen.
     @Volatile
     var mDeltaX: Float = 0.toFloat()
+
     @Volatile
     var mDeltaY: Float = 0.toFloat()
+
     @Volatile
     var mDeltaTranslateX: Float = 0.toFloat()
+
     @Volatile
     var mDeltaTranslateY: Float = 0.toFloat()
+
     // public volatile float mScaleCurrentF = 1.0f;
     // use scale to zoom in initially
     @Volatile
     var mScaleCurrentF = INITIAL_SCALE
+
     @Volatile
     var mScalePrevious = 0f
 
@@ -178,10 +187,12 @@ class RendererDisplayPdbFile
     private val mLightPosInEyeSpace = FloatArray(4)
 
     private var mUseVertexShaderProgram = false
+
     /**
      * This is a handle to our per-vertex cube shading program.
      */
     private var mPerVertexProgramHandle = -1
+
     /**
      * This is a handle to our per-pixel cube shading program.
      */
@@ -189,10 +200,12 @@ class RendererDisplayPdbFile
 
     private var mWireFrameRenderingFlag = false
     private var mSelectModeFlag = false
+
     /**
      * This is a handle to our light point program.
      */
     private var mPointProgramHandle: Int = 0
+
     /**
      * A temporary matrix.
      */
@@ -224,9 +237,9 @@ class RendererDisplayPdbFile
 
         mMol = Molecule()
         mManagerViewmode = ManagerViewmode(
-                mActivity, mMol, mBufferManager, mHandler)
+                mActivity, mMol, mBufferManager)
         mPdbFile = ParserPdbFile(
-                mActivity, mMol, mBufferManager, mManagerViewmode, mHandler)
+                mActivity, mMol, mBufferManager, mManagerViewmode)
     }
 
     override fun onSurfaceCreated(glUnused: GL10, config: EGLConfig) {
@@ -312,8 +325,8 @@ class RendererDisplayPdbFile
         /*
          * let the UI thread know that all GL objects are created
          */
-        val message = Message.obtain(mHandler, Molecule.UI_MESSAGE_GL_READY)
-        mHandler.dispatchMessage(message)
+//        val message = Message.obtain(mHandler, Molecule.UI_MESSAGE_GL_READY)
+//        mHandler.dispatchMessage(message)
 
         // was the old "tunnel" graphic showing the selection area
         //   now deprecated
@@ -385,8 +398,8 @@ class RendererDisplayPdbFile
             val scaleF = 1.5f / mMol.dcOffset
 
             /*
-         * render the molecule triangles
-         */
+             * render the molecule triangles
+             */
             Matrix.setIdentityM(mModelMatrix, 0)
             Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -2.5f)
             Matrix.scaleM(mModelMatrix, 0, scaleF, scaleF, scaleF)
@@ -411,6 +424,10 @@ class RendererDisplayPdbFile
             Timber.i("*** RENDERER mema " + mInfo.availMem / 1024 / 1024
                     + " seconds: " + prettyPrint)
         }
+
+//        if (listener != null) {
+//            mActivity.runOnUiThread { listener!!.updateActivity()}
+//        }
     }
 
 
@@ -895,6 +912,43 @@ class RendererDisplayPdbFile
 
     fun loadPdbFromStream(inputStream: InputStream) {
         mPdbFile.loadPdbFromStream(inputStream)
+    }
+
+    /**
+     *  read the GL frame buffer and convert the bits
+     *  to an Android compatible bitmap.
+     *  Convert RGB(#000000) to transparent
+     *  @link https://stackoverflow.com/a/5013141/3853712
+     */
+    fun readGlBufferToBitmap(x: Int, y: Int, w: Int, h: Int): Bitmap? {
+        val b = IntArray(w * (y + h))
+        val bt = IntArray(w * h)
+        val ib: IntBuffer = IntBuffer.wrap(b)
+        ib.position(0)
+        glReadPixels(x, 0, w, y + h, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib)
+        val glError = GLES20.glGetError()
+        if (glError != GLES20.GL_NO_ERROR) {
+            Timber.e("OnDrawFrame, glerror =  $glError")
+        }
+        var i = 0
+        var k = 0
+        while (i < h) {
+            //remember, that OpenGL bitmap is incompatible with Android bitmap
+            //and so, some correction need.
+            for (j in 0 until w) {
+                var pix = b[(i + y) * w + j]
+                if (pix == 0xff000000.toInt()) {
+                    pix = 0
+                }
+                val pb = pix shr 16 and 0xff
+                val pr = pix shl 16 and 0x00ff0000
+                val pix1 = pix and 0xff00ff00.toInt() or pr or pb
+                bt[(h - k - 1) * w + j] = pix1
+            }
+            i++
+            k++
+        }
+        return Bitmap.createBitmap(bt, w, h, Bitmap.Config.ARGB_8888)
     }
 
     companion object {

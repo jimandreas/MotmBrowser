@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.bammellab.sandbox.R
@@ -28,23 +29,23 @@ class FilePermissionActivity : AppCompatActivity() {
         }
     }
 
+    private val TAG = "standalone"
     // see this handy answer:
     //  http://stackoverflow.com/questions/33162152/storage-permission-error-in-marshmallow
     fun isStoragePermissionGranted(): Boolean {
         return if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
-                Timber.v("Permission is granted")
+                Timber.i("Permission is granted")
                 true
             } else {
-                Timber.v("Permission is revoked")
-                ActivityCompat.requestPermissions(
-                        this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+                Timber.i("Permission is revoked")
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
                 message(" Please say ALLOW and try again")
                 false
             }
         } else { //permission is automatically granted on sdk<23 upon installation
-            Timber.v("Permission is granted")
+            Timber.i( "Permission is granted")
             true
         }
     }

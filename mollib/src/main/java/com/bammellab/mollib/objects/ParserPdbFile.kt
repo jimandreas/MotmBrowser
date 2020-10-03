@@ -19,8 +19,6 @@ package com.bammellab.mollib.objects
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.os.Handler
-import android.os.Message
 import android.os.SystemClock
 import com.bammellab.mollib.common.math.Vector3
 import com.bammellab.mollib.protein.*
@@ -39,8 +37,8 @@ import kotlin.math.sqrt
 class ParserPdbFile(mActivity: Activity,
                     private val mMol: Molecule,
                     bm: BufferManager,
-                    private val mManagerViewmode: ManagerViewmode,
-                    private val handler: Handler) {
+                    private val mManagerViewmode: ManagerViewmode
+                    ) {
     private var pdbFileLoaded = false
     private val atomSphere: AtomSphere
 
@@ -206,8 +204,8 @@ class ParserPdbFile(mActivity: Activity,
         /*
          * let the UI know that the parsing is completed (to flush the spinner)
          */
-        val message: Message = Message.obtain(handler, Molecule.UI_MESSAGE_FINISHED_PARSING)
-        handler.dispatchMessage(message)
+//        val message: Message = Message.obtain(handler, Molecule.UI_MESSAGE_FINISHED_PARSING)
+//        handler.dispatchMessage(message)
     }
 
     /*

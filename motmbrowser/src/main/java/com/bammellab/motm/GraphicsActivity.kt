@@ -50,7 +50,7 @@ import java.io.InputStream
  * for the one to be displayed initially.
  */
 
-class GraphicsActivity : AppCompatActivity(), Handler.Callback, PdbCache.PdbCallback {
+class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
     private lateinit var buttonPreviousObj: Button
     private lateinit var buttonNextObj: Button
     private lateinit var buttonSelect: Button
@@ -67,8 +67,8 @@ class GraphicsActivity : AppCompatActivity(), Handler.Callback, PdbCache.PdbCall
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val handler = Handler(
-                Looper.getMainLooper(), this)
+//        val handler = Handler(
+//                Looper.getMainLooper(), this)
 
         pdbList = intent.getStringArrayExtra(INTENT_TAG_LIST)
         currentPdbIndex = intent.getIntExtra(INTENT_TAG_INDEX, 0)
@@ -98,7 +98,7 @@ class GraphicsActivity : AppCompatActivity(), Handler.Callback, PdbCache.PdbCall
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
 
-            mRenderer = RendererDisplayPdbFile(this, mGLSurfaceView, handler)
+            mRenderer = RendererDisplayPdbFile(this, mGLSurfaceView)
             mGLSurfaceView.setRenderer(mRenderer, displayMetrics.density)
 
             // This freezes the updates, now adjusted in GLSurfaceView
@@ -262,20 +262,20 @@ class GraphicsActivity : AppCompatActivity(), Handler.Callback, PdbCache.PdbCall
      * @return true - TODO: understand if this means something
      */
 
-    override fun handleMessage(msg: Message): Boolean {
-
-        // http://stackoverflow.com/a/27659565/3853712
-
-
-        when (msg.what) {
-            UI_MESSAGE_GL_READY -> {
-                pdbCache.downloadPdb(pdbList[currentPdbIndex])
-                runOnUiThread { mNextViewProgressCircle.visibility = View.VISIBLE }
-            }
-            UI_MESSAGE_FINISHED_PARSING, UI_MESSAGE_FINISHED_VIEW_CHANGE -> runOnUiThread { mNextViewProgressCircle.visibility = View.INVISIBLE }
-        }
-        return true
-    }
+//    override fun handleMessage(msg: Message): Boolean {
+//
+//        // http://stackoverflow.com/a/27659565/3853712
+//
+//
+//        when (msg.what) {
+//            UI_MESSAGE_GL_READY -> {
+//                pdbCache.downloadPdb(pdbList[currentPdbIndex])
+//                runOnUiThread { mNextViewProgressCircle.visibility = View.VISIBLE }
+//            }
+//            UI_MESSAGE_FINISHED_PARSING, UI_MESSAGE_FINISHED_VIEW_CHANGE -> runOnUiThread { mNextViewProgressCircle.visibility = View.INVISIBLE }
+//        }
+//        return true
+//    }
 
     companion object {
         const val INTENT_TAG_LIST = "pdbList"

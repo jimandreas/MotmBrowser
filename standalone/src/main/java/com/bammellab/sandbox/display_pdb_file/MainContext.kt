@@ -11,12 +11,9 @@ import timber.log.Timber
  * Handler is set up to carry messages from other threads to the UI thread
  */
 
-//@SuppressLint("StaticFieldLeak")
 enum class MainContext {
 
     INSTANCE;
-
-//    var context: Context? = null
     var handler: Handler? = null
 
     init {
@@ -24,21 +21,4 @@ enum class MainContext {
             Timber.plant(Timber.DebugTree())
         }
     }
-
-//    @IntDef(UI_MESSAGE_GL_READY, UI_MESSAGE_UPDATE_RPM)
-//    @Retention(RetentionPolicy.SOURCE)
-//    annotation class UImessages
-//
-//    companion object {
-//
-//
-//        /**
-//         * Handler messages
-//         * for more information on the IntDef in the Studio annotation library:
-//         *
-//         * https://noobcoderblog.wordpress.com/2015/04/12/java-enum-and-android-intdefstringdef-annotation/
-//         */
-//        val UI_MESSAGE_GL_READY = 1
-//        val UI_MESSAGE_UPDATE_RPM = 2
-//    }
 }

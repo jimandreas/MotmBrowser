@@ -31,8 +31,8 @@ import timber.log.Timber
 // TODO: implement Interface in Activity - for flagging low mem in UI (commented out after lib refactor)
 class ManagerViewmode(private val mActivity: Activity,
                       private val mMol: Molecule,
-                      private val mBufMgr: BufferManager,
-                      private val handler: Handler) {
+                      private val mBufMgr: BufferManager
+                      ) {
 
     private val mAtomSphere: AtomSphere
     private val mAtomToAtomBond: SegmentAtomToAtomBond
@@ -70,8 +70,8 @@ class ManagerViewmode(private val mActivity: Activity,
         /*
          * let the UI know that the mode change is completed (to flush the spinner)
          */
-        val message = Message.obtain(handler, Molecule.UI_MESSAGE_FINISHED_VIEW_CHANGE)
-        handler.dispatchMessage(message)
+//        val message = Message.obtain(handler, Molecule.UI_MESSAGE_FINISHED_VIEW_CHANGE)
+//        handler.dispatchMessage(message)
     }
 
     /*
