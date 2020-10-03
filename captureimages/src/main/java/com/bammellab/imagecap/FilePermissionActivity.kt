@@ -27,7 +27,6 @@ class FilePermissionActivity : AppCompatActivity() {
         }
     }
 
-    private val TAG = "standalone"
     // see this handy answer:
     //  http://stackoverflow.com/questions/33162152/storage-permission-error-in-marshmallow
     fun isStoragePermissionGranted(): Boolean {

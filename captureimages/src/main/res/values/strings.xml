@@ -4,7 +4,7 @@
 
     <!-- CURRENT stuff-->
 
-    <string name="activity_load_pdb_file_title">Load a PDB file</string>
+    <string name="activity_capture_images">Capture PNGs</string>
 
     <string name="button_next_obj">Next OBJ</string>
     <string name="button_prev_obj">Prev OBJ</string>

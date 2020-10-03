@@ -27,7 +27,7 @@ import java.io.IOException
 //@Suppress("UsePropertyAccessSyntax", "UNUSED_VARIABLE", "unused", "UNUSED_PARAMETER", "DEPRECATION")
 //@SuppressWarnings("UnusedParameters", "unused") // Parameters inspected reflectively.
 
-class ActivityImageCap : AppCompatActivity(), Handler.Callback, UpdateRenderFinished {
+class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
     /** Hold a reference to our GLSurfaceView  */
     private var mGLSurfaceView: GLSurfaceViewDisplayPdbFile? = null
     private var mRenderer: RendererDisplayPdbFile? = null
@@ -136,7 +136,7 @@ class ActivityImageCap : AppCompatActivity(), Handler.Callback, UpdateRenderFini
         setContentView(R.layout.display_pdb_file)
 
         mGLSurfaceView = findViewById(R.id.gl_surface_view)
-        mNextViewProgress = findViewById(R.id.next_view_progress_circle)
+
 
         // Check if the system supports OpenGL ES 2.0.
         val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -163,23 +163,7 @@ class ActivityImageCap : AppCompatActivity(), Handler.Callback, UpdateRenderFini
         Timber.v("onCreate - loadNext")
         loadNextPdbFile()
 
-        findViewById<View>(R.id.button_next_obj).setOnClickListener { loadNextPdbFile() }
 
-        findViewById<View>(R.id.button_prev_obj).setOnClickListener { loadPrevPdbFile() }
-
-        //		findViewById(R.id.button_switch_rendering_mode).setOnClickListener(new View.OnClickListener() {
-        //			@Override
-        //			public void onClick(View v) {
-        //				toggleWireframe();
-        //			}
-        //		});
-
-        findViewById<View>(R.id.button_select).setOnClickListener { toggleSelect() }
-
-        findViewById<View>(R.id.button_change_viewmode).setOnClickListener {
-            mNextViewProgress!!.visibility = View.VISIBLE
-            mGLSurfaceView!!.queueEvent { mRenderer!!.nextViewMode() }
-        }
     }
 
 
@@ -230,33 +214,7 @@ class ActivityImageCap : AppCompatActivity(), Handler.Callback, UpdateRenderFini
         }
     }
 
-    // no button anymore for shader
-    fun updateShaderStatus() {
-        //        runOnUiThread(new Runnable() {
-        //            @Override
-        //            public void run() {
-        //                if (useVertexShading) {
-        //                    ((Button) findViewById(R.id.button_switch_shaders)).setText(R.string.button_objects_using_pixel_shading);
-        //                } else {
-        //                    ((Button) findViewById(R.id.button_switch_shaders)).setText(R.string.button_objects_using_vertex_shading);
-        //                }
-        //            }
-        //        });
-    }
-    //    public void updateWireframeStatus(final boolean wireFrameRendering) {
-    //        runOnUiThread(new Runnable() {
-    //            @Override
-    //            public void run() {
-    //                if (wireFrameRendering) {
-    //                    ((Button) findViewById(
-    //                            R.id.button_switch_rendering_mode)).setText(R.string.button_objects_using_triangle_rendering);
-    //                } else {
-    //                    ((Button) findViewById(
-    //                            R.id.button_switch_rendering_mode)).setText(R.string.button_objects_using_wireframe_rendering);
-    //                }
-    //            }
-    //        });
-    //    }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -294,45 +252,6 @@ class ActivityImageCap : AppCompatActivity(), Handler.Callback, UpdateRenderFini
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-
-    /**
-     * receive messages from the renderer
-     * Currently:
-     * GL_READY - the GL components are created - instance state can
-     * now be set (like for device rotation)
-     * UPDATE_RPM - RPM indicator - to be implemented
-     * @param msg  message sent from renderer
-     * @return true - TODO: understand if this means something
-     */
-
-    override fun handleMessage(msg: Message): Boolean {
-
-        // http://stackoverflow.com/a/27659565/3853712
-
-
-//        @MainContext.UImessages val what = msg.what
-//
-//        when (what) {
-//            UI_MESSAGE_GL_READY -> {
-//            }}
-
-        //                renderer.updateColor(MyGLRenderer.RENDER_SET_COLOR_R, sliderRed.getProgress());
-        //                renderer.updateColor(MyGLRenderer.RENDER_SET_COLOR_G, sliderGreen.getProgress());
-        //                renderer.updateColor(MyGLRenderer.RENDER_SET_COLOR_B, sliderBlue.getProgress());
-        //                int rpm = msg.arg1;
-        //                if (rpm < 0) {
-        //                    rpm *= -1;
-        //                }
-        //                if (speedometer != null) {
-        //                    speedometer.setSpeed((double) rpm);
-        //                }
-        return true
-    }
-
-    companion object {
-//        private val LOG_TAG = "activity"
     }
 
     override fun updateActivity() {
