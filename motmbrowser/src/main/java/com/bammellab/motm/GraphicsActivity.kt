@@ -157,7 +157,7 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
         // TODO: update this spinnner
         buttonChangeViewmode.setOnClickListener {
             nextViewProgressCircle.visibility = View.VISIBLE
-            gLSurfaceView.queueEvent { mRenderer.nextViewMode() }
+//            gLSurfaceView.queueEvent { mRenderer.nextViewMode() }
         }
 
         /*
@@ -192,7 +192,7 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
      * @param stream input stream from cache or from http
      */
     override fun loadPdbFromStream(stream: InputStream) {
-        gLSurfaceView.queueEvent { mRenderer.loadPdbFromStream(stream) }
+//        gLSurfaceView.queueEvent { mRenderer.loadPdbFromStream(stream) }
     }
 
     private fun toggleShader() {

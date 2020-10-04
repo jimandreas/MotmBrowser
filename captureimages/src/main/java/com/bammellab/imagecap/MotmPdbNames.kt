@@ -22,6 +22,7 @@ object MotmPdbNames {
 
     val pdbNames = listOf(
 
+            "1bna",
             "148l",
             "1a0h",
             "1a0i",
@@ -69,6 +70,7 @@ object MotmPdbNames {
             "1bkv",
             "1blb",
             "1bln",
+            "1bna",
             "1bo4",
             "1boy",
             "1bpo",

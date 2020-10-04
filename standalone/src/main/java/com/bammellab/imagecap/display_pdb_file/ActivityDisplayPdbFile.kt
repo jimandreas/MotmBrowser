@@ -55,14 +55,14 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
         Timber.d("Next file: %s", name)
         //        setTitle(pdb_file_display_name[nextNameIndex]);
         title = pdbFileNames[nextNameIndex]
-        mRenderer!!.setPdbFileName(name)
+        //mRenderer!!.setPdbFileName(name)
 
         // WRITE the image!!!
         if (nextNameIndex > 0) {
             writeCurrentImage()
         }
 
-        gLSurfaceView!!.queueEvent { mRenderer!!.loadPdbFile() }
+        // gLSurfaceView!!.queueEvent { mRenderer!!.loadPdbFile() }
     }
 
     private fun loadPrevPdbFile() {
@@ -75,10 +75,10 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
         Timber.d("Previous file: %s", name)
         //        setTitle(pdb_file_display_name[nextNameIndex]);
         title = pdbFileNames[nextNameIndex]
-        mRenderer!!.setPdbFileName(name)
+        // mRenderer!!.setPdbFileName(name)
         // mRenderer!!.listener = this
 
-        gLSurfaceView!!.queueEvent { mRenderer!!.loadPdbFile() }
+       //gLSurfaceView!!.queueEvent { mRenderer!!.loadPdbFile() }
     }
 
     private fun writeCurrentImage() {
@@ -179,7 +179,7 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
 
         findViewById<View>(R.id.button_change_viewmode).setOnClickListener {
             nextViewProgress!!.visibility = View.VISIBLE
-            gLSurfaceView!!.queueEvent { mRenderer!!.nextViewMode() }
+//            gLSurfaceView!!.queueEvent { mRenderer!!.nextViewMode() }
         }
     }
 

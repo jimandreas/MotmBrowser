@@ -26,7 +26,6 @@
 
 package com.bammellab.mollib
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.graphics.Bitmap
@@ -41,7 +40,6 @@ import com.bammellab.mollib.protein.AtomInfo
 import com.bammellab.mollib.protein.Molecule
 import com.bammellab.mollib.protein.PdbAtom
 import timber.log.Timber
-import java.io.InputStream
 import java.nio.IntBuffer
 import java.util.*
 import javax.microedition.khronos.egl.EGLConfig
@@ -59,12 +57,21 @@ interface UpdateRenderFinished {
     fun updateActivity()
 }
 
+interface SurfaceCreated {
+    fun surfaceCreatedCallback()
+}
+
 class RendererDisplayPdbFile(
         private val activity: Activity,
         private val glSurfaceView: GLSurfaceViewDisplayPdbFile
 ) : GLSurfaceView.Renderer {
 
-    var listener: UpdateRenderFinished? = null
+    private var listener: UpdateRenderFinished? = null
+    private var surfaceCreated : SurfaceCreated? = null
+
+    fun setSurfaceCreatedListener(listener: SurfaceCreated) {
+        surfaceCreated = listener
+    }
 
     private val xYZ = XYZ()
 
@@ -317,6 +324,10 @@ class RendererDisplayPdbFile(
         // was the old "tunnel" graphic showing the selection area
         //   now deprecated
         // mSegmentBackboneDirect = new SegmentBackboneDirect(mMol);
+
+        if (surfaceCreated != null) {
+            surfaceCreated!!.surfaceCreatedCallback()
+        }
     }
 
     override fun onSurfaceChanged(glUnused: GL10?, width: Int, height: Int) {
@@ -398,18 +409,18 @@ class RendererDisplayPdbFile(
             select()
         }
 
-        if (!mMol.reportedTimeFlag) {
+        //if (!mMol.reportedTimeFlag) {
             mMol.reportedTimeFlag = true
             val endTime = SystemClock.uptimeMillis().toFloat()
             val elapsedTime = (endTime - mMol.startOfParseTime) / 1000
-            @SuppressLint("DefaultLocale") val prettyPrint = String.format("%6.2f", elapsedTime)
-
+            val prettyPrint = String.format("%6.2f", elapsedTime)
             val activityManager = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
-            val mInfo = ActivityManager.MemoryInfo()
-            activityManager.getMemoryInfo(mInfo)
-            Timber.i("*** RENDERER mema " + mInfo.availMem / 1024 / 1024
-                    + " seconds: " + prettyPrint)
-        }
+            val memInfo = ActivityManager.MemoryInfo()
+            activityManager.getMemoryInfo(memInfo)
+            Timber.i("*** RENDERER mema %d seconds %s",
+                    memInfo.availMem / 1024 / 1024,
+                    prettyPrint)
+        //}
 
 //        if (listener != null) {
 //            mActivity.runOnUiThread { listener!!.updateActivity()}
@@ -462,6 +473,34 @@ class RendererDisplayPdbFile(
         if (glError != GLES20.GL_NO_ERROR) {
             Timber.e("OnDrawFrame, glerror =  $glError")
         }
+    }
+
+    fun resetCamera() {
+        /*
+         * reset view manipulation
+         */
+        scaleCurrentF = INITIAL_SCALE // zoom
+
+        // Position the eye in front of the origin.
+        val eyeX = 0.0f
+        val eyeY = 0.0f
+        val eyeZ = -0.5f
+
+        // We are looking toward the distance
+        val lookX = 0.0f
+        val lookY = 0.0f
+        val lookZ = -5.0f
+
+        // Set our up vector. This is where our head would be pointing were we holding the camera.
+        val upX = 0.0f
+        val upY = 1.0f
+        val upZ = 0.0f
+
+        // Set the view matrix. This matrix can be said to represent the camera position.
+        // NOTE: In OpenGL 1, a ModelView matrix is used, which is a combination of a model and
+        // view matrix. In OpenGL 2, we can keep track of these matrices separately if we choose.
+        Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ)
+
     }
 
     /*
@@ -632,43 +671,6 @@ class RendererDisplayPdbFile(
         }
     }
 
-    fun loadPdbFile() {
-        // TODO: fix this hack on detecting when OPENGL is up and running
-        if (perVertexProgramHandle != -1) {
-            pdbFile.parse(pdbFileName)
-            /*
-             * reset view manipulation
-             */
-            scaleCurrentF = INITIAL_SCALE // zoom
-
-            // Position the eye in front of the origin.
-            val eyeX = 0.0f
-            val eyeY = 0.0f
-            val eyeZ = -0.5f
-
-            // We are looking toward the distance
-            val lookX = 0.0f
-            val lookY = 0.0f
-            val lookZ = -5.0f
-
-            // Set our up vector. This is where our head would be pointing were we holding the camera.
-            val upX = 0.0f
-            val upY = 1.0f
-            val upZ = 0.0f
-
-            // Set the view matrix. This matrix can be said to represent the camera position.
-            // NOTE: In OpenGL 1, a ModelView matrix is used, which is a combination of a model and
-            // view matrix. In OpenGL 2, we can keep track of these matrices separately if we choose.
-            Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ)
-        }
-    }
-
-    // TODO: send message to Handler
-    fun nextViewMode() {
-        // TODO: fix this hack on detecting when OPENGL is up and running
-        managerViewmode?.nextViewMode()
-        // mActivity.changeViewIsFinished();
-    }
 
 
     /**
@@ -890,14 +892,6 @@ class RendererDisplayPdbFile(
         bufferManager.resetBuffersForNextUsage()
         mMol.clearLists()
         Timber.i("CLEANUP")
-    }
-
-    fun setPdbFileName(name: String) {
-        pdbFileName = name
-    }
-
-    fun loadPdbFromStream(inputStream: InputStream) {
-        pdbFile.loadPdbFromStream(inputStream)
     }
 
     /**

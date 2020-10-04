@@ -87,17 +87,13 @@ class ParserPdbFile(activity: Activity,
         val prettyPrint = String.format("%6.2f", elapsedTime)
 
         Timber.i("finished parsing: " + mMol.name + " in" + prettyPrint + " seconds.")
-
-        managerViewmode.createView()
     }
 
 
     fun loadPdbFromStream(inputStream: InputStream) {
-
         resetMoleculeMaxMin()
         mMol.clearLists()
         loadPdbFromInputStream(inputStream)
-        managerViewmode.createView()
     }
 
     /*
