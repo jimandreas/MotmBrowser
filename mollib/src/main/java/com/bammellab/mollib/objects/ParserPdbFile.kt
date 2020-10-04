@@ -19,6 +19,8 @@ package com.bammellab.mollib.objects
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.os.Environment
+import android.os.Environment.DIRECTORY_PICTURES
 import android.os.SystemClock
 import com.bammellab.mollib.common.math.Vector3
 import com.bammellab.mollib.protein.*
@@ -113,7 +115,9 @@ class ParserPdbFile(mActivity: Activity,
 //            val folder = mActivity.getExternalFilesDir("PDB")
 //            val folder2 = mActivity.filesDir
 
-            val folder3 = File("/storage/emulated/0/PDB/")
+//            val folder3 = File("/storage/emulated/0/PDB/")
+//            val folder3 = Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES)
+            val folder3 = Environment.getExternalStoragePublicDirectory("PDB")
             //            File myFile = new File(folder3,"1a0h.pdb.gz");
             val myFile = File(folder3, pdbFileName)
             fileInputStream = FileInputStream(myFile)

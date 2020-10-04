@@ -34,10 +34,7 @@ import android.opengl.GLES20
 import android.opengl.GLES30.glReadPixels
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
-import android.os.Handler
-import android.os.Message
 import android.os.SystemClock
-import android.view.View
 import com.bammellab.mollib.common.math.Vector3
 import com.bammellab.mollib.objects.*
 import com.bammellab.mollib.protein.AtomInfo
@@ -51,10 +48,7 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 import kotlin.math.max
 
-
 /*
- *   Alt-Enter to disable annoying Lint warnings...
- *
  *   MVP
  *     M - Model to World
  *     V - World to View
@@ -65,65 +59,57 @@ interface UpdateRenderFinished {
     fun updateActivity()
 }
 
-/**
- * This class implements our custom renderer. Note that the GL10 parameter passed in is unused for OpenGL ES 2.0
- * renderers -- the static class GLES20 is used instead.
- */
-class RendererDisplayPdbFile
-/*
- * Let's get started.
- */
-(private val mActivity: Activity,
- private val mGlSurfaceView: GLSurfaceViewDisplayPdbFile
- ) : GLSurfaceView.Renderer {
+class RendererDisplayPdbFile(
+        private val activity: Activity,
+        private val glSurfaceView: GLSurfaceViewDisplayPdbFile
+) : GLSurfaceView.Renderer {
 
     var listener: UpdateRenderFinished? = null
 
-
     private val mXYZ = XYZ()
 
-    var mTouchX = 300f
-    var mTouchY = 300f
+    var touchX = 300f
+    var touchY = 300f
 
-    private val mFloatVector1 = FloatArray(4)
-    private val mFloatVector2 = FloatArray(4)
+    private val floatVector1 = FloatArray(4)
+    private val floatVector2 = FloatArray(4)
 
 
-    private var mPdbFileName: String = "nofile"
+    private var pdbFileName: String = "nofile"
 
     // update to add touch control - these are set by the SurfaceView class
     // These still work without volatile, but refreshes are not guaranteed to happen.
     @Volatile
-    var mDeltaX: Float = 0.toFloat()
+    var deltaX: Float = 0.toFloat()
 
     @Volatile
-    var mDeltaY: Float = 0.toFloat()
+    var deltaY: Float = 0.toFloat()
 
     @Volatile
-    var mDeltaTranslateX: Float = 0.toFloat()
+    var deltaTranslateX: Float = 0.toFloat()
 
     @Volatile
-    var mDeltaTranslateY: Float = 0.toFloat()
+    var deltaTranslateY: Float = 0.toFloat()
 
     // public volatile float mScaleCurrentF = 1.0f;
     // use scale to zoom in initially
     @Volatile
-    var mScaleCurrentF = INITIAL_SCALE
+    var scaleCurrentF = INITIAL_SCALE
 
     @Volatile
-    var mScalePrevious = 0f
+    var scalePrevious = 0f
 
     /**
      * Store the model matrix. This matrix is used to move models from object space (where each model can be thought
      * of being located at the center of the universe) to world space.
      */
-    private val mModelMatrix = FloatArray(16)
+    private val modelMatrix = FloatArray(16)
 
     /**
      * Store the view matrix. This can be thought of as our camera. This matrix transforms world space to eye space;
      * it positions things relative to our eye.
      */
-    private val mViewMatrix = FloatArray(16)
+    private val viewMatrix = FloatArray(16)
 
     /**
      * Store the projection matrix. This is used to project the scene onto a 2D viewport.
@@ -226,10 +212,10 @@ class RendererDisplayPdbFile
     private var mCube: CubeHacked? = null
     private var mPointer: Pointer? = null
     private val mMol: Molecule
-    private val mPdbFile: ParserPdbFile
+    private val pdbFile: ParserPdbFile
     private val mManagerViewmode: ManagerViewmode?
 
-    private val mBufferManager = BufferManager.getInstance(mActivity)
+    private val mBufferManager = BufferManager.getInstance(activity)
 
     init {
 
@@ -237,9 +223,9 @@ class RendererDisplayPdbFile
 
         mMol = Molecule()
         mManagerViewmode = ManagerViewmode(
-                mActivity, mMol, mBufferManager)
-        mPdbFile = ParserPdbFile(
-                mActivity, mMol, mBufferManager, mManagerViewmode)
+                activity, mMol, mBufferManager)
+        pdbFile = ParserPdbFile(
+                activity, mMol, mBufferManager, mManagerViewmode)
     }
 
     override fun onSurfaceCreated(glUnused: GL10, config: EGLConfig) {
@@ -270,7 +256,7 @@ class RendererDisplayPdbFile
         // Set the view matrix. This matrix can be said to represent the camera position.
         // NOTE: In OpenGL 1, a ModelView matrix is used, which is a combination of a model and
         // view matrix. In OpenGL 2, we can keep track of these matrices separately if we choose.
-        Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ)
+        Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ)
 
         var vertexShader = mXYZ.vertexShaderLesson2
         var fragmentShader = mXYZ.fragmentShaderLesson2
@@ -342,10 +328,10 @@ class RendererDisplayPdbFile
         // Create a new perspective projection matrix. The height will stay the same
         // while the width will vary as per aspect ratio.
         val ratio = width.toFloat() / height
-        val left = -ratio * mScaleCurrentF
-        val right = ratio * mScaleCurrentF
-        val bottom = -1.0f * mScaleCurrentF
-        val top = 1.0f * mScaleCurrentF
+        val left = -ratio * scaleCurrentF
+        val right = ratio * scaleCurrentF
+        val bottom = -1.0f * scaleCurrentF
+        val top = 1.0f * scaleCurrentF
         val near = 1.0f
         val far = 20.0f
         // final float far = 5.0f;  nothing visible
@@ -362,15 +348,15 @@ class RendererDisplayPdbFile
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
 
         if (!mSelectModeFlag) {
-            if (mScaleCurrentF != mScalePrevious) {
+            if (scaleCurrentF != scalePrevious) {
                 onSurfaceChanged(null, mWidth, mHeight)  // adjusts view
-                mScalePrevious = mScaleCurrentF
+                scalePrevious = scaleCurrentF
             }
 
             // move the view as necessary if the user has shifted it manually
-            Matrix.translateM(mViewMatrix, 0, mDeltaTranslateX, mDeltaTranslateY, 0.0f)
-            mDeltaTranslateX = 0.0f
-            mDeltaTranslateY = 0.0f
+            Matrix.translateM(viewMatrix, 0, deltaTranslateX, deltaTranslateY, 0.0f)
+            deltaTranslateX = 0.0f
+            deltaTranslateY = 0.0f
 
             // Set our per-vertex lighting program.
             val mSelectedProgramHandle = if (mUseVertexShaderProgram) {
@@ -393,16 +379,16 @@ class RendererDisplayPdbFile
             Matrix.translateM(mLightModelMatrix, 0, 0.0f, 0.0f, -1.0f)
 
             Matrix.multiplyMV(mLightPosInWorldSpace, 0, mLightModelMatrix, 0, mLightPosInModelSpace, 0)
-            Matrix.multiplyMV(mLightPosInEyeSpace, 0, mViewMatrix, 0, mLightPosInWorldSpace, 0)
+            Matrix.multiplyMV(mLightPosInEyeSpace, 0, viewMatrix, 0, mLightPosInWorldSpace, 0)
 
             val scaleF = 1.5f / mMol.dcOffset
 
             /*
              * render the molecule triangles
              */
-            Matrix.setIdentityM(mModelMatrix, 0)
-            Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -2.5f)
-            Matrix.scaleM(mModelMatrix, 0, scaleF, scaleF, scaleF)
+            Matrix.setIdentityM(modelMatrix, 0)
+            Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
+            Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
             doMatrixSetup()
             mBufferManager.render(mPositionHandle, mColorHandle, mNormalHandle, mWireFrameRenderingFlag)
             // DEBUG:  box in scene center
@@ -418,7 +404,7 @@ class RendererDisplayPdbFile
             val elapsedTime = (endTime - mMol.mStartOfParseTime) / 1000
             @SuppressLint("DefaultLocale") val prettyPrint = String.format("%6.2f", elapsedTime)
 
-            val activityManager = mActivity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
+            val activityManager = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
             val mInfo = ActivityManager.MemoryInfo()
             activityManager.getMemoryInfo(mInfo)
             Timber.i("*** RENDERER mema " + mInfo.availMem / 1024 / 1024
@@ -439,23 +425,23 @@ class RendererDisplayPdbFile
 
         if (!mSelectModeFlag) {
             Matrix.setIdentityM(mIncrementalRotation, 0)
-            Matrix.rotateM(mIncrementalRotation, 0, mDeltaX, 0.0f, 1.0f, 0.0f)
-            Matrix.rotateM(mIncrementalRotation, 0, mDeltaY, 1.0f, 0.0f, 0.0f)
-            mDeltaX = 0.0f
-            mDeltaY = 0.0f
+            Matrix.rotateM(mIncrementalRotation, 0, deltaX, 0.0f, 1.0f, 0.0f)
+            Matrix.rotateM(mIncrementalRotation, 0, deltaY, 1.0f, 0.0f, 0.0f)
+            deltaX = 0.0f
+            deltaY = 0.0f
 
             // Multiply the current rotation by the accumulated rotation, and then set the accumulated rotation to the result.
             Matrix.multiplyMM(mTemporaryMatrix, 0, mIncrementalRotation, 0, mAccumulatedRotation, 0)
             System.arraycopy(mTemporaryMatrix, 0, mAccumulatedRotation, 0, 16)
         }
         // Rotate the object taking the overall rotation into account.
-        Matrix.multiplyMM(mTemporaryMatrix, 0, mModelMatrix, 0, mAccumulatedRotation, 0)
-        System.arraycopy(mTemporaryMatrix, 0, mModelMatrix, 0, 16)
+        Matrix.multiplyMM(mTemporaryMatrix, 0, modelMatrix, 0, mAccumulatedRotation, 0)
+        System.arraycopy(mTemporaryMatrix, 0, modelMatrix, 0, 16)
 
         // This multiplies the view matrix by the model matrix, and stores
         // the result in the MVP matrix
         // (which currently contains model * view).
-        Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mModelMatrix, 0)
+        Matrix.multiplyMM(mMVPMatrix, 0, viewMatrix, 0, modelMatrix, 0)
 
         // Pass in the modelview matrix.
         GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mMVPMatrix, 0)
@@ -495,7 +481,7 @@ class RendererDisplayPdbFile
         // This multiplies the modelview matrix by the projection matrix,
         // and stores the result in the MVP matrix
         // (which now contains model * view * projection).
-        Matrix.multiplyMM(mTemporaryMatrix, 0, mProjectionMatrix, 0, mModelMatrix, 0)
+        Matrix.multiplyMM(mTemporaryMatrix, 0, mProjectionMatrix, 0, modelMatrix, 0)
         System.arraycopy(mTemporaryMatrix, 0, mMVPMatrix, 0, 16)
 
         // Pass in the combined matrix.
@@ -525,7 +511,7 @@ class RendererDisplayPdbFile
         GLES20.glDisableVertexAttribArray(pointPositionHandle)
 
         // Pass in the transformation matrix.
-        Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mLightModelMatrix, 0)
+        Matrix.multiplyMM(mMVPMatrix, 0, viewMatrix, 0, mLightModelMatrix, 0)
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0)
         GLES20.glUniformMatrix4fv(pointMVPMatrixHandle, 1, false, mMVPMatrix, 0)
 
@@ -635,25 +621,25 @@ class RendererDisplayPdbFile
         if (mSelectModeFlag) {
             mSelectModeFlag = false
             // reset any rotation during selection movement
-            mDeltaX = 0.0f
-            mDeltaY = 0.0f
-            mScaleCurrentF = mSaveScale
-            mGlSurfaceView.mSelectMode = false
+            deltaX = 0.0f
+            deltaY = 0.0f
+            scaleCurrentF = mSaveScale
+            glSurfaceView.mSelectMode = false
         } else {
             mSelectModeFlag = true
-            mSaveScale = mScaleCurrentF
-            mGlSurfaceView.mSelectMode = true
+            mSaveScale = scaleCurrentF
+            glSurfaceView.mSelectMode = true
         }
     }
 
     fun loadPdbFile() {
         // TODO: fix this hack on detecting when OPENGL is up and running
         if (mPerVertexProgramHandle != -1) {
-            mPdbFile.parse(mPdbFileName)
+            pdbFile.parse(pdbFileName)
             /*
              * reset view manipulation
              */
-            mScaleCurrentF = INITIAL_SCALE // zoom
+            scaleCurrentF = INITIAL_SCALE // zoom
 
             // Position the eye in front of the origin.
             val eyeX = 0.0f
@@ -673,7 +659,7 @@ class RendererDisplayPdbFile
             // Set the view matrix. This matrix can be said to represent the camera position.
             // NOTE: In OpenGL 1, a ModelView matrix is used, which is a combination of a model and
             // view matrix. In OpenGL 2, we can keep track of these matrices separately if we choose.
-            Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ)
+            Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ)
         }
     }
 
@@ -694,19 +680,19 @@ class RendererDisplayPdbFile
          * first render the triangles of the molecule
          */
         var scaleF = 1.5f / mMol.dcOffset
-        Matrix.setIdentityM(mModelMatrix, 0)
-        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -2.5f)
-        Matrix.scaleM(mModelMatrix, 0, scaleF, scaleF, scaleF)
+        Matrix.setIdentityM(modelMatrix, 0)
+        Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
+        Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
         doMatrixSetup()
         mBufferManager.render(mPositionHandle, mColorHandle, mNormalHandle, mWireFrameRenderingFlag)
 
         // int[] mViewport = new int[]{0, 0, mWidth, mHeight};
         mViewport[2] = mWidth
         mViewport[3] = mHeight
-        val x = mTouchX.toInt()
+        val x = touchX.toInt()
         // offset works out to 100 pixels on an Galaxy S2 (800 vertical),
         //   or 160 on a Nexus 4 (1280 vertical)
-        val y = mTouchY.toInt() - (max(mHeight.toFloat(), mWidth.toFloat()) * 0.125f).toInt()
+        val y = touchY.toInt() - (max(mHeight.toFloat(), mWidth.toFloat()) * 0.125f).toInt()
 
         Matrix.setIdentityM(mTemporaryMatrix, 0)
 
@@ -718,15 +704,15 @@ class RendererDisplayPdbFile
                 mProjectionMatrix, 0, mViewport, 0, mFloatVector2, 0);*/
 
         mScreenVector1.setAll(
-                (mFloatVector1[0] / mFloatVector1[3]).toDouble(),
-                (mFloatVector1[1] / mFloatVector1[3]).toDouble(),
-                (mFloatVector1[2] / mFloatVector1[3]).toDouble()
+                (floatVector1[0] / floatVector1[3]).toDouble(),
+                (floatVector1[1] / floatVector1[3]).toDouble(),
+                (floatVector1[2] / floatVector1[3]).toDouble()
         )
 
         mScreenVector2.setAll(
-                (mFloatVector2[0] / mFloatVector2[3]).toDouble(),
-                (mFloatVector2[1] / mFloatVector2[3]).toDouble(),
-                (mFloatVector2[2] / mFloatVector2[3]).toDouble()
+                (floatVector2[0] / floatVector2[3]).toDouble(),
+                (floatVector2[1] / floatVector2[3]).toDouble(),
+                (floatVector2[2] / floatVector2[3]).toDouble()
         )
 
         // now draw the targeted location in screen coords
@@ -741,7 +727,7 @@ class RendererDisplayPdbFile
         mPointer!!.setup(
                 mScreenVector1.x.toFloat(),
                 mScreenVector1.y.toFloat(),
-                -1.01f, mScaleCurrentF)
+                -1.01f, scaleCurrentF)
 
         mPointer!!.render(mPositionHandle, mColorHandle, mNormalHandle, false /* mWireFrameRenderingFlag */)
 
@@ -778,28 +764,28 @@ class RendererDisplayPdbFile
             //                mManagerViewmode.repeatViewMode();
             //            }
 
-            mFloatVector2[0] = atom1.atomPosition.x.toFloat()
-            mFloatVector2[1] = atom1.atomPosition.y.toFloat()
-            mFloatVector2[2] = atom1.atomPosition.z.toFloat()
-            mFloatVector2[3] = 1.0f
+            floatVector2[0] = atom1.atomPosition.x.toFloat()
+            floatVector2[1] = atom1.atomPosition.y.toFloat()
+            floatVector2[2] = atom1.atomPosition.z.toFloat()
+            floatVector2[3] = 1.0f
 
             // same as for rendering!!
             // Works!!
             scaleF = 1.5f / mMol.dcOffset
-            Matrix.setIdentityM(mModelMatrix, 0)
-            Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -2.5f)
-            Matrix.scaleM(mModelMatrix, 0, scaleF, scaleF, scaleF)
+            Matrix.setIdentityM(modelMatrix, 0)
+            Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
+            Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
             doMatrixSetup()
 
-            Matrix.multiplyMM(mTemporaryMatrix, 0, mViewMatrix, 0, mModelMatrix, 0)
-            Matrix.multiplyMV(mFloatVector1, 0, mTemporaryMatrix, 0, mFloatVector2, 0)
+            Matrix.multiplyMM(mTemporaryMatrix, 0, viewMatrix, 0, modelMatrix, 0)
+            Matrix.multiplyMV(floatVector1, 0, mTemporaryMatrix, 0, floatVector2, 0)
 
-            if (mFloatVector1[3] == 0f) mFloatVector1[3] = 1.0f
+            if (floatVector1[3] == 0f) floatVector1[3] = 1.0f
 
             mTestAtomVector.setAll(
-                    (mFloatVector1[0] / mFloatVector1[3]).toDouble(),
-                    (mFloatVector1[1] / mFloatVector1[3]).toDouble(),
-                    (mFloatVector1[2] / mFloatVector1[3]).toDouble()
+                    (floatVector1[0] / floatVector1[3]).toDouble(),
+                    (floatVector1[1] / floatVector1[3]).toDouble(),
+                    (floatVector1[2] / floatVector1[3]).toDouble()
             )
 
             /*  old way of doing the intersection:  */
@@ -879,9 +865,9 @@ class RendererDisplayPdbFile
         scaleF = 1.5f / mMol.dcOffset
         // cube is 8X a molecule
         // scaleF = scaleF / 8.0f;
-        Matrix.setIdentityM(mModelMatrix, 0)
-        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -2.5f)
-        Matrix.scaleM(mModelMatrix, 0, scaleF, scaleF, scaleF)
+        Matrix.setIdentityM(modelMatrix, 0)
+        Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
+        Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
 
 
         atom1 = mMol.atoms[mMol.numList[selectedAtomIndex]]
@@ -907,11 +893,11 @@ class RendererDisplayPdbFile
     }
 
     fun setPdbFileName(name: String) {
-        mPdbFileName = name
+        pdbFileName = name
     }
 
     fun loadPdbFromStream(inputStream: InputStream) {
-        mPdbFile.loadPdbFromStream(inputStream)
+        pdbFile.loadPdbFromStream(inputStream)
     }
 
     /**

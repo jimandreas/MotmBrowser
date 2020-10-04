@@ -129,8 +129,8 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                     x2 = m.getX(1)
                     y2 = m.getY(1)
 
-                    mRenderer!!.mTouchX = m.x
-                    mRenderer!!.mTouchY = m.y
+                    mRenderer!!.touchX = m.x
+                    mRenderer!!.touchY = m.y
 
                     mOldX = (x1 + x2) / 2.0f
                     mOldY = (y1 + y2) / 2.0f
@@ -145,16 +145,16 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                         x2 = m.getX(1)
                         y2 = m.getY(1)
 
-                        mRenderer!!.mTouchX = m.x
-                        mRenderer!!.mTouchY = m.y
+                        mRenderer!!.touchX = m.x
+                        mRenderer!!.touchY = m.y
 
                         deltax = (x1 + x2) / 2.0f
                         deltax -= mOldX
                         deltay = (y1 + y2) / 2.0f
                         deltay -= mOldY
 
-                        mRenderer!!.mDeltaTranslateX = mRenderer!!.mDeltaTranslateX + deltax / (mDensity * 300f)
-                        mRenderer!!.mDeltaTranslateY = mRenderer!!.mDeltaTranslateY - deltay / (mDensity * 300f)
+                        mRenderer!!.deltaTranslateX = mRenderer!!.deltaTranslateX + deltax / (mDensity * 300f)
+                        mRenderer!!.deltaTranslateY = mRenderer!!.deltaTranslateY - deltay / (mDensity * 300f)
 
                         mOldX = (x1 + x2) / 2.0f
                         mOldY = (y1 + y2) / 2.0f
@@ -170,21 +170,21 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
 
                             // TODO: adjust this exponent.
                             //   for now, hack into buckets
-                            if (mRenderer!!.mScaleCurrentF < 0.1f) {
-                                mRenderer!!.mScaleCurrentF = mRenderer!!.mScaleCurrentF + -deltaSpacing / 1000f
-                            } else if (mRenderer!!.mScaleCurrentF < 0.1f) {
-                                mRenderer!!.mScaleCurrentF = mRenderer!!.mScaleCurrentF + -deltaSpacing / 500f
-                            } else if (mRenderer!!.mScaleCurrentF < 0.5f) {
-                                mRenderer!!.mScaleCurrentF = mRenderer!!.mScaleCurrentF + -deltaSpacing / 200f
-                            } else if (mRenderer!!.mScaleCurrentF < 1f) {
-                                mRenderer!!.mScaleCurrentF = mRenderer!!.mScaleCurrentF + -deltaSpacing / 50f
-                            } else if (mRenderer!!.mScaleCurrentF < 2f) {
-                                mRenderer!!.mScaleCurrentF = mRenderer!!.mScaleCurrentF + -deltaSpacing / 10f
-                            } else if (mRenderer!!.mScaleCurrentF < 5f) {
-                                mRenderer!!.mScaleCurrentF = mRenderer!!.mScaleCurrentF + -deltaSpacing / 10f
-                            } else if (mRenderer!!.mScaleCurrentF > 5f) {
+                            if (mRenderer!!.scaleCurrentF < 0.1f) {
+                                mRenderer!!.scaleCurrentF = mRenderer!!.scaleCurrentF + -deltaSpacing / 1000f
+                            } else if (mRenderer!!.scaleCurrentF < 0.1f) {
+                                mRenderer!!.scaleCurrentF = mRenderer!!.scaleCurrentF + -deltaSpacing / 500f
+                            } else if (mRenderer!!.scaleCurrentF < 0.5f) {
+                                mRenderer!!.scaleCurrentF = mRenderer!!.scaleCurrentF + -deltaSpacing / 200f
+                            } else if (mRenderer!!.scaleCurrentF < 1f) {
+                                mRenderer!!.scaleCurrentF = mRenderer!!.scaleCurrentF + -deltaSpacing / 50f
+                            } else if (mRenderer!!.scaleCurrentF < 2f) {
+                                mRenderer!!.scaleCurrentF = mRenderer!!.scaleCurrentF + -deltaSpacing / 10f
+                            } else if (mRenderer!!.scaleCurrentF < 5f) {
+                                mRenderer!!.scaleCurrentF = mRenderer!!.scaleCurrentF + -deltaSpacing / 10f
+                            } else if (mRenderer!!.scaleCurrentF > 5f) {
                                 if (deltaSpacing > 0) {
-                                    mRenderer!!.mScaleCurrentF = mRenderer!!.mScaleCurrentF + -deltaSpacing / 10f
+                                    mRenderer!!.scaleCurrentF = mRenderer!!.scaleCurrentF + -deltaSpacing / 10f
                                 }
                             }
                             //                        Log.w("Move", "Spacing is " + mRenderer.mScaleCurrentF + " spacing = " + deltaSpacing);
@@ -200,8 +200,8 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                         x2 = m.getX(1)
                         y2 = m.getY(1)
 
-                        mRenderer!!.mTouchX = m.x
-                        mRenderer!!.mTouchY = m.y
+                        mRenderer!!.touchX = m.x
+                        mRenderer!!.touchY = m.y
 
                         mOldX = (x1 + x2) / 2.0f
                         mOldY = (y1 + y2) / 2.0f
@@ -219,8 +219,8 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                 val x = m.x
                 val y = m.y
 
-                mRenderer!!.mTouchX = m.x
-                mRenderer!!.mTouchY = m.y
+                mRenderer!!.touchX = m.x
+                mRenderer!!.touchY = m.y
 
                 if (m.action == MotionEvent.ACTION_MOVE) {
                     if (mLastTouchState != ONE_FINGER_DOWN) {  // handle anything to one finger interaction
@@ -229,8 +229,8 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                         val deltaX = (x - mPreviousX) / mDensity / 2f
                         val deltaY = (y - mPreviousY) / mDensity / 2f
 
-                        mRenderer!!.mDeltaX = mRenderer!!.mDeltaX + deltaX
-                        mRenderer!!.mDeltaY = mRenderer!!.mDeltaY + deltaY
+                        mRenderer!!.deltaX = mRenderer!!.deltaX + deltaX
+                        mRenderer!!.deltaY = mRenderer!!.deltaY + deltaY
                         // Log.w("touch", ": mDX = " + mRenderer.mDeltaX + " mDY = " + mRenderer.mDeltaY);
                     }
                 }
