@@ -38,15 +38,15 @@ import java.nio.ByteOrder
 class SegmentBackboneDirect(private val mMol: Molecule) {
     // private static final float ELLIPSE_X_FACTOR = 2f / 9f;
 
-    private var mNumIndices = 0
-    private val mCylinderIndexCount: Int = 0
-    private lateinit var mFloatData: FloatArray
+    private var numIndices = 0
+    private val cylinderIndexCount: Int = 0
+    private lateinit var floatData: FloatArray
     private var mOffset: Int = 0
 
     private val vbo = IntArray(1)
     internal val ibo = IntArray(1)
 
-    private val mBufMgr: BufferManager = mMol.mBufMgr
+    private val bufMgr: BufferManager = mMol.bufMgr
 
     // TODO:  work on color for atom ends and half-way in the connection
 
@@ -102,7 +102,7 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
          * math: two tris per slice, wrapping for numSlices+1 (hit original again to close)
          *    doubled for two colors on each half
          */
-        mFloatData = FloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
+        floatData = FloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
         mOffset = 0
 
         /*
@@ -198,12 +198,12 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
 
         }  // end for loop for body
 
-        mNumIndices = mOffset
+        numIndices = mOffset
 
         val vertexDataBuffer = ByteBuffer
-                .allocateDirect(mFloatData.size * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder())
+                .allocateDirect(floatData.size * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder())
                 .asFloatBuffer()
-        vertexDataBuffer.put(mFloatData).position(0)
+        vertexDataBuffer.put(floatData).position(0)
 
         GLES20.glGenBuffers(1, vbo, 0)
 
@@ -252,7 +252,7 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
                 GLES20.GL_TRIANGLES
             }
 
-            GLES20.glDrawArrays(todo, 0, mNumIndices)
+            GLES20.glDrawArrays(todo, 0, numIndices)
 
             GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0)  // release
         } else {
@@ -275,38 +275,38 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
         n[1] *= -normal_brightness_factor
         n[2] *= -normal_brightness_factor
 
-        mFloatData[mOffset++] = p1[0]
-        mFloatData[mOffset++] = p1[1]
-        mFloatData[mOffset++] = p1[2]
-        mFloatData[mOffset++] = n[0]
-        mFloatData[mOffset++] = n[1]
-        mFloatData[mOffset++] = n[2]
-        mFloatData[mOffset++] = color[0]
-        mFloatData[mOffset++] = color[1]
-        mFloatData[mOffset++] = color[2]
-        mFloatData[mOffset++] = color[3]
+        floatData[mOffset++] = p1[0]
+        floatData[mOffset++] = p1[1]
+        floatData[mOffset++] = p1[2]
+        floatData[mOffset++] = n[0]
+        floatData[mOffset++] = n[1]
+        floatData[mOffset++] = n[2]
+        floatData[mOffset++] = color[0]
+        floatData[mOffset++] = color[1]
+        floatData[mOffset++] = color[2]
+        floatData[mOffset++] = color[3]
 
-        mFloatData[mOffset++] = p2[0]
-        mFloatData[mOffset++] = p2[1]
-        mFloatData[mOffset++] = p2[2]
-        mFloatData[mOffset++] = n[0]
-        mFloatData[mOffset++] = n[1]
-        mFloatData[mOffset++] = n[2]
-        mFloatData[mOffset++] = color[0]
-        mFloatData[mOffset++] = color[1]
-        mFloatData[mOffset++] = color[2]
-        mFloatData[mOffset++] = color[3]
+        floatData[mOffset++] = p2[0]
+        floatData[mOffset++] = p2[1]
+        floatData[mOffset++] = p2[2]
+        floatData[mOffset++] = n[0]
+        floatData[mOffset++] = n[1]
+        floatData[mOffset++] = n[2]
+        floatData[mOffset++] = color[0]
+        floatData[mOffset++] = color[1]
+        floatData[mOffset++] = color[2]
+        floatData[mOffset++] = color[3]
 
-        mFloatData[mOffset++] = p3[0]
-        mFloatData[mOffset++] = p3[1]
-        mFloatData[mOffset++] = p3[2]
-        mFloatData[mOffset++] = n[0]
-        mFloatData[mOffset++] = n[1]
-        mFloatData[mOffset++] = n[2]
-        mFloatData[mOffset++] = color[0]
-        mFloatData[mOffset++] = color[1]
-        mFloatData[mOffset++] = color[2]
-        mFloatData[mOffset++] = color[3]
+        floatData[mOffset++] = p3[0]
+        floatData[mOffset++] = p3[1]
+        floatData[mOffset++] = p3[2]
+        floatData[mOffset++] = n[0]
+        floatData[mOffset++] = n[1]
+        floatData[mOffset++] = n[2]
+        floatData[mOffset++] = color[0]
+        floatData[mOffset++] = color[1]
+        floatData[mOffset++] = color[2]
+        floatData[mOffset++] = color[3]
     }
 
     companion object {

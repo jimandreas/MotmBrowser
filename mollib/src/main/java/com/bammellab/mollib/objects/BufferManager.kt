@@ -69,7 +69,7 @@ private constructor(context: Context) {
 
     init {
         //        sContext = context;
-        mBufferList = ArrayList()
+        bufferList = ArrayList()
         sFloatArray = FloatArray(sFloatArraySize)
     }
 
@@ -81,12 +81,12 @@ private constructor(context: Context) {
     //
     //        int i;
     //        int count = 0;
-    //        for (i = 0; i < mBufferList.size(); i++ ) {
-    //            ae = mBufferList.get(i);
+    //        for (i = 0; i < bufferList.size(); i++ ) {
+    //            ae = bufferList.get(i);
     //            if (ae.bufferInUse) {
     //                count++;
     //            }
-    //            mBufferList.get(i).clearBufferInUse();
+    //            bufferList.get(i).clearBufferInUse();
     //        }
     ////        Timber.w("Dropped " + count + " buffers");
     //    }
@@ -101,16 +101,16 @@ private constructor(context: Context) {
 
         var i = 0
 
-        while (i < mBufferList.size) {
-            ae = mBufferList[i]
+        while (i < bufferList.size) {
+            ae = bufferList[i]
             ae.bufferInUse = false
             if (ae.bufferAllocated) {
                 GLES20.glDeleteBuffers(1, ae.glBuf, 0)
             }
-            mBufferList[i].clearBufferInUse()
+            bufferList[i].clearBufferInUse()
             i++
         }
-        mBufferList.clear()
+        bufferList.clear()
         //        Timber.w("Dropped " + count + " buffers");
     }
 
@@ -166,14 +166,14 @@ private constructor(context: Context) {
     fun transferToGl() {
         var ae: GLArrayEntry? = null
         var i = 0
-        while (i < mBufferList.size) {
-            ae = mBufferList[i]
+        while (i < bufferList.size) {
+            ae = bufferList[i]
             if (!ae.bufferInUse) {
                 break
             }
             i++
         }
-        if (ae == null || i == mBufferList.size) {  // create a record and a buffer
+        if (ae == null || i == bufferList.size) {  // create a record and a buffer
             //            Timber.i("creating buffer " + i);
 
             try {
@@ -198,7 +198,7 @@ private constructor(context: Context) {
             }
 
         }
-        mBufferList.add(ae)
+        bufferList.add(ae)
         ae.bufferInUse = true
         ae.nativeFloatBuffer!!.put(sFloatArray).position(0)
         GLES20.glGenBuffers(1, ae.glBuf, 0)
@@ -233,7 +233,7 @@ private constructor(context: Context) {
 
         if (!sReportedUsage) {
 
-            val bufferEfficiency = sBufferUsed / (mBufferList.size * sFloatArraySize).toFloat()
+            val bufferEfficiency = sBufferUsed / (bufferList.size * sFloatArraySize).toFloat()
             @SuppressLint("DefaultLocale") val prettyPrint = String.format("%6.2f", bufferEfficiency)
 
             Timber.i("Buffer used: %d triangles: %d buffer percent used: %s",
@@ -243,8 +243,8 @@ private constructor(context: Context) {
 
         GLES20.glEnable(GLES20.GL_CULL_FACE)
 
-        for (i in mBufferList.indices) {
-            ae = mBufferList[i]
+        for (i in bufferList.indices) {
+            ae = bufferList[i]
             if (!ae.bufferAllocated) {
                 continue
             }
@@ -295,7 +295,7 @@ private constructor(context: Context) {
 
     companion object {
         private lateinit var sFloatArray: FloatArray
-        private lateinit var mBufferList: ArrayList<GLArrayEntry>
+        private lateinit var bufferList: ArrayList<GLArrayEntry>
 
         private val sVertexDataFloatBuffer: FloatBuffer? = null
         private var sFloatArrayIndex: Int = 0

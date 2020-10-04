@@ -29,18 +29,18 @@ import java.nio.FloatBuffer
 class Pointer {
 
     /** Store our model data in a float buffer.  */
-    private val mPointerPositions: FloatBuffer
-    private val mPointerColors: FloatBuffer
-    private val mPointerNormals: FloatBuffer
+    private val pointerPositions: FloatBuffer
+    private val pointerColors: FloatBuffer
+    private val pointerNormals: FloatBuffer
 
     /** Size of the position data in elements.  */
-    private val mPositionDataSize = 3
+    private val positionDataSize = 3
 
     /** Size of the color data in elements.  */
-    private val mColorDataSize = 4
+    private val colorDataSize = 4
 
     /** Size of the normal data in elements.  */
-    private val mNormalDataSize = 3
+    private val normalDataSize = 3
 
     // Define points for a pointer.
 
@@ -75,21 +75,21 @@ class Pointer {
     init {
         // Initialize the buffers.
 
-        mPointerPositions = ByteBuffer.allocateDirect(pointerPositionData.size * BYTES_PER_FLOAT)
+        pointerPositions = ByteBuffer.allocateDirect(pointerPositionData.size * BYTES_PER_FLOAT)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer()
-        mPointerPositions.put(pointerPositionData).position(0)
+        pointerPositions.put(pointerPositionData).position(0)
 
-        mPointerColors = ByteBuffer.allocateDirect(pointerColorData.size * BYTES_PER_FLOAT)
+        pointerColors = ByteBuffer.allocateDirect(pointerColorData.size * BYTES_PER_FLOAT)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer()
-        mPointerColors.put(pointerColorData).position(0)
+        pointerColors.put(pointerColorData).position(0)
 
         for (i in pointerNormalData.indices) {
             pointerNormalData[i] *= 10f
         }
 
-        mPointerNormals = ByteBuffer.allocateDirect(pointerNormalData.size * BYTES_PER_FLOAT)
+        pointerNormals = ByteBuffer.allocateDirect(pointerNormalData.size * BYTES_PER_FLOAT)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer()
-        mPointerNormals.put(pointerNormalData).position(0)
+        pointerNormals.put(pointerNormalData).position(0)
 
 
     }
@@ -98,19 +98,19 @@ class Pointer {
         var i = 0
         while (i < pointerPositionData.size) {
 
-            mPointerPositions.put(i, x + pointerPositionData[i] / 10.0f * scalingFactor)
-            mPointerPositions.put(i + 1, y + pointerPositionData[i + 1] / 10.0f * scalingFactor)
-            mPointerPositions.put(i + 2, z + pointerPositionData[i + 2] / 10.0f * scalingFactor)
+            pointerPositions.put(i, x + pointerPositionData[i] / 10.0f * scalingFactor)
+            pointerPositions.put(i + 1, y + pointerPositionData[i + 1] / 10.0f * scalingFactor)
+            pointerPositions.put(i + 2, z + pointerPositionData[i + 2] / 10.0f * scalingFactor)
             i += 3
-            //            mFinalCubePositionData[i] = x + pointerPositionData[i] / 3.0f;
-            //            mFinalCubePositionData[i+1] = y + pointerPositionData[i+1] / 3.0f;
-            //            mFinalCubePositionData[i+2] = z + pointerPositionData[i+2] / 3.0f;
+            //            finalCubePositionData[i] = x + pointerPositionData[i] / 3.0f;
+            //            finalCubePositionData[i+1] = y + pointerPositionData[i+1] / 3.0f;
+            //            finalCubePositionData[i+2] = z + pointerPositionData[i+2] / 3.0f;
         }
     }
 
-    fun render(mPositionHandle: Int,
-               mColorHandle: Int,
-               mNormalHandle: Int,
+    fun render(positionHandle: Int,
+               colorHandle: Int,
+               normalHandle: Int,
                doWireframeRendering: Boolean) {
 
         // Draw
@@ -121,25 +121,25 @@ class Pointer {
         }
 
         // Pass in the position information
-        mPointerPositions.position(0)
-        GLES20.glVertexAttribPointer(mPositionHandle, mPositionDataSize, GLES20.GL_FLOAT, false,
-                0, mPointerPositions)
+        pointerPositions.position(0)
+        GLES20.glVertexAttribPointer(positionHandle, positionDataSize, GLES20.GL_FLOAT, false,
+                0, pointerPositions)
 
-        GLES20.glEnableVertexAttribArray(mPositionHandle)
+        GLES20.glEnableVertexAttribArray(positionHandle)
 
         // Pass in the color information
-        mPointerColors.position(0)
-        GLES20.glVertexAttribPointer(mColorHandle, mColorDataSize, GLES20.GL_FLOAT, false,
-                0, mPointerColors)
+        pointerColors.position(0)
+        GLES20.glVertexAttribPointer(colorHandle, colorDataSize, GLES20.GL_FLOAT, false,
+                0, pointerColors)
 
-        GLES20.glEnableVertexAttribArray(mColorHandle)
+        GLES20.glEnableVertexAttribArray(colorHandle)
 
         // Pass in the normal information
-        mPointerNormals.position(0)
-        GLES20.glVertexAttribPointer(mNormalHandle, mNormalDataSize, GLES20.GL_FLOAT, false,
-                0, mPointerNormals)
+        pointerNormals.position(0)
+        GLES20.glVertexAttribPointer(normalHandle, normalDataSize, GLES20.GL_FLOAT, false,
+                0, pointerNormals)
 
-        GLES20.glEnableVertexAttribArray(mNormalHandle)
+        GLES20.glEnableVertexAttribArray(normalHandle)
 
         // Draw the pointer.
         GLES20.glDrawArrays(todo, 0, 9)

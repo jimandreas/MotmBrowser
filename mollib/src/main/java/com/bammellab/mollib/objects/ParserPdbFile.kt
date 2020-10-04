@@ -36,10 +36,10 @@ import kotlin.math.sqrt
 // TODO: parse HETATM - convert "CO" in 1mat to single letter code (at atom 1967)
 
 @SuppressLint("DefaultLocale")
-class ParserPdbFile(mActivity: Activity,
+class ParserPdbFile(activity: Activity,
                     private val mMol: Molecule,
                     bm: BufferManager,
-                    private val mManagerViewmode: ManagerViewmode
+                    private val managerViewmode: ManagerViewmode
                     ) {
     private var pdbFileLoaded = false
     private val atomSphere: AtomSphere
@@ -56,16 +56,16 @@ class ParserPdbFile(mActivity: Activity,
     private var minZ = 1e6f
 
     init {
-//        val mAssetManager = mActivity.assets
+//        val assetManager = activity.assets
         mPdbFileName = "NOTDEF"
-        mMol.mBufMgr = bm
-//        val mBufMgr = bm
+        mMol.bufMgr = bm
+//        val bufMgr = bm
         atomSphere = AtomSphere(mMol)
 
-        bondTemplate = ParserBondTemplate(mActivity)
+        bondTemplate = ParserBondTemplate(activity)
         bondTemplate.parseBondInfo()
 
-        atomInfo = ParserAtomInfo(mActivity)
+        atomInfo = ParserAtomInfo(activity)
         atomInfo.parseAtomInfo()
 
     }
@@ -88,7 +88,7 @@ class ParserPdbFile(mActivity: Activity,
 
         Timber.i("finished parsing: " + mMol.name + " in" + prettyPrint + " seconds.")
 
-        mManagerViewmode.createView()
+        managerViewmode.createView()
     }
 
 
@@ -97,7 +97,7 @@ class ParserPdbFile(mActivity: Activity,
         resetMoleculeMaxMin()
         mMol.clearLists()
         loadPdbFromInputStream(inputStream)
-        mManagerViewmode.createView()
+        managerViewmode.createView()
     }
 
     /*
@@ -112,8 +112,8 @@ class ParserPdbFile(mActivity: Activity,
         try {
 //            val file = File(Environment.getExternalStoragePublicDirectory(
 //                    Environment.DIRECTORY_PICTURES), "test123")
-//            val folder = mActivity.getExternalFilesDir("PDB")
-//            val folder2 = mActivity.filesDir
+//            val folder = activity.getExternalFilesDir("PDB")
+//            val folder2 = activity.filesDir
 
 //            val folder3 = File("/storage/emulated/0/PDB/")
 //            val folder3 = Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES)
@@ -127,7 +127,7 @@ class ParserPdbFile(mActivity: Activity,
             //inputStream = GZIPInputStream(fileInputStream)
             loadPdbFromInputStream(fileInputStream)
 
-            // inputStream = mAssetManager.open(pdbFileName, AssetManager.ACCESS_BUFFER);
+            // inputStream = assetManager.open(pdbFileName, AssetManager.ACCESS_BUFFER);
 
         } catch (e: IOException) {
             Timber.e("IO error in file $pdbFileName")

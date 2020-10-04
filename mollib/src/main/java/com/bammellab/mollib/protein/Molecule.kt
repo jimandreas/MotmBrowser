@@ -24,7 +24,7 @@ import java.util.*
 class Molecule {
     var name: String? = null
     var maxAtomNumber: Int = 0
-    lateinit var mBufMgr: BufferManager
+    lateinit var bufMgr: BufferManager
     val numList: MutableList<Int> = ArrayList()
     @SuppressLint("UseSparseArrays")
     val atoms = HashMap<Int, PdbAtom>()
@@ -44,8 +44,8 @@ class Molecule {
      * for tracking memory and time
      */
 
-    var mReportedTimeFlag: Boolean = false
-    var mStartOfParseTime: Float = 0.toFloat()
+    var reportedTimeFlag: Boolean = false
+    var startOfParseTime: Float = 0.toFloat()
     var geometrySlices = INITIAL_SLICES
     var ribbonSlices = RIBBON_INITIAL_SLICES
     var sphereGeometrySlices = INITIAL_SLICES / 2

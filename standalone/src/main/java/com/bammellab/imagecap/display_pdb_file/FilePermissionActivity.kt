@@ -88,7 +88,7 @@ class FilePermissionActivity : AppCompatActivity() {
             Timber.v("1a0h: read %d bytes", byteCount)
             fileInputStream.close()
 
-            // inputStream = mAssetManager.open(pdbFileName, AssetManager.ACCESS_BUFFER);
+            // inputStream = assetManager.open(pdbFileName, AssetManager.ACCESS_BUFFER);
 
         } catch (e: IOException) {
             Timber.e("IO error in file 1a0h.pdb")

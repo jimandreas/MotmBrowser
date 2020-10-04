@@ -43,15 +43,15 @@ class CatmullRomCurve : ICurve.ICurve3D {
     private var mPoints: MutableList<Vector3>
     var numPoints: Int = 0
         private set
-    private var mSelectedIndex = -1
+    private var selectedIndex = -1
     override val currentTangent: Vector3
-    private val mCurrentPoint: Vector3
+    private val currentPoint: Vector3
     private var mCalculateTangents: Boolean = false
-    private lateinit var mSegmentLengths: DoubleArray
+    private lateinit var segmentLengths: DoubleArray
     private var isClosedCurve: Boolean = false
-    private val mTempNext = Vector3()
-    private val mTempPrevLen = Vector3()
-    private val mTempPointLen = Vector3()
+    private val tempNext = Vector3()
+    private val tempPrevLen = Vector3()
+    private val tempPointLen = Vector3()
 
     val points: List<Vector3>
         get() = mPoints
@@ -59,7 +59,7 @@ class CatmullRomCurve : ICurve.ICurve3D {
     init {
         mPoints = Collections.synchronizedList(CopyOnWriteArrayList())
         currentTangent = Vector3()
-        mCurrentPoint = Vector3()
+        currentPoint = Vector3()
     }
 
     fun addPoint(point: Vector3) {
@@ -77,8 +77,8 @@ class CatmullRomCurve : ICurve.ICurve3D {
             val prevt = if (t == 0.0) t + DELTA else t - DELTA
             val nextt = if (t == 1.0) t - DELTA else t + DELTA
             p(currentTangent, prevt)
-            p(mTempNext, nextt)
-            currentTangent.subtract(mTempNext)
+            p(tempNext, nextt)
+            currentTangent.subtract(tempNext)
             currentTangent.multiply(.5)
             currentTangent.normalize()
         }
@@ -88,16 +88,16 @@ class CatmullRomCurve : ICurve.ICurve3D {
 
     fun selectPoint(point: Vector3): Int {
         var minDist = java.lang.Double.MAX_VALUE
-        mSelectedIndex = -1
+        selectedIndex = -1
         for (i in 0 until numPoints) {
             val p = mPoints[i]
             val distance = pow2(p.x - point.x) + pow2(p.y - point.y) + pow2(p.z - point.z)
             if (distance < minDist && distance < EPSILON) {
                 minDist = distance
-                mSelectedIndex = i
+                selectedIndex = i
             }
         }
-        return mSelectedIndex
+        return selectedIndex
     }
 
     override fun setCalculateTangents(calculateTangents: Boolean) {
@@ -121,7 +121,7 @@ class CatmullRomCurve : ICurve.ICurve3D {
         val start = if (isClosedCurve) 0 else 2
         var currentIndex = start + floor((if (t == 1.0) t - DELTA else t) * (numPoints - end)).toInt()
         val tdivnum = t * (numPoints - end) - (currentIndex - start)
-        mCurrentPoint.setAll(0.0, 0.0, 0.0)
+        currentPoint.setAll(0.0, 0.0, 0.0)
 
         if (!isClosedCurve) {
             // Limit the bounds for AccelerateDecelerateInterpolator
@@ -135,11 +135,11 @@ class CatmullRomCurve : ICurve.ICurve3D {
             if (index < 0) index = numPoints - index - 2
             val p = mPoints[index]
 
-            mCurrentPoint.x = mCurrentPoint.x + b * p.x
-            mCurrentPoint.y = mCurrentPoint.y + b * p.y
-            mCurrentPoint.z = mCurrentPoint.z + b * p.z
+            currentPoint.x = currentPoint.x + b * p.x
+            currentPoint.y = currentPoint.y + b * p.y
+            currentPoint.z = currentPoint.z + b * p.z
         }
-        result.setAll(mCurrentPoint)
+        result.setAll(currentPoint)
     }
 
     private fun pow2(value: Double): Double {
@@ -162,17 +162,17 @@ class CatmullRomCurve : ICurve.ICurve3D {
     private fun getLength(segments: Int): Double {
         var totalLength = 0.0
 
-        mSegmentLengths = DoubleArray(segments + 1)
-        mSegmentLengths[0] = 0.0
-        calculatePoint(mTempPrevLen, 0.0)
+        segmentLengths = DoubleArray(segments + 1)
+        segmentLengths[0] = 0.0
+        calculatePoint(tempPrevLen, 0.0)
 
         for (i in 1..segments) {
             val t = i.toDouble() / segments.toDouble()
-            calculatePoint(mTempPointLen, t)
-            val dist = mTempPrevLen.distanceTo(mTempPointLen)
+            calculatePoint(tempPointLen, t)
+            val dist = tempPrevLen.distanceTo(tempPointLen)
             totalLength += dist
-            mSegmentLengths[i] = dist
-            mTempPrevLen.setAll(mTempPointLen)
+            segmentLengths[i] = dist
+            tempPrevLen.setAll(tempPointLen)
         }
 
         return totalLength
@@ -195,7 +195,7 @@ class CatmullRomCurve : ICurve.ICurve3D {
         val curveLength = getLength(resolution * 100)
         // -- get the length between each new point
         val segmentDistance = curveLength / resolution
-        val numSegments = mSegmentLengths.size.toDouble()
+        val numSegments = segmentLengths.size.toDouble()
 
         val newPoints = Collections.synchronizedList(CopyOnWriteArrayList<Vector3>())
         // -- add first control point
@@ -209,7 +209,7 @@ class CatmullRomCurve : ICurve.ICurve3D {
 
         var i = 1
         while (i < numSegments) {
-            currentLength += mSegmentLengths[i]
+            currentLength += segmentLengths[i]
             if (currentLength >= segmentDistance) {
                 point = Vector3()
                 calculatePoint(point, i.toDouble() / (numSegments - 1))

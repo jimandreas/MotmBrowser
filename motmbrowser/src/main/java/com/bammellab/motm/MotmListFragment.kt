@@ -73,17 +73,17 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
     class SimpleStringRecyclerViewAdapter(context: Context, private val motmList: List<String>)
         : RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder>() {
 
-        private val mTypedValue = TypedValue()
-        private val mBackground: Int
+        private val typedValue = TypedValue()
+        private val background: Int
 
         class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-            var mBoundString: String? = null
-            val mImageView: ImageView = mView.findViewById(R.id.avatar)
-            val mTextView: TextView = mView.findViewById(R.id.motmtext1)
-            val mTextView2: TextView = mView.findViewById(R.id.motmtext2)
+            var boundString: String? = null
+            val imageView: ImageView = mView.findViewById(R.id.avatar)
+            val textView: TextView = mView.findViewById(R.id.motmtext1)
+            val textView2: TextView = mView.findViewById(R.id.motmtext2)
 
             override fun toString(): String {
-                return super.toString() + " '" + mTextView.text
+                return super.toString() + " '" + textView.text
             }
         }
 
@@ -92,29 +92,29 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
         }
 
         init {
-            context.theme.resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true)
-            mBackground = mTypedValue.resourceId
+            context.theme.resolveAttribute(R.attr.selectableItemBackground, typedValue, true)
+            background = typedValue.resourceId
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.list_item_motm, parent, false)
-            view.setBackgroundResource(mBackground)
+            view.setBackgroundResource(background)
             return ViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//            holder.mBoundString = motmList[position]
+//            holder.boundString = motmList[position]
             val invertPosition = invertPosition(position)
-            holder.mBoundString = (invertPosition+1).toString() // motm tables are one based, position starts at zero
+            holder.boundString = (invertPosition+1).toString() // motm tables are one based, position starts at zero
 
             holder.mView.setOnClickListener { v ->
                 val context = v.context
-                // val str = holder.mBoundString
+                // val str = holder.boundString
 
-                Timber.i("OnClick: bound string is %s", holder.mBoundString)
+                Timber.i("OnClick: bound string is %s", holder.boundString)
                 val intent = Intent(context, MotmDetailActivity::class.java)
-                intent.putExtra(MotmDetailActivity.EXTRA_NAME, holder.mBoundString)
+                intent.putExtra(MotmDetailActivity.EXTRA_NAME, holder.boundString)
                 //                intent.putExtra(MotmDetailActivity.EXTRA_CATEGORY,
                 //                        MotmSection.FRAG_ALL_MOTM);
                 context.startActivity(intent)
@@ -130,16 +130,16 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
 //                    + Corpus.motmDescByKey[position + 1])
                     + motmTagLinesGet(invertPosition+1))
 
-            holder.mTextView.text = spannedString
-            holder.mTextView2.visibility = View.GONE
+            holder.textView.text = spannedString
+            holder.textView2.visibility = View.GONE
 
             val image = Corpus.motmImageListGet(invertPosition + 1)
 
             val url = MotmApplication.RCSB_MOTM_IMAGE_PREFIX + image
-            Glide.with(holder.mImageView.context)
+            Glide.with(holder.imageView.context)
                     .load(url)
                     .fitCenter()
-                    .into(holder.mImageView)
+                    .into(holder.imageView)
         }
 
         override fun getItemCount(): Int {

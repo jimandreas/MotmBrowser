@@ -26,11 +26,11 @@ import com.bammellab.mollib.protein.Molecule
  * draw nice rectangular boxes representing nucleic acids (the ladder)
  */
 class RenderNucleic(private val mMol: Molecule) {
-    private val mBufMgr: BufferManager = mMol.mBufMgr
+    private val bufMgr: BufferManager = mMol.bufMgr
 
-    private var mNumIndices = 0
-    private val mCylinderIndexCount: Int = 0
-    private lateinit var mVertexData: FloatArray
+    private var numIndices = 0
+    private val cylinderIndexCount: Int = 0
+    private lateinit var vertexData: FloatArray
     private var mOffset: Int = 0
     internal val vboTopAndBottom = IntArray(1)
     internal val vboBody = IntArray(1)
@@ -77,7 +77,7 @@ class RenderNucleic(private val mMol: Molecule) {
                 }
             }
         }
-        mBufMgr.transferToGl()
+        bufMgr.transferToGl()
     }
 
     /*
@@ -96,8 +96,8 @@ class RenderNucleic(private val mMol: Molecule) {
         val theColor = getColor(crd)
         // not all nucleic residues specify their ladder element (5CCW)
 
-        mVertexData = mBufMgr.getFloatArray(36 * STRIDE_IN_FLOATS)
-        mOffset = mBufMgr.floatArrayIndex
+        vertexData = bufMgr.getFloatArray(36 * STRIDE_IN_FLOATS)
+        mOffset = bufMgr.floatArrayIndex
 
         corner1.setAll(crd.nucleicCornerAtom.atomPosition)
 
@@ -238,8 +238,8 @@ class RenderNucleic(private val mMol: Molecule) {
         n = XYZ.getNormal(mMol.p3, mMol.p2, mMol.p1)
         putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
 
-        mNumIndices = mOffset
-        mBufMgr.floatArrayIndex = mOffset
+        numIndices = mOffset
+        bufMgr.floatArrayIndex = mOffset
 
         /* **************************
          * END number 1
@@ -374,8 +374,8 @@ class RenderNucleic(private val mMol: Molecule) {
         n = XYZ.getNormal(mMol.p3, mMol.p2, mMol.p1)
         putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
 
-        mNumIndices = mOffset
-        mBufMgr.floatArrayIndex = mOffset
+        numIndices = mOffset
+        bufMgr.floatArrayIndex = mOffset
     }
 
     private fun putTri(p1: FloatArray, p2: FloatArray, p3: FloatArray, n: FloatArray, color: FloatArray) {
@@ -384,38 +384,38 @@ class RenderNucleic(private val mMol: Molecule) {
         n[1] *= -normal_brightness_factor
         n[2] *= -normal_brightness_factor
 
-        mVertexData[mOffset++] = p1[0]
-        mVertexData[mOffset++] = p1[1]
-        mVertexData[mOffset++] = p1[2]
-        mVertexData[mOffset++] = n[0]
-        mVertexData[mOffset++] = n[1]
-        mVertexData[mOffset++] = n[2]
-        mVertexData[mOffset++] = color[0]
-        mVertexData[mOffset++] = color[1]
-        mVertexData[mOffset++] = color[2]
-        mVertexData[mOffset++] = color[3]
+        vertexData[mOffset++] = p1[0]
+        vertexData[mOffset++] = p1[1]
+        vertexData[mOffset++] = p1[2]
+        vertexData[mOffset++] = n[0]
+        vertexData[mOffset++] = n[1]
+        vertexData[mOffset++] = n[2]
+        vertexData[mOffset++] = color[0]
+        vertexData[mOffset++] = color[1]
+        vertexData[mOffset++] = color[2]
+        vertexData[mOffset++] = color[3]
 
-        mVertexData[mOffset++] = p2[0]
-        mVertexData[mOffset++] = p2[1]
-        mVertexData[mOffset++] = p2[2]
-        mVertexData[mOffset++] = n[0]
-        mVertexData[mOffset++] = n[1]
-        mVertexData[mOffset++] = n[2]
-        mVertexData[mOffset++] = color[0]
-        mVertexData[mOffset++] = color[1]
-        mVertexData[mOffset++] = color[2]
-        mVertexData[mOffset++] = color[3]
+        vertexData[mOffset++] = p2[0]
+        vertexData[mOffset++] = p2[1]
+        vertexData[mOffset++] = p2[2]
+        vertexData[mOffset++] = n[0]
+        vertexData[mOffset++] = n[1]
+        vertexData[mOffset++] = n[2]
+        vertexData[mOffset++] = color[0]
+        vertexData[mOffset++] = color[1]
+        vertexData[mOffset++] = color[2]
+        vertexData[mOffset++] = color[3]
 
-        mVertexData[mOffset++] = p3[0]
-        mVertexData[mOffset++] = p3[1]
-        mVertexData[mOffset++] = p3[2]
-        mVertexData[mOffset++] = n[0]
-        mVertexData[mOffset++] = n[1]
-        mVertexData[mOffset++] = n[2]
-        mVertexData[mOffset++] = color[0]
-        mVertexData[mOffset++] = color[1]
-        mVertexData[mOffset++] = color[2]
-        mVertexData[mOffset++] = color[3]
+        vertexData[mOffset++] = p3[0]
+        vertexData[mOffset++] = p3[1]
+        vertexData[mOffset++] = p3[2]
+        vertexData[mOffset++] = n[0]
+        vertexData[mOffset++] = n[1]
+        vertexData[mOffset++] = n[2]
+        vertexData[mOffset++] = color[0]
+        vertexData[mOffset++] = color[1]
+        vertexData[mOffset++] = color[2]
+        vertexData[mOffset++] = color[3]
     }
 
     companion object {

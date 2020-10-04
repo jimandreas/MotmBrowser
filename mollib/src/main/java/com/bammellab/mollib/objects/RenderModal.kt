@@ -39,10 +39,10 @@ import kotlin.math.acos
  * render the polypeptide backbone "ribbon" - follows the Alpha Carbons (CA)
  */
 class RenderModal(private val mMol: Molecule) {
-    private val mBufMgr: BufferManager = mMol.mBufMgr
+    private val bufMgr: BufferManager = mMol.bufMgr
 
-    private val mCylinderIndexCount: Int = 0
-    private lateinit var mVertexData: FloatArray
+    private val cylinderIndexCount: Int = 0
+    private lateinit var vertexData: FloatArray
     private var mOffset: Int = 0
     internal val vboTopAndBottom = IntArray(1)
     internal val vboBody = IntArray(1)
@@ -158,7 +158,7 @@ class RenderModal(private val mMol: Molecule) {
         /*
          * done rendering, commit the triangles
          */
-        mBufMgr.transferToGl()
+        bufMgr.transferToGl()
     }
 
     /*
@@ -438,8 +438,8 @@ class RenderModal(private val mMol: Molecule) {
             }
 
 
-            mVertexData = mBufMgr.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
-            mOffset = mBufMgr.floatArrayIndex
+            vertexData = bufMgr.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
+            mOffset = bufMgr.floatArrayIndex
 
             run {
 
@@ -523,7 +523,7 @@ class RenderModal(private val mMol: Molecule) {
                 // reuse the 2nd array
                 System.arraycopy(v2, 0, v1, 0, (numSlices + 1) * 3)
 
-                mBufMgr.floatArrayIndex = mOffset
+                bufMgr.floatArrayIndex = mOffset
             }
         }
     }
@@ -807,8 +807,8 @@ class RenderModal(private val mMol: Molecule) {
             }
 
 
-            mVertexData = mBufMgr.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
-            mOffset = mBufMgr.floatArrayIndex
+            vertexData = bufMgr.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
+            mOffset = bufMgr.floatArrayIndex
 
             run {
 
@@ -893,7 +893,7 @@ class RenderModal(private val mMol: Molecule) {
                 System.arraycopy(v2, 0, v1, 0, (numSlices + 1) * 3)
                 mMol.cache2_valid = true
 
-                mBufMgr.floatArrayIndex = mOffset
+                bufMgr.floatArrayIndex = mOffset
             }
             whereInSpline++
         }
@@ -920,8 +920,8 @@ class RenderModal(private val mMol: Molecule) {
         val whiteColor = floatArrayOf(1.0f, 1.0f, 1.0f, 1.0f)
         val greenColor = floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f)
 
-        mVertexData = mBufMgr.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
-        mOffset = mBufMgr.floatArrayIndex
+        vertexData = bufMgr.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
+        mOffset = bufMgr.floatArrayIndex
         for (i in 0 until numSlices) {
 
             p1[0] = v1[i * 3]
@@ -989,7 +989,7 @@ class RenderModal(private val mMol: Molecule) {
                 putTri(p1, p2, p3, n, greenColor)
             }
         }
-        mBufMgr.floatArrayIndex = mOffset
+        bufMgr.floatArrayIndex = mOffset
     }
 
     private fun renderRibbon(path: CatmullRomCurve, start_index: Int, end_index: Int, descriptor_count: Int) {
@@ -1155,8 +1155,8 @@ class RenderModal(private val mMol: Molecule) {
                 endVertexCache[slice * 3 + 2] = (z1 + positionEnd.z).toFloat()
             }
 
-            mVertexData = mBufMgr.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
-            mOffset = mBufMgr.floatArrayIndex
+            vertexData = bufMgr.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
+            mOffset = bufMgr.floatArrayIndex
 
             //                if (thedot < 2.7) {
             //                    v1 = matchVertexCache(v1, numSlices + 1, v2, p1p2);
@@ -1240,7 +1240,7 @@ class RenderModal(private val mMol: Molecule) {
             // reuse the 2nd array
             System.arraycopy(endVertexCache, 0, v1, 0, (numSlices + 1) * 3)
             mMol.cache2_valid = true
-            mBufMgr.floatArrayIndex = mOffset
+            bufMgr.floatArrayIndex = mOffset
         }
     }
 
@@ -1257,38 +1257,38 @@ class RenderModal(private val mMol: Molecule) {
         n[1] *= -normalBrightnessFactor
         n[2] *= -normalBrightnessFactor
 
-        mVertexData[mOffset++] = p1[0]
-        mVertexData[mOffset++] = p1[1]
-        mVertexData[mOffset++] = p1[2]
-        mVertexData[mOffset++] = n[0]
-        mVertexData[mOffset++] = n[1]
-        mVertexData[mOffset++] = n[2]
-        mVertexData[mOffset++] = color[0]
-        mVertexData[mOffset++] = color[1]
-        mVertexData[mOffset++] = color[2]
-        mVertexData[mOffset++] = color[3]
+        vertexData[mOffset++] = p1[0]
+        vertexData[mOffset++] = p1[1]
+        vertexData[mOffset++] = p1[2]
+        vertexData[mOffset++] = n[0]
+        vertexData[mOffset++] = n[1]
+        vertexData[mOffset++] = n[2]
+        vertexData[mOffset++] = color[0]
+        vertexData[mOffset++] = color[1]
+        vertexData[mOffset++] = color[2]
+        vertexData[mOffset++] = color[3]
 
-        mVertexData[mOffset++] = p2[0]
-        mVertexData[mOffset++] = p2[1]
-        mVertexData[mOffset++] = p2[2]
-        mVertexData[mOffset++] = n[0]
-        mVertexData[mOffset++] = n[1]
-        mVertexData[mOffset++] = n[2]
-        mVertexData[mOffset++] = color[0]
-        mVertexData[mOffset++] = color[1]
-        mVertexData[mOffset++] = color[2]
-        mVertexData[mOffset++] = color[3]
+        vertexData[mOffset++] = p2[0]
+        vertexData[mOffset++] = p2[1]
+        vertexData[mOffset++] = p2[2]
+        vertexData[mOffset++] = n[0]
+        vertexData[mOffset++] = n[1]
+        vertexData[mOffset++] = n[2]
+        vertexData[mOffset++] = color[0]
+        vertexData[mOffset++] = color[1]
+        vertexData[mOffset++] = color[2]
+        vertexData[mOffset++] = color[3]
 
-        mVertexData[mOffset++] = p3[0]
-        mVertexData[mOffset++] = p3[1]
-        mVertexData[mOffset++] = p3[2]
-        mVertexData[mOffset++] = n[0]
-        mVertexData[mOffset++] = n[1]
-        mVertexData[mOffset++] = n[2]
-        mVertexData[mOffset++] = color[0]
-        mVertexData[mOffset++] = color[1]
-        mVertexData[mOffset++] = color[2]
-        mVertexData[mOffset++] = color[3]
+        vertexData[mOffset++] = p3[0]
+        vertexData[mOffset++] = p3[1]
+        vertexData[mOffset++] = p3[2]
+        vertexData[mOffset++] = n[0]
+        vertexData[mOffset++] = n[1]
+        vertexData[mOffset++] = n[2]
+        vertexData[mOffset++] = color[0]
+        vertexData[mOffset++] = color[1]
+        vertexData[mOffset++] = color[2]
+        vertexData[mOffset++] = color[3]
     }
 
     // float[] start_vertex_cache = new float[(numSlices + 1) * 3];

@@ -31,28 +31,28 @@ import timber.log.Timber
 // TODO: implement Interface in Activity - for flagging low mem in UI (commented out after lib refactor)
 class ManagerViewmode(private val mActivity: Activity,
                       private val mMol: Molecule,
-                      private val mBufMgr: BufferManager
+                      private val bufMgr: BufferManager
                       ) {
 
-    private val mAtomSphere: AtomSphere
-    private val mAtomToAtomBond: SegmentAtomToAtomBond
+    private val atomSphere: AtomSphere
+    private val atomToAtomBond: SegmentAtomToAtomBond
     private val mRenderModal: RenderModal
     private val mRenderNucleic: RenderNucleic
-    private val mAtomInfo: ParserAtomInfo
-    private var mCurrentMode: Int = 0
+    private val atomInfo: ParserAtomInfo
+    private var currentMode: Int = 0
 
     init {
-        mMol.mBufMgr = mBufMgr
-        mAtomSphere = AtomSphere(mMol)
-        mAtomToAtomBond = SegmentAtomToAtomBond(mMol)
+        mMol.bufMgr = bufMgr
+        atomSphere = AtomSphere(mMol)
+        atomToAtomBond = SegmentAtomToAtomBond(mMol)
         mRenderModal = RenderModal(mMol)
         mRenderNucleic = RenderNucleic(mMol)
-        mAtomInfo = ParserAtomInfo(mActivity)
-        mAtomInfo.parseAtomInfo()
+        atomInfo = ParserAtomInfo(mActivity)
+        atomInfo.parseAtomInfo()
     }
 
     fun createView() {
-        mCurrentMode = VIEW_INITIAL
+        currentMode = VIEW_INITIAL
         nextViewMode()
     }
 
@@ -61,8 +61,8 @@ class ManagerViewmode(private val mActivity: Activity,
     //    }
     fun nextViewMode() {
 
-        if (++mCurrentMode > VIEW_TOTAL_MODES) {
-            mCurrentMode = VIEW_INITIAL + 1
+        if (++currentMode > VIEW_TOTAL_MODES) {
+            currentMode = VIEW_INITIAL + 1
         }
 
         doViewMode()
@@ -106,10 +106,10 @@ visibleAppThreshold = 94371840 (0x5A00000)
     private fun doViewMode() {
 
         val startTime = SystemClock.uptimeMillis().toFloat()
-        mMol.mReportedTimeFlag = false
-        mMol.mStartOfParseTime = startTime
+        mMol.reportedTimeFlag = false
+        mMol.startOfParseTime = startTime
 
-        mBufMgr.resetBuffersForNextUsage()
+        bufMgr.resetBuffersForNextUsage()
 
         /*
          * let's see how much memory there is to play with
@@ -117,14 +117,14 @@ visibleAppThreshold = 94371840 (0x5A00000)
 
 
         val activityManager2 = mActivity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
-        val mInfo2 = ActivityManager.MemoryInfo()
-        activityManager2.getMemoryInfo(mInfo2)
-        val initialAvailMem = mInfo2.threshold
+        val info2 = ActivityManager.MemoryInfo()
+        activityManager2.getMemoryInfo(info2)
+        val initialAvailMem = info2.threshold
         try {
             run bailout@ {
                 Timber.i("THRESHOLD mbyte = " + initialAvailMem / 1024 / 1024)
 
-                when (mCurrentMode) {
+                when (currentMode) {
                     VIEW_RIBBONS -> {
                         sDrawMode = D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_RIBBONS
                         calcMemoryUsage(sDrawMode)
@@ -145,7 +145,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
                  */
                         if (!calcMemoryUsage(sDrawMode)) {
                             sDrawMode = D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_RIBBONS
-                            mCurrentMode = VIEW_RIBBONS
+                            currentMode = VIEW_RIBBONS
                             mRenderModal.renderModal()
                             mRenderNucleic.renderNucleic()
                             drawNucleicBonds()
@@ -196,13 +196,13 @@ visibleAppThreshold = 94371840 (0x5A00000)
              *    it was fun while it lasted
              */
     //            case VIEW_RIBBONS_ONLY:
-    //                mRenderAlphaHelix.renderAlphaHelices();
+    //                renderAlphaHelix.renderAlphaHelices();
     //                mRenderBetaRibbon.renderBetaRibbons();
     //                mRenderRibbon.renderRibbon();
     //                // renderBackbone();
     //                break;
     //            case VIEW_RIBBONS_AND_BACKBONE:
-    //                mRenderAlphaHelix.renderAlphaHelices();
+    //                renderAlphaHelix.renderAlphaHelices();
     //                mRenderBetaRibbon.renderBetaRibbons();
     //                mRenderRibbon.renderRibbon();
     //                renderBackbone();
@@ -223,7 +223,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
          * old diags follow:
          */
 
-    //        Log.v(LOG_TAG,"*** mema " + mInfo.availMem/1024/1024
+    //        Log.v(LOG_TAG,"*** mema " + info.availMem/1024/1024
     //            + " getMemoryClass() = " + activityManager.getMemoryClass());
     //
     //        Timber.i("finished visualization in" + pretty_print + " seconds. " + start_time + " " + end_time);
@@ -252,13 +252,13 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 continue
             }
 
-            mAtomToAtomBond.genBondCylinders(
+            atomToAtomBond.genBondCylinders(
                     mMol.geometrySlices,
                     0.25f,
                     atom1,
                     atom2,
                     color,
-                    mAtomInfo)
+                    atomInfo)
 
         }
     }
@@ -298,13 +298,13 @@ visibleAppThreshold = 94371840 (0x5A00000)
                     continue
                 }
             }
-            mAtomToAtomBond.genBondCylinders(
+            atomToAtomBond.genBondCylinders(
                     mMol.geometrySlices,
                     0.25f,
                     atom1,
                     atom2,
                     color,
-                    mAtomInfo)
+                    atomInfo)
 
         }
     }
@@ -345,13 +345,13 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 }
             }
 
-            mAtomToAtomBond.genBondCylinders(
+            atomToAtomBond.genBondCylinders(
                     mMol.geometrySlices,
                     0.25f,
                     atom1,
                     atom2,
                     color,
-                    mAtomInfo)
+                    atomInfo)
 
         }
     }
@@ -414,7 +414,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
                         mMol.name, atom1.atomNumber, atom1.residueName, atom1.atomName)
             }
             elementSymbol = atom1.elementSymbol
-            ai = mAtomInfo.atomNameToAtomInfoHash[elementSymbol]
+            ai = atomInfo.atomNameToAtomInfoHash[elementSymbol]
             useColor = ai?.color ?: color
             /*
              * for full sized atom mode, look up the radius
@@ -438,13 +438,13 @@ visibleAppThreshold = 94371840 (0x5A00000)
                     radius
                 }
             }
-            mAtomSphere.genSphere(
+            atomSphere.genSphere(
                     mMol.sphereGeometrySlices,
                     useRadius,
                     atom1,
                     useColor)
         }
-        mBufMgr.transferToGl()
+        bufMgr.transferToGl()
     }
 
     /*
@@ -465,8 +465,8 @@ visibleAppThreshold = 94371840 (0x5A00000)
         ChainRenderingDescriptor chain_entry;
         PdbAtom atom;
 
-        for (int i = 0; i < mMol.mListofChainDescriptorLists.size(); i++) {
-            pdb_backbone_list = mMol.mListofChainDescriptorLists.get(i);
+        for (int i = 0; i < mMol.listofChainDescriptorLists.size(); i++) {
+            pdb_backbone_list = mMol.listofChainDescriptorLists.get(i);
             if (pdb_backbone_list.size() >= 4) {
 
                 path = new CatmullRomCurve();
@@ -494,7 +494,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
 
                 path.calculatePoint(v1, i / (float) scaling);
                 path.calculatePoint(v2, (i + 1) / (float) scaling);
-                mBackboneSegment.genBackboneSegment(
+                backboneSegment.genBackboneSegment(
                         30,
                         0.28f,
                         v1,
@@ -504,7 +504,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 color[2] += 1/(float) scaling;
             }
         }
-        mBufMgr.transferToGl();
+        bufMgr.transferToGl();
     }
     */
 
@@ -540,9 +540,9 @@ visibleAppThreshold = 94371840 (0x5A00000)
         }
 
         val activityManager2 = mActivity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
-        val mInfo2 = ActivityManager.MemoryInfo()
-        activityManager2.getMemoryInfo(mInfo2)
-        var initialAvailMem = mInfo2.threshold
+        val info2 = ActivityManager.MemoryInfo()
+        activityManager2.getMemoryInfo(info2)
+        var initialAvailMem = info2.threshold
 
         initialAvailMem /= 2  // seems like we only get 1/2 to play with
 

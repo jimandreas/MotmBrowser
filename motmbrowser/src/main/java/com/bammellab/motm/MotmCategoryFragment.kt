@@ -114,21 +114,21 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
 
         inner class ViewHolderMotm(val mView: View, viewType: Int)
             : RecyclerView.ViewHolder(mView), View.OnClickListener {
-            var mBoundString: String? = null
-            lateinit var mImageView: ImageView
-            lateinit var mTextView: TextView
-            lateinit var mTextView2: TextView
-            lateinit var mTextViewHeader: TextView
+            var boundString: String? = null
+            lateinit var imageView: ImageView
+            lateinit var textView: TextView
+            lateinit var textView2: TextView
+            lateinit var textViewHeader: TextView
 
             init {
                 when (viewType) {
                     VIEW_TYPE_MOTM -> {
-                        mImageView = mView.findViewById(R.id.avatar)
-                        mTextView = mView.findViewById(R.id.motmtext1)
-                        mTextView2 = mView.findViewById(R.id.motmtext2)
+                        imageView = mView.findViewById(R.id.avatar)
+                        textView = mView.findViewById(R.id.motmtext1)
+                        textView2 = mView.findViewById(R.id.motmtext2)
                     }
                     VIEW_TYPE_HEADER -> {
-                        mTextViewHeader = mView.findViewById(R.id.motmheader)
+                        textViewHeader = mView.findViewById(R.id.motmheader)
                     }
                 }
             }
@@ -171,14 +171,14 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
         }
 
         override fun onBindViewHolder(holder: ViewHolderMotm, position: Int) {
-            holder.mBoundString = motmList[position]
+            holder.boundString = motmList[position]
 
             /*
              * handle clicks on molecules.  clicks on headers are ignored
              */
             holder.mView.setOnClickListener(View.OnClickListener { v ->
                 val context = v.context
-                val str = holder.mBoundString
+                val str = holder.boundString
                 if (!isNumeric(str)) {
                     return@OnClickListener
                 }
@@ -198,12 +198,12 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
                 val imageIndex = Integer.valueOf(motm)
                 val imageString = Corpus.motmImageListGet(imageIndex)
                 val url = MotmApplication.RCSB_MOTM_IMAGE_PREFIX + imageString
-                Glide.with(holder.mImageView.context)
+                Glide.with(holder.imageView.context)
                         .load(url)
                         .fitCenter()
-                        .into(holder.mImageView)
+                        .into(holder.imageView)
 
-                holder.mImageView.visibility = View.VISIBLE
+                holder.imageView.visibility = View.VISIBLE
 
                 // note:  the "Corpus" is zero based,
                 //    but the indexing scheme on motm is one based - so
@@ -216,8 +216,8 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
                         + "</i><br>"
 //                        + Corpus.motmDescByKey[imageIndex])
                         + Corpus.motmTagLines[Corpus.motmTagLines.size - imageIndex])
-                holder.mTextView.text = spannedString
-                holder.mTextView2.visibility = View.GONE
+                holder.textView.text = spannedString
+                holder.textView2.visibility = View.GONE
 
                 //                TypedValue typedValue = new TypedValue();
                 //                Resources.Theme theme = holder.mView.getContext().getTheme();
@@ -228,7 +228,7 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
                 //
                 //                theme.resolveAttribute(textColorPrimary, typedValue, true);
                 //                color = typedValue.data;
-                //                holder.mTextView.setTextColor(color);
+                //                holder.textView.setTextColor(color);
 
 
             } else {
@@ -241,10 +241,10 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
                         //                            + Corpus.motmDescByKey.get(position + 1)
                 )
 
-                holder.mTextViewHeader.text = spannedString
-                //                float old_size = holder.mTextView.getTextSize();
+                holder.textViewHeader.text = spannedString
+                //                float old_size = holder.textView.getTextSize();
                 //                Timber.i("old text size in float: %f", old_size);
-                //                holder.mTextView.setTextSize(22.0f);
+                //                holder.textView.setTextSize(22.0f);
 
             }
         }

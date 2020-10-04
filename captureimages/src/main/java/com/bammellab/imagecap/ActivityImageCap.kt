@@ -42,7 +42,7 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
         glSurfaceView.setRenderer(renderer, displayMetrics.density)
 
         // This freezes the updates, now adjusted in GLSurfaceView
-        // mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        // gLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
         processPdbs = MotmProcessPdbs(
                 this,

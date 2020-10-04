@@ -139,15 +139,15 @@ class CubeHacked {
             cubePositions.put(i + 1, y + cubePositionData[i + 1] / 2.2f)
             cubePositions.put(i + 2, z + cubePositionData[i + 2] / 2.2f)
             i += 3
-            //            mFinalCubePositionData[i] = x + cubePositionData[i] / 3.0f;
-            //            mFinalCubePositionData[i+1] = y + cubePositionData[i+1] / 3.0f;
-            //            mFinalCubePositionData[i+2] = z + cubePositionData[i+2] / 3.0f;
+            //            finalCubePositionData[i] = x + cubePositionData[i] / 3.0f;
+            //            finalCubePositionData[i+1] = y + cubePositionData[i+1] / 3.0f;
+            //            finalCubePositionData[i+2] = z + cubePositionData[i+2] / 3.0f;
         }
     }
 
-    fun render(mPositionHandle: Int,
-               mColorHandle: Int,
-               mNormalHandle: Int,
+    fun render(positionHandle: Int,
+               colorHandle: Int,
+               normalHandle: Int,
                doWireframeRendering: Boolean) {
 
         // Draw
@@ -159,24 +159,24 @@ class CubeHacked {
 
         // Pass in the position information
         cubePositions.position(0)
-        GLES20.glVertexAttribPointer(mPositionHandle, positionDataSize, GLES20.GL_FLOAT, false,
+        GLES20.glVertexAttribPointer(positionHandle, positionDataSize, GLES20.GL_FLOAT, false,
                 0, cubePositions)
 
-        GLES20.glEnableVertexAttribArray(mPositionHandle)
+        GLES20.glEnableVertexAttribArray(positionHandle)
 
         // Pass in the color information
         cubeColors.position(0)
-        GLES20.glVertexAttribPointer(mColorHandle, colorDataSize, GLES20.GL_FLOAT, false,
+        GLES20.glVertexAttribPointer(colorHandle, colorDataSize, GLES20.GL_FLOAT, false,
                 0, cubeColors)
 
-        GLES20.glEnableVertexAttribArray(mColorHandle)
+        GLES20.glEnableVertexAttribArray(colorHandle)
 
         // Pass in the normal information
         cubeNormals.position(0)
-        GLES20.glVertexAttribPointer(mNormalHandle, normalDataSize, GLES20.GL_FLOAT, false,
+        GLES20.glVertexAttribPointer(normalHandle, normalDataSize, GLES20.GL_FLOAT, false,
                 0, cubeNormals)
 
-        GLES20.glEnableVertexAttribArray(mNormalHandle)
+        GLES20.glEnableVertexAttribArray(normalHandle)
 
         // Draw the cube.
         GLES20.glDrawArrays(todo, 0, 36)

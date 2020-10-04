@@ -44,12 +44,12 @@ class Matrix4 {
     //and not static to ensure that this class can be utilized by multiple threads
     //in a safe manner without the overhead of synchronization. This is a tradeoff of
     //speed for memory and it is considered a small enough memory increase to be acceptable.
-    private val mTmp = DoubleArray(16) //A scratch matrix
+    private val tmp = DoubleArray(16) //A scratch matrix
     private val mFloat = FloatArray(16) //A float copy of the values, used for sending to GL.
     private val mQuat = Quaternion() //A scratch quaternion.
-    private val mVec1 = Vector3() //A scratch Vector3
-    private val mVec2 = Vector3() //A scratch Vector3
-    private val mVec3 = Vector3() //A scratch Vector3
+    private val vec1 = Vector3() //A scratch Vector3
+    private val vec2 = Vector3() //A scratch Vector3
+    private val vec3 = Vector3() //A scratch Vector3
     private var mMatrix: Matrix4? = null //A scratch Matrix4
 
 
@@ -381,8 +381,8 @@ class Matrix4 {
      */
     @Suppress("UNUSED_VARIABLE")
     fun inverse(): Matrix4 {
-        val success = MatrixDoublePrecision.invertM(mTmp, 0, doubleValues, 0)
-        System.arraycopy(mTmp, 0, doubleValues, 0, 16)
+        val success = MatrixDoublePrecision.invertM(tmp, 0, doubleValues, 0)
+        System.arraycopy(tmp, 0, doubleValues, 0, 16)
         return this
     }
 
@@ -394,8 +394,8 @@ class Matrix4 {
      */
     @Suppress("MemberVisibilityCanBePrivate")
     fun transpose(): Matrix4 {
-        MatrixDoublePrecision.transposeM(mTmp, 0, doubleValues, 0)
-        System.arraycopy(mTmp, 0, doubleValues, 0, 16)
+        MatrixDoublePrecision.transposeM(tmp, 0, doubleValues, 0)
+        System.arraycopy(tmp, 0, doubleValues, 0, 16)
         return this
     }
 
@@ -406,23 +406,23 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     fun add(matrix: Matrix4): Matrix4 {
-        matrix.toArray(mTmp)
-        doubleValues[0] += mTmp[0]
-        doubleValues[1] += mTmp[1]
-        doubleValues[2] += mTmp[2]
-        doubleValues[3] += mTmp[3]
-        doubleValues[4] += mTmp[4]
-        doubleValues[5] += mTmp[5]
-        doubleValues[6] += mTmp[6]
-        doubleValues[7] += mTmp[7]
-        doubleValues[8] += mTmp[8]
-        doubleValues[9] += mTmp[9]
-        doubleValues[10] += mTmp[10]
-        doubleValues[11] += mTmp[11]
-        doubleValues[12] += mTmp[12]
-        doubleValues[13] += mTmp[13]
-        doubleValues[14] += mTmp[14]
-        doubleValues[15] += mTmp[15]
+        matrix.toArray(tmp)
+        doubleValues[0] += tmp[0]
+        doubleValues[1] += tmp[1]
+        doubleValues[2] += tmp[2]
+        doubleValues[3] += tmp[3]
+        doubleValues[4] += tmp[4]
+        doubleValues[5] += tmp[5]
+        doubleValues[6] += tmp[6]
+        doubleValues[7] += tmp[7]
+        doubleValues[8] += tmp[8]
+        doubleValues[9] += tmp[9]
+        doubleValues[10] += tmp[10]
+        doubleValues[11] += tmp[11]
+        doubleValues[12] += tmp[12]
+        doubleValues[13] += tmp[13]
+        doubleValues[14] += tmp[14]
+        doubleValues[15] += tmp[15]
         return this
     }
 
@@ -433,23 +433,23 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     fun subtract(matrix: Matrix4): Matrix4 {
-        matrix.toArray(mTmp)
-        doubleValues[0] -= mTmp[0]
-        doubleValues[1] -= mTmp[1]
-        doubleValues[2] -= mTmp[2]
-        doubleValues[3] -= mTmp[3]
-        doubleValues[4] -= mTmp[4]
-        doubleValues[5] -= mTmp[5]
-        doubleValues[6] -= mTmp[6]
-        doubleValues[7] -= mTmp[7]
-        doubleValues[8] -= mTmp[8]
-        doubleValues[9] -= mTmp[9]
-        doubleValues[10] -= mTmp[10]
-        doubleValues[11] -= mTmp[11]
-        doubleValues[12] -= mTmp[12]
-        doubleValues[13] -= mTmp[13]
-        doubleValues[14] -= mTmp[14]
-        doubleValues[15] -= mTmp[15]
+        matrix.toArray(tmp)
+        doubleValues[0] -= tmp[0]
+        doubleValues[1] -= tmp[1]
+        doubleValues[2] -= tmp[2]
+        doubleValues[3] -= tmp[3]
+        doubleValues[4] -= tmp[4]
+        doubleValues[5] -= tmp[5]
+        doubleValues[6] -= tmp[6]
+        doubleValues[7] -= tmp[7]
+        doubleValues[8] -= tmp[8]
+        doubleValues[9] -= tmp[9]
+        doubleValues[10] -= tmp[10]
+        doubleValues[11] -= tmp[11]
+        doubleValues[12] -= tmp[12]
+        doubleValues[13] -= tmp[13]
+        doubleValues[14] -= tmp[14]
+        doubleValues[15] -= tmp[15]
         return this
     }
 
@@ -463,8 +463,8 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     private fun multiply(matrix: Matrix4): Matrix4 {
-        System.arraycopy(doubleValues, 0, mTmp, 0, 16)
-        MatrixDoublePrecision.multiplyMM(doubleValues, 0, mTmp, 0, matrix.doubleValues, 0)
+        System.arraycopy(doubleValues, 0, tmp, 0, 16)
+        MatrixDoublePrecision.multiplyMM(doubleValues, 0, tmp, 0, matrix.doubleValues, 0)
         return this
     }
 
@@ -478,8 +478,8 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     fun leftMultiply(matrix: Matrix4): Matrix4 {
-        System.arraycopy(doubleValues, 0, mTmp, 0, 16)
-        MatrixDoublePrecision.multiplyMM(doubleValues, 0, matrix.doubleValues, 0, mTmp, 0)
+        System.arraycopy(doubleValues, 0, tmp, 0, 16)
+        MatrixDoublePrecision.multiplyMM(doubleValues, 0, matrix.doubleValues, 0, tmp, 0)
         return this
     }
 
@@ -721,8 +721,8 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     fun lerp(matrix: Matrix4, t: Double): Matrix4 {
-        matrix.toArray(mTmp)
-        for (i in 0..15) doubleValues[i] = doubleValues[i] * (1.0 - t) + t * mTmp[i]
+        matrix.toArray(tmp)
+        for (i in 0..15) doubleValues[i] = doubleValues[i] * (1.0 - t) + t * tmp[i]
         return this
     }
 
@@ -986,20 +986,20 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     fun setToLookAt(direction: Vector3, up: Vector3): Matrix4 {
-        mVec3.setAll(direction).normalize()
-        mVec1.setAll(direction).normalize()
-        mVec1.cross(up).normalize()
-        mVec2.setAll(mVec1).cross(mVec3).normalize()
+        vec3.setAll(direction).normalize()
+        vec1.setAll(direction).normalize()
+        vec1.cross(up).normalize()
+        vec2.setAll(vec1).cross(vec3).normalize()
         identity()
-        doubleValues[M00] = mVec1.x
-        doubleValues[M01] = mVec1.y
-        doubleValues[M02] = mVec1.z
-        doubleValues[M10] = mVec2.x
-        doubleValues[M11] = mVec2.y
-        doubleValues[M12] = mVec2.z
-        doubleValues[M20] = mVec3.x
-        doubleValues[M21] = mVec3.y
-        doubleValues[M22] = mVec3.z
+        doubleValues[M00] = vec1.x
+        doubleValues[M01] = vec1.y
+        doubleValues[M02] = vec1.z
+        doubleValues[M10] = vec2.x
+        doubleValues[M11] = vec2.y
+        doubleValues[M12] = vec2.z
+        doubleValues[M20] = vec3.x
+        doubleValues[M21] = vec3.y
+        doubleValues[M22] = vec3.z
         return this
     }
 
@@ -1027,10 +1027,10 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     fun setToWorld(position: Vector3, forward: Vector3, up: Vector3): Matrix4 {
-        mVec1.setAll(forward).normalize()
-        mVec2.setAll(mVec1).cross(up).normalize()
-        mVec3.setAll(mVec2).cross(mVec1).normalize()
-        return setAll(mVec2, mVec3, mVec1, position)
+        vec1.setAll(forward).normalize()
+        vec2.setAll(vec1).cross(up).normalize()
+        vec3.setAll(vec2).cross(vec1).normalize()
+        return setAll(vec2, vec3, vec1, position)
     }
 
     private fun getTranslation(vec: Vector3): Vector3 {
@@ -1097,24 +1097,24 @@ class Matrix4 {
      * @return boolean True if they are an exact match.
      */
     /*fun equals(m2: Matrix4): Boolean {
-        m2.toArray(mTmp)
+        m2.toArray(tmp)
         return !(
-            doubleValues[0] != mTmp[0]
-            || doubleValues[1] != mTmp[1]
-            || doubleValues[2] != mTmp[2]
-            || doubleValues[3] != mTmp[3]
-            || doubleValues[4] != mTmp[4]
-            || doubleValues[5] != mTmp[5]
-            || doubleValues[6] != mTmp[6]
-            || doubleValues[7] != mTmp[7]
-            || doubleValues[8] != mTmp[8]
-            || doubleValues[9] != mTmp[9]
-            || doubleValues[10] != mTmp[10]
-            || doubleValues[11] != mTmp[11]
-            || doubleValues[12] != mTmp[12]
-            || doubleValues[13] != mTmp[13]
-            || doubleValues[14] != mTmp[14]
-            || doubleValues[15] != mTmp[15])
+            doubleValues[0] != tmp[0]
+            || doubleValues[1] != tmp[1]
+            || doubleValues[2] != tmp[2]
+            || doubleValues[3] != tmp[3]
+            || doubleValues[4] != tmp[4]
+            || doubleValues[5] != tmp[5]
+            || doubleValues[6] != tmp[6]
+            || doubleValues[7] != tmp[7]
+            || doubleValues[8] != tmp[8]
+            || doubleValues[9] != tmp[9]
+            || doubleValues[10] != tmp[10]
+            || doubleValues[11] != tmp[11]
+            || doubleValues[12] != tmp[12]
+            || doubleValues[13] != tmp[13]
+            || doubleValues[14] != tmp[14]
+            || doubleValues[15] != tmp[15])
     }*/
 
     /*

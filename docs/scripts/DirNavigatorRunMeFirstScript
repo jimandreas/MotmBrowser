@@ -1,0 +1,24 @@
+#!/bin/bash
+
+
+# kudos to JeremyWeir for the testing code
+# https://stackoverflow.com/a/3856879
+
+find . -type d -print > dirlist
+thisDir=`pwd`
+
+for i in `cat dirlist`
+do
+ cd $i
+ echo $i
+ count=`ls -1 *.kt 2>/dev/null | wc -l`
+ if [ $count != 0 ]
+ then
+	 echo "Yup"
+	 bash $thisDir/HungarianNotationConversionScript
+	 rm -f *.sed *.sorted *.susp *.tst *.VarsOkToConvert
+
+ fi
+ cd $thisDir
+done
+

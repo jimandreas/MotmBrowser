@@ -23,12 +23,12 @@ import com.bammellab.mollib.protein.PdbAtom
 
 class AtomSphere(private val mMol: Molecule) {
 
-    private val mNumIndices: Int = 0
+    private val numIndices: Int = 0
 
     private val vbo = IntArray(1)
     private val ibo = IntArray(1)
 
-    private val mBufMgr: BufferManager = mMol.mBufMgr
+    private val bufMgr: BufferManager = mMol.bufMgr
 
     fun genSphere(
             numSlices: Int,
@@ -73,13 +73,13 @@ class AtomSphere(private val mMol: Molecule) {
         }
         val angleStep = 2.0f * Math.PI.toFloat() / numSlices
 
-        val vertexData = mBufMgr.getFloatArray(
+        val vertexData = bufMgr.getFloatArray(
                 numSlices * numSlices // number of vertices
 
                         * 3 * 2 // two triangles worth generated per loop
 
                         * STRIDE_IN_FLOATS) // num floats per vertex
-        var offset = mBufMgr.floatArrayIndex
+        var offset = bufMgr.floatArrayIndex
 
         /*
          * note the use of less-than-equals - the first point is repeated to complete the circle
@@ -214,7 +214,7 @@ class AtomSphere(private val mMol: Molecule) {
             i++
         }
 
-        mBufMgr.floatArrayIndex = offset
+        bufMgr.floatArrayIndex = offset
 
         /*
          * debugging print out of vertices

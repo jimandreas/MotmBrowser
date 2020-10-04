@@ -39,7 +39,7 @@ class SegmentAtomToAtomBond(private val mMol: Molecule) {
     private lateinit var mVertexData: FloatArray
     private var mOffset: Int = 0
 
-    private val mBufMgr: BufferManager = mMol.mBufMgr
+    private val bufMgr: BufferManager = mMol.bufMgr
 
     fun genBondCylinders(
             numSlices: Int,
@@ -127,8 +127,8 @@ class SegmentAtomToAtomBond(private val mMol: Molecule) {
          * math: two tris per slice, wrapping for numSlices+1 (hit original again to close)
          *    doubled for two colors on each half
          */
-        mVertexData = mBufMgr.getFloatArray(2 * 6 * (numSlices + 1) * STRIDE_IN_FLOATS)
-        mOffset = mBufMgr.floatArrayIndex
+        mVertexData = bufMgr.getFloatArray(2 * 6 * (numSlices + 1) * STRIDE_IN_FLOATS)
+        mOffset = bufMgr.floatArrayIndex
 
         /*
          * first generate the points, then map them to the position
@@ -287,8 +287,8 @@ class SegmentAtomToAtomBond(private val mMol: Molecule) {
 
         }  // end for loop for body
 
-        //mBufMgr.setFloatArrayIndex(mOffset);
-        mBufMgr.floatArrayIndex = mOffset
+        //bufMgr.setFloatArrayIndex(mOffset);
+        bufMgr.floatArrayIndex = mOffset
     }
 
     private fun putTri(n: FloatArray, color: FloatArray) {

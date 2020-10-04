@@ -151,19 +151,19 @@ object MatrixDoublePrecision {
      * Transposes a 4 x 4 matrix.
      *
      * @param mTrans the array that holds the output inverted matrix
-     * @param mTransOffset an offset into mInv where the inverted matrix is
+     * @param transOffset an offset into mInv where the inverted matrix is
      * stored.
      * @param m the input array
      * @param mOffset an offset into m where the matrix is stored.
      */
-    fun transposeM(mTrans: DoubleArray, mTransOffset: Int, m: DoubleArray,
+    fun transposeM(mTrans: DoubleArray, transOffset: Int, m: DoubleArray,
                    mOffset: Int) {
         for (i in 0..3) {
-            val mBase = i * 4 + mOffset
-            mTrans[i + mTransOffset] = m[mBase]
-            mTrans[i + 4 + mTransOffset] = m[mBase + 1]
-            mTrans[i + 8 + mTransOffset] = m[mBase + 2]
-            mTrans[i + 12 + mTransOffset] = m[mBase + 3]
+            val base = i * 4 + mOffset
+            mTrans[i + transOffset] = m[base]
+            mTrans[i + 4 + transOffset] = m[base + 1]
+            mTrans[i + 8 + transOffset] = m[base + 2]
+            mTrans[i + 12 + transOffset] = m[base + 3]
         }
     }
 
@@ -171,13 +171,13 @@ object MatrixDoublePrecision {
      * Inverts a 4 x 4 matrix.
      *
      * @param mInv the array that holds the output inverted matrix
-     * @param mInvOffset an offset into mInv where the inverted matrix is
+     * @param invOffset an offset into mInv where the inverted matrix is
      * stored.
      * @param m the input array
      * @param mOffset an offset into m where the matrix is stored.
      * @return true if the matrix could be inverted, false if it could not.
      */
-    fun invertM(mInv: DoubleArray, mInvOffset: Int, m: DoubleArray,
+    fun invertM(mInv: DoubleArray, invOffset: Int, m: DoubleArray,
                 mOffset: Int): Boolean {
         // Invert a 4 x 4 matrix using Cramer's Rule
 
@@ -259,25 +259,25 @@ object MatrixDoublePrecision {
 
         // calculate matrix inverse
         val invdet = 1.0f / det
-        mInv[mInvOffset] = dst0 * invdet
-        mInv[1 + mInvOffset] = dst1 * invdet
-        mInv[2 + mInvOffset] = dst2 * invdet
-        mInv[3 + mInvOffset] = dst3 * invdet
+        mInv[invOffset] = dst0 * invdet
+        mInv[1 + invOffset] = dst1 * invdet
+        mInv[2 + invOffset] = dst2 * invdet
+        mInv[3 + invOffset] = dst3 * invdet
 
-        mInv[4 + mInvOffset] = dst4 * invdet
-        mInv[5 + mInvOffset] = dst5 * invdet
-        mInv[6 + mInvOffset] = dst6 * invdet
-        mInv[7 + mInvOffset] = dst7 * invdet
+        mInv[4 + invOffset] = dst4 * invdet
+        mInv[5 + invOffset] = dst5 * invdet
+        mInv[6 + invOffset] = dst6 * invdet
+        mInv[7 + invOffset] = dst7 * invdet
 
-        mInv[8 + mInvOffset] = dst8 * invdet
-        mInv[9 + mInvOffset] = dst9 * invdet
-        mInv[10 + mInvOffset] = dst10 * invdet
-        mInv[11 + mInvOffset] = dst11 * invdet
+        mInv[8 + invOffset] = dst8 * invdet
+        mInv[9 + invOffset] = dst9 * invdet
+        mInv[10 + invOffset] = dst10 * invdet
+        mInv[11 + invOffset] = dst11 * invdet
 
-        mInv[12 + mInvOffset] = dst12 * invdet
-        mInv[13 + mInvOffset] = dst13 * invdet
-        mInv[14 + mInvOffset] = dst14 * invdet
-        mInv[15 + mInvOffset] = dst15 * invdet
+        mInv[12 + invOffset] = dst12 * invdet
+        mInv[13 + invOffset] = dst13 * invdet
+        mInv[14 + invOffset] = dst14 * invdet
+        mInv[15 + invOffset] = dst15 * invdet
 
         return true
     }

@@ -39,7 +39,7 @@ class Vector3 {
     var z: Double = 0.toDouble()
 
     //Scratch vector. We use lazy loading here.
-    private var mTemp: Vector3? = null
+    private var temp: Vector3? = null
 
     /*
      * Checks if this [Vector3] is of unit length with a default
@@ -424,10 +424,10 @@ class Vector3 {
     fun rotateX(angle: Double): Vector3 {
         val cosRY = cos(angle)
         val sinRY = sin(angle)
-        if (mTemp == null) mTemp = Vector3()
-        mTemp!!.setAll(x, y, z)
-        y = mTemp!!.y * cosRY - mTemp!!.z * sinRY
-        z = mTemp!!.y * sinRY + mTemp!!.z * cosRY
+        if (temp == null) temp = Vector3()
+        temp!!.setAll(x, y, z)
+        y = temp!!.y * cosRY - temp!!.z * sinRY
+        z = temp!!.y * sinRY + temp!!.z * cosRY
         return this
     }
 
@@ -441,10 +441,10 @@ class Vector3 {
     fun rotateY(angle: Double): Vector3 {
         val cosRY = cos(angle)
         val sinRY = sin(angle)
-        if (mTemp == null) mTemp = Vector3()
-        mTemp!!.setAll(x, y, z)
-        x = mTemp!!.x * cosRY + mTemp!!.z * sinRY
-        z = mTemp!!.x * -sinRY + mTemp!!.z * cosRY
+        if (temp == null) temp = Vector3()
+        temp!!.setAll(x, y, z)
+        x = temp!!.x * cosRY + temp!!.z * sinRY
+        z = temp!!.x * -sinRY + temp!!.z * cosRY
         return this
     }
 
@@ -458,10 +458,10 @@ class Vector3 {
     fun rotateZ(angle: Double): Vector3 {
         val cosRY = cos(angle)
         val sinRY = sin(angle)
-        if (mTemp == null) mTemp = Vector3()
-        mTemp!!.setAll(x, y, z)
-        x = mTemp!!.x * cosRY - mTemp!!.y * sinRY
-        y = mTemp!!.x * sinRY + mTemp!!.y * cosRY
+        if (temp == null) temp = Vector3()
+        temp!!.setAll(x, y, z)
+        x = temp!!.x * cosRY - temp!!.y * sinRY
+        y = temp!!.x * sinRY + temp!!.y * cosRY
         return this
     }
 
@@ -652,11 +652,11 @@ class Vector3 {
      * @return A reference to this [Vector3] to facilitate chaining.
      */
     fun cross(v: Vector3): Vector3 {
-        if (mTemp == null) mTemp = Vector3()
-        mTemp!!.setAll(this)
-        x = v.y * mTemp!!.z - v.z * mTemp!!.y
-        y = v.z * mTemp!!.x - v.x * mTemp!!.z
-        z = v.x * mTemp!!.y - v.y * mTemp!!.x
+        if (temp == null) temp = Vector3()
+        temp!!.setAll(this)
+        x = v.y * temp!!.z - v.z * temp!!.y
+        y = v.z * temp!!.x - v.x * temp!!.z
+        z = v.x * temp!!.y - v.y * temp!!.x
         return this
     }
 
@@ -671,11 +671,11 @@ class Vector3 {
      * @return A reference to this [Vector3] to facilitate chaining.
      */
     fun cross(x: Double, y: Double, z: Double): Vector3 {
-        if (mTemp == null) mTemp = Vector3()
-        mTemp!!.setAll(this)
-        this.x = y * mTemp!!.z - z * mTemp!!.y
-        this.y = z * mTemp!!.x - x * mTemp!!.z
-        this.z = x * mTemp!!.y - y * mTemp!!.x
+        if (temp == null) temp = Vector3()
+        temp!!.setAll(this)
+        this.x = y * temp!!.z - z * temp!!.y
+        this.y = z * temp!!.x - x * temp!!.z
+        this.z = x * temp!!.y - y * temp!!.x
         return this
     }
 

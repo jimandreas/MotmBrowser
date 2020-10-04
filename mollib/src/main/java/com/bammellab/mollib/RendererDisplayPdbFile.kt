@@ -66,7 +66,7 @@ class RendererDisplayPdbFile(
 
     var listener: UpdateRenderFinished? = null
 
-    private val mXYZ = XYZ()
+    private val xYZ = XYZ()
 
     var touchX = 300f
     var touchY = 300f
@@ -114,118 +114,118 @@ class RendererDisplayPdbFile(
     /**
      * Store the projection matrix. This is used to project the scene onto a 2D viewport.
      */
-    private val mProjectionMatrix = FloatArray(16)
+    private val projectionMatrix = FloatArray(16)
 
     /**
      * Allocate storage for the final combined matrix. This will be passed into the shader program.
      */
-    private val mMVPMatrix = FloatArray(16)
+    private val mVPMatrix = FloatArray(16)
 
     /**
      * Stores a copy of the model matrix specifically for the light position.
      */
-    private val mLightModelMatrix = FloatArray(16)
+    private val lightModelMatrix = FloatArray(16)
 
     /**
      * This will be used to pass in the transformation matrix.
      */
-    private var mMVPMatrixHandle: Int = 0
+    private var mVPMatrixHandle: Int = 0
 
     /**
      * This will be used to pass in the modelview matrix.
      */
-    private var mMVMatrixHandle: Int = 0
+    private var mVMatrixHandle: Int = 0
 
     /**
      * This will be used to pass in the light position.
      */
-    private var mLightPosHandle: Int = 0
+    private var lightPosHandle: Int = 0
 
     /**
      * This will be used to pass in model position information.
      */
-    private var mPositionHandle: Int = 0
+    private var positionHandle: Int = 0
 
     /**
      * This will be used to pass in model color information.
      */
-    private var mColorHandle: Int = 0
+    private var colorHandle: Int = 0
 
     /**
      * This will be used to pass in model normal information.
      */
-    private var mNormalHandle: Int = 0
+    private var normalHandle: Int = 0
 
     /**
      * Used to hold a light centered on the origin in model space. We need a 4th coordinate so we can get translations to work when
      * we multiply this by our transformation matrices.
      */
-    private val mLightPosInModelSpace = floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f)
+    private val lightPosInModelSpace = floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f)
 
     /**
      * Used to hold the current position of the light in world space (after transformation via model matrix).
      */
-    private val mLightPosInWorldSpace = FloatArray(4)
+    private val lightPosInWorldSpace = FloatArray(4)
 
     /**
      * Used to hold the transformed position of the light in eye space (after transformation via modelview matrix)
      */
-    private val mLightPosInEyeSpace = FloatArray(4)
+    private val lightPosInEyeSpace = FloatArray(4)
 
-    private var mUseVertexShaderProgram = false
+    private var useVertexShaderProgram = false
 
     /**
      * This is a handle to our per-vertex cube shading program.
      */
-    private var mPerVertexProgramHandle = -1
+    private var perVertexProgramHandle = -1
 
     /**
      * This is a handle to our per-pixel cube shading program.
      */
-    private var mPerPixelProgramHandle: Int = 0
+    private var perPixelProgramHandle: Int = 0
 
-    private var mWireFrameRenderingFlag = false
-    private var mSelectModeFlag = false
+    private var wireFrameRenderingFlag = false
+    private var selectModeFlag = false
 
     /**
      * This is a handle to our light point program.
      */
-    private var mPointProgramHandle: Int = 0
+    private var pointProgramHandle: Int = 0
 
     /**
      * A temporary matrix.
      */
-    private val mTemporaryMatrix = FloatArray(16)
+    private val temporaryMatrix = FloatArray(16)
 
     /**
      * Store the accumulated rotation.
      */
-    private val mAccumulatedRotation = FloatArray(16)
-    private val mAccumulatedTranslation = FloatArray(16)
-    private val mAccumulatedScaling = FloatArray(16)
+    private val accumulatedRotation = FloatArray(16)
+    private val accumulatedTranslation = FloatArray(16)
+    private val accumulatedScaling = FloatArray(16)
 
     /**
      * Store the current rotation.
      */
-    private val mIncrementalRotation = FloatArray(16)
+    private val incrementalRotation = FloatArray(16)
 
     private var mCube: CubeHacked? = null
     private var mPointer: Pointer? = null
     private val mMol: Molecule
     private val pdbFile: ParserPdbFile
-    private val mManagerViewmode: ManagerViewmode?
+    private val managerViewmode: ManagerViewmode?
 
-    private val mBufferManager = BufferManager.getInstance(activity)
+    private val bufferManager = BufferManager.getInstance(activity)
 
     init {
 
-        mBufferManager.resetBuffersForNextUsage()
+        bufferManager.resetBuffersForNextUsage()
 
         mMol = Molecule()
-        mManagerViewmode = ManagerViewmode(
-                activity, mMol, mBufferManager)
+        managerViewmode = ManagerViewmode(
+                activity, mMol, bufferManager)
         pdbFile = ParserPdbFile(
-                activity, mMol, mBufferManager, mManagerViewmode)
+                activity, mMol, bufferManager, managerViewmode)
     }
 
     override fun onSurfaceCreated(glUnused: GL10, config: EGLConfig) {
@@ -258,20 +258,20 @@ class RendererDisplayPdbFile(
         // view matrix. In OpenGL 2, we can keep track of these matrices separately if we choose.
         Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ)
 
-        var vertexShader = mXYZ.vertexShaderLesson2
-        var fragmentShader = mXYZ.fragmentShaderLesson2
+        var vertexShader = xYZ.vertexShaderLesson2
+        var fragmentShader = xYZ.fragmentShaderLesson2
         var vertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, vertexShader)
         var fragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader)
 
-        mPerVertexProgramHandle = createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
+        perVertexProgramHandle = createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
                 arrayOf("a_Position", "a_Color", "a_Normal"))
 
         /* add in a pixel shader from lesson 3 - switchable */
-        vertexShader = mXYZ.vertexShaderLesson3
-        fragmentShader = mXYZ.fragmentShaderLesson3
+        vertexShader = xYZ.vertexShaderLesson3
+        fragmentShader = xYZ.fragmentShaderLesson3
         vertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, vertexShader)
         fragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader)
-        mPerPixelProgramHandle = createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
+        perPixelProgramHandle = createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
                 arrayOf("a_Position", "a_Color", "a_Normal"))
 
         // Define a simple shader program for our point (the orbiting light source)
@@ -293,7 +293,7 @@ class RendererDisplayPdbFile(
 
         val pointVertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, pointVertexShader)
         val pointFragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, pointFragmentShader)
-        mPointProgramHandle = createAndLinkProgram(pointVertexShaderHandle, pointFragmentShaderHandle,
+        pointProgramHandle = createAndLinkProgram(pointVertexShaderHandle, pointFragmentShaderHandle,
                 arrayOf("a_Position"))
 
         /*
@@ -304,15 +304,15 @@ class RendererDisplayPdbFile(
 
 
         // Initialize the modifier matrices
-        Matrix.setIdentityM(mAccumulatedRotation, 0)
-        Matrix.setIdentityM(mAccumulatedTranslation, 0)
-        Matrix.setIdentityM(mAccumulatedScaling, 0)
+        Matrix.setIdentityM(accumulatedRotation, 0)
+        Matrix.setIdentityM(accumulatedTranslation, 0)
+        Matrix.setIdentityM(accumulatedScaling, 0)
 
         /*
          * let the UI thread know that all GL objects are created
          */
-//        val message = Message.obtain(mHandler, Molecule.UI_MESSAGE_GL_READY)
-//        mHandler.dispatchMessage(message)
+//        val message = Message.obtain(handler, Molecule.UI_MESSAGE_GL_READY)
+//        handler.dispatchMessage(message)
 
         // was the old "tunnel" graphic showing the selection area
         //   now deprecated
@@ -336,7 +336,7 @@ class RendererDisplayPdbFile(
         val far = 20.0f
         // final float far = 5.0f;  nothing visible
 
-        Matrix.frustumM(mProjectionMatrix, 0, left, right, bottom, top, near, far)
+        Matrix.frustumM(projectionMatrix, 0, left, right, bottom, top, near, far)
 
         val glError = GLES20.glGetError()
         if (glError != GLES20.GL_NO_ERROR) {
@@ -347,7 +347,7 @@ class RendererDisplayPdbFile(
     override fun onDrawFrame(glUnused: GL10) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
 
-        if (!mSelectModeFlag) {
+        if (!selectModeFlag) {
             if (scaleCurrentF != scalePrevious) {
                 onSurfaceChanged(null, mWidth, mHeight)  // adjusts view
                 scalePrevious = scaleCurrentF
@@ -359,27 +359,27 @@ class RendererDisplayPdbFile(
             deltaTranslateY = 0.0f
 
             // Set our per-vertex lighting program.
-            val mSelectedProgramHandle = if (mUseVertexShaderProgram) {
-                mPerVertexProgramHandle
+            val selectedProgramHandle = if (useVertexShaderProgram) {
+                perVertexProgramHandle
             } else {
-                mPerPixelProgramHandle
+                perPixelProgramHandle
             }
 
-            GLES20.glUseProgram(mSelectedProgramHandle)
+            GLES20.glUseProgram(selectedProgramHandle)
             // Set program handles for drawing.
-            mMVPMatrixHandle = GLES20.glGetUniformLocation(mSelectedProgramHandle, "u_MVPMatrix")
-            mMVMatrixHandle = GLES20.glGetUniformLocation(mSelectedProgramHandle, "u_MVMatrix")
-            mLightPosHandle = GLES20.glGetUniformLocation(mSelectedProgramHandle, "u_LightPos")
-            mPositionHandle = GLES20.glGetAttribLocation(mSelectedProgramHandle, "a_Position")
-            mColorHandle = GLES20.glGetAttribLocation(mSelectedProgramHandle, "a_Color")
-            mNormalHandle = GLES20.glGetAttribLocation(mSelectedProgramHandle, "a_Normal")
+            mVPMatrixHandle = GLES20.glGetUniformLocation(selectedProgramHandle, "u_MVPMatrix")
+            mVMatrixHandle = GLES20.glGetUniformLocation(selectedProgramHandle, "u_MVMatrix")
+            lightPosHandle = GLES20.glGetUniformLocation(selectedProgramHandle, "u_LightPos")
+            positionHandle = GLES20.glGetAttribLocation(selectedProgramHandle, "a_Position")
+            colorHandle = GLES20.glGetAttribLocation(selectedProgramHandle, "a_Color")
+            normalHandle = GLES20.glGetAttribLocation(selectedProgramHandle, "a_Normal")
 
             // Calculate position of the light. Push into the distance.
-            Matrix.setIdentityM(mLightModelMatrix, 0)
-            Matrix.translateM(mLightModelMatrix, 0, 0.0f, 0.0f, -1.0f)
+            Matrix.setIdentityM(lightModelMatrix, 0)
+            Matrix.translateM(lightModelMatrix, 0, 0.0f, 0.0f, -1.0f)
 
-            Matrix.multiplyMV(mLightPosInWorldSpace, 0, mLightModelMatrix, 0, mLightPosInModelSpace, 0)
-            Matrix.multiplyMV(mLightPosInEyeSpace, 0, viewMatrix, 0, mLightPosInWorldSpace, 0)
+            Matrix.multiplyMV(lightPosInWorldSpace, 0, lightModelMatrix, 0, lightPosInModelSpace, 0)
+            Matrix.multiplyMV(lightPosInEyeSpace, 0, viewMatrix, 0, lightPosInWorldSpace, 0)
 
             val scaleF = 1.5f / mMol.dcOffset
 
@@ -390,18 +390,18 @@ class RendererDisplayPdbFile(
             Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
             Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
             doMatrixSetup()
-            mBufferManager.render(mPositionHandle, mColorHandle, mNormalHandle, mWireFrameRenderingFlag)
+            bufferManager.render(positionHandle, colorHandle, normalHandle, wireFrameRenderingFlag)
             // DEBUG:  box in scene center
-            // mBoundingBox.render(mPositionHandle, mColorHandle, mNormalHandle, mWireFrameRenderingFlag);
+            // mBoundingBox.render(positionHandle, colorHandle, normalHandle, wireFrameRenderingFlag);
 
         } else {
             select()
         }
 
-        if (!mMol.mReportedTimeFlag) {
-            mMol.mReportedTimeFlag = true
+        if (!mMol.reportedTimeFlag) {
+            mMol.reportedTimeFlag = true
             val endTime = SystemClock.uptimeMillis().toFloat()
-            val elapsedTime = (endTime - mMol.mStartOfParseTime) / 1000
+            val elapsedTime = (endTime - mMol.startOfParseTime) / 1000
             @SuppressLint("DefaultLocale") val prettyPrint = String.format("%6.2f", elapsedTime)
 
             val activityManager = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
@@ -423,40 +423,40 @@ class RendererDisplayPdbFile(
          * as indicated by the user touching the screen
          */
 
-        if (!mSelectModeFlag) {
-            Matrix.setIdentityM(mIncrementalRotation, 0)
-            Matrix.rotateM(mIncrementalRotation, 0, deltaX, 0.0f, 1.0f, 0.0f)
-            Matrix.rotateM(mIncrementalRotation, 0, deltaY, 1.0f, 0.0f, 0.0f)
+        if (!selectModeFlag) {
+            Matrix.setIdentityM(incrementalRotation, 0)
+            Matrix.rotateM(incrementalRotation, 0, deltaX, 0.0f, 1.0f, 0.0f)
+            Matrix.rotateM(incrementalRotation, 0, deltaY, 1.0f, 0.0f, 0.0f)
             deltaX = 0.0f
             deltaY = 0.0f
 
             // Multiply the current rotation by the accumulated rotation, and then set the accumulated rotation to the result.
-            Matrix.multiplyMM(mTemporaryMatrix, 0, mIncrementalRotation, 0, mAccumulatedRotation, 0)
-            System.arraycopy(mTemporaryMatrix, 0, mAccumulatedRotation, 0, 16)
+            Matrix.multiplyMM(temporaryMatrix, 0, incrementalRotation, 0, accumulatedRotation, 0)
+            System.arraycopy(temporaryMatrix, 0, accumulatedRotation, 0, 16)
         }
         // Rotate the object taking the overall rotation into account.
-        Matrix.multiplyMM(mTemporaryMatrix, 0, modelMatrix, 0, mAccumulatedRotation, 0)
-        System.arraycopy(mTemporaryMatrix, 0, modelMatrix, 0, 16)
+        Matrix.multiplyMM(temporaryMatrix, 0, modelMatrix, 0, accumulatedRotation, 0)
+        System.arraycopy(temporaryMatrix, 0, modelMatrix, 0, 16)
 
         // This multiplies the view matrix by the model matrix, and stores
         // the result in the MVP matrix
         // (which currently contains model * view).
-        Matrix.multiplyMM(mMVPMatrix, 0, viewMatrix, 0, modelMatrix, 0)
+        Matrix.multiplyMM(mVPMatrix, 0, viewMatrix, 0, modelMatrix, 0)
 
         // Pass in the modelview matrix.
-        GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mMVPMatrix, 0)
+        GLES20.glUniformMatrix4fv(mVMatrixHandle, 1, false, mVPMatrix, 0)
 
         // This multiplies the modelview matrix by the projection matrix,
         // and stores the result in the MVP matrix
         // (which now contains model * view * projection).
-        Matrix.multiplyMM(mTemporaryMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0)
-        System.arraycopy(mTemporaryMatrix, 0, mMVPMatrix, 0, 16)
+        Matrix.multiplyMM(temporaryMatrix, 0, projectionMatrix, 0, mVPMatrix, 0)
+        System.arraycopy(temporaryMatrix, 0, mVPMatrix, 0, 16)
 
         // Pass in the combined matrix.
-        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0)
+        GLES20.glUniformMatrix4fv(mVPMatrixHandle, 1, false, mVPMatrix, 0)
 
         // Pass in the light position in eye space.
-        GLES20.glUniform3f(mLightPosHandle, mLightPosInEyeSpace[0], mLightPosInEyeSpace[1], mLightPosInEyeSpace[2])
+        GLES20.glUniform3f(lightPosHandle, lightPosInEyeSpace[0], lightPosInEyeSpace[1], lightPosInEyeSpace[2])
 
         val glError = GLES20.glGetError()
         if (glError != GLES20.GL_NO_ERROR) {
@@ -474,22 +474,22 @@ class RendererDisplayPdbFile(
     private fun doMatrixSetupViewOnly() {
 
         // Pass in the modelview matrix.
-        // GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mMVPMatrix, 0);
-        Matrix.setIdentityM(mTemporaryMatrix, 0)
-        GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mTemporaryMatrix, 0)
+        // GLES20.glUniformMatrix4fv(mVMatrixHandle, 1, false, mVPMatrix, 0);
+        Matrix.setIdentityM(temporaryMatrix, 0)
+        GLES20.glUniformMatrix4fv(mVMatrixHandle, 1, false, temporaryMatrix, 0)
 
         // This multiplies the modelview matrix by the projection matrix,
         // and stores the result in the MVP matrix
         // (which now contains model * view * projection).
-        Matrix.multiplyMM(mTemporaryMatrix, 0, mProjectionMatrix, 0, modelMatrix, 0)
-        System.arraycopy(mTemporaryMatrix, 0, mMVPMatrix, 0, 16)
+        Matrix.multiplyMM(temporaryMatrix, 0, projectionMatrix, 0, modelMatrix, 0)
+        System.arraycopy(temporaryMatrix, 0, mVPMatrix, 0, 16)
 
         // Pass in the combined matrix.
-        // GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
-        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mProjectionMatrix, 0)
+        // GLES20.glUniformMatrix4fv(mVPMatrixHandle, 1, false, mVPMatrix, 0);
+        GLES20.glUniformMatrix4fv(mVPMatrixHandle, 1, false, projectionMatrix, 0)
 
         // Pass in the light position in eye space.
-        GLES20.glUniform3f(mLightPosHandle, mLightPosInEyeSpace[0], mLightPosInEyeSpace[1], mLightPosInEyeSpace[2])
+        GLES20.glUniform3f(lightPosHandle, lightPosInEyeSpace[0], lightPosInEyeSpace[1], lightPosInEyeSpace[2])
 
         val glError = GLES20.glGetError()
         if (glError != GLES20.GL_NO_ERROR) {
@@ -501,19 +501,19 @@ class RendererDisplayPdbFile(
      * Draws a point representing the position of the light.
      */
     private fun drawLight() {
-        val pointMVPMatrixHandle = GLES20.glGetUniformLocation(mPointProgramHandle, "u_MVPMatrix")
-        val pointPositionHandle = GLES20.glGetAttribLocation(mPointProgramHandle, "a_Position")
+        val pointMVPMatrixHandle = GLES20.glGetUniformLocation(pointProgramHandle, "u_MVPMatrix")
+        val pointPositionHandle = GLES20.glGetAttribLocation(pointProgramHandle, "a_Position")
 
         // Pass in the position.
-        GLES20.glVertexAttrib3f(pointPositionHandle, mLightPosInModelSpace[0], mLightPosInModelSpace[1], mLightPosInModelSpace[2])
+        GLES20.glVertexAttrib3f(pointPositionHandle, lightPosInModelSpace[0], lightPosInModelSpace[1], lightPosInModelSpace[2])
 
         // Since we are not using a buffer object, disable vertex arrays for this attribute.
         GLES20.glDisableVertexAttribArray(pointPositionHandle)
 
         // Pass in the transformation matrix.
-        Matrix.multiplyMM(mMVPMatrix, 0, viewMatrix, 0, mLightModelMatrix, 0)
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0)
-        GLES20.glUniformMatrix4fv(pointMVPMatrixHandle, 1, false, mMVPMatrix, 0)
+        Matrix.multiplyMM(mVPMatrix, 0, viewMatrix, 0, lightModelMatrix, 0)
+        Matrix.multiplyMM(mVPMatrix, 0, projectionMatrix, 0, mVPMatrix, 0)
+        GLES20.glUniformMatrix4fv(pointMVPMatrixHandle, 1, false, mVPMatrix, 0)
 
         // Draw the point.
         GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1)
@@ -605,7 +605,7 @@ class RendererDisplayPdbFile(
 
     // TODO: send message to Handler
     fun toggleShader() {
-        mUseVertexShaderProgram = !mUseVertexShaderProgram
+        useVertexShaderProgram = !useVertexShaderProgram
     }
 
     fun toggleHydrogenDisplayMode() {
@@ -613,28 +613,28 @@ class RendererDisplayPdbFile(
     }
 
     fun toggleWireframeFlag() {
-        mWireFrameRenderingFlag = !mWireFrameRenderingFlag
+        wireFrameRenderingFlag = !wireFrameRenderingFlag
     }
 
     fun toggleSelectFlag() {
 
-        if (mSelectModeFlag) {
-            mSelectModeFlag = false
+        if (selectModeFlag) {
+            selectModeFlag = false
             // reset any rotation during selection movement
             deltaX = 0.0f
             deltaY = 0.0f
-            scaleCurrentF = mSaveScale
-            glSurfaceView.mSelectMode = false
+            scaleCurrentF = saveScale
+            glSurfaceView.selectMode = false
         } else {
-            mSelectModeFlag = true
-            mSaveScale = scaleCurrentF
-            glSurfaceView.mSelectMode = true
+            selectModeFlag = true
+            saveScale = scaleCurrentF
+            glSurfaceView.selectMode = true
         }
     }
 
     fun loadPdbFile() {
         // TODO: fix this hack on detecting when OPENGL is up and running
-        if (mPerVertexProgramHandle != -1) {
+        if (perVertexProgramHandle != -1) {
             pdbFile.parse(pdbFileName)
             /*
              * reset view manipulation
@@ -666,7 +666,7 @@ class RendererDisplayPdbFile(
     // TODO: send message to Handler
     fun nextViewMode() {
         // TODO: fix this hack on detecting when OPENGL is up and running
-        mManagerViewmode?.nextViewMode()
+        managerViewmode?.nextViewMode()
         // mActivity.changeViewIsFinished();
     }
 
@@ -684,7 +684,7 @@ class RendererDisplayPdbFile(
         Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
         Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
         doMatrixSetup()
-        mBufferManager.render(mPositionHandle, mColorHandle, mNormalHandle, mWireFrameRenderingFlag)
+        bufferManager.render(positionHandle, colorHandle, normalHandle, wireFrameRenderingFlag)
 
         // int[] mViewport = new int[]{0, 0, mWidth, mHeight};
         mViewport[2] = mWidth
@@ -694,22 +694,22 @@ class RendererDisplayPdbFile(
         //   or 160 on a Nexus 4 (1280 vertical)
         val y = touchY.toInt() - (max(mHeight.toFloat(), mWidth.toFloat()) * 0.125f).toInt()
 
-        Matrix.setIdentityM(mTemporaryMatrix, 0)
+        Matrix.setIdentityM(temporaryMatrix, 0)
 
         /*        int result;
-        result = GLU.gluUnProject(x, mHeight - y, 0.0f, mTemporaryMatrix, 0,
-                mProjectionMatrix, 0, mViewport, 0, mFloatVector1, 0);
+        result = GLU.gluUnProject(x, mHeight - y, 0.0f, temporaryMatrix, 0,
+                projectionMatrix, 0, mViewport, 0, mFloatVector1, 0);
 
-        result = GLU.gluUnProject(x, mHeight - y, 1.0f, mTemporaryMatrix, 0,
-                mProjectionMatrix, 0, mViewport, 0, mFloatVector2, 0);*/
+        result = GLU.gluUnProject(x, mHeight - y, 1.0f, temporaryMatrix, 0,
+                projectionMatrix, 0, mViewport, 0, mFloatVector2, 0);*/
 
-        mScreenVector1.setAll(
+        screenVector1.setAll(
                 (floatVector1[0] / floatVector1[3]).toDouble(),
                 (floatVector1[1] / floatVector1[3]).toDouble(),
                 (floatVector1[2] / floatVector1[3]).toDouble()
         )
 
-        mScreenVector2.setAll(
+        screenVector2.setAll(
                 (floatVector2[0] / floatVector2[3]).toDouble(),
                 (floatVector2[1] / floatVector2[3]).toDouble(),
                 (floatVector2[2] / floatVector2[3]).toDouble()
@@ -718,36 +718,36 @@ class RendererDisplayPdbFile(
         // now draw the targeted location in screen coords
         doMatrixSetupViewOnly()
 
-        //        String pretty_print_a = String.format("%6.2f", mScreenVector1.x);
-        //        String pretty_print_b = String.format("%6.2f", mScreenVector1.y);
-        //        String pretty_print_c = String.format("%6.2f", mScreenVector1.z);
+        //        String pretty_print_a = String.format("%6.2f", screenVector1.x);
+        //        String pretty_print_b = String.format("%6.2f", screenVector1.y);
+        //        String pretty_print_c = String.format("%6.2f", screenVector1.z);
 
         // Timber.i("pointer: " + pretty_print_a + pretty_print_b + pretty_print_c);
 
         mPointer!!.setup(
-                mScreenVector1.x.toFloat(),
-                mScreenVector1.y.toFloat(),
+                screenVector1.x.toFloat(),
+                screenVector1.y.toFloat(),
                 -1.01f, scaleCurrentF)
 
-        mPointer!!.render(mPositionHandle, mColorHandle, mNormalHandle, false /* mWireFrameRenderingFlag */)
+        mPointer!!.render(positionHandle, colorHandle, normalHandle, false /* wireFrameRenderingFlag */)
 
         /*
          * move the origin point of the interesecting ray out
          *   a bit in Z space - so that the origin is always
          *   towards the camera
          */
-        mTempVector1.setAll(mScreenVector2)
-        mTempVector1.subtract(mScreenVector1)
-        mTempVector1.normalize()
-        mTempVector1.multiply(2.0)
-        mScreenVector1.subtract(mTempVector1)
+        tempVector1.setAll(screenVector2)
+        tempVector1.subtract(screenVector1)
+        tempVector1.normalize()
+        tempVector1.multiply(2.0)
+        screenVector1.subtract(tempVector1)
 
         var selectedAtomIndex: Int
 
         val gotHit = false
 
         var atom1: PdbAtom?
-        mSelectedAtomsList.clear()
+        selectedAtomsList.clear()
         for (i in 0 until mMol.atoms.size) {
             atom1 = mMol.atoms[mMol.numList[i]]
             if (atom1 == null) {
@@ -761,7 +761,7 @@ class RendererDisplayPdbFile(
 
             //            if (atom1.pickedAtom) {
             //                atom1.pickedAtom = false;
-            //                mManagerViewmode.repeatViewMode();
+            //                managerViewmode.repeatViewMode();
             //            }
 
             floatVector2[0] = atom1.atomPosition.x.toFloat()
@@ -777,12 +777,12 @@ class RendererDisplayPdbFile(
             Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
             doMatrixSetup()
 
-            Matrix.multiplyMM(mTemporaryMatrix, 0, viewMatrix, 0, modelMatrix, 0)
-            Matrix.multiplyMV(floatVector1, 0, mTemporaryMatrix, 0, floatVector2, 0)
+            Matrix.multiplyMM(temporaryMatrix, 0, viewMatrix, 0, modelMatrix, 0)
+            Matrix.multiplyMV(floatVector1, 0, temporaryMatrix, 0, floatVector2, 0)
 
             if (floatVector1[3] == 0f) floatVector1[3] = 1.0f
 
-            mTestAtomVector.setAll(
+            testAtomVector.setAll(
                     (floatVector1[0] / floatVector1[3]).toDouble(),
                     (floatVector1[1] / floatVector1[3]).toDouble(),
                     (floatVector1[2] / floatVector1[3]).toDouble()
@@ -790,8 +790,8 @@ class RendererDisplayPdbFile(
 
             /*  old way of doing the intersection:  */
             //                got_hit = Intersector.intersectRaySphere(
-            //                        mScreenVector1, mScreenVector2,
-            //                        mTestAtomVector, 0.10f,
+            //                        screenVector1, screenVector2,
+            //                        testAtomVector, 0.10f,
             //                        screen_vector /* if a hit */);
 
             /* end old way of doing the intersection */
@@ -802,26 +802,26 @@ class RendererDisplayPdbFile(
             // Vector3 p1_minus_sc = new Vector3();
             // Vector3 dp = new Vector3();
 
-            val p1_minus_sc = mTempVector1
-            val dp = mTempVector2
+            val p1_minus_sc = tempVector1
+            val dp = tempVector2
 
-            dp.setAll(mScreenVector2)
-            dp.subtract(mScreenVector1)
+            dp.setAll(screenVector2)
+            dp.subtract(screenVector1)
             dp.normalize()
 
             val a = dp.dot(dp)
 
-            p1_minus_sc.setAll(mScreenVector1)
-            p1_minus_sc.subtract(mTestAtomVector)
+            p1_minus_sc.setAll(screenVector1)
+            p1_minus_sc.subtract(testAtomVector)
 
             val b = 2 * dp.dot(p1_minus_sc)
 
-            var c = mTestAtomVector.dot(mTestAtomVector)
-            c += mScreenVector1.dot(mScreenVector1)
-            c -= 2 * mTestAtomVector.dot(mScreenVector1)
+            var c = testAtomVector.dot(testAtomVector)
+            c += screenVector1.dot(screenVector1)
+            c -= 2 * testAtomVector.dot(screenVector1)
             // c = c - (0.10 * 0.10);
             // c = c - (0.05 * 0.05);
-            // mTempVector1 the "radius" of the target sphere
+            // tempVector1 the "radius" of the target sphere
             //  based on the size of the molecule
             val radius = 0.05 * 15.0 / mMol.dcOffset
             c -= radius * radius
@@ -834,20 +834,20 @@ class RendererDisplayPdbFile(
             if (bb4ac >= 0) {
 
                 val selectedAtom = AtomInfo()
-                selectedAtom.atomTransformedPosition.setAll(mTestAtomVector)
+                selectedAtom.atomTransformedPosition.setAll(testAtomVector)
                 selectedAtom.indexNumber = i
-                mSelectedAtomsList.add(selectedAtom)
+                selectedAtomsList.add(selectedAtom)
             }
         }
 
-        if (mSelectedAtomsList.isEmpty()) {
+        if (selectedAtomsList.isEmpty()) {
             return
         }
         var maxZ = -999999.0
         selectedAtomIndex = 999999
         var ai: AtomInfo
-        for (i in mSelectedAtomsList.indices) {
-            ai = mSelectedAtomsList[i]
+        for (i in selectedAtomsList.indices) {
+            ai = selectedAtomsList[i]
             val zvalue = ai.atomTransformedPosition.z
             if (zvalue > maxZ) {
                 selectedAtomIndex = ai.indexNumber
@@ -855,9 +855,9 @@ class RendererDisplayPdbFile(
             }
         }
 
-        //        if (atom1.atom_number != mLastReportedAtom) {
+        //        if (atom1.atom_number != lastReportedAtom) {
         //            Log.i("SEL", "atom " + atom1.atom_number);
-        //            mLastReportedAtom = atom1.atom_number;
+        //            lastReportedAtom = atom1.atom_number;
         //        }
 
 
@@ -876,18 +876,18 @@ class RendererDisplayPdbFile(
                 atom1!!.atomPosition.x.toFloat(),
                 atom1.atomPosition.y.toFloat(),
                 atom1.atomPosition.z.toFloat())
-        mCube!!.render(mPositionHandle, mColorHandle, mNormalHandle, false /* mWireFrameRenderingFlag */)
+        mCube!!.render(positionHandle, colorHandle, normalHandle, false /* wireFrameRenderingFlag */)
 
-        if (atom1.atomNumber != mLastReportedAtom) {
+        if (atom1.atomNumber != lastReportedAtom) {
             Timber.i("atom " + atom1.atomNumber)
-            mLastReportedAtom = atom1.atomNumber
+            lastReportedAtom = atom1.atomNumber
         }
 
 
     }
 
     fun doCleanUp() {
-        mBufferManager.resetBuffersForNextUsage()
+        bufferManager.resetBuffersForNextUsage()
         mMol.clearLists()
         Timber.i("CLEANUP")
     }
@@ -938,20 +938,20 @@ class RendererDisplayPdbFile(
     }
 
     companion object {
-        private val mScreenVector1 = Vector3()
-        private val mScreenVector2 = Vector3()
-        private val mTempVector1 = Vector3()
-        private val mTempVector2 = Vector3()
-        private val mTestAtomVector = Vector3()
+        private val screenVector1 = Vector3()
+        private val screenVector2 = Vector3()
+        private val tempVector1 = Vector3()
+        private val tempVector2 = Vector3()
+        private val testAtomVector = Vector3()
 
-        private val mSelectedAtomsList = ArrayList<AtomInfo>()
+        private val selectedAtomsList = ArrayList<AtomInfo>()
 
         private const val INITIAL_SCALE = 0.5f
-        private var mSaveScale = 0f
+        private var saveScale = 0f
 
         private var mHeight: Int = 0
         private var mWidth: Int = 0
-        private var mLastReportedAtom = -1
+        private var lastReportedAtom = -1
         private val mViewport = intArrayOf(0, 0, 0, 0)
     }
 
@@ -960,7 +960,7 @@ class RendererDisplayPdbFile(
     //         * let the UI know that the parsing is completed (to flush the spinner)
     //         */
     //        Message message;
-    //        message = Message.obtain(mHandler, UI_MESSAGE_FINISHED_PARSING);
-    //        mHandler.dispatchMessage(message);
+    //        message = Message.obtain(handler, UI_MESSAGE_FINISHED_PARSING);
+    //        handler.dispatchMessage(message);
     //    }
 }

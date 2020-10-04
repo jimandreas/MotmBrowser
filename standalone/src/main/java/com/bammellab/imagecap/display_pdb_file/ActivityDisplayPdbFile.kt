@@ -30,11 +30,11 @@ import java.io.IOException
 
 class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRenderFinished {
     /** Hold a reference to our GLSurfaceView  */
-    private var mGLSurfaceView: GLSurfaceViewDisplayPdbFile? = null
+    private var gLSurfaceView: GLSurfaceViewDisplayPdbFile? = null
     private var mRenderer: RendererDisplayPdbFile? = null
-    private var mNextViewProgress: ProgressBar? = null
+    private var nextViewProgress: ProgressBar? = null
 
-    private var mNextNameIndex = -1
+    private var nextNameIndex = -1
     // wire in the names and display names
     private val pdbFileNames2 = arrayOf(
 
@@ -48,46 +48,46 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
     private val pdbFileNames = MotmPdbNames.pdbNames
 
     private fun loadNextPdbFile() {
-        if (++mNextNameIndex == pdbFileNames.size) {
-            mNextNameIndex = 0
+        if (++nextNameIndex == pdbFileNames.size) {
+            nextNameIndex = 0
         }
-        val name = pdbFileNames[mNextNameIndex]
+        val name = pdbFileNames[nextNameIndex]
         Timber.d("Next file: %s", name)
-        //        setTitle(pdb_file_display_name[mNextNameIndex]);
-        title = pdbFileNames[mNextNameIndex]
+        //        setTitle(pdb_file_display_name[nextNameIndex]);
+        title = pdbFileNames[nextNameIndex]
         mRenderer!!.setPdbFileName(name)
 
         // WRITE the image!!!
-        if (mNextNameIndex > 0) {
+        if (nextNameIndex > 0) {
             writeCurrentImage()
         }
 
-        mGLSurfaceView!!.queueEvent { mRenderer!!.loadPdbFile() }
+        gLSurfaceView!!.queueEvent { mRenderer!!.loadPdbFile() }
     }
 
     private fun loadPrevPdbFile() {
 
-        if (mNextNameIndex-- == 0) {
-            mNextNameIndex = pdbFileNames.size - 1
+        if (nextNameIndex-- == 0) {
+            nextNameIndex = pdbFileNames.size - 1
         }
-        val name = pdbFileNames[mNextNameIndex]
+        val name = pdbFileNames[nextNameIndex]
 
         Timber.d("Previous file: %s", name)
-        //        setTitle(pdb_file_display_name[mNextNameIndex]);
-        title = pdbFileNames[mNextNameIndex]
+        //        setTitle(pdb_file_display_name[nextNameIndex]);
+        title = pdbFileNames[nextNameIndex]
         mRenderer!!.setPdbFileName(name)
         // mRenderer!!.listener = this
 
-        mGLSurfaceView!!.queueEvent { mRenderer!!.loadPdbFile() }
+        gLSurfaceView!!.queueEvent { mRenderer!!.loadPdbFile() }
     }
 
     private fun writeCurrentImage() {
 
-        mGLSurfaceView!!.queueEvent {
+        gLSurfaceView!!.queueEvent {
             val file = getDiskCacheDir("foo")
             try {
                 val folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                val pdbName = pdbFileNames[mNextNameIndex]
+                val pdbName = pdbFileNames[nextNameIndex]
                 val myFile = File(folder, "$pdbName.png")
                 val fileOutputStream = FileOutputStream(myFile)
                 val bm = mRenderer!!.readGlBufferToBitmap(200, 500, 700, 700)
@@ -136,8 +136,8 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
         super.onCreate(savedInstanceState)
         setContentView(R.layout.display_pdb_file)
 
-        mGLSurfaceView = findViewById(R.id.gl_surface_view)
-        mNextViewProgress = findViewById(R.id.next_view_progress_circle)
+        gLSurfaceView = findViewById(R.id.gl_surface_view)
+        nextViewProgress = findViewById(R.id.next_view_progress_circle)
 
         // Check if the system supports OpenGL ES 2.0.
         val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -146,15 +146,15 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
 
         if (supportsEs2) {
             // Request an OpenGL ES 2.0 compatible context.
-            mGLSurfaceView!!.setEGLContextClientVersion(2)
+            gLSurfaceView!!.setEGLContextClientVersion(2)
 
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
 
-            mRenderer = RendererDisplayPdbFile(this, mGLSurfaceView!!)
-            mGLSurfaceView!!.setRenderer(mRenderer!!, displayMetrics.density)
+            mRenderer = RendererDisplayPdbFile(this, gLSurfaceView!!)
+            gLSurfaceView!!.setRenderer(mRenderer!!, displayMetrics.density)
             // This freezes the updates, now adjusted in GLSurfaceView
-            // mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+            // gLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         } else {
             // This is where you could create an OpenGL ES 1.x compatible
             // renderer if you wanted to support both ES 1 and ES 2.
@@ -178,8 +178,8 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
         findViewById<View>(R.id.button_select).setOnClickListener { toggleSelect() }
 
         findViewById<View>(R.id.button_change_viewmode).setOnClickListener {
-            mNextViewProgress!!.visibility = View.VISIBLE
-            mGLSurfaceView!!.queueEvent { mRenderer!!.nextViewMode() }
+            nextViewProgress!!.visibility = View.VISIBLE
+            gLSurfaceView!!.queueEvent { mRenderer!!.nextViewMode() }
         }
     }
 
@@ -188,14 +188,14 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
         // The activity must call the GL surface view's onResume() on activity
         // onResume().
         super.onResume()
-        mGLSurfaceView!!.onResume()
+        gLSurfaceView!!.onResume()
     }
 
     override fun onPause() {
         // The activity must call the GL surface view's onPause() on activity
         // onPause().
         super.onPause()
-        mGLSurfaceView!!.onPause()
+        gLSurfaceView!!.onPause()
     }
 
     override fun onDestroy() {
@@ -204,23 +204,23 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
     }
 
     private fun toggleShader() {
-        mGLSurfaceView!!.queueEvent { mRenderer!!.toggleShader() }
+        gLSurfaceView!!.queueEvent { mRenderer!!.toggleShader() }
     }
 
     private fun toggleHydrogenDisplayMode() {
-        mGLSurfaceView!!.queueEvent { mRenderer!!.toggleHydrogenDisplayMode() }
+        gLSurfaceView!!.queueEvent { mRenderer!!.toggleHydrogenDisplayMode() }
     }
 
     private fun toggleWireframe() {
-        mGLSurfaceView!!.queueEvent { mRenderer!!.toggleWireframeFlag() }
+        gLSurfaceView!!.queueEvent { mRenderer!!.toggleWireframeFlag() }
     }
 
     private fun toggleSelect() {
-        mGLSurfaceView!!.queueEvent { mRenderer!!.toggleSelectFlag() }
+        gLSurfaceView!!.queueEvent { mRenderer!!.toggleSelectFlag() }
     }
 
     fun changeViewIsFinished() {
-        runOnUiThread { mNextViewProgress!!.visibility = View.INVISIBLE }
+        runOnUiThread { nextViewProgress!!.visibility = View.INVISIBLE }
     }
 
     fun noMemoryForAtomView() {

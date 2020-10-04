@@ -46,7 +46,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var mDrawerLayout: DrawerLayout
+    private lateinit var drawerLayout: DrawerLayout
     private val listener = PageChangeListener()
     private lateinit var viewPager : ViewPager
     lateinit var app : MotmApplication
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             ab.setDisplayHomeAsUpEnabled(true)
         }
 
-        mDrawerLayout = findViewById(R.id.drawer_layout)
+        drawerLayout = findViewById(R.id.drawer_layout)
 
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView?.setNavigationItemSelectedListener(this)
@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                mDrawerLayout.openDrawer(GravityCompat.START)
+                drawerLayout.openDrawer(GravityCompat.START)
                 return true
             }
             R.id.menu_night_mode_system -> setNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
@@ -204,24 +204,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     internal class Adapter(fm: FragmentManager) : androidx.fragment.app.FragmentPagerAdapter(fm) {
-        private val mFragments = ArrayList<Fragment>()
-        private val mFragmentTitles = ArrayList<String>()
+        private val fragments = ArrayList<Fragment>()
+        private val fragmentTitles = ArrayList<String>()
 
         fun addFragment(fragment: Fragment, title: String) {
-            mFragments.add(fragment)
-            mFragmentTitles.add(title)
+            fragments.add(fragment)
+            fragmentTitles.add(title)
         }
 
         override fun getItem(position: Int): Fragment {
-            return mFragments[position]
+            return fragments[position]
         }
 
         override fun getCount(): Int {
-            return mFragments.size
+            return fragments.size
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return mFragmentTitles[position]
+            return fragmentTitles[position]
         }
     }
 

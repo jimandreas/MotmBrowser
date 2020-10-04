@@ -55,8 +55,8 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
     private lateinit var buttonNextObj: Button
     private lateinit var buttonSelect: Button
     private lateinit var buttonChangeViewmode: Button
-    private lateinit var mGLSurfaceView: GLSurfaceViewDisplayPdbFile
-    private lateinit var mNextViewProgressCircle: ProgressBar
+    private lateinit var gLSurfaceView: GLSurfaceViewDisplayPdbFile
+    private lateinit var nextViewProgressCircle: ProgressBar
 
     private lateinit var mRenderer: RendererDisplayPdbFile
     private lateinit var pdbList: Array<String>
@@ -78,13 +78,13 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
         buttonNextObj = findViewById(R.id.button_next_obj)
         buttonSelect = findViewById(R.id.button_select)
         buttonChangeViewmode = findViewById(R.id.button_change_viewmode)
-        mGLSurfaceView = findViewById(R.id.gl_surface_view)
-        mNextViewProgressCircle = findViewById(R.id.next_view_progress_circle)
+        gLSurfaceView = findViewById(R.id.gl_surface_view)
+        nextViewProgressCircle = findViewById(R.id.next_view_progress_circle)
 
-        pdbCache = PdbCache(this, mGLSurfaceView.context)
+        pdbCache = PdbCache(this, gLSurfaceView.context)
 
-        //        mGLSurfaceView = (GLSurfaceViewDisplayPdbFile) findViewById(R.id.gl_surface_view);
-        //        mNextViewProgressCircle = (ProgressBar) findViewById(R.id.next_view_progress_circle);
+        //        gLSurfaceView = (GLSurfaceViewDisplayPdbFile) findViewById(R.id.gl_surface_view);
+        //        nextViewProgressCircle = (ProgressBar) findViewById(R.id.next_view_progress_circle);
 
         // Check if the system supports OpenGL ES 2.0.
         val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -93,16 +93,16 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
 
         if (supportsEs2) {
             // Request an OpenGL ES 2.0 compatible context.
-            mGLSurfaceView.setEGLContextClientVersion(2)
+            gLSurfaceView.setEGLContextClientVersion(2)
 
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
 
-            mRenderer = RendererDisplayPdbFile(this, mGLSurfaceView)
-            mGLSurfaceView.setRenderer(mRenderer, displayMetrics.density)
+            mRenderer = RendererDisplayPdbFile(this, gLSurfaceView)
+            gLSurfaceView.setRenderer(mRenderer, displayMetrics.density)
 
             // This freezes the updates, now adjusted in GLSurfaceView
-            // mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+            // gLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         } else {
             Timber.e("No support of OPENGL ES2")
             Toast.makeText(this, "Need OpenGL2 support, sorry", Toast.LENGTH_LONG)
@@ -124,7 +124,7 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
                 return@OnClickListener
             }
 
-            mNextViewProgressCircle.visibility = View.VISIBLE
+            nextViewProgressCircle.visibility = View.VISIBLE
 
             if (++currentPdbIndex == pdbList.size) {
                 currentPdbIndex = 0
@@ -143,7 +143,7 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
                 return@OnClickListener
             }
 
-            mNextViewProgressCircle.visibility = View.VISIBLE
+            nextViewProgressCircle.visibility = View.VISIBLE
 
             if (--currentPdbIndex < 0) {
                 currentPdbIndex = pdbList.size - 1
@@ -156,8 +156,8 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
 
         // TODO: update this spinnner
         buttonChangeViewmode.setOnClickListener {
-            mNextViewProgressCircle.visibility = View.VISIBLE
-            mGLSurfaceView.queueEvent { mRenderer.nextViewMode() }
+            nextViewProgressCircle.visibility = View.VISIBLE
+            gLSurfaceView.queueEvent { mRenderer.nextViewMode() }
         }
 
         /*
@@ -173,12 +173,12 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
 
     override fun onResume() {
         super.onResume()
-        mGLSurfaceView.onResume()
+        gLSurfaceView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        mGLSurfaceView.onPause()
+        gLSurfaceView.onPause()
     }
 
     override fun onDestroy() {
@@ -192,27 +192,27 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
      * @param stream input stream from cache or from http
      */
     override fun loadPdbFromStream(stream: InputStream) {
-        mGLSurfaceView.queueEvent { mRenderer.loadPdbFromStream(stream) }
+        gLSurfaceView.queueEvent { mRenderer.loadPdbFromStream(stream) }
     }
 
     private fun toggleShader() {
-        mGLSurfaceView.queueEvent { mRenderer.toggleShader() }
+        gLSurfaceView.queueEvent { mRenderer.toggleShader() }
     }
 
     private fun toggleHydrogenDisplayMode() {
-        mGLSurfaceView.queueEvent { mRenderer.toggleHydrogenDisplayMode() }
+        gLSurfaceView.queueEvent { mRenderer.toggleHydrogenDisplayMode() }
     }
 
     private fun toggleWireframe() {
-        mGLSurfaceView.queueEvent { mRenderer.toggleWireframeFlag() }
+        gLSurfaceView.queueEvent { mRenderer.toggleWireframeFlag() }
     }
 
     private fun toggleSelect() {
-        mGLSurfaceView.queueEvent { mRenderer.toggleSelectFlag() }
+        gLSurfaceView.queueEvent { mRenderer.toggleSelectFlag() }
     }
 
     fun changeViewIsFinished() {
-        runOnUiThread { mNextViewProgressCircle.visibility = View.INVISIBLE }
+        runOnUiThread { nextViewProgressCircle.visibility = View.INVISIBLE }
     }
 
     fun noMemoryForAtomView() {
@@ -270,9 +270,9 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
 //        when (msg.what) {
 //            UI_MESSAGE_GL_READY -> {
 //                pdbCache.downloadPdb(pdbList[currentPdbIndex])
-//                runOnUiThread { mNextViewProgressCircle.visibility = View.VISIBLE }
+//                runOnUiThread { nextViewProgressCircle.visibility = View.VISIBLE }
 //            }
-//            UI_MESSAGE_FINISHED_PARSING, UI_MESSAGE_FINISHED_VIEW_CHANGE -> runOnUiThread { mNextViewProgressCircle.visibility = View.INVISIBLE }
+//            UI_MESSAGE_FINISHED_PARSING, UI_MESSAGE_FINISHED_VIEW_CHANGE -> runOnUiThread { nextViewProgressCircle.visibility = View.INVISIBLE }
 //        }
 //        return true
 //    }

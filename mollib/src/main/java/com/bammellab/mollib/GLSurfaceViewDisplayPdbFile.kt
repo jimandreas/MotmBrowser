@@ -31,23 +31,23 @@ import kotlin.math.sqrt
 
 @Suppress("ConstantConditionIf")
 class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
-    var mSelectMode = false
-    private var mLastTouchState = NO_FINGER_DOWN
+    var selectMode = false
+    private var lastTouchState = NO_FINGER_DOWN
 
     private var mRenderer: RendererDisplayPdbFile? = null
 
     private var mScroller: Scroller? = null
-    private var mGestureDetector: GestureDetector? = null
+    private var gestureDetector: GestureDetector? = null
     private var mContext: Context? = null
 
     // Offsets for touch events
-    private var mPreviousX: Float = 0.toFloat()
-    private var mPreviousY: Float = 0.toFloat()
+    private var previousX: Float = 0.toFloat()
+    private var previousY: Float = 0.toFloat()
     private var mDensity: Float = 0.toFloat()
-    private var mInitialSpacing: Float = 0.toFloat()
+    private var initialSpacing: Float = 0.toFloat()
 
-    private var mOldX = 0f
-    private var mOldY = 0f
+    private var oldX = 0f
+    private var oldY = 0f
 
     private val isAnimationRunning: Boolean
         get() = !mScroller!!.isFinished
@@ -70,19 +70,19 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
         // until the fling ends. This code (ab)uses a ValueAnimator object to generate
         // a callback on every animation frame. We don't use the animated value at all.
 
-        val mScrollAnimator = ValueAnimator.ofFloat(0f, 1f)
-        mScrollAnimator.addUpdateListener {
+        val scrollAnimator = ValueAnimator.ofFloat(0f, 1f)
+        scrollAnimator.addUpdateListener {
             // tickScrollAnimation();
         }
 
 
         // Create a gesture detector to handle onTouch messages
-        mGestureDetector = GestureDetector(context, GestureListener())
+        gestureDetector = GestureDetector(context, GestureListener())
 
         // Turn off long press--this control doesn't use it, and if long press is enabled,
         // you can't scroll for a bit, pause, then scroll some more (the pause is interpreted
         // as a long press, apparently)
-        mGestureDetector!!.setIsLongpressEnabled(false)
+        gestureDetector!!.setIsLongpressEnabled(false)
     }
 
     // with h/t to :
@@ -104,7 +104,7 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
         // hand the event to the GestureDetector
         // ignore the result for now.
         // TODO:  hook up fling logic
-        val result = mGestureDetector!!.onTouchEvent(m)
+        val result = gestureDetector!!.onTouchEvent(m)
 
         if (m == null) {
             return true
@@ -116,14 +116,14 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
         val pointerCount = m.pointerCount
         when {
             pointerCount > 2 -> {
-                mLastTouchState = MORE_FINGERS
+                lastTouchState = MORE_FINGERS
                 return true
             }
             pointerCount == 2 -> {
-                if (mSelectMode) return true
+                if (selectMode) return true
                 val action = m.actionMasked
                 val actionIndex = m.actionIndex
-                if (mLastTouchState == MORE_FINGERS) {
+                if (lastTouchState == MORE_FINGERS) {
                     x1 = m.getX(0)
                     y1 = m.getY(0)
                     x2 = m.getX(1)
@@ -132,9 +132,9 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                     mRenderer!!.touchX = m.x
                     mRenderer!!.touchY = m.y
 
-                    mOldX = (x1 + x2) / 2.0f
-                    mOldY = (y1 + y2) / 2.0f
-                    mLastTouchState = TWO_FINGERS_DOWN
+                    oldX = (x1 + x2) / 2.0f
+                    oldY = (y1 + y2) / 2.0f
+                    lastTouchState = TWO_FINGERS_DOWN
                     return true
                 }
                 when (action) {
@@ -149,23 +149,23 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                         mRenderer!!.touchY = m.y
 
                         deltax = (x1 + x2) / 2.0f
-                        deltax -= mOldX
+                        deltax -= oldX
                         deltay = (y1 + y2) / 2.0f
-                        deltay -= mOldY
+                        deltay -= oldY
 
                         mRenderer!!.deltaTranslateX = mRenderer!!.deltaTranslateX + deltax / (mDensity * 300f)
                         mRenderer!!.deltaTranslateY = mRenderer!!.deltaTranslateY - deltay / (mDensity * 300f)
 
-                        mOldX = (x1 + x2) / 2.0f
-                        mOldY = (y1 + y2) / 2.0f
+                        oldX = (x1 + x2) / 2.0f
+                        oldY = (y1 + y2) / 2.0f
 
-                        val mCurrentSpacing = spacing(m)
+                        val currentSpacing = spacing(m)
 
-                        if (mLastTouchState != TWO_FINGERS_DOWN) {
-                            mInitialSpacing = spacing(m)
+                        if (lastTouchState != TWO_FINGERS_DOWN) {
+                            initialSpacing = spacing(m)
                         } else {
-                            deltaSpacing = mCurrentSpacing - mInitialSpacing
-                            deltaSpacing /= mInitialSpacing
+                            deltaSpacing = currentSpacing - initialSpacing
+                            deltaSpacing /= initialSpacing
 
 
                             // TODO: adjust this exponent.
@@ -203,13 +203,13 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                         mRenderer!!.touchX = m.x
                         mRenderer!!.touchY = m.y
 
-                        mOldX = (x1 + x2) / 2.0f
-                        mOldY = (y1 + y2) / 2.0f
-                        mInitialSpacing = spacing(m)
+                        oldX = (x1 + x2) / 2.0f
+                        oldY = (y1 + y2) / 2.0f
+                        initialSpacing = spacing(m)
                     }
                     MotionEvent.ACTION_POINTER_UP -> if (hack) renderMode = RENDERMODE_WHEN_DIRTY
-                }// Log.w("Down", "touch DOWN, mInitialSpacing is " + mInitialSpacing);
-                mLastTouchState = TWO_FINGERS_DOWN
+                }// Log.w("Down", "touch DOWN, initialSpacing is " + initialSpacing);
+                lastTouchState = TWO_FINGERS_DOWN
                 return true
             }
             pointerCount == 1 -> {
@@ -223,19 +223,19 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                 mRenderer!!.touchY = m.y
 
                 if (m.action == MotionEvent.ACTION_MOVE) {
-                    if (mLastTouchState != ONE_FINGER_DOWN) {  // handle anything to one finger interaction
-                        mLastTouchState = ONE_FINGER_DOWN
+                    if (lastTouchState != ONE_FINGER_DOWN) {  // handle anything to one finger interaction
+                        lastTouchState = ONE_FINGER_DOWN
                     } else if (mRenderer != null) {
-                        val deltaX = (x - mPreviousX) / mDensity / 2f
-                        val deltaY = (y - mPreviousY) / mDensity / 2f
+                        val deltaX = (x - previousX) / mDensity / 2f
+                        val deltaY = (y - previousY) / mDensity / 2f
 
                         mRenderer!!.deltaX = mRenderer!!.deltaX + deltaX
                         mRenderer!!.deltaY = mRenderer!!.deltaY + deltaY
                         // Log.w("touch", ": mDX = " + mRenderer.mDeltaX + " mDY = " + mRenderer.mDeltaY);
                     }
                 }
-                mPreviousX = x
-                mPreviousY = y
+                previousX = x
+                previousY = y
 
                 return true
             }
@@ -300,8 +300,8 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
             //            float scrollTheta = vectorToScalarScroll(
             //                    velocityX,
             //                    velocityY,
-            //                    e2.getX() - mPieBounds.centerX(),
-            //                    e2.getY() - mPieBounds.centerY());
+            //                    e2.getX() - pieBounds.centerX(),
+            //                    e2.getY() - pieBounds.centerY());
             //            mScroller.fling(
             //                    0,
             //                    (int) getPieRotation(),
@@ -314,8 +314,8 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
             //
             //            // Start the animator and tell it to animate for the expected duration of the fling.
             //            if (Build.VERSION.SDK_INT >= 11) {
-            //                mScrollAnimator.setDuration(mScroller.getDuration());
-            //                mScrollAnimator.start();
+            //                scrollAnimator.setDuration(mScroller.getDuration());
+            //                scrollAnimator.start();
             //            }
             return true
         }

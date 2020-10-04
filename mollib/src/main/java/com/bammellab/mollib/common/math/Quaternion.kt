@@ -38,9 +38,9 @@ class Quaternion {
     var z: Double = 0.toDouble()
 
     //Scratch members
-    private val mTmpVec1 = Vector3()
-    private val mTmpVec2 = Vector3()
-    private val mTmpVec3 = Vector3()
+    private val tmpVec1 = Vector3()
+    private val tmpVec2 = Vector3()
+    private val tmpVec3 = Vector3()
 
 
     //--------------------------------------------------
@@ -483,13 +483,13 @@ class Quaternion {
         //            // The look and up vectors are parallel/anti-parallel
         //            if (dot < 0) {
         //                // The look and up vectors are parallel but opposite direction
-        //                mTmpVec3.crossAndSet(WorldParameters.RIGHT_AXIS, v1);
-        //                if (mTmpVec3.length() < 1e-6) {
+        //                tmpVec3.crossAndSet(WorldParameters.RIGHT_AXIS, v1);
+        //                if (tmpVec3.length() < 1e-6) {
         //                    // Vectors were co-linear, pick another
-        //                    mTmpVec3.crossAndSet(WorldParameters.UP_AXIS, v1);
+        //                    tmpVec3.crossAndSet(WorldParameters.UP_AXIS, v1);
         //                }
-        //                mTmpVec3.normalize();
-        //                return fromAngleAxis(mTmpVec3, 180.0);
+        //                tmpVec3.normalize();
+        //                return fromAngleAxis(tmpVec3, 180.0);
         //            } else {
         //                // The look and up vectors are parallel in the same direction
         //                return identity();
@@ -516,9 +516,9 @@ class Quaternion {
      */
     fun fromRotationBetween(x1: Double, y1: Double, z1: Double, x2: Double,
                             y2: Double, z2: Double): Quaternion {
-        mTmpVec1.setAll(x1, y1, z1).normalize()
-        mTmpVec2.setAll(x2, y2, z2).normalize()
-        return fromRotationBetween(mTmpVec1, mTmpVec2)
+        tmpVec1.setAll(x1, y1, z1).normalize()
+        tmpVec2.setAll(x2, y2, z2).normalize()
+        return fromRotationBetween(tmpVec1, tmpVec2)
     }
 
     /**
@@ -594,16 +594,16 @@ class Quaternion {
      * @return [Vector3] The result of the multiplication.
      */
     fun multiply(vector: Vector3): Vector3 {
-        mTmpVec3.setAll(x, y, z)
-        mTmpVec1.crossAndSet(mTmpVec3, vector)
-        mTmpVec2.crossAndSet(mTmpVec3, mTmpVec1)
-        mTmpVec1.multiply(2.0 * w)
-        mTmpVec2.multiply(2.0)
+        tmpVec3.setAll(x, y, z)
+        tmpVec1.crossAndSet(tmpVec3, vector)
+        tmpVec2.crossAndSet(tmpVec3, tmpVec1)
+        tmpVec1.multiply(2.0 * w)
+        tmpVec2.multiply(2.0)
 
-        mTmpVec1.add(mTmpVec2)
-        mTmpVec1.add(vector)
+        tmpVec1.add(tmpVec2)
+        tmpVec1.add(vector)
 
-        return mTmpVec1
+        return tmpVec1
     }
 
     /**
@@ -975,21 +975,21 @@ class Quaternion {
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
     fun lookAt(lookAt: Vector3, upDirection: Vector3): Quaternion {
-        mTmpVec1.setAll(lookAt)
-        mTmpVec2.setAll(upDirection)
+        tmpVec1.setAll(lookAt)
+        tmpVec2.setAll(upDirection)
         // Vectors are parallel/anti-parallel if their dot product magnitude and length product are equal
         val dotProduct = Vector3.dot(lookAt, upDirection)
         val dotError = abs(abs(dotProduct) - lookAt.length() * upDirection.length())
         //        if (dotError <= 1e-6) {
         //            // The look and up vectors are parallel
-        //            mTmpVec2.normalize();
-        //            if (dotProduct < 0) mTmpVec1.inverse();
-        //            fromRotationBetween(WorldParameters.FORWARD_AXIS, mTmpVec1);
+        //            tmpVec2.normalize();
+        //            if (dotProduct < 0) tmpVec1.inverse();
+        //            fromRotationBetween(WorldParameters.FORWARD_AXIS, tmpVec1);
         //            return this;
         //        }
-        Vector3.orthoNormalize(mTmpVec1, mTmpVec2) // Find the forward and up vectors
-        mTmpVec3.crossAndSet(mTmpVec1, mTmpVec2) // Create the right vector
-        fromAxes(mTmpVec3, mTmpVec2, mTmpVec1)
+        Vector3.orthoNormalize(tmpVec1, tmpVec2) // Find the forward and up vectors
+        tmpVec3.crossAndSet(tmpVec1, tmpVec2) // Create the right vector
+        fromAxes(tmpVec3, tmpVec2, tmpVec1)
         return this
     }
 
@@ -1076,9 +1076,9 @@ class Quaternion {
         result = 31 * result + x.hashCode()
         result = 31 * result + y.hashCode()
         result = 31 * result + z.hashCode()
-        result = 31 * result + mTmpVec1.hashCode()
-        result = 31 * result + mTmpVec2.hashCode()
-        result = 31 * result + mTmpVec3.hashCode()
+        result = 31 * result + tmpVec1.hashCode()
+        result = 31 * result + tmpVec2.hashCode()
+        result = 31 * result + tmpVec3.hashCode()
         return result
     }
 

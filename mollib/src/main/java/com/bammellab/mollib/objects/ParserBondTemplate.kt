@@ -54,7 +54,7 @@ class ParserBondTemplate(activity: Activity) {
     val residueToBondHash = HashMap<String, ArrayListMultimap<String, String>>()
     // for debugging
     private val residueList = ArrayList<String>()
-    private val mAssetManager: AssetManager = activity.assets
+    private val assetManager: AssetManager = activity.assets
 
     fun parseBondInfo() {
 
@@ -88,7 +88,7 @@ class ParserBondTemplate(activity: Activity) {
         var lineNumber = 0
         var line: String? = null
         try {
-            inputStream = mAssetManager.open(charmmFileName, AssetManager.ACCESS_BUFFER)
+            inputStream = assetManager.open(charmmFileName, AssetManager.ACCESS_BUFFER)
             if (inputStream == null) {
                 Timber.e("cannot open$charmmFileName, returning")
                 return
@@ -119,7 +119,7 @@ class ParserBondTemplate(activity: Activity) {
                     }
                     residueBondMap = ArrayListMultimap.create()
                     residueToBondHash[residueName] = residueBondMap
-                    //                        mResidueBondMappingBundle.putBundle(residue_name, bond_map);
+                    //                        residueBondMappingBundle.putBundle(residue_name, bond_map);
                     residueList.add(residueName)  // for dumping the bundle
 
                 } else if (line.substring(0, 4).contains("BOND")) {
