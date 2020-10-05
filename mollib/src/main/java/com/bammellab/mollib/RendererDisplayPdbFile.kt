@@ -392,7 +392,11 @@ class RendererDisplayPdbFile(
             Matrix.multiplyMV(lightPosInWorldSpace, 0, lightModelMatrix, 0, lightPosInModelSpace, 0)
             Matrix.multiplyMV(lightPosInEyeSpace, 0, viewMatrix, 0, lightPosInWorldSpace, 0)
 
-            val scaleF = 1.5f / mMol.dcOffset
+            var testOffset =  mMol.dcOffset
+            if (testOffset < 0.000001) {
+                testOffset = 1f
+            }
+            val scaleF = 1.5f / testOffset
 
             /*
              * render the molecule triangles
@@ -400,16 +404,24 @@ class RendererDisplayPdbFile(
             Matrix.setIdentityM(modelMatrix, 0)
             Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
             Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
+            val foo = modelMatrix
             doMatrixSetup()
             bufferManager.render(positionHandle, colorHandle, normalHandle, wireFrameRenderingFlag)
             // DEBUG:  box in scene center
             // mBoundingBox.render(positionHandle, colorHandle, normalHandle, wireFrameRenderingFlag);
 
+            // DEBUG cube
+            debugCube()
+            val glError = GLES20.glGetError()
+            if (glError != GLES20.GL_NO_ERROR) {
+                Timber.e("GLERROR: $glError")
+            }
+
         } else {
             select()
         }
 
-        //if (!mMol.reportedTimeFlag) {
+        if (!mMol.reportedTimeFlag) {
             mMol.reportedTimeFlag = true
             val endTime = SystemClock.uptimeMillis().toFloat()
             val elapsedTime = (endTime - mMol.startOfParseTime) / 1000
@@ -420,7 +432,7 @@ class RendererDisplayPdbFile(
             Timber.i("*** RENDERER mema %d seconds %s",
                     memInfo.availMem / 1024 / 1024,
                     prettyPrint)
-        //}
+        }
 
 //        if (listener != null) {
 //            mActivity.runOnUiThread { listener!!.updateActivity()}
@@ -457,6 +469,8 @@ class RendererDisplayPdbFile(
         // Pass in the modelview matrix.
         GLES20.glUniformMatrix4fv(mVMatrixHandle, 1, false, mVPMatrix, 0)
 
+        val mvmB4 = mVPMatrix
+
         // This multiplies the modelview matrix by the projection matrix,
         // and stores the result in the MVP matrix
         // (which now contains model * view * projection).
@@ -468,6 +482,11 @@ class RendererDisplayPdbFile(
 
         // Pass in the light position in eye space.
         GLES20.glUniform3f(lightPosHandle, lightPosInEyeSpace[0], lightPosInEyeSpace[1], lightPosInEyeSpace[2])
+
+        val mm = modelMatrix
+        val vm = viewMatrix
+        val mvm = mVPMatrix
+        val light = lightPosInEyeSpace
 
         val glError = GLES20.glGetError()
         if (glError != GLES20.GL_NO_ERROR) {
@@ -886,6 +905,25 @@ class RendererDisplayPdbFile(
         }
 
 
+    }
+
+    /**
+     *  cube at 0,0,0
+     */
+    fun debugCube() {
+        var scaleF = 1.5f / mMol.dcOffset
+        // cube is 8X a molecule
+        // scaleF = scaleF / 8.0f;
+        Matrix.setIdentityM(modelMatrix, 0)
+        Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
+        Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
+
+        doMatrixSetup()
+        mCube!!.setup(
+                0.toFloat(),
+                0.toFloat(),
+                0.toFloat())
+        mCube!!.render(positionHandle, colorHandle, normalHandle, false /* wireFrameRenderingFlag */)
     }
 
     fun doCleanUp() {

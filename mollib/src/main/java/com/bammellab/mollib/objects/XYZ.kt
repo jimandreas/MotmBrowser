@@ -17,6 +17,8 @@
 @file:Suppress("unused")
 package com.bammellab.mollib.objects
 
+import com.bammellab.mollib.common.math.Matrix4
+import timber.log.Timber
 import kotlin.math.sqrt
 
 /*
@@ -229,6 +231,14 @@ End Function
             T[2] = p1[2] / mag
             return T
         }
+    }
+
+    fun prettyPrintMatrix4(m4: Matrix4) {
+
+    }
+
+    fun prettyPrintMatrixFloats(f: FloatArray) {
+
     }
 
 }

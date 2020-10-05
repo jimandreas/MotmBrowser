@@ -1,6 +1,6 @@
 //@file:Suppress("unused", "FunctionName", "IllegalIdentifier")
 @file:Suppress("unused")
-package com.bammellab.imagecap.display_pdb_file
+package com.bammellab.standalone
 
 import android.app.ActivityManager
 import android.content.Context

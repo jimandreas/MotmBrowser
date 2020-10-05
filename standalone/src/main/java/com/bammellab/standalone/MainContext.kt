@@ -1,4 +1,4 @@
-package com.bammellab.imagecap.display_pdb_file
+package com.bammellab.standalone
 import android.os.Handler
 import com.bammellab.mollib.BuildConfig
 import timber.log.Timber

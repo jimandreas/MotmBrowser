@@ -1,4 +1,4 @@
-package com.bammellab.imagecap.display_pdb_file
+package com.bammellab.standalone
 
 import android.app.Application
 import android.content.Context

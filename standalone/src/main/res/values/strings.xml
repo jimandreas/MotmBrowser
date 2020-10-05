@@ -5,6 +5,8 @@
     <!-- CURRENT stuff-->
 
     <string name="activity_load_pdb_file_title">Load a PDB file</string>
+    <string name="activity_support_opegl">The system must support OpenGL 2.0+</string>
+    <string name="activity_support_requirement">The system must support OpenGL 2.0+</string>
 
     <string name="button_next_obj">Next OBJ</string>
     <string name="button_prev_obj">Prev OBJ</string>
@@ -21,5 +23,9 @@
     <!-- obsolete button labels stuff -->
 
     <!-- previous work -->
+
+    <!-- misc -->
+
+    <string name="affirmative_respose">OK</string>
 
 </resources>
