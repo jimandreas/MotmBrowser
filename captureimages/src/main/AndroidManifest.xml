@@ -25,7 +25,7 @@
               We will set this in code instead.
         -->
         <activity
-            android:name="com.bammellab.captureimages.FilePermissionActivity"
+            android:name="com.bammellab.captureimages.CaptureImagesFilePermissionActivity"
             android:label="@string/activity_capture_images"
             android:theme="@style/Theme.DesignDemo2"
             android:noHistory="true"

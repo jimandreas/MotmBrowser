@@ -25,8 +25,8 @@
               We will set this in code instead.
         -->
         <activity
-            android:name="com.bammellab.standalone.FilePermissionActivity"
-            android:label="@string/activity_load_pdb_file_title"
+            android:name="com.bammellab.standalone.StandaloneFilePermissionActivity"
+            android:label="@string/activity_file_permission_please"
             android:theme="@style/Theme.DesignDemo2"
             android:noHistory="true">
             <intent-filter>

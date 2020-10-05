@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">3D Sandbox</string>
+    <string name="app_name">PDB Standalone</string>
 
     <!-- CURRENT stuff-->
 
+    <string name="activity_file_permission_please">PDB Standalone</string>
     <string name="activity_load_pdb_file_title">Load a PDB file</string>
     <string name="activity_support_opegl">The system must support OpenGL 2.0+</string>
     <string name="activity_support_requirement">The system must support OpenGL 2.0+</string>

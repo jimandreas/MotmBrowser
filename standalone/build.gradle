@@ -7,7 +7,7 @@ android {
     compileSdkVersion buildConfig.compileSdk
 
     defaultConfig {
-        applicationId "com.molbrowser.sandbox"
+        applicationId "com.bammellab.standalone"
 
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk

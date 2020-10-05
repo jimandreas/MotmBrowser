@@ -14,7 +14,7 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 
-class FilePermissionActivity : AppCompatActivity() {
+class CaptureImagesFilePermissionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_permission)

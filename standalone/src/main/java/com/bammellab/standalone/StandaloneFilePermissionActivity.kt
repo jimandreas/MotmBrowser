@@ -15,7 +15,7 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 
-class FilePermissionActivity : AppCompatActivity() {
+class StandaloneFilePermissionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_permission)
@@ -28,7 +28,6 @@ class FilePermissionActivity : AppCompatActivity() {
         }
     }
 
-    private val TAG = "standalone"
     // see this handy answer:
     //  http://stackoverflow.com/questions/33162152/storage-permission-error-in-marshmallow
     fun isStoragePermissionGranted(): Boolean {
