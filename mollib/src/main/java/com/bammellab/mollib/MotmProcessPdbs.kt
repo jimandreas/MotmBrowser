@@ -1,4 +1,4 @@
-package com.bammellab.imagecap
+package com.bammellab.mollib
 
 import android.graphics.Bitmap
 import android.opengl.GLSurfaceView
@@ -20,7 +20,8 @@ import java.io.IOException
 class MotmProcessPdbs(
         activityIn: AppCompatActivity,
         glSurfaceViewIn: GLSurfaceViewDisplayPdbFile,
-        rendererIn: RendererDisplayPdbFile
+        rendererIn: RendererDisplayPdbFile,
+        pdbFileNamesIn: List<String>
 ) : SurfaceCreated {
     private val activity = activityIn
     private val glSurfaceView = glSurfaceViewIn
@@ -29,7 +30,7 @@ class MotmProcessPdbs(
 
     private var nextNameIndex = -1
 
-    private val pdbFileNames = MotmPdbNames.pdbNames
+    private val pdbFileNames = pdbFileNamesIn
 
     init {
         checkFiles()

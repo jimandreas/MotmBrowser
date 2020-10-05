@@ -1,4 +1,4 @@
-package com.bammellab.imagecap;
+package com.bammellab.standalone;
 
 /*
  * test the XYZ utility functions

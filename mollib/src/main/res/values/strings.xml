@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">mollib</string>
+    <string name="activity_support_opegl">The system must support OpenGL 2.0+</string>
+    <string name="activity_support_requirement">The system must support OpenGL 2.0+</string>
+    <string name="affirmative_respose">OK</string>
 </resources>

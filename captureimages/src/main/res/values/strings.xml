@@ -6,8 +6,7 @@
 
     <string name="activity_capture_images">Capture PNGs</string>
 
-    <string name="activity_support_opegl">The system must support OpenGL 2.0+</string>
-    <string name="activity_support_requirement">The system must support OpenGL 2.0+</string>
+
 
     <!-- toolbar menu stuff -->
     <string name="action_wireframe">Wire frame</string>

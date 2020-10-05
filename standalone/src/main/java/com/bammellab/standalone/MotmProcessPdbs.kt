@@ -53,7 +53,7 @@ class MotmProcessPdbs(
     }
 
     // private fun checkFiles() = runBlocking {
-    private fun loadNextPdbFile() = runBlocking {
+    fun loadNextPdbFile() = runBlocking {
         launch(Dispatchers.IO) {
             if (++nextNameIndex == myPdbFileNames.size) {
                 nextNameIndex = 0
@@ -79,10 +79,9 @@ class MotmProcessPdbs(
             Timber.e("SETTING DIRTY FLAG")
             glSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
         }
-
     }
 
-    private fun loadPrevPdbFile() {
+    fun loadPrevPdbFile() {
 
         if (nextNameIndex-- == 0) {
             nextNameIndex = myPdbFileNames.size - 1
@@ -97,11 +96,13 @@ class MotmProcessPdbs(
         // glSurfaceView.queueEvent { renderer.loadPdbFile() }
     }
 
+
+
     /**
      *
      * @link: https://gist.github.com/granoeste/5574148
      */
-    private fun getDiskCacheDir(uniqueName: String): File {
+    fun getDiskCacheDir(uniqueName: String): File {
 
         // Check if media is mounted or storage is built-in, if so, try and use external cache dir
         // otherwise use internal cache dir
@@ -126,6 +127,8 @@ class MotmProcessPdbs(
         fullPath = cachePath + File.separator + uniqueName
         return File(fullPath)
     }
+
+
 
     private fun checkFiles() = runBlocking {
         launch(Dispatchers.IO) { // will get dispatched to ForkJoinPool.commonPool (or equivalent)

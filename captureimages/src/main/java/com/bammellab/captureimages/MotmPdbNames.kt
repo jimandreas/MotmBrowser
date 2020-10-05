@@ -16,7 +16,7 @@
  *
  */
 
-package com.bammellab.imagecap
+package com.bammellab.captureimages
 
 object MotmPdbNames {
 

@@ -1,6 +1,6 @@
 @file:Suppress("UnnecessaryVariable")
 
-package com.bammellab.imagecap
+package com.bammellab.mollib
 
 import android.app.Activity
 import android.app.ActivityManager
@@ -20,7 +20,6 @@ fun failDialog(
             { _, _ ->
                 activityIn.finish()
             } .show()
-
 }
 
 fun checkForOpengl(activityIn: Activity): Boolean {

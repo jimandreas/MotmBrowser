@@ -1,4 +1,4 @@
-package com.bammellab.imagecap
+package com.bammellab.captureimages
 
 import android.Manifest
 import android.content.Intent

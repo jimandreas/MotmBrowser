@@ -1,14 +1,12 @@
 @file:Suppress("unused")
 
-package com.bammellab.imagecap
+package com.bammellab.captureimages
 
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
-import com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
-import com.bammellab.mollib.RendererDisplayPdbFile
-import com.bammellab.mollib.UpdateRenderFinished
+import com.bammellab.mollib.*
 import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 
@@ -47,7 +45,8 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
         processPdbs = MotmProcessPdbs(
                 this,
                 glSurfaceView,
-                renderer)
+                renderer,
+                MotmPdbNames.pdbNames)
 
         processPdbs.startProcessing()
     }

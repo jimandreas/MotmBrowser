@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.bammellab.imagecap.R
+import com.bammellab.standalone.R
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
