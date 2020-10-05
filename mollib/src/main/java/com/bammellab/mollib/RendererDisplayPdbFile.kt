@@ -68,12 +68,18 @@ class RendererDisplayPdbFile(
 
     private var listener: UpdateRenderFinished? = null
     private var surfaceCreated : SurfaceCreated? = null
+    private var pdbLoaded = false
 
     fun setSurfaceCreatedListener(listener: SurfaceCreated) {
         surfaceCreated = listener
     }
 
+    fun setPdbLoadedFlag() {
+        pdbLoaded = true
+    }
+
     private val xYZ = XYZ()
+
 
     var touchX = 300f
     var touchY = 300f
@@ -356,6 +362,9 @@ class RendererDisplayPdbFile(
     }
 
     override fun onDrawFrame(glUnused: GL10) {
+        if (!pdbLoaded) {
+            return
+        }
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
 
         if (!selectModeFlag) {

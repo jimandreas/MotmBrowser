@@ -10,12 +10,11 @@ import androidx.core.content.ContextCompat.getSystemService
 
 fun failDialog(
         activityIn: Activity,
-        titleString: Int,
-        messageString: Int
+        titleString: Int
 ) {
     AlertDialog.Builder(activityIn)
         .setTitle(activityIn.getString(titleString))
-            .setMessage(activityIn.getString(messageString))
+            //.setMessage(activityIn.getString(messageString))
             .setPositiveButton(activityIn.getString(R.string.affirmative_respose))
             { _, _ ->
                 activityIn.finish()

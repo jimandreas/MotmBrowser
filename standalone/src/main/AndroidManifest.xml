@@ -27,7 +27,8 @@
         <activity
             android:name="com.bammellab.standalone.FilePermissionActivity"
             android:label="@string/activity_load_pdb_file_title"
-            android:theme="@style/Theme.DesignDemo2">
+            android:theme="@style/Theme.DesignDemo2"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

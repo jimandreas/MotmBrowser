@@ -1,10 +1,9 @@
 //@file:Suppress("unused", "FunctionName", "IllegalIdentifier")
 @file:Suppress("unused")
+
 package com.bammellab.standalone
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
@@ -12,6 +11,7 @@ import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
+import com.bammellab.mollib.MotmProcessPdbs
 import com.bammellab.mollib.RendererDisplayPdbFile
 import com.bammellab.mollib.UpdateRenderFinished
 import com.google.android.material.snackbar.Snackbar
@@ -21,11 +21,11 @@ import timber.log.Timber
 //@Suppress("UsePropertyAccessSyntax", "UNUSED_VARIABLE", "unused", "UNUSED_PARAMETER", "DEPRECATION")
 //@SuppressWarnings("UnusedParameters", "unused") // Parameters inspected reflectively.
 
-class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRenderFinished {
+class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
     /** Hold a reference to our GLSurfaceView  */
     private lateinit var glSurfaceView: GLSurfaceViewDisplayPdbFile
     private lateinit var renderer: RendererDisplayPdbFile
-    private lateinit var processPdbs : MotmProcessPdbs
+    private lateinit var processPdbs: MotmProcessPdbs
 
     private var nextViewProgress: ProgressBar? = null
 
@@ -39,8 +39,8 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
 
         if (!checkForOpengl(this)) {
             failDialog(this,
-                    R.string.activity_support_requirement,
-                    R.string.activity_support_opegl)
+                    R.string.activity_support_requirement
+            )
             return
         }
 
@@ -59,20 +59,19 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
         processPdbs = MotmProcessPdbs(
                 this,
                 glSurfaceView,
-                renderer)
+                renderer,
+                listOf(
+                        "1bna",
+                        "1bbl",
+                        "4pti"
+
+                ))
 
         processPdbs.startProcessing()
 
         findViewById<View>(R.id.button_next_obj).setOnClickListener { processPdbs.loadNextPdbFile() }
 
         findViewById<View>(R.id.button_prev_obj).setOnClickListener { processPdbs.loadPrevPdbFile() }
-
-        //		findViewById(R.id.button_switch_rendering_mode).setOnClickListener(new View.OnClickListener() {
-        //			@Override
-        //			public void onClick(View v) {
-        //				toggleWireframe();
-        //			}
-        //		});
 
         findViewById<View>(R.id.button_select).setOnClickListener { toggleSelect() }
 
@@ -83,6 +82,7 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
     }
 
     private var nextNameIndex = -1
+
     // wire in the names and display names
     private val pdbFileNames2 = arrayOf(
 
@@ -94,7 +94,7 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
     )
 
     private val pdbFileNames = MotmPdbNames.pdbNames
-    
+
 
     override fun onResume() {
         // The activity must call the GL surface view's onResume() on activity
@@ -144,32 +144,8 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
     }
 
     // no button anymore for shader
-    fun updateShaderStatus() {
-        //        runOnUiThread(new Runnable() {
-        //            @Override
-        //            public void run() {
-        //                if (useVertexShading) {
-        //                    ((Button) findViewById(R.id.button_switch_shaders)).setText(R.string.button_objects_using_pixel_shading);
-        //                } else {
-        //                    ((Button) findViewById(R.id.button_switch_shaders)).setText(R.string.button_objects_using_vertex_shading);
-        //                }
-        //            }
-        //        });
-    }
-    //    public void updateWireframeStatus(final boolean wireFrameRendering) {
-    //        runOnUiThread(new Runnable() {
-    //            @Override
-    //            public void run() {
-    //                if (wireFrameRendering) {
-    //                    ((Button) findViewById(
-    //                            R.id.button_switch_rendering_mode)).setText(R.string.button_objects_using_triangle_rendering);
-    //                } else {
-    //                    ((Button) findViewById(
-    //                            R.id.button_switch_rendering_mode)).setText(R.string.button_objects_using_wireframe_rendering);
-    //                }
-    //            }
-    //        });
-    //    }
+    fun updateShaderStatus() {}
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -207,41 +183,6 @@ class ActivityDisplayPdbFile : AppCompatActivity(), Handler.Callback, UpdateRend
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-
-    /**
-     * receive messages from the renderer
-     * Currently:
-     * GL_READY - the GL components are created - instance state can
-     * now be set (like for device rotation)
-     * UPDATE_RPM - RPM indicator - to be implemented
-     * @param msg  message sent from renderer
-     * @return true - TODO: understand if this means something
-     */
-
-    override fun handleMessage(msg: Message): Boolean {
-
-        // http://stackoverflow.com/a/27659565/3853712
-
-
-//        @MainContext.UImessages val what = msg.what
-//
-//        when (what) {
-//            UI_MESSAGE_GL_READY -> {
-//            }}
-
-        //                renderer.updateColor(MyGLRenderer.RENDER_SET_COLOR_R, sliderRed.getProgress());
-        //                renderer.updateColor(MyGLRenderer.RENDER_SET_COLOR_G, sliderGreen.getProgress());
-        //                renderer.updateColor(MyGLRenderer.RENDER_SET_COLOR_B, sliderBlue.getProgress());
-        //                int rpm = msg.arg1;
-        //                if (rpm < 0) {
-        //                    rpm *= -1;
-        //                }
-        //                if (speedometer != null) {
-        //                    speedometer.setSpeed((double) rpm);
-        //                }
-        return true
     }
 
     companion object {

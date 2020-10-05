@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.bammellab.standalone"
+    package="com.bammellab.captureimages"
     tools:ignore="GoogleAppIndexingWarning">
     <!-- We require OpenGL ES 2.0 -->
     <uses-feature
@@ -12,12 +12,12 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name="com.bammellab.standalone.StandaloneApplication"
+        android:name="com.bammellab.captureimages.CaptureImagesApplication"
         android:icon="@drawable/ic_launcher_xml"
         android:label="@string/app_name"
         tools:ignore="AllowBackup">
         <activity
-            android:name="com.bammellab.standalone.ActivityImageCap"
+            android:name="com.bammellab.captureimages.ActivityImageCap"
             android:label="@string/activity_capture_images"
             android:theme="@style/Theme.DesignDemo2"/>
         <!--
@@ -25,9 +25,11 @@
               We will set this in code instead.
         -->
         <activity
-            android:name="com.bammellab.standalone.FilePermissionActivity"
+            android:name="com.bammellab.captureimages.FilePermissionActivity"
             android:label="@string/activity_capture_images"
-            android:theme="@style/Theme.DesignDemo2">
+            android:theme="@style/Theme.DesignDemo2"
+            android:noHistory="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

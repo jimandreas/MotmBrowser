@@ -48,7 +48,7 @@ class MotmProcessPdbs(
     }
 
     // private fun checkFiles() = runBlocking {
-    private fun loadNextPdbFile() = runBlocking {
+     fun loadNextPdbFile() = runBlocking {
         launch(Dispatchers.IO) {
             if (++nextNameIndex == pdbFileNames.size) {
                 nextNameIndex = 0
@@ -73,11 +73,12 @@ class MotmProcessPdbs(
             Thread.sleep(1000)
             Timber.e("SETTING DIRTY FLAG")
             glSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+            renderer.setPdbLoadedFlag()
         }
 
     }
 
-    private fun loadPrevPdbFile() {
+     fun loadPrevPdbFile() {
 
         if (nextNameIndex-- == 0) {
             nextNameIndex = pdbFileNames.size - 1
