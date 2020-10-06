@@ -83,7 +83,6 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
     private val pdbFileNames2 = listOf(
 
             "1bna",
-            "1adc",
             "1AGU_simple",
             "1amb",
             "1bn0",
@@ -92,6 +91,7 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
             "1gfl",
             "1mat",
             "1mfk_rna",
+            "1adc",
             "1x1r"
     )
 
@@ -133,6 +133,8 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
     fun changeViewIsFinished() {
         runOnUiThread { nextViewProgress!!.visibility = View.INVISIBLE }
     }
+
+
 
     fun noMemoryForAtomView() {
         runOnUiThread {

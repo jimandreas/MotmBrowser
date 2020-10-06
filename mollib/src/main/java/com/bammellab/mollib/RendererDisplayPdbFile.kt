@@ -401,11 +401,8 @@ class RendererDisplayPdbFile(
             Matrix.multiplyMV(lightPosInWorldSpace, 0, lightModelMatrix, 0, lightPosInModelSpace, 0)
             Matrix.multiplyMV(lightPosInEyeSpace, 0, viewMatrix, 0, lightPosInWorldSpace, 0)
 
-            var testOffset =  mMol.dcOffset
-            if (testOffset < 0.000001) {
-                testOffset = 1f
-            }
-            val scaleF = 1.5f / testOffset
+            // TODO: fix scaling!!
+            val scaleF = .05f
 
             /*
              * render the molecule triangles

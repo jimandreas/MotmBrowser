@@ -90,9 +90,13 @@ class ParserPdbFile(activity: Activity,
     }
 
 
-    fun loadPdbFromStream(inputStream: InputStream) {
+    fun loadPdbFromStream(pdbFileName: String, inputStream: InputStream) {
         resetMoleculeMaxMin()
         mMol.clearLists()
+
+        mPdbFileName = pdbFileName
+        mMol.name = pdbFileName
+
         loadPdbFromInputStream(inputStream)
     }
 

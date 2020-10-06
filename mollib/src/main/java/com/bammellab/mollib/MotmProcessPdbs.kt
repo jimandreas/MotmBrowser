@@ -63,9 +63,8 @@ class MotmProcessPdbs(
                 managePdbFile.parsePdbFile(name)
             }
 
-            launch(Dispatchers.Main) {
-                activity.title = name
-            }
+
+            activity.runOnUiThread { activity.title = name }
 
             // renderer.setPdbFileName(name)
 
@@ -78,6 +77,7 @@ class MotmProcessPdbs(
             Thread.sleep(1000)
             Timber.e("SETTING DIRTY FLAG")
             glSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+            renderer.resetCamera()
             renderer.setPdbLoadedFlag()
         }
 
@@ -104,6 +104,7 @@ class MotmProcessPdbs(
         Thread.sleep(1000)
         Timber.e("SETTING DIRTY FLAG")
         glSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+        renderer.resetCamera()
         renderer.setPdbLoadedFlag()
     }
 

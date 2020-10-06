@@ -17,6 +17,7 @@ class ManagePdbFile(
     private val glSurfaceView = glSurfaceViewIn
 
     private val bufferManager = BufferManager.getInstance(activity)
+
     fun setup() {
         bufferManager.resetBuffersForNextUsage()
 
@@ -39,13 +40,15 @@ class ManagePdbFile(
         val name = "$pdbAssetName.pdb"
         try {
             val inputStream = activity.assets.open(name, AssetManager.ACCESS_BUFFER);
-            pdbFile.loadPdbFromStream(inputStream)
+            pdbFile.loadPdbFromStream(pdbAssetName, inputStream)
         } catch (e: IOException) {
             Timber.e("Could not access asset: $name")
             return
         }
+
         glSurfaceView.queueEvent {
             managerViewmode.createView()
+
         }
     }
 
