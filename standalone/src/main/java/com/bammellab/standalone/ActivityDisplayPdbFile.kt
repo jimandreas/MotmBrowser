@@ -60,12 +60,8 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
                 this,
                 glSurfaceView,
                 renderer,
-                listOf(
-                        "1bna",
-                        "1bbl",
-                        "4pti"
-
-                ))
+                pdbFileNames2,
+                loadPdbFromAssetsIn = true)
 
         processPdbs.startProcessing()
 
@@ -84,17 +80,20 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
     private var nextNameIndex = -1
 
     // wire in the names and display names
-    private val pdbFileNames2 = arrayOf(
+    private val pdbFileNames2 = listOf(
 
             "1bna",
-            "1bna",
-            "1bna",
-            "1bna",
-            "1bna"
+            "1adc",
+            "1AGU_simple",
+            "1amb",
+            "1bn0",
+            "1bn1",
+            "1ei0",
+            "1gfl",
+            "1mat",
+            "1mfk_rna",
+            "1x1r"
     )
-
-    private val pdbFileNames = MotmPdbNames.pdbNames
-
 
     override fun onResume() {
         // The activity must call the GL surface view's onResume() on activity

@@ -21,12 +21,14 @@ class MotmProcessPdbs(
         activityIn: AppCompatActivity,
         glSurfaceViewIn: GLSurfaceViewDisplayPdbFile,
         rendererIn: RendererDisplayPdbFile,
-        pdbFileNamesIn: List<String>
+        pdbFileNamesIn: List<String>,
+        loadPdbFromAssetsIn: Boolean
 ) : SurfaceCreated {
     private val activity = activityIn
     private val glSurfaceView = glSurfaceViewIn
     private val renderer = rendererIn
     private val managePdbFile = ManagePdbFile(activityIn, glSurfaceViewIn)
+    private val loadPdbFromAssets = loadPdbFromAssetsIn
 
     private var nextNameIndex = -1
 
@@ -47,8 +49,7 @@ class MotmProcessPdbs(
         loadNextPdbFile()
     }
 
-    // private fun checkFiles() = runBlocking {
-     fun loadNextPdbFile() = runBlocking {
+    fun loadNextPdbFile() = runBlocking {
         launch(Dispatchers.IO) {
             if (++nextNameIndex == pdbFileNames.size) {
                 nextNameIndex = 0
@@ -56,7 +57,11 @@ class MotmProcessPdbs(
             val name = pdbFileNames[nextNameIndex]
             Timber.d("Next file: %s", name)
 
-            managePdbFile.parsePdbFile(name)
+            if (loadPdbFromAssets) {
+                managePdbFile.parsePdbFileFromAsset(name)
+            } else {
+                managePdbFile.parsePdbFile(name)
+            }
 
             launch(Dispatchers.Main) {
                 activity.title = name
@@ -78,8 +83,7 @@ class MotmProcessPdbs(
 
     }
 
-     fun loadPrevPdbFile() {
-
+    fun loadPrevPdbFile() = runBlocking {
         if (nextNameIndex-- == 0) {
             nextNameIndex = pdbFileNames.size - 1
         }
@@ -87,10 +91,20 @@ class MotmProcessPdbs(
 
         Timber.d("Previous file: %s", name)
 
-        activity.title = pdbFileNames[nextNameIndex]
-        // renderer.setPdbFileName(name)
+        if (loadPdbFromAssets) {
+            managePdbFile.parsePdbFileFromAsset(name)
+        } else {
+            managePdbFile.parsePdbFile(name)
+        }
 
-        // glSurfaceView.queueEvent { renderer.loadPdbFile() }
+        launch(Dispatchers.Main) {
+            activity.title = name
+        }
+
+        Thread.sleep(1000)
+        Timber.e("SETTING DIRTY FLAG")
+        glSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+        renderer.setPdbLoadedFlag()
     }
 
     private fun writeCurrentImage() {

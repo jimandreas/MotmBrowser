@@ -1,8 +1,11 @@
 package com.bammellab.mollib
 
 import android.app.Activity
+import android.content.res.AssetManager
 import com.bammellab.mollib.objects.*
 import com.bammellab.mollib.protein.Molecule
+import timber.log.Timber
+import java.io.IOException
 
 class ManagePdbFile(
     private val activity: Activity,
@@ -31,5 +34,20 @@ class ManagePdbFile(
             managerViewmode.createView()
         }
     }
+
+    fun parsePdbFileFromAsset(pdbAssetName: String) {
+        val name = "$pdbAssetName.pdb"
+        try {
+            val inputStream = activity.assets.open(name, AssetManager.ACCESS_BUFFER);
+            pdbFile.loadPdbFromStream(inputStream)
+        } catch (e: IOException) {
+            Timber.e("Could not access asset: $name")
+            return
+        }
+        glSurfaceView.queueEvent {
+            managerViewmode.createView()
+        }
+    }
+
 
 }
