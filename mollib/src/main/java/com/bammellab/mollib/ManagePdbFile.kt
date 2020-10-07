@@ -8,32 +8,20 @@ import timber.log.Timber
 import java.io.IOException
 
 class ManagePdbFile(
-    private val activity: Activity,
-    glSurfaceViewIn: GLSurfaceViewDisplayPdbFile
-) {
-    private lateinit var mol: Molecule
-    private lateinit var pdbFile: ParserPdbFile
-    private lateinit var managerViewmode: ManagerViewmode
-    private val glSurfaceView = glSurfaceViewIn
+    private val activity: Activity
 
+) {
+
+    private lateinit var pdbFile: ParserPdbFile
     private val bufferManager = BufferManager.getInstance(activity)
 
-    fun setup() {
-        bufferManager.resetBuffersForNextUsage()
-
-        mol = Molecule()
-        managerViewmode = ManagerViewmode(
-                activity, mol, bufferManager)
+    fun setup(mol: Molecule, managerViewmode: ManagerViewmode ) {
         pdbFile = ParserPdbFile(
                 activity, mol, bufferManager, managerViewmode)
     }
 
     fun parsePdbFile(pdbFileName: String) {
         pdbFile.parse(pdbFileName)
-
-        glSurfaceView.queueEvent {
-            managerViewmode.createView()
-        }
     }
 
     fun parsePdbFileFromAsset(pdbAssetName: String) {
@@ -44,11 +32,6 @@ class ManagePdbFile(
         } catch (e: IOException) {
             Timber.e("Could not access asset: $name")
             return
-        }
-
-        glSurfaceView.queueEvent {
-            managerViewmode.createView()
-
         }
     }
 

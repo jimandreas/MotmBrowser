@@ -85,7 +85,7 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
             "1bna",
             "1AGU_simple",
             "1amb",
-            "1bn0",
+            // "1bn0", // boring
             "1bn1",
             "1ei0",
             "1gfl",

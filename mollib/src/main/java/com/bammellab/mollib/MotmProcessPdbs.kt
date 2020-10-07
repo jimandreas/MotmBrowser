@@ -8,6 +8,9 @@ import com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
 import com.bammellab.mollib.ManagePdbFile
 import com.bammellab.mollib.RendererDisplayPdbFile
 import com.bammellab.mollib.SurfaceCreated
+import com.bammellab.mollib.objects.BufferManager
+import com.bammellab.mollib.objects.ManagerViewmode
+import com.bammellab.mollib.protein.Molecule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -17,6 +20,10 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 
+/**
+ * common code to parse and display PDB info
+ *   from a PDB folder or from a local asset file.
+ */
 class MotmProcessPdbs(
         activityIn: AppCompatActivity,
         glSurfaceViewIn: GLSurfaceViewDisplayPdbFile,
@@ -27,17 +34,23 @@ class MotmProcessPdbs(
     private val activity = activityIn
     private val glSurfaceView = glSurfaceViewIn
     private val renderer = rendererIn
-    private val managePdbFile = ManagePdbFile(activityIn, glSurfaceViewIn)
+    private val managePdbFile = ManagePdbFile(activityIn)
     private val loadPdbFromAssets = loadPdbFromAssetsIn
+    private lateinit var managerViewmode: ManagerViewmode
+    private lateinit var mol: Molecule
+    private val bufferManager = BufferManager.getInstance(activity)
 
     private var nextNameIndex = -1
 
     private val pdbFileNames = pdbFileNamesIn
 
     init {
-        checkFiles()
+        if (!loadPdbFromAssets) {
+            checkFiles()
+        }
         rendererIn.setSurfaceCreatedListener(this)
-        managePdbFile.setup()
+
+
     }
 
     fun startProcessing() {
@@ -56,6 +69,14 @@ class MotmProcessPdbs(
             }
             val name = pdbFileNames[nextNameIndex]
             Timber.d("Next file: %s", name)
+            activity.runOnUiThread { activity.title = name }
+
+            mol = Molecule()
+            managerViewmode = ManagerViewmode(
+                    activity, mol, bufferManager)
+            managePdbFile.setup(mol, managerViewmode)
+
+            bufferManager.resetBuffersForNextUsage()
 
             if (loadPdbFromAssets) {
                 managePdbFile.parsePdbFileFromAsset(name)
@@ -63,22 +84,13 @@ class MotmProcessPdbs(
                 managePdbFile.parsePdbFile(name)
             }
 
+            glSurfaceView.queueEvent {
+                managerViewmode.createView()
+                Timber.e("SETTING DIRTY FLAG")
+                renderer.resetCamera()
+                renderer.setPdbLoadedFlag()
+            }
 
-            activity.runOnUiThread { activity.title = name }
-
-            // renderer.setPdbFileName(name)
-
-//            // WRITE the image!
-//            if (nextNameIndex > 0) {
-//                writeCurrentImage()
-//            }
-
-            //glSurfaceView.queueEvent { renderer.loadPdbFile() }
-            Thread.sleep(1000)
-            Timber.e("SETTING DIRTY FLAG")
-            glSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
-            renderer.resetCamera()
-            renderer.setPdbLoadedFlag()
         }
 
     }
@@ -90,6 +102,12 @@ class MotmProcessPdbs(
         val name = pdbFileNames[nextNameIndex]
 
         Timber.d("Previous file: %s", name)
+        activity.runOnUiThread { activity.title = name }
+
+        mol = Molecule()
+        managerViewmode = ManagerViewmode(
+                activity, mol, bufferManager)
+        managePdbFile.setup(mol, managerViewmode)
 
         if (loadPdbFromAssets) {
             managePdbFile.parsePdbFileFromAsset(name)
@@ -97,15 +115,12 @@ class MotmProcessPdbs(
             managePdbFile.parsePdbFile(name)
         }
 
-        launch(Dispatchers.Main) {
-            activity.title = name
+        glSurfaceView.queueEvent {
+            managerViewmode.createView()
+            Timber.e("SETTING DIRTY FLAG")
+            renderer.resetCamera()
+            renderer.setPdbLoadedFlag()
         }
-
-        Thread.sleep(1000)
-        Timber.e("SETTING DIRTY FLAG")
-        glSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
-        renderer.resetCamera()
-        renderer.setPdbLoadedFlag()
     }
 
     private fun writeCurrentImage() {

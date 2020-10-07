@@ -29,6 +29,7 @@ package com.bammellab.mollib
 import android.app.Activity
 import android.app.ActivityManager
 import android.graphics.Bitmap
+import android.opengl.GLES10
 import android.opengl.GLES20
 import android.opengl.GLES30.glReadPixels
 import android.opengl.GLSurfaceView
@@ -76,6 +77,7 @@ class RendererDisplayPdbFile(
 
     fun setPdbLoadedFlag() {
         pdbLoaded = true
+        GLES20.glFinish()
     }
 
     private val xYZ = XYZ()
@@ -906,7 +908,7 @@ class RendererDisplayPdbFile(
         mCube!!.render(positionHandle, colorHandle, normalHandle, false /* wireFrameRenderingFlag */)
 
         if (atom1.atomNumber != lastReportedAtom) {
-            Timber.i("atom " + atom1.atomNumber)
+            Timber.i("atom %s", atom1.atomNumber)
             lastReportedAtom = atom1.atomNumber
         }
 
@@ -916,10 +918,8 @@ class RendererDisplayPdbFile(
     /**
      *  cube at 0,0,0
      */
-    fun debugCube() {
-        var scaleF = 1.5f / mMol.dcOffset
-        // cube is 8X a molecule
-        // scaleF = scaleF / 8.0f;
+    private fun debugCube() {
+        val scaleF = 0.05f
         Matrix.setIdentityM(modelMatrix, 0)
         Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
         Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
