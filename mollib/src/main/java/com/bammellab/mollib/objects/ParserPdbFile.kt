@@ -104,6 +104,9 @@ class ParserPdbFile(activityIn: Activity,
 
     /*
      * hacked to open files in the PDB folder
+     * //
+     * See:
+     * https://github.com/indus1530/SCANS_BL/blob/950ee7fa5d0f04a592bc56d88ede83a8f98b6960/app/src/main/java/edu/aku/hassannaqvi/uen_scans_bl/utils/SDCardUtilsExtensions.kt
      */
     private fun parsePdbFile(pdbFileName: String) {
         val inputStream: InputStream

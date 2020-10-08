@@ -3,6 +3,7 @@
 package com.bammellab.captureimages
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
@@ -49,7 +50,11 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
                 MotmPdbNames.pdbNames,
                 loadPdbFromAssetsIn = false)
 
-        processPdbs.startProcessing()
+        processPdbs.startProcessing(captureImages = true)
+
+        Handler().postDelayed(Runnable { processPdbs.writeCurrentImage() }, 5000)
+        Handler().postDelayed(Runnable { processPdbs.loadNextPdbFile() }, 7000)
+        Handler().postDelayed(Runnable { processPdbs.writeCurrentImage() }, 10000)
     }
 
 

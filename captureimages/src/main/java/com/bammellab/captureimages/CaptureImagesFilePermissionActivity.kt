@@ -4,9 +4,10 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import timber.log.Timber
 import java.io.File
@@ -29,7 +30,12 @@ class CaptureImagesFilePermissionActivity : AppCompatActivity() {
 
     // see this handy answer:
     //  http://stackoverflow.com/questions/33162152/storage-permission-error-in-marshmallow
-    fun isStoragePermissionGranted(): Boolean {
+    private fun isStoragePermissionGranted(): Boolean {
+
+        val readOnly = isExternalStorageReadOnly()
+
+        val available = isExternalStorageAvailable()
+
         return if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
@@ -42,15 +48,27 @@ class CaptureImagesFilePermissionActivity : AppCompatActivity() {
                 false
             }
         } else { //permission is automatically granted on sdk<23 upon installation
-            Timber.i( "Permission is granted")
+            Timber.i("Permission is granted")
             true
         }
     }
 
+
+    private fun isExternalStorageReadOnly(): Boolean {
+        val extStorageState: String = Environment.getExternalStorageState()
+        return Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)
+    }
+
+    private fun isExternalStorageAvailable(): Boolean {
+        val extStorageState: String = Environment.getExternalStorageState()
+        return Environment.MEDIA_MOUNTED.equals(extStorageState)
+    }
+
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Timber.v("Permission: %s was %s", permissions[0], grantResults[0])
+            Timber.v("Permission: %s was %s (GRANTED = 0, DENIED = -1)", permissions[0], grantResults[0])
             //resume tasks needing this permission
         }
     }

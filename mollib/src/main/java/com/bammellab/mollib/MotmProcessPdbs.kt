@@ -2,6 +2,7 @@ package com.bammellab.mollib
 
 import android.graphics.Bitmap
 import android.os.Environment
+import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bammellab.mollib.objects.BufferManager
@@ -11,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
@@ -40,6 +40,7 @@ class MotmProcessPdbs(
     private var nextNameIndex = -1
 
     private val pdbFileNames = pdbFileNamesIn
+    private var captureImagesFlag = false
 
     init {
         if (!loadPdbFromAssets) {
@@ -48,8 +49,9 @@ class MotmProcessPdbs(
         rendererIn.setSurfaceCreatedListener(this)
     }
 
-    fun startProcessing() {
+    fun startProcessing(captureImages: Boolean = false) {
         Timber.v("startProcessing: thread ${Thread.currentThread().name}")
+        captureImagesFlag = captureImages
     }
 
     override fun surfaceCreatedCallback() {
@@ -63,6 +65,12 @@ class MotmProcessPdbs(
         }
         Timber.v("Next file: %s", pdbFileNames[nextNameIndex])
         commonStuff()
+
+//        if (captureImagesFlag) {
+//            writeCurrentImage()
+//        }
+
+
     }
 
     fun loadPrevPdbFile() {
@@ -79,40 +87,50 @@ class MotmProcessPdbs(
     private fun commonStuff() = runBlocking {
         launch(Dispatchers.IO) {
             //mutex.withLock {
-                val name = pdbFileNames[nextNameIndex]
-                activity.runOnUiThread { activity.title = name }
-                renderer.tossMoleculeToGC()
-                val mol = Molecule() // the one place where Molecule is allocated!!
-                managerViewmode = ManagerViewmode(
-                        activity, mol, bufferManager)
-                managePdbFile.setup(mol, managerViewmode)
+            val name = pdbFileNames[nextNameIndex]
+            activity.runOnUiThread { activity.title = name }
+            renderer.tossMoleculeToGC()
+            val mol = Molecule() // the one place where Molecule is allocated!!
+            managerViewmode = ManagerViewmode(
+                    activity, mol, bufferManager)
+            managePdbFile.setup(mol, managerViewmode)
 
-                bufferManager.resetBuffersForNextUsage()
+            bufferManager.resetBuffersForNextUsage()
 
-                if (loadPdbFromAssets) {
-                    managePdbFile.parsePdbFileFromAsset(name)
-                } else {
-                    managePdbFile.parsePdbFile(name)
-                }
+            if (loadPdbFromAssets) {
+                managePdbFile.parsePdbFileFromAsset(name)
+            } else {
+                managePdbFile.parsePdbFile(name)
+            }
 
-                glSurfaceView.queueEvent {
-                    managerViewmode.createView()
-                    renderer.setMolecule(mol)
-                    renderer.resetCamera()
-                }
+            glSurfaceView.queueEvent {
+                managerViewmode.createView()
+                renderer.setMolecule(mol)
+                renderer.resetCamera()
+            }
             //}
         }
     }
 
 
-    private fun writeCurrentImage() {
+    fun writeCurrentImage() {
 
         glSurfaceView.queueEvent {
-            val file = getDiskCacheDir("foo")
+            val internalSDcard = getDiskCacheDir("foo")
             try {
-                val folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                val externalStorageVolumes: Array<out File> =
+                        ContextCompat.getExternalFilesDirs(activity, null)
+                val sdcardRoot = externalStorageVolumes
+                        .last()
+                        .absolutePath
+                        .split("/")
+                        .dropLast(4)
+                        .joinToString("/")
+
                 val pdbName = pdbFileNames[nextNameIndex]
-                val myFile = File(folder, "$pdbName.png")
+                //val myFile = File(sdcardRoot, "/PDB/$pdbName.png")
+
+                val myFile = File("/sdcard/Pictures/", "$pdbName.png")
                 val fileOutputStream = FileOutputStream(myFile)
                 val bm = renderer.readGlBufferToBitmap(200, 500, 700, 700)
                 if (bm != null) {
@@ -127,6 +145,7 @@ class MotmProcessPdbs(
                 e.printStackTrace()
             }
         }
+
     }
 
     /**
