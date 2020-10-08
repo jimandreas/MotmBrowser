@@ -79,7 +79,7 @@ class MotmProcessPdbs(
 
     private fun commonStuff() = runBlocking {
         launch(Dispatchers.IO) {
-            mutex.withLock {
+            //mutex.withLock {
                 val name = pdbFileNames[nextNameIndex]
                 activity.runOnUiThread { activity.title = name }
                 renderer.tossMoleculeToGC()
@@ -101,7 +101,7 @@ class MotmProcessPdbs(
                     renderer.setMolecule(mol)
                     renderer.resetCamera()
                 }
-            }
+            //}
         }
     }
 
