@@ -22,6 +22,7 @@ import android.app.Activity
 import android.os.Environment
 import android.os.Environment.DIRECTORY_PICTURES
 import android.os.SystemClock
+import androidx.core.content.ContextCompat
 import com.bammellab.mollib.common.math.Vector3
 import com.bammellab.mollib.protein.*
 import com.google.common.collect.ArrayListMultimap
@@ -36,11 +37,12 @@ import kotlin.math.sqrt
 // TODO: parse HETATM - convert "CO" in 1mat to single letter code (at atom 1967)
 
 @SuppressLint("DefaultLocale")
-class ParserPdbFile(activity: Activity,
+class ParserPdbFile(activityIn: Activity,
                     private val mMol: Molecule,
                     bm: BufferManager,
                     private val managerViewmode: ManagerViewmode
                     ) {
+    private var activity = activityIn
     private var pdbFileLoaded = false
     private val atomSphere: AtomSphere
 
@@ -110,16 +112,19 @@ class ParserPdbFile(activity: Activity,
         val fileInputStream: FileInputStream
 
         try {
-//            val file = File(Environment.getExternalStoragePublicDirectory(
-//                    Environment.DIRECTORY_PICTURES), "test123")
-//            val folder = activity.getExternalFilesDir("PDB")
-//            val folder2 = activity.filesDir
 
-//            val folder3 = File("/storage/emulated/0/PDB/")
-//            val folder3 = Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES)
-            val folder3 = Environment.getExternalStoragePublicDirectory("PDB")
-            //            File myFile = new File(folder3,"1a0h.pdb.gz");
-            val myFile = File(folder3, pdbFileName)
+            val externalStorageVolumes: Array<out File> =
+                    ContextCompat.getExternalFilesDirs(activity, null)
+            val sdcardRoot = externalStorageVolumes
+                    .last()
+                    .absolutePath
+                    .split("/")
+                    .dropLast(4)
+                    .joinToString("/")
+
+            val name = "PDB/$pdbFileName"
+
+            val myFile = File(sdcardRoot, name)
             fileInputStream = FileInputStream(myFile)
 
             Timber.i("success with %s", pdbFileName)

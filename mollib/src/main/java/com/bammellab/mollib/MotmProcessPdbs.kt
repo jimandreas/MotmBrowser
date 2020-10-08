@@ -3,6 +3,7 @@ package com.bammellab.mollib
 import android.graphics.Bitmap
 import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bammellab.mollib.objects.BufferManager
 import com.bammellab.mollib.objects.ManagerViewmode
 import com.bammellab.mollib.protein.Molecule
@@ -45,8 +46,6 @@ class MotmProcessPdbs(
             checkFiles()
         }
         rendererIn.setSurfaceCreatedListener(this)
-
-
     }
 
     fun startProcessing() {
@@ -166,8 +165,22 @@ class MotmProcessPdbs(
             val currentTime = System.currentTimeMillis()
             var missingCount = 0
             val path = "/mnt/sdcard/PDB"
+
+
+            // https://developer.android.com/training/data-storage/app-specific#external
+
+            val externalStorageVolumes: Array<out File> =
+                    ContextCompat.getExternalFilesDirs(activity, null)
+            val sdcardRoot = externalStorageVolumes
+                    .last()
+                    .absolutePath
+                    .split("/")
+                    .dropLast(4)
+                    .joinToString("/")
+
+
             for (name in pdbFileNames) {
-                val file = File(path, "$name.pdb")
+                val file = File(sdcardRoot, "/PDB/$name.pdb")
                 if (!file.exists()) {
                     if (missingCount < 10) {
                         Timber.e("$file is missing from $path")

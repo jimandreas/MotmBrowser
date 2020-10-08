@@ -46,7 +46,8 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
                 this,
                 glSurfaceView,
                 renderer,
-                MotmPdbNames.pdbNames)
+                MotmPdbNames.pdbNames,
+                loadPdbFromAssetsIn = false)
 
         processPdbs.startProcessing()
     }
@@ -98,6 +99,6 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
     }
 
     override fun updateActivity() {
-        
+        Timber.e("Update Activity")
     }
 }
