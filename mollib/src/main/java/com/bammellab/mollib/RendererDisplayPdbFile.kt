@@ -29,7 +29,6 @@ package com.bammellab.mollib
 import android.app.Activity
 import android.app.ActivityManager
 import android.graphics.Bitmap
-import android.opengl.GLES10
 import android.opengl.GLES20
 import android.opengl.GLES30.glReadPixels
 import android.opengl.GLSurfaceView
@@ -226,21 +225,17 @@ class RendererDisplayPdbFile(
 
     private var mCube: CubeHacked? = null
     private var mPointer: Pointer? = null
-    private val mMol: Molecule
-    private val pdbFile: ParserPdbFile
-    private val managerViewmode: ManagerViewmode?
+    private var molecule: Molecule? = null
 
     private val bufferManager = BufferManager.getInstance(activity)
+    private var reportedTimeFlag = false
 
-    init {
-
-        bufferManager.resetBuffersForNextUsage()
-
-        mMol = Molecule()
-        managerViewmode = ManagerViewmode(
-                activity, mMol, bufferManager)
-        pdbFile = ParserPdbFile(
-                activity, mMol, bufferManager, managerViewmode)
+    fun setMolecule(moleculeIn: Molecule) {
+        molecule = moleculeIn
+        reportedTimeFlag = false
+    }
+    fun tossMoleculeToGC() {
+        molecule = null
     }
 
     override fun onSurfaceCreated(glUnused: GL10, config: EGLConfig) {
@@ -364,7 +359,7 @@ class RendererDisplayPdbFile(
     }
 
     override fun onDrawFrame(glUnused: GL10) {
-        if (!pdbLoaded) {
+        if (molecule == null) {
             return
         }
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
@@ -429,10 +424,10 @@ class RendererDisplayPdbFile(
             select()
         }
 
-        if (!mMol.reportedTimeFlag) {
-            mMol.reportedTimeFlag = true
+        if (!reportedTimeFlag) {
+            reportedTimeFlag = true
             val endTime = SystemClock.uptimeMillis().toFloat()
-            val elapsedTime = (endTime - mMol.startOfParseTime) / 1000
+            val elapsedTime = (endTime - molecule!!.startOfParseTime) / 1000
             val prettyPrint = String.format("%6.2f", elapsedTime)
             val activityManager = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
             val memInfo = ActivityManager.MemoryInfo()
@@ -675,7 +670,7 @@ class RendererDisplayPdbFile(
     }
 
     fun toggleHydrogenDisplayMode() {
-        mMol.displayHydrosFlag = !mMol.displayHydrosFlag
+        molecule!!.displayHydrosFlag = !molecule!!.displayHydrosFlag
     }
 
     fun toggleWireframeFlag() {
@@ -708,7 +703,7 @@ class RendererDisplayPdbFile(
         /*
          * first render the triangles of the molecule
          */
-        var scaleF = 1.5f / mMol.dcOffset
+        var scaleF = 1.5f / molecule!!.dcOffset
         Matrix.setIdentityM(modelMatrix, 0)
         Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
         Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
@@ -777,10 +772,10 @@ class RendererDisplayPdbFile(
 
         var atom1: PdbAtom?
         selectedAtomsList.clear()
-        for (i in 0 until mMol.atoms.size) {
-            atom1 = mMol.atoms[mMol.numList[i]]
+        for (i in 0 until molecule!!.atoms.size) {
+            atom1 = molecule!!.atoms[molecule!!.numList[i]]
             if (atom1 == null) {
-                Timber.e("drawSpheres: error - got null for " + mMol.numList[i])
+                Timber.e("drawSpheres: error - got null for " + molecule!!.numList[i])
                 continue
             }
             // skip HOH (water) molecules
@@ -800,7 +795,7 @@ class RendererDisplayPdbFile(
 
             // same as for rendering!!
             // Works!!
-            scaleF = 1.5f / mMol.dcOffset
+            scaleF = 1.5f / molecule!!.dcOffset
             Matrix.setIdentityM(modelMatrix, 0)
             Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
             Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
@@ -852,7 +847,7 @@ class RendererDisplayPdbFile(
             // c = c - (0.05 * 0.05);
             // tempVector1 the "radius" of the target sphere
             //  based on the size of the molecule
-            val radius = 0.05 * 15.0 / mMol.dcOffset
+            val radius = 0.05 * 15.0 / molecule!!.dcOffset
             c -= radius * radius
 
             val bb4ac = b * b - 4.0 * a * c
@@ -891,7 +886,7 @@ class RendererDisplayPdbFile(
 
 
         // pop in a cube - try to surround the picked atom
-        scaleF = 1.5f / mMol.dcOffset
+        scaleF = 1.5f / molecule!!.dcOffset
         // cube is 8X a molecule
         // scaleF = scaleF / 8.0f;
         Matrix.setIdentityM(modelMatrix, 0)
@@ -899,7 +894,7 @@ class RendererDisplayPdbFile(
         Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
 
 
-        atom1 = mMol.atoms[mMol.numList[selectedAtomIndex]]
+        atom1 = molecule!!.atoms[molecule!!.numList[selectedAtomIndex]]
         doMatrixSetup()
         mCube!!.setup(
                 atom1!!.atomPosition.x.toFloat(),
@@ -934,7 +929,7 @@ class RendererDisplayPdbFile(
 
     fun doCleanUp() {
         bufferManager.resetBuffersForNextUsage()
-        mMol.clearLists()
+        molecule = null
         Timber.i("CLEANUP")
     }
 

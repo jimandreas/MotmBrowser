@@ -14,14 +14,12 @@
  * limitations under the License
  */
 
-@file:Suppress("unused")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
 package com.bammellab.mollib.objects
 
 
 import android.app.Activity
 import android.app.ActivityManager
-import android.os.Handler
-import android.os.Message
 import android.os.SystemClock
 import com.bammellab.mollib.protein.AtomInfo
 import com.bammellab.mollib.protein.Molecule
@@ -29,8 +27,8 @@ import com.bammellab.mollib.protein.PdbAtom
 import timber.log.Timber
 
 // TODO: implement Interface in Activity - for flagging low mem in UI (commented out after lib refactor)
-class ManagerViewmode(private val mActivity: Activity,
-                      private val mMol: Molecule,
+class ManagerViewmode(private val activity: Activity,
+                      private val molecule: Molecule,
                       private val bufMgr: BufferManager
                       ) {
 
@@ -42,12 +40,12 @@ class ManagerViewmode(private val mActivity: Activity,
     private var currentMode: Int = 0
 
     init {
-        mMol.bufMgr = bufMgr
-        atomSphere = AtomSphere(mMol)
-        atomToAtomBond = SegmentAtomToAtomBond(mMol)
-        mRenderModal = RenderModal(mMol)
-        mRenderNucleic = RenderNucleic(mMol)
-        atomInfo = ParserAtomInfo(mActivity)
+        molecule.bufMgr = bufMgr
+        atomSphere = AtomSphere(molecule)
+        atomToAtomBond = SegmentAtomToAtomBond(molecule)
+        mRenderModal = RenderModal(molecule)
+        mRenderNucleic = RenderNucleic(molecule)
+        atomInfo = ParserAtomInfo(activity)
         atomInfo.parseAtomInfo()
     }
 
@@ -106,8 +104,8 @@ visibleAppThreshold = 94371840 (0x5A00000)
     private fun doViewMode() {
 
         val startTime = SystemClock.uptimeMillis().toFloat()
-        mMol.reportedTimeFlag = false
-        mMol.startOfParseTime = startTime
+        molecule.reportedTimeFlag = false
+        molecule.startOfParseTime = startTime
 
         bufMgr.resetBuffersForNextUsage()
 
@@ -116,7 +114,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
          */
 
 
-        val activityManager2 = mActivity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
+        val activityManager2 = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
         val info2 = ActivityManager.MemoryInfo()
         activityManager2.getMemoryInfo(info2)
         val initialAvailMem = info2.threshold
@@ -186,7 +184,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 }
             }
         } catch (e: Exception) {
-            Timber.e(e, "Crashed displaying: %s", mMol.name)
+            Timber.e(e, "Crashed displaying: %s", molecule.name)
         }
 
     }
@@ -241,19 +239,19 @@ visibleAppThreshold = 94371840 (0x5A00000)
         var atom1: PdbAtom?
         var atom2: PdbAtom?
 
-        for (i in 0 until mMol.bondList.size) {
-            atom1Number = mMol.bondList[i].atomNumber1
-            atom2Number = mMol.bondList[i].atomNumber2
+        for (i in 0 until molecule.bondList.size) {
+            atom1Number = molecule.bondList[i].atomNumber1
+            atom2Number = molecule.bondList[i].atomNumber2
 
-            atom1 = mMol.atoms[atom1Number]
-            atom2 = mMol.atoms[atom2Number]
+            atom1 = molecule.atoms[atom1Number]
+            atom2 = molecule.atoms[atom2Number]
             if (atom1 == null || atom2 == null) {
                 Timber.e("null ptr : atom1: $atom1 atom2: $atom2")
                 continue
             }
 
             atomToAtomBond.genBondCylinders(
-                    mMol.geometrySlices,
+                    molecule.geometrySlices,
                     0.25f,
                     atom1,
                     atom2,
@@ -275,12 +273,12 @@ visibleAppThreshold = 94371840 (0x5A00000)
         var atom1: PdbAtom?
         var atom2: PdbAtom?
 
-        for (i in 0 until mMol.bondList.size) {
-            atom1Number = mMol.bondList[i].atomNumber1
-            atom2Number = mMol.bondList[i].atomNumber2
+        for (i in 0 until molecule.bondList.size) {
+            atom1Number = molecule.bondList[i].atomNumber1
+            atom2Number = molecule.bondList[i].atomNumber2
 
-            atom1 = mMol.atoms[atom1Number]
-            atom2 = mMol.atoms[atom2Number]
+            atom1 = molecule.atoms[atom1Number]
+            atom2 = molecule.atoms[atom2Number]
 
             if (atom1 == null || atom2 == null) {
                 Timber.e("null ptr : atom1: $atom1 atom2: $atom2")
@@ -292,14 +290,14 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 continue
             }
 
-            if (!mMol.displayHydrosFlag) {
+            if (!molecule.displayHydrosFlag) {
                 if (atom1.elementSymbol == "H" || atom2.elementSymbol == "H") {
 
                     continue
                 }
             }
             atomToAtomBond.genBondCylinders(
-                    mMol.geometrySlices,
+                    molecule.geometrySlices,
                     0.25f,
                     atom1,
                     atom2,
@@ -323,12 +321,12 @@ visibleAppThreshold = 94371840 (0x5A00000)
         var atom1: PdbAtom?
         var atom2: PdbAtom?
 
-        for (i in 0 until mMol.bondList.size) {
-            atom1Number = mMol.bondList[i].atomNumber1
-            atom2Number = mMol.bondList[i].atomNumber2
+        for (i in 0 until molecule.bondList.size) {
+            atom1Number = molecule.bondList[i].atomNumber1
+            atom2Number = molecule.bondList[i].atomNumber2
 
-            atom1 = mMol.atoms[atom1Number]
-            atom2 = mMol.atoms[atom2Number]
+            atom1 = molecule.atoms[atom1Number]
+            atom2 = molecule.atoms[atom2Number]
 
             if (atom1 == null || atom2 == null) {
                 Timber.e("null ptr : atom1: $atom1 atom2: $atom2")
@@ -338,7 +336,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 continue
             }
 
-            if (!mMol.displayHydrosFlag) {
+            if (!molecule.displayHydrosFlag) {
                 if (atom1.elementSymbol == "H" || atom2.elementSymbol == "H") {
 
                     continue
@@ -346,7 +344,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
             }
 
             atomToAtomBond.genBondCylinders(
-                    mMol.geometrySlices,
+                    molecule.geometrySlices,
                     0.25f,
                     atom1,
                     atom2,
@@ -382,10 +380,10 @@ visibleAppThreshold = 94371840 (0x5A00000)
             else -> radius = 0.25f
         }
 
-        for (i in 0 until mMol.atoms.size) {
-            atom1 = mMol.atoms[mMol.numList[i]]
+        for (i in 0 until molecule.atoms.size) {
+            atom1 = molecule.atoms[molecule.numList[i]]
             if (atom1 == null) {
-                Timber.e("drawSpheres: error - got null for " + mMol.numList[i])
+                Timber.e("drawSpheres: error - got null for " + molecule.numList[i])
                 continue
             }
             // skip HOH (water) molecules
@@ -401,7 +399,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
                     continue
                 }
             } else if (atom1.elementSymbol == "H") {
-                if (!mMol.displayHydrosFlag) {
+                if (!molecule.displayHydrosFlag) {
                     continue
                 } else if (sDrawMode and D_ALL_ATOMS == 0) {
                     continue
@@ -411,7 +409,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
             }
             if (atom1.atomBondCount == 0) {
                 Timber.e("%s: drawSpheres no bond at atom %d residue %s type %s",
-                        mMol.name, atom1.atomNumber, atom1.residueName, atom1.atomName)
+                        molecule.name, atom1.atomNumber, atom1.residueName, atom1.atomName)
             }
             elementSymbol = atom1.elementSymbol
             ai = atomInfo.atomNameToAtomInfoHash[elementSymbol]
@@ -439,7 +437,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 }
             }
             atomSphere.genSphere(
-                    mMol.sphereGeometrySlices,
+                    molecule.sphereGeometrySlices,
                     useRadius,
                     atom1,
                     useColor)
@@ -521,25 +519,25 @@ visibleAppThreshold = 94371840 (0x5A00000)
          * calculate usage with normal slices
          */
 
-        mMol.geometrySlices = Molecule.INITIAL_SLICES
-        mMol.sphereGeometrySlices = Molecule.INITIAL_SLICES / 2
+        molecule.geometrySlices = Molecule.INITIAL_SLICES
+        molecule.sphereGeometrySlices = Molecule.INITIAL_SLICES / 2
         var ribbons: Long = 0
         var sphere: Long = 0
         var bonds: Long = 0
 
         if (dmode and D_RIBBONS != 0) {
-            ribbons = mMol.bondAllocation(Molecule.INITIAL_SLICES).toLong()
+            ribbons = molecule.bondAllocation(Molecule.INITIAL_SLICES).toLong()
         }
 
         if (dmode and D_BONDS != 0) {
-            bonds = mMol.ribbonAllocation(Molecule.INITIAL_SLICES).toLong()
+            bonds = molecule.ribbonAllocation(Molecule.INITIAL_SLICES).toLong()
         }
 
         if (dmode and D_SPHERES != 0) {
-            sphere = mMol.sphereAllocation(mMol.sphereGeometrySlices).toLong()
+            sphere = molecule.sphereAllocation(molecule.sphereGeometrySlices).toLong()
         }
 
-        val activityManager2 = mActivity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
+        val activityManager2 = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
         val info2 = ActivityManager.MemoryInfo()
         activityManager2.getMemoryInfo(info2)
         var initialAvailMem = info2.threshold
@@ -547,16 +545,16 @@ visibleAppThreshold = 94371840 (0x5A00000)
         initialAvailMem /= 2  // seems like we only get 1/2 to play with
 
         if (ribbons + bonds + sphere > initialAvailMem) {
-            mMol.geometrySlices = mMol.geometrySlices / 2
+            molecule.geometrySlices = molecule.geometrySlices / 2
 
             if (dmode and D_RIBBONS != 0) {
-                ribbons = mMol.bondAllocation(mMol.geometrySlices).toLong()
+                ribbons = molecule.bondAllocation(molecule.geometrySlices).toLong()
             }
             if (dmode and D_BONDS != 0) {
-                bonds = mMol.ribbonAllocation(mMol.geometrySlices).toLong()
+                bonds = molecule.ribbonAllocation(molecule.geometrySlices).toLong()
             }
             if (dmode and D_SPHERES != 0) {
-                sphere = mMol.sphereAllocation(mMol.geometrySlices).toLong()
+                sphere = molecule.sphereAllocation(molecule.geometrySlices).toLong()
             }
 
             if (ribbons + bonds + sphere > initialAvailMem) {
@@ -571,9 +569,9 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 /*
                  * whack the sphere quality and try again
                  */
-                mMol.sphereGeometrySlices = 5
-                mMol.ribbonSlices = 5
-                sphere = mMol.sphereAllocation(mMol.sphereGeometrySlices).toLong()
+                molecule.sphereGeometrySlices = 5
+                molecule.ribbonSlices = 5
+                sphere = molecule.sphereAllocation(molecule.sphereGeometrySlices).toLong()
 
                 if (ribbons + bonds + sphere > initialAvailMem) {
                     val overdraw2 = initialAvailMem - ribbons - bonds - sphere
@@ -583,9 +581,9 @@ visibleAppThreshold = 94371840 (0x5A00000)
                             + " b: " + bonds
                             + " s: " + sphere
                             + " avail: " + initialAvailMem)
-                    mMol.geometrySlices = 3
-                    mMol.sphereGeometrySlices = 3
-                    mMol.ribbonSlices = 5
+                    molecule.geometrySlices = 3
+                    molecule.sphereGeometrySlices = 3
+                    molecule.ribbonSlices = 5
                     return false
                 } else {
                     val overdraw2 = initialAvailMem - ribbons - bonds - sphere

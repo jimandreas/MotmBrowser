@@ -1,19 +1,16 @@
 package com.bammellab.mollib
 
 import android.graphics.Bitmap
-import android.opengl.GLSurfaceView
 import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
-import com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
-import com.bammellab.mollib.ManagePdbFile
-import com.bammellab.mollib.RendererDisplayPdbFile
-import com.bammellab.mollib.SurfaceCreated
 import com.bammellab.mollib.objects.BufferManager
 import com.bammellab.mollib.objects.ManagerViewmode
 import com.bammellab.mollib.protein.Molecule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
@@ -37,7 +34,6 @@ class MotmProcessPdbs(
     private val managePdbFile = ManagePdbFile(activityIn)
     private val loadPdbFromAssets = loadPdbFromAssetsIn
     private lateinit var managerViewmode: ManagerViewmode
-    private lateinit var mol: Molecule
     private val bufferManager = BufferManager.getInstance(activity)
 
     private var nextNameIndex = -1
@@ -62,66 +58,53 @@ class MotmProcessPdbs(
         loadNextPdbFile()
     }
 
-    fun loadNextPdbFile() = runBlocking {
-        launch(Dispatchers.IO) {
-            if (++nextNameIndex == pdbFileNames.size) {
-                nextNameIndex = 0
-            }
-            val name = pdbFileNames[nextNameIndex]
-            Timber.d("Next file: %s", name)
-            activity.runOnUiThread { activity.title = name }
-
-            mol = Molecule()
-            managerViewmode = ManagerViewmode(
-                    activity, mol, bufferManager)
-            managePdbFile.setup(mol, managerViewmode)
-
-            bufferManager.resetBuffersForNextUsage()
-
-            if (loadPdbFromAssets) {
-                managePdbFile.parsePdbFileFromAsset(name)
-            } else {
-                managePdbFile.parsePdbFile(name)
-            }
-
-            glSurfaceView.queueEvent {
-                managerViewmode.createView()
-                Timber.e("SETTING DIRTY FLAG")
-                renderer.resetCamera()
-                renderer.setPdbLoadedFlag()
-            }
-
+    fun loadNextPdbFile() {
+        if (++nextNameIndex == pdbFileNames.size) {
+            nextNameIndex = 0
         }
-
+        Timber.v("Next file: %s", pdbFileNames[nextNameIndex])
+        commonStuff()
     }
 
-    fun loadPrevPdbFile() = runBlocking {
+    fun loadPrevPdbFile() {
         if (nextNameIndex-- == 0) {
             nextNameIndex = pdbFileNames.size - 1
         }
-        val name = pdbFileNames[nextNameIndex]
+        Timber.v("Prev file: %s", pdbFileNames[nextNameIndex])
+        commonStuff()
+    }
 
-        Timber.d("Previous file: %s", name)
-        activity.runOnUiThread { activity.title = name }
 
-        mol = Molecule()
-        managerViewmode = ManagerViewmode(
-                activity, mol, bufferManager)
-        managePdbFile.setup(mol, managerViewmode)
+    val mutex = Mutex()
 
-        if (loadPdbFromAssets) {
-            managePdbFile.parsePdbFileFromAsset(name)
-        } else {
-            managePdbFile.parsePdbFile(name)
-        }
+    private fun commonStuff() = runBlocking {
+        launch(Dispatchers.IO) {
+            mutex.withLock {
+                val name = pdbFileNames[nextNameIndex]
+                activity.runOnUiThread { activity.title = name }
+                renderer.tossMoleculeToGC()
+                val mol = Molecule() // the one place where Molecule is allocated!!
+                managerViewmode = ManagerViewmode(
+                        activity, mol, bufferManager)
+                managePdbFile.setup(mol, managerViewmode)
 
-        glSurfaceView.queueEvent {
-            managerViewmode.createView()
-            Timber.e("SETTING DIRTY FLAG")
-            renderer.resetCamera()
-            renderer.setPdbLoadedFlag()
+                bufferManager.resetBuffersForNextUsage()
+
+                if (loadPdbFromAssets) {
+                    managePdbFile.parsePdbFileFromAsset(name)
+                } else {
+                    managePdbFile.parsePdbFile(name)
+                }
+
+                glSurfaceView.queueEvent {
+                    managerViewmode.createView()
+                    renderer.setMolecule(mol)
+                    renderer.resetCamera()
+                }
+            }
         }
     }
+
 
     private fun writeCurrentImage() {
 
