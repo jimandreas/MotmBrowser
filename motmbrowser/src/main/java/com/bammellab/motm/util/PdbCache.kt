@@ -70,7 +70,7 @@ class PdbCache(private val activity: Activity, private val context: Context) {
         try {
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    Timber.e(e, "Failed to load %s", call.request().url)
+                    //Timber.e(e, "Failed to load %s", call.request().url)
                 }
 
                 @Throws(IOException::class)
@@ -85,7 +85,7 @@ class PdbCache(private val activity: Activity, private val context: Context) {
 
                     Timber.i("loaded the PDB!")
 
-                    inputStream = GZIPInputStream(response.body!!.byteStream())
+                    inputStream = GZIPInputStream(response.body()!!.byteStream())
                     downloadPdbFromHttp(inputStream, pdbid)
                     response.close()
                 }

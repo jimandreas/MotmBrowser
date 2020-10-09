@@ -87,12 +87,24 @@ dependencies {
     implementation deps.kotlin.stdlib.jdk
     implementation deps.kotlin.coroutines.jdk
     implementation deps.kotlin.coroutines.android
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.1.0'
+
+    implementation deps.android.support.appcompat
+    implementation deps.android.support.constraintLayout
+    implementation deps.android.x.coreKtx
+    implementation deps.android.material
     implementation deps.android.support.cardview
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta6'
-    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
+
+    implementation deps.okhttp.client
     implementation deps.retrofit.client
+
+    implementation deps.pdbparser
+    implementation deps.timber
+    implementation deps.picasso
+    implementation deps.guava
+
+
+    implementation deps.glide
+    kapt deps.glide
 
     implementation (deps.retrofit.converterXml) {
         exclude group: 'stax', module: 'stax-api'
@@ -101,14 +113,7 @@ dependencies {
         exclude group: 'stream', module: 'stream'
     }
 
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'androidx.core:core-ktx:1.4.0-alpha01'
-    implementation 'com.github.bumptech.glide:glide:4.10.0'
-    kapt 'com.github.bumptech.glide:glide:4.10.0'
-    implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.google.guava:guava:28.1-jre'
-
     testImplementation deps.annotations
-    testImplementation 'junit:junit:4.13-beta-3'
-    testImplementation 'com.google.truth:truth:1.0'
+    testImplementation deps.junit
+    testImplementation deps.truth
 }
