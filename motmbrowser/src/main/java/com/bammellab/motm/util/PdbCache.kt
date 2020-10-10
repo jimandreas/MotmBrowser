@@ -85,7 +85,9 @@ class PdbCache(private val activity: Activity, private val context: Context) {
 
                     Timber.i("loaded the PDB!")
 
-                    inputStream = GZIPInputStream(response.body()!!.byteStream())
+                    // inputStream = GZIPInputStream(response.body()!!.byteStream())
+                    val responseBody = response.body
+                    inputStream = GZIPInputStream(responseBody!!.byteStream())
                     downloadPdbFromHttp(inputStream, pdbid)
                     response.close()
                 }

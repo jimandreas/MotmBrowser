@@ -49,9 +49,3 @@ dependencies {
     testImplementation deps.junit
     testImplementation deps.truth
 }
-
-//kotlin {
-//    experimental {
-//        coroutines 'enable'
-//    }
-//}

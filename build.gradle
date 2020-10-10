@@ -22,7 +22,7 @@ buildscript {
             'kotlinCoroutines': '1.2.1',
 //            'okhttp': '3.14.1',
             'okhttp': '4.9.0',
-            'retrofit': '2.6.2',
+            'retrofit': '2.9.0',
     ]
 
     ext.deps = [
@@ -100,7 +100,7 @@ buildscript {
 
             'okio': 'com.squareup.okio:okio:1.14.0',
             'moshi': 'com.squareup.moshi:moshi:1.5.0',
-            'timber': 'com.jakewharton.timber:timber:4.3.1',
+            'timber': 'com.jakewharton.timber:timber:4.7.1',
 
             'sqlBrite': 'com.squareup.sqlbrite3:sqlbrite-kotlin:3.2.0',
             'bugsnag': 'com.bugsnag:bugsnag-android:4.2.2',
@@ -114,8 +114,8 @@ buildscript {
             'glideannotation' : 'com.github.bumptech.glide:glide:4.11.0',
             'picasso' : 'com.squareup.picasso:picasso:2.5.2',
 
-            junit: 'junit:junit:4.12',
-            truth: 'com.google.truth:truth:0.41',
+            junit: 'junit:junit:4.13',
+            truth: 'com.google.truth:truth:1.0.1',
             annotations: 'org.jetbrains:annotations:16.0.1'
 
 
