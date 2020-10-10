@@ -17,9 +17,9 @@
 @file:Suppress("unused", "MemberVisibilityCanBePrivate")
 package com.bammellab.mollib.objects
 
-
 import android.app.Activity
 import android.app.ActivityManager
+import com.kotmol.pdbParser.AtomInformationTable
 import com.kotmol.pdbParser.Molecule
 import com.kotmol.pdbParser.PdbAtom
 import timber.log.Timber
@@ -258,8 +258,8 @@ visibleAppThreshold = 94371840 (0x5A00000)
             atom1Number = molecule.bondList[i].atomNumber1
             atom2Number = molecule.bondList[i].atomNumber2
 
-            atom1 = molecule.atoms[atom1Number]
-            atom2 = molecule.atoms[atom2Number]
+            atom1 = molecule.atomNumberToAtomInfoHash[atom1Number]
+            atom2 = molecule.atomNumberToAtomInfoHash[atom2Number]
 
             if (atom1 == null || atom2 == null) {
                 Timber.e("null ptr : atom1: $atom1 atom2: $atom2")
@@ -302,8 +302,8 @@ visibleAppThreshold = 94371840 (0x5A00000)
             atom1Number = molecule.bondList[i].atomNumber1
             atom2Number = molecule.bondList[i].atomNumber2
 
-            atom1 = molecule.atoms[atom1Number]
-            atom2 = molecule.atoms[atom2Number]
+            atom1 = molecule.atomNumberToAtomInfoHash[atom1Number]
+            atom2 = molecule.atomNumberToAtomInfoHash[atom2Number]
 
             if (atom1 == null || atom2 == null) {
                 Timber.e("null ptr : atom1: $atom1 atom2: $atom2")
@@ -337,7 +337,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
 
         var atom1: PdbAtom?
         var elementSymbol: String
-        var ai: AtomInfo?
+        var ai: AtomInformationTable.AtomNameNumber?
         var useColor: FloatArray
         val color = floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f)
         var lookupRadius = false
@@ -355,10 +355,10 @@ visibleAppThreshold = 94371840 (0x5A00000)
             else -> radius = 0.25f
         }
 
-        for (i in 0 until molecule.atoms.size) {
-            atom1 = molecule.atoms[molecule.numList[i]]
+        for (i in 0 until molecule.atomNumberList.size) {
+            atom1 = molecule.atomNumberToAtomInfoHash[molecule.atomNumberList[i]]
             if (atom1 == null) {
-                Timber.e("drawSpheres: error - got null for " + molecule.numList[i])
+                Timber.e("drawSpheres: error - got null for %d", molecule.atomNumberList[i])
                 continue
             }
             // skip HOH (water) molecules
@@ -387,18 +387,20 @@ visibleAppThreshold = 94371840 (0x5A00000)
                         molecule.molName, atom1.atomNumber, atom1.residueName, atom1.atomName)
             }
             elementSymbol = atom1.elementSymbol
-            ai = atomInfo.atomNameToAtomInfoHash[elementSymbol]
+            ai = AtomInformationTable.atomSymboltoAtomNumNameColor[elementSymbol]
             useColor = ai?.color ?: color
             /*
              * for full sized atom mode, look up the radius
              */
             if (lookupRadius) {
                 radius = if (ai == null) {
-                    Timber.e("drawSpheres: no AtomInfo at atom " + atom1.atomNumber +
-                            " residue " + atom1.residueName + " type " + atom1.atomName)
+                    Timber.e("drawSpheres: no AtomInfo at atom %d residue %s type %s",
+                            atom1.atomNumber,
+                            atom1.residueName,
+                            atom1.atomName)
                     .25f
                 } else {
-                    ai.vdwRadius.toFloat() / 100f
+                    ai.vanDerWaalsRadius.toFloat() / 100f
                 }
                 if (radius == 0f) {
                     radius = .25f
@@ -412,7 +414,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 }
             }
             atomSphere.genSphere(
-                    molecule.sphereGeometrySlices,
+                    sphereGeometrySlices,
                     useRadius,
                     atom1,
                     useColor)
@@ -493,23 +495,22 @@ visibleAppThreshold = 94371840 (0x5A00000)
         /*
          * calculate usage with normal slices
          */
-
-        geometrySlices = Molecule.INITIAL_SLICES
-        molecule.sphereGeometrySlices = Molecule.INITIAL_SLICES / 2
+        geometrySlices = INITIAL_SLICES
+        var sphereGeometrySlices = INITIAL_SLICES / 2
         var ribbons: Long = 0
         var sphere: Long = 0
         var bonds: Long = 0
 
         if (dmode and D_RIBBONS != 0) {
-            ribbons = molecule.bondAllocation(Molecule.INITIAL_SLICES).toLong()
+            ribbons = bondAllocation(INITIAL_SLICES).toLong()
         }
 
         if (dmode and D_BONDS != 0) {
-            bonds = molecule.ribbonAllocation(Molecule.INITIAL_SLICES).toLong()
+            bonds = ribbonAllocation(INITIAL_SLICES).toLong()
         }
 
         if (dmode and D_SPHERES != 0) {
-            sphere = molecule.sphereAllocation(molecule.sphereGeometrySlices).toLong()
+            sphere = sphereAllocation(sphereGeometrySlices).toLong()
         }
 
         val activityManager2 = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
@@ -523,13 +524,13 @@ visibleAppThreshold = 94371840 (0x5A00000)
             geometrySlices = geometrySlices / 2
 
             if (dmode and D_RIBBONS != 0) {
-                ribbons = molecule.bondAllocation(geometrySlices).toLong()
+                ribbons = bondAllocation(geometrySlices).toLong()
             }
             if (dmode and D_BONDS != 0) {
-                bonds = molecule.ribbonAllocation(geometrySlices).toLong()
+                bonds = ribbonAllocation(geometrySlices).toLong()
             }
             if (dmode and D_SPHERES != 0) {
-                sphere = molecule.sphereAllocation(geometrySlices).toLong()
+                sphere = sphereAllocation(geometrySlices).toLong()
             }
 
             if (ribbons + bonds + sphere > initialAvailMem) {
@@ -544,9 +545,9 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 /*
                  * whack the sphere quality and try again
                  */
-                molecule.sphereGeometrySlices = 5
-                molecule.ribbonSlices = 5
-                sphere = molecule.sphereAllocation(molecule.sphereGeometrySlices).toLong()
+                sphereGeometrySlices = 5
+                ribbonSlices = 5
+                sphere = sphereAllocation(sphereGeometrySlices).toLong()
 
                 if (ribbons + bonds + sphere > initialAvailMem) {
                     val overdraw2 = initialAvailMem - ribbons - bonds - sphere
@@ -558,8 +559,8 @@ visibleAppThreshold = 94371840 (0x5A00000)
                             initialAvailMem)
 
                     geometrySlices = 3
-                    molecule.sphereGeometrySlices = 3
-                    molecule.ribbonSlices = 5
+                    sphereGeometrySlices = 3
+                    ribbonSlices = 5
                     return false
                 } else {
                     val overdraw2 = initialAvailMem - ribbons - bonds - sphere
@@ -574,6 +575,35 @@ visibleAppThreshold = 94371840 (0x5A00000)
         }
         return true  // rendering will fit, hopefully
     }
+
+    /*
+     * calculate projected triangle allocations in bytes
+     *   based on the "slices" or number of facets in the geometry
+     */
+    fun bondAllocation(numSlices: Int): Int {
+        return molecule.bondList.size *
+                2 * 6 * (numSlices + 1) * STRIDE_IN_BYTES
+    }
+
+    fun sphereAllocation(numSlices: Int): Int {
+        return (molecule.atomNumberList.size *
+                numSlices * numSlices // number of vertices
+
+                * 3 * 2 // two triangles worth generated per loop
+
+                * STRIDE_IN_BYTES) // num floats per vertex
+    }
+
+    /*
+     * note that there are 10 "cylinders" between nodes in the ribbons
+     *    this is a wired-in number so far.
+     *       This calculation overestimates the needed space by a little bit.
+     */
+    fun ribbonAllocation(numSlices: Int): Int {
+        return ribbonNodeCount * 10 *
+                6 * (numSlices + 1) * STRIDE_IN_BYTES
+    }
+
 
     companion object {
         /*
@@ -605,5 +635,18 @@ visibleAppThreshold = 94371840 (0x5A00000)
         private const val D_SPHERES = 1 shl 9
 
         private var sDrawMode: Int = 0
+
+        private const val sphereGeometrySlices = 20 // TODO: make this dynamic
+        private const val INITIAL_SLICES = 20
+
+        private const val BYTES_PER_FLOAT = 4
+        private const val BYTES_PER_SHORT = 2
+        
+        private const val POSITION_DATA_SIZE_IN_ELEMENTS = 3
+        private const val NORMAL_DATA_SIZE_IN_ELEMENTS = 3
+        private const val COLOR_DATA_SIZE_IN_ELEMENTS = 4
+
+        private const val STRIDE_IN_FLOATS = POSITION_DATA_SIZE_IN_ELEMENTS + NORMAL_DATA_SIZE_IN_ELEMENTS + COLOR_DATA_SIZE_IN_ELEMENTS
+        private const val STRIDE_IN_BYTES = STRIDE_IN_FLOATS * BYTES_PER_FLOAT
     }
 }

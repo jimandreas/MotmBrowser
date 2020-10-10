@@ -17,12 +17,14 @@
 @file:Suppress("unused")
 package com.bammellab.mollib.objects
 
+import com.bammellab.mollib.common.math.MotmVector3
+import com.kotmol.pdbParser.ChainRenderingDescriptor
 import com.kotmol.pdbParser.Molecule
 
 /*
  * draw nice rectangular boxes representing nucleic acids (the ladder)
  */
-class RenderNucleic(private val mMol: Molecule) {
+class RenderNucleic(private val molecule: Molecule) {
 
     private var numIndices = 0
     private val cylinderIndexCount: Int = 0
@@ -32,18 +34,26 @@ class RenderNucleic(private val mMol: Molecule) {
     internal val vboBody = IntArray(1)
     internal val ibo = IntArray(1)
 
+    private val p1p2 = MotmVector3()
+    private val pvec = MotmVector3()
+    private val rvec = MotmVector3()
+    private val svec = MotmVector3()
+    private val p1 = FloatArray(3)
+    private val p2 = FloatArray(3)
+    private val p3 = FloatArray(3)
+
     private fun getColor(crd: ChainRenderingDescriptor): FloatArray {
         val anAtom = crd.nucleicCornerAtom
-        return when {
-            anAtom.residueName == "DC" -> C_color
-            anAtom.residueName == "DT" -> T_color
-            anAtom.residueName == "C" -> C_color
-            anAtom.residueName == "T" -> T_color
-            anAtom.residueName == "U" -> U_color
-            anAtom.residueName == "DA" -> A_color
-            anAtom.residueName == "DG" -> G_color
-            anAtom.residueName == "A" -> A_color
-            anAtom.residueName == "G" -> G_color
+        return when (anAtom.residueName) {
+            "DC" -> C_color
+            "DT" -> T_color
+            "C" -> C_color
+            "T" -> T_color
+            "U" -> U_color
+            "DA" -> A_color
+            "DG" -> G_color
+            "A" -> A_color
+            "G" -> G_color
             // it is something else.  Flag it with white
             else -> white_color
         }
@@ -54,20 +64,20 @@ class RenderNucleic(private val mMol: Molecule) {
         /*
          * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
          */
-        normal_brightness_factor = mMol.dcOffset / 3
+        normal_brightness_factor = (molecule.dcOffset / 3).toFloat()
 
         var pdbBackboneList: List<*>
         var chainEntry: ChainRenderingDescriptor
 
-        for (i in 0 until mMol.listofChainDescriptorLists.size) {
-            pdbBackboneList = mMol.listofChainDescriptorLists[i]
+        for (i in 0 until molecule.listofChainDescriptorLists.size) {
+            pdbBackboneList = molecule.listofChainDescriptorLists[i]
             for (j in pdbBackboneList.indices) {
                 chainEntry = pdbBackboneList[j] as ChainRenderingDescriptor
-                if (chainEntry.nucleicType == ChainRenderingDescriptor.PURINE) {
+                if (chainEntry.nucleicType == ChainRenderingDescriptor.NucleicType.PURINE) {
                     // Log.d("LOG_TAG", "purine: " + atom.atom_number);
                     render(chainEntry, 3)
                 }
-                if (chainEntry.nucleicType == ChainRenderingDescriptor.PYRIMIDINE) {
+                if (chainEntry.nucleicType == ChainRenderingDescriptor.NucleicType.PYRIMIDINE) {
                     // Log.d("LOG_TAG", "pyrimidine: " + atom.atom_number);
                     render(chainEntry, 5)
                 }
@@ -95,34 +105,34 @@ class RenderNucleic(private val mMol: Molecule) {
         vertexData = BufferManager.getFloatArray(36 * STRIDE_IN_FLOATS)
         mOffset = BufferManager.floatArrayIndex
 
-        corner1.setAll(crd.nucleicCornerAtom.atomPosition)
+        corner1.setAll(MotmVector3(crd.nucleicCornerAtom.atomPosition))
 
         // set P to vector defining side of rectangle
         //    vector is corner to guide atom
-        mMol.P.setAll(crd.nucleicGuideAtom.atomPosition)
-        mMol.P.subtract(corner1)
-        mMol.P.normalize()
+        pvec.setAll(MotmVector3(crd.nucleicGuideAtom.atomPosition))
+        pvec.subtract(corner1)
+        pvec.normalize()
 
         // fix corner2 along P - and set its length,
         //   based at corner1
-        corner2.setAll(mMol.P)
+        corner2.setAll(pvec)
         corner2.multiply(scaler.toDouble())
         corner2.add(corner1)
 
         // set R to vector across the rectangle
         //    vector is corner atom to planar atom
-        mMol.R.setAll(crd.nucleicPlanarAtom.atomPosition)
-        mMol.R.subtract(corner1)
-        mMol.R.normalize()
+        rvec.setAll(MotmVector3(crd.nucleicPlanarAtom.atomPosition))
+        rvec.subtract(corner1)
+        rvec.normalize()
 
         // S - normal - now we can get the normal to the plane
-        mMol.S.setAll(mMol.P)
-        mMol.S.cross(mMol.R)
+        svec.setAll(pvec)
+        svec.cross(rvec)
 
         // now cross back to get the vector for our other corner
 
-        corner3.setAll(mMol.S)
-        corner3.cross(mMol.P)
+        corner3.setAll(svec)
+        corner3.cross(pvec)
         // corner3.multiply((double) scaler * 0.75);
         corner3.multiply(2.0)
 
@@ -140,51 +150,51 @@ class RenderNucleic(private val mMol: Molecule) {
          *  TOP
          */
 
-        mMol.S.multiply(0.25)
+        svec.multiply(0.25)
 
         corner1t.setAll(corner1)
         corner2t.setAll(corner2)
         corner3t.setAll(corner3)
         corner4t.setAll(corner4)
-        corner1t.add(mMol.S)
-        corner2t.add(mMol.S)
-        corner3t.add(mMol.S)
-        corner4t.add(mMol.S)
+        corner1t.add(svec)
+        corner2t.add(svec)
+        corner3t.add(svec)
+        corner4t.add(svec)
 
         // OK we should have all 4 corners now
         //  do the triangles
 
-        mMol.p1[0] = corner1t.x.toFloat()
-        mMol.p1[1] = corner1t.y.toFloat()
-        mMol.p1[2] = corner1t.z.toFloat()
+        p1[0] = corner1t.x.toFloat()
+        p1[1] = corner1t.y.toFloat()
+        p1[2] = corner1t.z.toFloat()
 
-        mMol.p2[0] = corner3t.x.toFloat()
-        mMol.p2[1] = corner3t.y.toFloat()
-        mMol.p2[2] = corner3t.z.toFloat()
+        p2[0] = corner3t.x.toFloat()
+        p2[1] = corner3t.y.toFloat()
+        p2[2] = corner3t.z.toFloat()
 
-        mMol.p3[0] = corner2t.x.toFloat()
-        mMol.p3[1] = corner2t.y.toFloat()
-        mMol.p3[2] = corner2t.z.toFloat()
+        p3[0] = corner2t.x.toFloat()
+        p3[1] = corner2t.y.toFloat()
+        p3[2] = corner2t.z.toFloat()
         // OK that is one triangle.
 
-        n = XYZ.getNormal(mMol.p3, mMol.p2, mMol.p1)
-        putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
+        n = XYZ.getNormal(p3, p2, p1)
+        putTri(p1, p2, p3, n, theColor)
 
-        mMol.p1[0] = corner3t.x.toFloat()
-        mMol.p1[1] = corner3t.y.toFloat()
-        mMol.p1[2] = corner3t.z.toFloat()
+        p1[0] = corner3t.x.toFloat()
+        p1[1] = corner3t.y.toFloat()
+        p1[2] = corner3t.z.toFloat()
 
-        mMol.p2[0] = corner4t.x.toFloat()
-        mMol.p2[1] = corner4t.y.toFloat()
-        mMol.p2[2] = corner4t.z.toFloat()
+        p2[0] = corner4t.x.toFloat()
+        p2[1] = corner4t.y.toFloat()
+        p2[2] = corner4t.z.toFloat()
 
-        mMol.p3[0] = corner2t.x.toFloat()
-        mMol.p3[1] = corner2t.y.toFloat()
-        mMol.p3[2] = corner2t.z.toFloat()
+        p3[0] = corner2t.x.toFloat()
+        p3[1] = corner2t.y.toFloat()
+        p3[2] = corner2t.z.toFloat()
         // OK that is one triangle.
 
-        n = XYZ.getNormal(mMol.p3, mMol.p2, mMol.p1)
-        putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
+        n = XYZ.getNormal(p3, p2, p1)
+        putTri(p1, p2, p3, n, theColor)
 
 
         /*
@@ -194,45 +204,45 @@ class RenderNucleic(private val mMol: Molecule) {
         corner2b.setAll(corner2)
         corner3b.setAll(corner3)
         corner4b.setAll(corner4)
-        corner1b.subtract(mMol.S)
-        corner2b.subtract(mMol.S)
-        corner3b.subtract(mMol.S)
-        corner4b.subtract(mMol.S)
+        corner1b.subtract(svec)
+        corner2b.subtract(svec)
+        corner3b.subtract(svec)
+        corner4b.subtract(svec)
 
         // OK we should have all 4 corners now
         //  do the triangles
 
-        mMol.p1[0] = corner1b.x.toFloat()
-        mMol.p1[1] = corner1b.y.toFloat()
-        mMol.p1[2] = corner1b.z.toFloat()
+        p1[0] = corner1b.x.toFloat()
+        p1[1] = corner1b.y.toFloat()
+        p1[2] = corner1b.z.toFloat()
 
-        mMol.p2[0] = corner2b.x.toFloat()
-        mMol.p2[1] = corner2b.y.toFloat()
-        mMol.p2[2] = corner2b.z.toFloat()
+        p2[0] = corner2b.x.toFloat()
+        p2[1] = corner2b.y.toFloat()
+        p2[2] = corner2b.z.toFloat()
 
-        mMol.p3[0] = corner3b.x.toFloat()
-        mMol.p3[1] = corner3b.y.toFloat()
-        mMol.p3[2] = corner3b.z.toFloat()
+        p3[0] = corner3b.x.toFloat()
+        p3[1] = corner3b.y.toFloat()
+        p3[2] = corner3b.z.toFloat()
         // OK that is one triangle.
 
-        n = XYZ.getNormal(mMol.p3, mMol.p2, mMol.p1)
-        putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
+        n = XYZ.getNormal(p3, p2, p1)
+        putTri(p1, p2, p3, n, theColor)
 
-        mMol.p1[0] = corner3b.x.toFloat()
-        mMol.p1[1] = corner3b.y.toFloat()
-        mMol.p1[2] = corner3b.z.toFloat()
+        p1[0] = corner3b.x.toFloat()
+        p1[1] = corner3b.y.toFloat()
+        p1[2] = corner3b.z.toFloat()
 
-        mMol.p2[0] = corner2b.x.toFloat()
-        mMol.p2[1] = corner2b.y.toFloat()
-        mMol.p2[2] = corner2b.z.toFloat()
+        p2[0] = corner2b.x.toFloat()
+        p2[1] = corner2b.y.toFloat()
+        p2[2] = corner2b.z.toFloat()
 
-        mMol.p3[0] = corner4b.x.toFloat()
-        mMol.p3[1] = corner4b.y.toFloat()
-        mMol.p3[2] = corner4b.z.toFloat()
+        p3[0] = corner4b.x.toFloat()
+        p3[1] = corner4b.y.toFloat()
+        p3[2] = corner4b.z.toFloat()
         // OK that is one triangle.
 
-        n = XYZ.getNormal(mMol.p3, mMol.p2, mMol.p1)
-        putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
+        n = XYZ.getNormal(p3, p2, p1)
+        putTri(p1, p2, p3, n, theColor)
 
         numIndices = mOffset
         BufferManager.floatArrayIndex = mOffset
@@ -240,135 +250,135 @@ class RenderNucleic(private val mMol: Molecule) {
         /* **************************
          * END number 1
          */
-        mMol.p1[0] = corner1t.x.toFloat()
-        mMol.p1[1] = corner1t.y.toFloat()
-        mMol.p1[2] = corner1t.z.toFloat()
+        p1[0] = corner1t.x.toFloat()
+        p1[1] = corner1t.y.toFloat()
+        p1[2] = corner1t.z.toFloat()
 
-        mMol.p2[0] = corner1b.x.toFloat()
-        mMol.p2[1] = corner1b.y.toFloat()
-        mMol.p2[2] = corner1b.z.toFloat()
+        p2[0] = corner1b.x.toFloat()
+        p2[1] = corner1b.y.toFloat()
+        p2[2] = corner1b.z.toFloat()
 
-        mMol.p3[0] = corner3b.x.toFloat()
-        mMol.p3[1] = corner3b.y.toFloat()
-        mMol.p3[2] = corner3b.z.toFloat()
+        p3[0] = corner3b.x.toFloat()
+        p3[1] = corner3b.y.toFloat()
+        p3[2] = corner3b.z.toFloat()
 
-        n = XYZ.getNormal(mMol.p3, mMol.p2, mMol.p1)
-        putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
+        n = XYZ.getNormal(p3, p2, p1)
+        putTri(p1, p2, p3, n, theColor)
 
-        mMol.p1[0] = corner1t.x.toFloat()
-        mMol.p1[1] = corner1t.y.toFloat()
-        mMol.p1[2] = corner1t.z.toFloat()
+        p1[0] = corner1t.x.toFloat()
+        p1[1] = corner1t.y.toFloat()
+        p1[2] = corner1t.z.toFloat()
 
-        mMol.p2[0] = corner3b.x.toFloat()
-        mMol.p2[1] = corner3b.y.toFloat()
-        mMol.p2[2] = corner3b.z.toFloat()
+        p2[0] = corner3b.x.toFloat()
+        p2[1] = corner3b.y.toFloat()
+        p2[2] = corner3b.z.toFloat()
 
-        mMol.p3[0] = corner3t.x.toFloat()
-        mMol.p3[1] = corner3t.y.toFloat()
-        mMol.p3[2] = corner3t.z.toFloat()
+        p3[0] = corner3t.x.toFloat()
+        p3[1] = corner3t.y.toFloat()
+        p3[2] = corner3t.z.toFloat()
 
-        n = XYZ.getNormal(mMol.p3, mMol.p2, mMol.p1)
-        putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
+        n = XYZ.getNormal(p3, p2, p1)
+        putTri(p1, p2, p3, n, theColor)
 
 
         /* **************************
          * END number 2
          */
-        mMol.p1[0] = corner3t.x.toFloat()
-        mMol.p1[1] = corner3t.y.toFloat()
-        mMol.p1[2] = corner3t.z.toFloat()
+        p1[0] = corner3t.x.toFloat()
+        p1[1] = corner3t.y.toFloat()
+        p1[2] = corner3t.z.toFloat()
 
-        mMol.p2[0] = corner3b.x.toFloat()
-        mMol.p2[1] = corner3b.y.toFloat()
-        mMol.p2[2] = corner3b.z.toFloat()
+        p2[0] = corner3b.x.toFloat()
+        p2[1] = corner3b.y.toFloat()
+        p2[2] = corner3b.z.toFloat()
 
-        mMol.p3[0] = corner4b.x.toFloat()
-        mMol.p3[1] = corner4b.y.toFloat()
-        mMol.p3[2] = corner4b.z.toFloat()
+        p3[0] = corner4b.x.toFloat()
+        p3[1] = corner4b.y.toFloat()
+        p3[2] = corner4b.z.toFloat()
 
-        n = XYZ.getNormal(mMol.p3, mMol.p2, mMol.p1)
-        putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
+        n = XYZ.getNormal(p3, p2, p1)
+        putTri(p1, p2, p3, n, theColor)
 
-        mMol.p1[0] = corner3t.x.toFloat()
-        mMol.p1[1] = corner3t.y.toFloat()
-        mMol.p1[2] = corner3t.z.toFloat()
+        p1[0] = corner3t.x.toFloat()
+        p1[1] = corner3t.y.toFloat()
+        p1[2] = corner3t.z.toFloat()
 
-        mMol.p2[0] = corner4b.x.toFloat()
-        mMol.p2[1] = corner4b.y.toFloat()
-        mMol.p2[2] = corner4b.z.toFloat()
+        p2[0] = corner4b.x.toFloat()
+        p2[1] = corner4b.y.toFloat()
+        p2[2] = corner4b.z.toFloat()
 
-        mMol.p3[0] = corner4t.x.toFloat()
-        mMol.p3[1] = corner4t.y.toFloat()
-        mMol.p3[2] = corner4t.z.toFloat()
+        p3[0] = corner4t.x.toFloat()
+        p3[1] = corner4t.y.toFloat()
+        p3[2] = corner4t.z.toFloat()
 
-        n = XYZ.getNormal(mMol.p3, mMol.p2, mMol.p1)
-        putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
+        n = XYZ.getNormal(p3, p2, p1)
+        putTri(p1, p2, p3, n, theColor)
 
         /* **************************
          * END number 3
          */
-        mMol.p1[0] = corner4t.x.toFloat()
-        mMol.p1[1] = corner4t.y.toFloat()
-        mMol.p1[2] = corner4t.z.toFloat()
+        p1[0] = corner4t.x.toFloat()
+        p1[1] = corner4t.y.toFloat()
+        p1[2] = corner4t.z.toFloat()
 
-        mMol.p2[0] = corner4b.x.toFloat()
-        mMol.p2[1] = corner4b.y.toFloat()
-        mMol.p2[2] = corner4b.z.toFloat()
+        p2[0] = corner4b.x.toFloat()
+        p2[1] = corner4b.y.toFloat()
+        p2[2] = corner4b.z.toFloat()
 
-        mMol.p3[0] = corner2b.x.toFloat()
-        mMol.p3[1] = corner2b.y.toFloat()
-        mMol.p3[2] = corner2b.z.toFloat()
+        p3[0] = corner2b.x.toFloat()
+        p3[1] = corner2b.y.toFloat()
+        p3[2] = corner2b.z.toFloat()
 
-        n = XYZ.getNormal(mMol.p3, mMol.p2, mMol.p1)
-        putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
+        n = XYZ.getNormal(p3, p2, p1)
+        putTri(p1, p2, p3, n, theColor)
 
-        mMol.p1[0] = corner4t.x.toFloat()
-        mMol.p1[1] = corner4t.y.toFloat()
-        mMol.p1[2] = corner4t.z.toFloat()
+        p1[0] = corner4t.x.toFloat()
+        p1[1] = corner4t.y.toFloat()
+        p1[2] = corner4t.z.toFloat()
 
-        mMol.p2[0] = corner2b.x.toFloat()
-        mMol.p2[1] = corner2b.y.toFloat()
-        mMol.p2[2] = corner2b.z.toFloat()
+        p2[0] = corner2b.x.toFloat()
+        p2[1] = corner2b.y.toFloat()
+        p2[2] = corner2b.z.toFloat()
 
-        mMol.p3[0] = corner2t.x.toFloat()
-        mMol.p3[1] = corner2t.y.toFloat()
-        mMol.p3[2] = corner2t.z.toFloat()
+        p3[0] = corner2t.x.toFloat()
+        p3[1] = corner2t.y.toFloat()
+        p3[2] = corner2t.z.toFloat()
 
-        n = XYZ.getNormal(mMol.p3, mMol.p2, mMol.p1)
-        putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
+        n = XYZ.getNormal(p3, p2, p1)
+        putTri(p1, p2, p3, n, theColor)
 
         /* **************************
          * END number 4
          */
-        mMol.p1[0] = corner2t.x.toFloat()
-        mMol.p1[1] = corner2t.y.toFloat()
-        mMol.p1[2] = corner2t.z.toFloat()
+        p1[0] = corner2t.x.toFloat()
+        p1[1] = corner2t.y.toFloat()
+        p1[2] = corner2t.z.toFloat()
 
-        mMol.p2[0] = corner2b.x.toFloat()
-        mMol.p2[1] = corner2b.y.toFloat()
-        mMol.p2[2] = corner2b.z.toFloat()
+        p2[0] = corner2b.x.toFloat()
+        p2[1] = corner2b.y.toFloat()
+        p2[2] = corner2b.z.toFloat()
 
-        mMol.p3[0] = corner1b.x.toFloat()
-        mMol.p3[1] = corner1b.y.toFloat()
-        mMol.p3[2] = corner1b.z.toFloat()
+        p3[0] = corner1b.x.toFloat()
+        p3[1] = corner1b.y.toFloat()
+        p3[2] = corner1b.z.toFloat()
 
-        n = XYZ.getNormal(mMol.p3, mMol.p2, mMol.p1)
-        putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
+        n = XYZ.getNormal(p3, p2, p1)
+        putTri(p1, p2, p3, n, theColor)
 
-        mMol.p1[0] = corner2t.x.toFloat()
-        mMol.p1[1] = corner2t.y.toFloat()
-        mMol.p1[2] = corner2t.z.toFloat()
+        p1[0] = corner2t.x.toFloat()
+        p1[1] = corner2t.y.toFloat()
+        p1[2] = corner2t.z.toFloat()
 
-        mMol.p2[0] = corner1b.x.toFloat()
-        mMol.p2[1] = corner1b.y.toFloat()
-        mMol.p2[2] = corner1b.z.toFloat()
+        p2[0] = corner1b.x.toFloat()
+        p2[1] = corner1b.y.toFloat()
+        p2[2] = corner1b.z.toFloat()
 
-        mMol.p3[0] = corner1t.x.toFloat()
-        mMol.p3[1] = corner1t.y.toFloat()
-        mMol.p3[2] = corner1t.z.toFloat()
+        p3[0] = corner1t.x.toFloat()
+        p3[1] = corner1t.y.toFloat()
+        p3[2] = corner1t.z.toFloat()
 
-        n = XYZ.getNormal(mMol.p3, mMol.p2, mMol.p1)
-        putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
+        n = XYZ.getNormal(p3, p2, p1)
+        putTri(p1, p2, p3, n, theColor)
 
         numIndices = mOffset
         BufferManager.floatArrayIndex = mOffset
@@ -417,18 +427,18 @@ class RenderNucleic(private val mMol: Molecule) {
     companion object {
 
         private val LOG_TAG = RenderNucleic::class.java.simpleName
-        private val corner1 = Vector3()
-        private val corner2 = Vector3()
-        private val corner3 = Vector3()
-        private val corner4 = Vector3()
-        private val corner1t = Vector3()
-        private val corner2t = Vector3()
-        private val corner3t = Vector3()
-        private val corner4t = Vector3()
-        private val corner1b = Vector3()
-        private val corner2b = Vector3()
-        private val corner3b = Vector3()
-        private val corner4b = Vector3()
+        private val corner1 = MotmVector3()
+        private val corner2 = MotmVector3()
+        private val corner3 = MotmVector3()
+        private val corner4 = MotmVector3()
+        private val corner1t = MotmVector3()
+        private val corner2t = MotmVector3()
+        private val corner3t = MotmVector3()
+        private val corner4t = MotmVector3()
+        private val corner1b = MotmVector3()
+        private val corner2b = MotmVector3()
+        private val corner3b = MotmVector3()
+        private val corner4b = MotmVector3()
         private var n = FloatArray(3)
 
         // see:  http://jmol.sourceforge.net/jscolors/#Residues: amino acids, nucleotides
