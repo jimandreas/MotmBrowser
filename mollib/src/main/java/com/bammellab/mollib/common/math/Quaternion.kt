@@ -38,9 +38,9 @@ class Quaternion {
     var z: Double = 0.toDouble()
 
     //Scratch members
-    private val tmpVec1 = Vector3()
-    private val tmpVec2 = Vector3()
-    private val tmpVec3 = Vector3()
+    private val tmpVec1 = MotmVector3()
+    private val tmpVec2 = MotmVector3()
+    private val tmpVec3 = MotmVector3()
 
 
     //--------------------------------------------------
@@ -48,11 +48,11 @@ class Quaternion {
     //--------------------------------------------------
 
     /**
-     * Creates a [Vector3] which represents the x axis of this [Quaternion].
+     * Creates a [MotmVector3] which represents the x axis of this [Quaternion].
      *
-     * @return [Vector3] The x axis of this [Quaternion].
+     * @return [MotmVector3] The x axis of this [Quaternion].
      */
-    private val xAxis: Vector3
+    private val xAxis: MotmVector3
         get() {
             val fTy = 2.0 * y
             val fTz = 2.0 * z
@@ -63,15 +63,15 @@ class Quaternion {
             val fTyy = fTy * y
             val fTzz = fTz * z
 
-            return Vector3(1 - (fTyy + fTzz), fTxy + fTwz, fTxz - fTwy)
+            return MotmVector3(1 - (fTyy + fTzz), fTxy + fTwz, fTxz - fTwy)
         }
 
     /**
-     * Creates a [Vector3] which represents the y axis of this [Quaternion].
+     * Creates a [MotmVector3] which represents the y axis of this [Quaternion].
      *
-     * @return [Vector3] The y axis of this [Quaternion].
+     * @return [MotmVector3] The y axis of this [Quaternion].
      */
-    private val yAxis: Vector3
+    private val yAxis: MotmVector3
         get() {
             val fTx = 2.0 * x
             val fTy = 2.0 * y
@@ -83,15 +83,15 @@ class Quaternion {
             val fTyz = fTz * y
             val fTzz = fTz * z
 
-            return Vector3(fTxy - fTwz, 1 - (fTxx + fTzz), fTyz + fTwx)
+            return MotmVector3(fTxy - fTwz, 1 - (fTxx + fTzz), fTyz + fTwx)
         }
 
     /**
-     * Creates a [Vector3] which represents the z axis of this [Quaternion].
+     * Creates a [MotmVector3] which represents the z axis of this [Quaternion].
      *
-     * @return [Vector3] The z axis of this [Quaternion].
+     * @return [MotmVector3] The z axis of this [Quaternion].
      */
-    private val zAxis: Vector3
+    private val zAxis: MotmVector3
         get() {
             val fTx = 2.0 * x
             val fTy = 2.0 * y
@@ -103,7 +103,7 @@ class Quaternion {
             val fTyy = fTy * y
             val fTyz = fTz * y
 
-            return Vector3(fTxz + fTwy, fTyz - fTwx, 1 - (fTxx + fTyy))
+            return MotmVector3(fTxz + fTwy, fTyz - fTwx, 1 - (fTxx + fTyy))
         }
 
     /**
@@ -197,10 +197,10 @@ class Quaternion {
      * Creates a [Quaternion] from the given axis vector and the rotation
      * angle around the axis.
      *
-     * @param axis [Vector3] The axis of rotation.
+     * @param axis [MotmVector3] The axis of rotation.
      * @param angle double The angle of rotation in degrees.
      */
-    constructor(axis: Vector3, angle: Double) {
+    constructor(axis: MotmVector3, angle: Double) {
         fromAngleAxis(axis, angle)
     }
 
@@ -240,23 +240,23 @@ class Quaternion {
     /**
      * Sets this [Quaternion]'s components from the given axis and angle around the axis.
      *
-     * @param axis [Vector3.Axis] The cardinal axis to set rotation on.
+     * @param axis [MotmVector3.Axis] The cardinal axis to set rotation on.
      * @param angle double The rotation angle in degrees.
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
-    fun fromAngleAxis(axis: Vector3.Axis, angle: Double): Quaternion {
-        fromAngleAxis(Vector3.getAxisVector(axis), angle)
+    fun fromAngleAxis(axis: MotmVector3.Axis, angle: Double): Quaternion {
+        fromAngleAxis(MotmVector3.getAxisVector(axis), angle)
         return this
     }
 
     /**
      * Sets this [Quaternion]'s components from the given axis vector and angle around the axis.
      *
-     * @param axis [Vector3] The axis to set rotation on.
+     * @param axis [MotmVector3] The axis to set rotation on.
      * @param angle double The rotation angle in degrees.
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
-    fun fromAngleAxis(axis: Vector3, angle: Double): Quaternion {
+    fun fromAngleAxis(axis: MotmVector3, angle: Double): Quaternion {
         if (!axis.isUnit) axis.normalize()
         val radian = Math.toRadians(angle) //MathUtil.degreesToRadians(angle);
         val halfAngle = radian * .5
@@ -278,7 +278,7 @@ class Quaternion {
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
     fun fromAngleAxis(x: Double, y: Double, z: Double, angle: Double): Quaternion {
-        var d = Vector3.length(x, y, z)
+        var d = MotmVector3.length(x, y, z)
         if (d == 0.0) {
             return identity()
         }
@@ -291,15 +291,15 @@ class Quaternion {
     }
 
     /**
-     * Sets this [Quaternion]'s components from the given x, y anx z axis [Vector3]s.
+     * Sets this [Quaternion]'s components from the given x, y anx z axis [MotmVector3]s.
      * The inputs must be ortho-normal.
      *
-     * @param xAxis [Vector3] The x axis.
-     * @param yAxis [Vector3] The y axis.
-     * @param zAxis [Vector3] The z axis.
+     * @param xAxis [MotmVector3] The x axis.
+     * @param yAxis [MotmVector3] The y axis.
+     * @param zAxis [MotmVector3] The z axis.
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
-    private fun fromAxes(xAxis: Vector3, yAxis: Vector3, zAxis: Vector3): Quaternion {
+    private fun fromAxes(xAxis: MotmVector3, yAxis: MotmVector3, zAxis: MotmVector3): Quaternion {
         return fromAxes(xAxis.x, xAxis.y, xAxis.z, yAxis.x, yAxis.y, yAxis.z, zAxis.x, zAxis.y, zAxis.z)
     }
 
@@ -390,7 +390,7 @@ class Quaternion {
      * @param yaw double The yaw angle in degrees.
      * @param pitch double The pitch angle in degrees.
      * @param roll double The roll angle in degrees.
-     * @return A reference to this [Vector3] to facilitate chaining.
+     * @return A reference to this [MotmVector3] to facilitate chaining.
      */
     fun fromEuler(yaw: Double, pitch: Double, roll: Double): Quaternion {
         var yawI = yaw
@@ -470,13 +470,13 @@ class Quaternion {
 
     /**
      * Set this [Quaternion]'s components to the rotation between the given
-     * two [Vector3]s. This will fail if the two vectors are parallel.
+     * two [MotmVector3]s. This will fail if the two vectors are parallel.
      *
-     * @param v1 [Vector3] The base vector, should be normalized.
-     * @param v2 [Vector3] The target vector, should be normalized.
+     * @param v1 [MotmVector3] The base vector, should be normalized.
+     * @param v2 [MotmVector3] The target vector, should be normalized.
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
-    fun fromRotationBetween(v1: Vector3, v2: Vector3): Quaternion {
+    fun fromRotationBetween(v1: MotmVector3, v2: MotmVector3): Quaternion {
         val dot = MathUtil.clamp(v1.dot(v2), -1.0, 1.0)
         val dotError = 1.0 - abs(dot)
         //        if (dotError <= 1e-6) {
@@ -584,16 +584,16 @@ class Quaternion {
     }
 
     /**
-     * Multiplies this [Quaternion] by a [Vector3].
-     * Note that if you plan on using the returned [Vector3],
+     * Multiplies this [Quaternion] by a [MotmVector3].
+     * Note that if you plan on using the returned [MotmVector3],
      * you should clone it immediately as it is an internal scratch
      * member of this [Quaternion] and may be modified at any
      * time.
      *
-     * @param vector [Vector3] to multiply by.
-     * @return [Vector3] The result of the multiplication.
+     * @param vector [MotmVector3] to multiply by.
+     * @return [MotmVector3] The result of the multiplication.
      */
-    fun multiply(vector: Vector3): Vector3 {
+    fun multiply(vector: MotmVector3): MotmVector3 {
         tmpVec3.setAll(x, y, z)
         tmpVec1.crossAndSet(tmpVec3, vector)
         tmpVec2.crossAndSet(tmpVec3, tmpVec1)
@@ -649,7 +649,7 @@ class Quaternion {
     /**
      * Set this [Quaternion] to the normalized inverse of itself.
      *
-     * @return A reference to this [Vector3] to facilitate chaining.
+     * @return A reference to this [MotmVector3] to facilitate chaining.
      */
     fun inverse(): Quaternion {
         val norm = length2()
@@ -679,7 +679,7 @@ class Quaternion {
      * Computes and sets w on this [Quaternion] based on x,y,z components such
      * that this [Quaternion] is of unit length.
      *
-     * @return A reference to this [Vector3] to facilitate chaining.
+     * @return A reference to this [MotmVector3] to facilitate chaining.
      */
     fun computeW(): Quaternion {
         val t = 1.0 - x * x - y * y - z * z
@@ -692,15 +692,15 @@ class Quaternion {
     }
 
     /**
-     * Creates a [Vector3] which represents the specified axis of this [Quaternion].
+     * Creates a [MotmVector3] which represents the specified axis of this [Quaternion].
      *
      * @param axis The axis of this [Quaternion] to be returned.
-     * @return [Vector3] The z axis of this [Quaternion].
+     * @return [MotmVector3] The z axis of this [Quaternion].
      */
-    fun getAxis(axis: Vector3.Axis): Vector3 {
+    fun getAxis(axis: MotmVector3.Axis): MotmVector3 {
         return when (axis) {
-            Vector3.Axis.X -> xAxis
-            Vector3.Axis.Y -> yAxis
+            MotmVector3.Axis.X -> xAxis
+            MotmVector3.Axis.Y -> yAxis
             else -> zAxis
         }
     }
@@ -748,7 +748,7 @@ class Quaternion {
     /**
      * Sets this [Quaternion] to the value of q = e^this.
      *
-     * @return A reference to this [Vector3] to facilitate chaining.
+     * @return A reference to this [MotmVector3] to facilitate chaining.
      */
     fun exp(): Quaternion {
         val angle = sqrt(x * x + y * y + z * z)
@@ -789,7 +789,7 @@ class Quaternion {
     /**
      * Sets this [Quaternion] to the value of q = log(this).
      *
-     * @return A reference to this [Vector3] to facilitate chaining.
+     * @return A reference to this [MotmVector3] to facilitate chaining.
      */
     fun log(): Quaternion {
         if (abs(w) < 1.0) {
@@ -967,18 +967,18 @@ class Quaternion {
     }
 
     /**
-     * Sets this [Quaternion] to be oriented to a target [Vector3].
+     * Sets this [Quaternion] to be oriented to a target [MotmVector3].
      * It is safe to use the input vectors for other things as they are cloned internally.
      *
-     * @param lookAt [Vector3] The point to look at.
-     * @param upDirection [Vector3] to use as the up direction.
+     * @param lookAt [MotmVector3] The point to look at.
+     * @param upDirection [MotmVector3] to use as the up direction.
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
-    fun lookAt(lookAt: Vector3, upDirection: Vector3): Quaternion {
+    fun lookAt(lookAt: MotmVector3, upDirection: MotmVector3): Quaternion {
         tmpVec1.setAll(lookAt)
         tmpVec2.setAll(upDirection)
         // Vectors are parallel/anti-parallel if their dot product magnitude and length product are equal
-        val dotProduct = Vector3.dot(lookAt, upDirection)
+        val dotProduct = MotmVector3.dot(lookAt, upDirection)
         val dotError = abs(abs(dotProduct) - lookAt.length() * upDirection.length())
         //        if (dotError <= 1e-6) {
         //            // The look and up vectors are parallel
@@ -987,7 +987,7 @@ class Quaternion {
         //            fromRotationBetween(WorldParameters.FORWARD_AXIS, tmpVec1);
         //            return this;
         //        }
-        Vector3.orthoNormalize(tmpVec1, tmpVec2) // Find the forward and up vectors
+        MotmVector3.orthoNormalize(tmpVec1, tmpVec2) // Find the forward and up vectors
         tmpVec3.crossAndSet(tmpVec1, tmpVec2) // Create the right vector
         fromAxes(tmpVec3, tmpVec2, tmpVec1)
         return this
@@ -1093,11 +1093,11 @@ class Quaternion {
          * Creates a new [Quaternion] and sets its components to the rotation between the given
          * two vectors. The incoming vectors should be normalized.
          *
-         * @param v1 [Vector3] The source vector.
-         * @param v2 [Vector3] The destination vector.
+         * @param v1 [MotmVector3] The source vector.
+         * @param v2 [MotmVector3] The destination vector.
          * @return [Quaternion] The new [Quaternion].
          */
-        fun createFromRotationBetween(v1: Vector3, v2: Vector3): Quaternion {
+        fun createFromRotationBetween(v1: MotmVector3, v2: MotmVector3): Quaternion {
             val q = Quaternion()
             q.fromRotationBetween(v1, v2)
             return q
@@ -1170,14 +1170,14 @@ class Quaternion {
         }
 
         /**
-         * Creates a new [Quaternion] which is oriented to a target [Vector3].
+         * Creates a new [Quaternion] which is oriented to a target [MotmVector3].
          * It is safe to use the input vectors for other things as they are cloned internally.
          *
-         * @param lookAt [Vector3] The point to look at.
-         * @param upDirection [Vector3] to use as the up direction.
+         * @param lookAt [MotmVector3] The point to look at.
+         * @param upDirection [MotmVector3] to use as the up direction.
          * @return [Quaternion] The new [Quaternion] representing the requested orientation.
          */
-        fun lookAtAndCreate(lookAt: Vector3, upDirection: Vector3): Quaternion {
+        fun lookAtAndCreate(lookAt: MotmVector3, upDirection: MotmVector3): Quaternion {
             val ret = Quaternion()
             return ret.lookAt(lookAt, upDirection)
         }

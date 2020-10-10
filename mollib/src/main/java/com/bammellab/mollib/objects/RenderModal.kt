@@ -29,24 +29,36 @@ import timber.log.Timber
 
 import com.bammellab.mollib.common.math.CatmullRomCurve
 import com.bammellab.mollib.common.math.MathUtil
-import com.bammellab.mollib.common.math.Vector3
-import com.bammellab.mollib.protein.ChainRenderingDescriptor
-import com.bammellab.mollib.protein.Molecule
-import com.bammellab.mollib.protein.PdbAtom
+import com.bammellab.mollib.common.math.MotmVector3
+import com.bammellab.mollib.objects.SegmentAtomToAtomBond.Companion.cache2_valid
+import com.kotmol.pdbParser.ChainRenderingDescriptor
+import com.kotmol.pdbParser.ChainRenderingDescriptor.SecondaryStructureType
+import com.kotmol.pdbParser.Molecule
+import com.kotmol.pdbParser.PdbAtom
+
 import kotlin.math.acos
 
 /*
  * render the polypeptide backbone "ribbon" - follows the Alpha Carbons (CA)
  */
 class RenderModal(private val mMol: Molecule) {
-    private val bufMgr: BufferManager = mMol.bufMgr
+
 
     private val cylinderIndexCount: Int = 0
     private lateinit var vertexData: FloatArray
     private var mOffset: Int = 0
-    internal val vboTopAndBottom = IntArray(1)
-    internal val vboBody = IntArray(1)
-    internal val ibo = IntArray(1)
+    private val vboTopAndBottom = IntArray(1)
+    private val vboBody = IntArray(1)
+    private val ibo = IntArray(1)
+
+    private val cache1: FloatArray
+    private val cache2: FloatArray
+
+    init {
+        cache1 = FloatArray((RIBBON_INITIAL_SLICES + 1) * 3)
+        cache2 = FloatArray((RIBBON_INITIAL_SLICES + 1) * 3)
+        cache2_valid = false
+    }
 
     fun renderModal() {
         var curvePoints: CatmullRomCurve
@@ -55,7 +67,7 @@ class RenderModal(private val mMol: Molecule) {
         var chainEntry: ChainRenderingDescriptor
         var mainchainAtom: PdbAtom?
         var guideAtom: PdbAtom?
-        var vnew: Vector3
+        var vnew: MotmVector3
         var j: Int
 
         for (i in 0 until mMol.listofChainDescriptorLists.size) {
@@ -84,17 +96,17 @@ class RenderModal(private val mMol: Molecule) {
                     }
 
                     // initial guide spline atom is the mainchain atom
-                    vnew = Vector3(mainchainAtom.atomPosition)
+                    vnew = MotmVector3(mainchainAtom.atomPosition)
                     guideAtomPoints.addPoint(vnew)
 
                     //  initial curve atom is the startAtom position
                     mainchainAtom = chainEntry.startAtom
-                    vnew = Vector3(mainchainAtom.atomPosition)
+                    vnew = MotmVector3(mainchainAtom.atomPosition)
                     curvePoints.addPoint(vnew)
 
                     guideAtom = chainEntry.guideAtom
                     if (guideAtom != null) {
-                        vnew = Vector3(guideAtom.atomPosition)
+                        vnew = MotmVector3(guideAtom.atomPosition)
                         guideAtomPoints.addPoint(vnew)
                     }
 
@@ -106,12 +118,12 @@ class RenderModal(private val mMol: Molecule) {
                  */
                 mainchainAtom = chainEntry.backboneAtom
                 if (mainchainAtom != null) {
-                    vnew = Vector3(mainchainAtom.atomPosition)
+                    vnew = MotmVector3(mainchainAtom.atomPosition)
                     curvePoints.addPoint(vnew)
                 }
 
                 guideAtom = chainEntry.guideAtom
-                vnew = Vector3(guideAtom!!.atomPosition)
+                vnew = MotmVector3(guideAtom!!.atomPosition)
                 guideAtomPoints.addPoint(vnew)
 
                 chainEntry.curveIndex = j * CSF
@@ -121,13 +133,13 @@ class RenderModal(private val mMol: Molecule) {
                  *   so that the spline can match the end of the helix
                  */
                 if (j == chainDescriptorList.size - 1) {
-                    if (chainEntry.secondaryStructureType == ChainRenderingDescriptor.NUCLEIC) {
+                    if (chainEntry.secondaryStructureType == SecondaryStructureType.NUCLEIC) {
                         mainchainAtom = chainEntry.nucleicEndAtom
-                        vnew = Vector3(mainchainAtom.atomPosition)
+                        vnew = MotmVector3(mainchainAtom.atomPosition)
                         curvePoints.addPoint(vnew)
 
                         guideAtom = chainEntry.guideAtom
-                        vnew = Vector3(guideAtom!!.atomPosition)
+                        vnew = MotmVector3(guideAtom!!.atomPosition)
                         guideAtomPoints.addPoint(vnew)
 
                         chainEntry.curveIndex = j * CSF
@@ -146,7 +158,7 @@ class RenderModal(private val mMol: Molecule) {
             chainEntry = chainDescriptorList[j] as ChainRenderingDescriptor
             // add the end atom as last in the curve
             mainchainAtom = chainEntry.endAtom
-            vnew = Vector3(mainchainAtom.atomPosition)
+            vnew = MotmVector3(mainchainAtom.atomPosition)
             curvePoints.addPoint(vnew)
 
             /*
@@ -158,7 +170,7 @@ class RenderModal(private val mMol: Molecule) {
         /*
          * done rendering, commit the triangles
          */
-        bufMgr.transferToGl()
+        BufferManager.transferToGl()
     }
 
     /*
@@ -177,7 +189,7 @@ class RenderModal(private val mMol: Molecule) {
         var startIndex = 0
         var j = 1
         val descriptorCount = chain_list.size
-        mMol.cache2_valid = false
+        cache2_valid = false
         while (j < descriptorCount) {
             chainEntry = chain_list[j] as ChainRenderingDescriptor
 
@@ -189,17 +201,18 @@ class RenderModal(private val mMol: Molecule) {
 
             if (currentType != chainEntry.secondaryStructureType) {
                 when (currentType) {
-                    ChainRenderingDescriptor.RIBBON -> renderRibbon(curve, startIndex, j, descriptorCount)
-                    ChainRenderingDescriptor.ALPHA_HELIX, ChainRenderingDescriptor.NUCLEIC ->
+                    SecondaryStructureType.RIBBON -> renderRibbon(curve, startIndex, j, descriptorCount)
+                    SecondaryStructureType.ALPHA_HELIX, SecondaryStructureType.NUCLEIC ->
                         // renderRibbon(guide_curve, start_index, j, descriptor_count);
                         // renderRibbon(curve, start_index, j, descriptor_count);
                         renderHelix(curve, startIndex, j, descriptorCount, chain_list,
-                                ChainRenderingDescriptor.ALPHA_HELIX)
-                    ChainRenderingDescriptor.BETA_SHEET ->
+                                SecondaryStructureType.ALPHA_HELIX)
+                    SecondaryStructureType.BETA_SHEET ->
                         // renderRibbon(guide_curve, start_index, j, descriptor_count);
                         // renderRibbon(curve, start_index, j, descriptor_count);
                         renderHelix(curve, startIndex, j, descriptorCount, chain_list,
-                                ChainRenderingDescriptor.BETA_SHEET)
+                                SecondaryStructureType.BETA_SHEET)
+                    else -> {}
                 }
                 startIndex = j
                 currentType = chainEntry.secondaryStructureType
@@ -210,24 +223,25 @@ class RenderModal(private val mMol: Molecule) {
          * render the last secondary at the end of the list
          */
         when (currentType) {
-            ChainRenderingDescriptor.RIBBON -> renderRibbon(curve, startIndex, j - 1, descriptorCount)
+            SecondaryStructureType.RIBBON -> renderRibbon(curve, startIndex, j - 1, descriptorCount)
 
-            ChainRenderingDescriptor.ALPHA_HELIX ->
+            SecondaryStructureType.ALPHA_HELIX ->
                 // renderRibbon(guide_curve, start_index, j, descriptor_count);
                 // renderRibbon(curve, start_index, j, descriptor_count);
                 renderHelix(curve, startIndex, j - 1, descriptorCount, chain_list,
-                        ChainRenderingDescriptor.ALPHA_HELIX)
+                        SecondaryStructureType.ALPHA_HELIX)
 
-            ChainRenderingDescriptor.BETA_SHEET ->
+            SecondaryStructureType.BETA_SHEET ->
                 // renderRibbon(guide_curve, start_index, j, descriptor_count);
                 // renderRibbon(curve, start_index, j, descriptor_count);
                 renderHelix(curve, startIndex, j - 1, descriptorCount, chain_list,
-                        ChainRenderingDescriptor.BETA_SHEET)
+                        SecondaryStructureType.BETA_SHEET)
 
-            ChainRenderingDescriptor.NUCLEIC ->
+            SecondaryStructureType.NUCLEIC ->
                 // renderRibbon(guide_curve, start_index, j, descriptor_count);
                 // renderRibbon(curve, start_index, j, descriptor_count);
                 renderNucleic(curve, startIndex, j, descriptorCount, chain_list)
+            else -> {}
         }
     }
 
@@ -242,24 +256,24 @@ class RenderModal(private val mMol: Molecule) {
                               start_index: Int, end_index: Int, descriptor_count: Int,
                               chain_list: List<*>) {
 
-        val positionPrevious = Vector3()
-        val positionStart = Vector3()
-        val positionEnd = Vector3()
-        val positionBeyond = Vector3()
+        val positionPrevious = MotmVector3()
+        val positionStart = MotmVector3()
+        val positionEnd = MotmVector3()
+        val positionBeyond = MotmVector3()
 
-        val P1 = Vector3()
-        val P2 = Vector3()
-        val R1 = Vector3()
-        val R2 = Vector3()
-        val S1 = Vector3()
-        val S2 = Vector3()
+        val P1 = MotmVector3()
+        val P2 = MotmVector3()
+        val R1 = MotmVector3()
+        val R2 = MotmVector3()
+        val S1 = MotmVector3()
+        val S2 = MotmVector3()
 
-        val delta = Vector3()
-        val temp = Vector3()
+        val delta = MotmVector3()
+        val temp = MotmVector3()
 
-        val prev1 = Vector3()
-        val prev2 = Vector3()
-        val prev3 = Vector3()
+        val prev1 = MotmVector3()
+        val prev2 = MotmVector3()
+        val prev3 = MotmVector3()
 
 
         // float radius = 0.25f;
@@ -276,9 +290,9 @@ class RenderModal(private val mMol: Molecule) {
         //        float[] v1 = new float[(numSlices + 1) * 3];
         //        float[] v2 = new float[(numSlices + 1) * 3];
 
-        val numSlices = mMol.ribbonSlices
-        val v1 = mMol.cache1
-        val v2 = mMol.cache2
+        val numSlices = ribbonSlices
+        val v1 = cache1
+        val v2 = cache2
 
         // subtract two points for the two unused end points
         val scaling = (path.numPoints - 2) * 10
@@ -313,7 +327,7 @@ class RenderModal(private val mMol: Molecule) {
             guideAtom = currentChainEntry.guideAtom
 
             if (debug)
-                Timber.i("end endAtom " + endAtom.atomNumber + " oxy " + guideAtom!!.atomNumber)
+                Timber.i("end endAtom %d oxy %d", endAtom.atomNumber, guideAtom!!.atomNumber)
 
             if (chainIndex + 1 < chain_list.size) {
                 val nextChainEntry = chain_list[chainIndex + 1] as ChainRenderingDescriptor
@@ -332,11 +346,11 @@ class RenderModal(private val mMol: Molecule) {
             //                    + " oxy-atom " + current_chain_entry.guideAtom.atom_number
             //                    + " index = " + chain_index);
 
-            R1.setAll(guideAtom!!.atomPosition)
-            R1.subtract(endAtom.atomPosition)
+            R1.setAll(MotmVector3(guideAtom!!.atomPosition))
+            R1.subtract(MotmVector3(endAtom.atomPosition))
 
-            delta.setAll(nextGuideAtom.atomPosition)
-            delta.subtract(nextEndAtom.atomPosition)
+            delta.setAll(MotmVector3(nextGuideAtom.atomPosition))
+            delta.subtract(MotmVector3(nextEndAtom.atomPosition))
 
             var weight = (where_in_spline - currentChainEntry.curveIndex).toDouble()
             weight /= CSF
@@ -358,8 +372,8 @@ class RenderModal(private val mMol: Molecule) {
             P2.setAll(positionEnd)
             P2.subtract(positionStart)
 
-            R2.setAll(guideAtom.atomPosition)
-            R2.subtract(endAtom.atomPosition)
+            R2.setAll(MotmVector3(guideAtom.atomPosition))
+            R2.subtract(MotmVector3(endAtom.atomPosition))
 
             if (R2.dot(prev1) < 0) {
                 R2.multiply(-1.0)
@@ -438,8 +452,8 @@ class RenderModal(private val mMol: Molecule) {
             }
 
 
-            vertexData = bufMgr.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
-            mOffset = bufMgr.floatArrayIndex
+            vertexData = BufferManager.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
+            mOffset = BufferManager.floatArrayIndex
 
             run {
 
@@ -523,7 +537,7 @@ class RenderModal(private val mMol: Molecule) {
                 // reuse the 2nd array
                 System.arraycopy(v2, 0, v1, 0, (numSlices + 1) * 3)
 
-                bufMgr.floatArrayIndex = mOffset
+                BufferManager.floatArrayIndex = mOffset
             }
         }
     }
@@ -532,27 +546,27 @@ class RenderModal(private val mMol: Molecule) {
     private fun renderHelix(path: CatmullRomCurve,
                             start_index: Int, end_index: Int, descriptor_count: Int,
                             chain_list: List<*>,
-                            descriptor: Int) {
+                            descriptor: SecondaryStructureType) {
 
-        val positionPrevious = Vector3()
-        val positionStart = Vector3()
-        val positionEnd = Vector3()
-        val positionBeyond = Vector3()
+        val positionPrevious = MotmVector3()
+        val positionStart = MotmVector3()
+        val positionEnd = MotmVector3()
+        val positionBeyond = MotmVector3()
 
-        //val p1p2 = Vector3()
-        val P1 = Vector3()
-        val P2 = Vector3()
-        val R1 = Vector3()
-        val R2 = Vector3()
-        val S1 = Vector3()
-        val S2 = Vector3()
+        //val p1p2 = MotmVector3()
+        val P1 = MotmVector3()
+        val P2 = MotmVector3()
+        val R1 = MotmVector3()
+        val R2 = MotmVector3()
+        val S1 = MotmVector3()
+        val S2 = MotmVector3()
 
-        val delta = Vector3()
-        val temp = Vector3()
+        val delta = MotmVector3()
+        val temp = MotmVector3()
 
-        val prev1 = Vector3()
-        val prev2 = Vector3()
-        val prev3 = Vector3()
+        val prev1 = MotmVector3()
+        val prev2 = MotmVector3()
+        val prev3 = MotmVector3()
 
         //val flag_color: Boolean
         var drawArrow = false
@@ -572,9 +586,9 @@ class RenderModal(private val mMol: Molecule) {
 
         //        float[] v1 = new float[(numSlices + 1) * 3];
         //        float[] v2 = new float[(numSlices + 1) * 3];
-        val numSlices = mMol.ribbonSlices
-        val v1 = mMol.cache1
-        val v2 = mMol.cache2
+        val numSlices = ribbonSlices
+        val v1 = cache1
+        val v2 = cache2
 
         // private void renderRibbon( CatmullRomCurve curve, int start_index, int end_index ) {
 
@@ -590,8 +604,8 @@ class RenderModal(private val mMol: Molecule) {
          * see if we can calculate the best offset at this point
          * status : algorithm abandoned (but was interesting to implement!
          */
-        //        Vector3 upper_curve = new Vector3();
-        //        Vector3 best_point = new Vector3();
+        //        MotmVector3 upper_curve = new MotmVector3();
+        //        MotmVector3 best_point = new MotmVector3();
 
         //        double min_distance = 999;
         //        int the_min_index = 0;
@@ -633,7 +647,7 @@ class RenderModal(private val mMol: Molecule) {
             oxygen = currentChainEntry.guideAtom
 
             if (debug)
-                Timber.i("end carbon " + carbon.atomNumber + " oxy " + oxygen!!.atomNumber)
+                Timber.i("end carbon %d oxy %d", carbon.atomNumber,  oxygen!!.atomNumber)
 
             if (chainIndex + 1 < chain_list.size) {
                 val nextChainEntry = chain_list[chainIndex + 1] as ChainRenderingDescriptor
@@ -642,7 +656,7 @@ class RenderModal(private val mMol: Molecule) {
                         Timber.i("next is end of HELIX ****** index = $chainIndex plus one")
                     nextCarbon = carbon
                     nextOxygen = oxygen
-                    if (descriptor == ChainRenderingDescriptor.BETA_SHEET) {
+                    if (descriptor == SecondaryStructureType.BETA_SHEET) {
                         drawArrow = true
                     }
                 } else {
@@ -661,7 +675,7 @@ class RenderModal(private val mMol: Molecule) {
                 if (debug) Timber.i("AT END **********************")
                 nextCarbon = carbon
                 nextOxygen = oxygen
-                if (descriptor == ChainRenderingDescriptor.BETA_SHEET) {
+                if (descriptor == SecondaryStructureType.BETA_SHEET) {
                     drawArrow = true
                 }
             }
@@ -672,11 +686,11 @@ class RenderModal(private val mMol: Molecule) {
             //                    + " oxy-atom " + current_chain_entry.guideAtom.atom_number
             //                    + " index = " + chain_index);
 
-            R1.setAll(oxygen!!.atomPosition)
-            R1.subtract(carbon.atomPosition)
+            R1.setAll(MotmVector3(oxygen!!.atomPosition))
+            R1.subtract(MotmVector3(carbon.atomPosition))
 
-            delta.setAll(nextOxygen!!.atomPosition)
-            delta.subtract(nextCarbon.atomPosition)
+            delta.setAll(MotmVector3(nextOxygen!!.atomPosition))
+            delta.subtract(MotmVector3(nextCarbon.atomPosition))
 
             var weight = (whereInSpline - currentChainEntry.curveIndex).toDouble()
             weight /= CSF
@@ -705,8 +719,8 @@ class RenderModal(private val mMol: Molecule) {
             P2.setAll(positionEnd)
             P2.subtract(positionStart)
 
-            R2.setAll(oxygen.atomPosition)
-            R2.subtract(carbon.atomPosition)
+            R2.setAll(MotmVector3(oxygen.atomPosition))
+            R2.subtract(MotmVector3(carbon.atomPosition))
 
             if (R2.dot(prev1) < 0) {
                 R2.multiply(-1.0)
@@ -807,8 +821,8 @@ class RenderModal(private val mMol: Molecule) {
             }
 
 
-            vertexData = bufMgr.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
-            mOffset = bufMgr.floatArrayIndex
+            vertexData = BufferManager.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
+            mOffset = BufferManager.floatArrayIndex
 
             run {
 
@@ -891,9 +905,9 @@ class RenderModal(private val mMol: Molecule) {
                 }
                 // reuse the 2nd array
                 System.arraycopy(v2, 0, v1, 0, (numSlices + 1) * 3)
-                mMol.cache2_valid = true
+                cache2_valid = true
 
-                bufMgr.floatArrayIndex = mOffset
+                BufferManager.floatArrayIndex = mOffset
             }
             whereInSpline++
         }
@@ -907,21 +921,21 @@ class RenderModal(private val mMol: Molecule) {
      */
     private fun connectionTube() {
 
-        if (!mMol.cache2_valid) {
+        if (!cache2_valid) {
             return
         }
         val p1 = FloatArray(3)
         val p2 = FloatArray(3)
         val p3 = FloatArray(3)
         var n: FloatArray
-        val numSlices = mMol.ribbonSlices
-        val v1 = mMol.cache1
-        val v2 = mMol.cache2
+        val numSlices = ribbonSlices
+        val v1 = cache1
+        val v2 = cache2
         val whiteColor = floatArrayOf(1.0f, 1.0f, 1.0f, 1.0f)
         val greenColor = floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f)
 
-        vertexData = bufMgr.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
-        mOffset = bufMgr.floatArrayIndex
+        vertexData = BufferManager.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
+        mOffset = BufferManager.floatArrayIndex
         for (i in 0 until numSlices) {
 
             p1[0] = v1[i * 3]
@@ -989,7 +1003,7 @@ class RenderModal(private val mMol: Molecule) {
                 putTri(p1, p2, p3, n, greenColor)
             }
         }
-        bufMgr.floatArrayIndex = mOffset
+        BufferManager.floatArrayIndex = mOffset
     }
 
     private fun renderRibbon(path: CatmullRomCurve, start_index: Int, end_index: Int, descriptor_count: Int) {
@@ -999,9 +1013,9 @@ class RenderModal(private val mMol: Molecule) {
         val whiteColor = floatArrayOf(1.0f, 1.0f, 1.0f, 1.0f)
         var color: FloatArray
 
-        val positionStart = Vector3()
-        val positionEnd = Vector3()
-        val positionBeyond = Vector3()
+        val positionStart = MotmVector3()
+        val positionEnd = MotmVector3()
+        val positionBeyond = MotmVector3()
 
 
         val radius = 0.25f
@@ -1014,28 +1028,29 @@ class RenderModal(private val mMol: Molecule) {
         var y1: Double
         var z1: Double
         var v1: FloatArray
+        
         //        double x2, y2, z2;
         //        double olddot = 1.0;
         //        int state = 0;
 
 
-        val p1p2 = Vector3()
-        val P = Vector3()
-        val R = Vector3()
-        val S = Vector3()
-        // Vector3 randomPoint = new Vector3(Math.random(), Math.random(), Math.random());
-        val randomPoint = Vector3(0.0, 999.0, 0.0)
-        val saveR = Vector3()
-        val oldR = Vector3()
+        val p1p2 = MotmVector3()
+        val P = MotmVector3()
+        val R = MotmVector3()
+        val S = MotmVector3()
+        // MotmVector3 randomPoint = new MotmVector3(Math.random(), Math.random(), Math.random());
+        val randomPoint = MotmVector3(0.0, 999.0, 0.0)
+        val saveR = MotmVector3()
+        val oldR = MotmVector3()
 
         //        int numSlices = 30;
         //        float[] start_vertex_cache = new float[(numSlices + 1) * 3];
         //        float[] end_vertex_cache = new float[(numSlices + 1) * 3];
 
-        val numSlices = mMol.ribbonSlices
-        val startVertexCache = mMol.cache1
+        val numSlices = ribbonSlices
+        val startVertexCache = cache1
         v1 = startVertexCache
-        val endVertexCache = mMol.cache2
+        val endVertexCache = cache2
 
         // private void renderRibbon( CatmullRomCurve curve, int start_index, int end_index ) {
 
@@ -1155,8 +1170,8 @@ class RenderModal(private val mMol: Molecule) {
                 endVertexCache[slice * 3 + 2] = (z1 + positionEnd.z).toFloat()
             }
 
-            vertexData = bufMgr.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
-            mOffset = bufMgr.floatArrayIndex
+            vertexData = BufferManager.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
+            mOffset = BufferManager.floatArrayIndex
 
             //                if (thedot < 2.7) {
             //                    v1 = matchVertexCache(v1, numSlices + 1, v2, p1p2);
@@ -1239,8 +1254,8 @@ class RenderModal(private val mMol: Molecule) {
             }
             // reuse the 2nd array
             System.arraycopy(endVertexCache, 0, v1, 0, (numSlices + 1) * 3)
-            mMol.cache2_valid = true
-            bufMgr.floatArrayIndex = mOffset
+            cache2_valid = true
+            BufferManager.floatArrayIndex = mOffset
         }
     }
 
@@ -1253,9 +1268,9 @@ class RenderModal(private val mMol: Molecule) {
          */
         val normalBrightnessFactor = mMol.dcOffset / 3
 
-        n[0] *= -normalBrightnessFactor
-        n[1] *= -normalBrightnessFactor
-        n[2] *= -normalBrightnessFactor
+        n[0] *= -normalBrightnessFactor.toFloat()
+        n[1] *= -normalBrightnessFactor.toFloat()
+        n[2] *= -normalBrightnessFactor.toFloat()
 
         vertexData[mOffset++] = p1[0]
         vertexData[mOffset++] = p1[1]
@@ -1293,15 +1308,15 @@ class RenderModal(private val mMol: Molecule) {
 
     // float[] start_vertex_cache = new float[(numSlices + 1) * 3];
 
-    private fun matchVertexCache(cache: FloatArray, cache_size: Int, v2: FloatArray, target_vector: Vector3): FloatArray {
+    private fun matchVertexCache(cache: FloatArray, cache_size: Int, v2: FloatArray, target_vector: MotmVector3): FloatArray {
         var i = 0
         var maxMatch = -1.0
         var dotResult: Double
         var bestMatch = 0
 
-        val testV1 = Vector3()
-        val testV2 = Vector3(v2[0].toDouble(), v2[1].toDouble(), v2[2].toDouble())
-        val result = Vector3()
+        val testV1 = MotmVector3()
+        val testV2 = MotmVector3(v2[0].toDouble(), v2[1].toDouble(), v2[2].toDouble())
+        val result = MotmVector3()
         target_vector.normalize()
 
         while (i < cache_size) {
@@ -1405,5 +1420,13 @@ class RenderModal(private val mMol: Molecule) {
         // private static final float ELLIPSE_X_FACTOR = 2f / 9f;
         private const val ELLIPSE_X_FACTOR = 1f
         private const val ELLIPSE_Z_FACTOR = 1f
+
+
+        private const val INITIAL_SLICES = 20
+        private const val RIBBON_INITIAL_SLICES = 3
+
+        private const val ribbonSlices = INITIAL_SLICES
+
+
     }
 }

@@ -18,62 +18,46 @@
 package com.bammellab.mollib.objects
 
 import com.bammellab.mollib.common.math.MathUtil
-import com.bammellab.mollib.common.math.Vector3
-import com.bammellab.mollib.protein.AtomInfo
-import com.bammellab.mollib.protein.Molecule
-import com.bammellab.mollib.protein.PdbAtom
+import com.bammellab.mollib.common.math.MotmVector3
+import com.kotmol.pdbParser.AtomInformationTable
+import com.kotmol.pdbParser.Molecule
+import com.kotmol.pdbParser.PdbAtom
 
-/*  Memory manager:
-   "Reserve" from current float array
-      Underlying manager builds float arrays in smaller blocks
-      to avoid one large allocation and copying.   Blocks
-      are retained.   All rendering is triangles with Stride.
-
-      One float[] array is used for accumulation.  When full
-      a new (or recycled) FloatBuffer is allocated and
-      the float[] array is copied into it.
-
- */
-class SegmentAtomToAtomBond(private val mMol: Molecule) {
+class SegmentAtomToAtomBond(private val molecule: Molecule) {
 
     private lateinit var mVertexData: FloatArray
     private var mOffset: Int = 0
-
-    private val bufMgr: BufferManager = mMol.bufMgr
 
     fun genBondCylinders(
             numSlices: Int,
             radius: Float,
             atom1: PdbAtom,
-            atom2: PdbAtom,
-            color: FloatArray,
-            atomInfo: ParserAtomInfo) {
+            atom2: PdbAtom)
+    {
 
         /*
          * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
          */
-        normal_brightness_factor = mMol.dcOffset / 3
+        normal_brightness_factor = (molecule.dcOffset / 3).toFloat()
 
         var i = 0
         val startColor: FloatArray
         val endColor: FloatArray
         /* start is atom1, end is atom2 */
-        val positionStart = atom1.atomPosition
-        val positionEnd = atom2.atomPosition
-        val positionMid = Vector3()
+        val positionStart = MotmVector3(atom1.atomPosition)
+        val positionEnd = MotmVector3(atom2.atomPosition)
+        val positionMid = MotmVector3()
 
         positionMid.x = (positionEnd.x + positionStart.x) / 2.0
         positionMid.y = (positionEnd.y + positionStart.y) / 2.0
         positionMid.z = (positionEnd.z + positionStart.z) / 2.0
 
-
-        var ai: AtomInfo?
         var elementSymbol: String = atom1.elementSymbol
-        ai = atomInfo.atomNameToAtomInfoHash[elementSymbol]
-        startColor = ai?.color ?: color
+        var ai = AtomInformationTable.atomSymboltoAtomNumNameColor[elementSymbol]
+        startColor = ai?.color ?: floatArrayOf(1.0f, 1.0f, 1.0f, 1.0f) // white for unknown
         elementSymbol = atom2.elementSymbol
-        ai = atomInfo.atomNameToAtomInfoHash[elementSymbol]
-        endColor = ai?.color ?: color
+        ai = AtomInformationTable.atomSymboltoAtomNumNameColor[elementSymbol]
+        endColor = ai?.color ?: floatArrayOf(1.0f, 1.0f, 1.0f, 1.0f) // white for unknown
         
 
         // debugging
@@ -88,33 +72,33 @@ class SegmentAtomToAtomBond(private val mMol: Molecule) {
         /*
          * calculate two vectors that are normal to our bond segment - R and S.
          */
-        //        Vector3 p1p2 = new Vector3();
+        //        MotmVector3 p1p2 = new MotmVector3();
         //        p1p2.setAll(position_end);
         //        p1p2.subtract(position_start);
-        //        Vector3 P = new Vector3(Math.random(), Math.random(), Math.random());
-        //        Vector3 R = new Vector3(p1p2);
+        //        MotmVector3 P = new MotmVector3(Math.random(), Math.random(), Math.random());
+        //        MotmVector3 R = new MotmVector3(p1p2);
         //        R.cross(P);
-        //        Vector3 S = new Vector3(R);
+        //        MotmVector3 S = new MotmVector3(R);
         //        S.cross(p1p2);
         //        R.normalize();
         //        S.normalize();
 
-        mMol.p1p2.setAll(positionEnd)
-        mMol.p1p2.subtract(positionStart)
-        mMol.P.x = Math.random()
-        mMol.P.y = Math.random()
-        mMol.P.z = Math.random()
-        // Vector3 R = new Vector3(p1p2);
-        mMol.R.setAll(mMol.p1p2)
-        mMol.R.cross(mMol.P)
-        // Vector3 S = new Vector3(R);
-        mMol.S.setAll(mMol.R)
+        p1p2.setAll(positionEnd)
+        p1p2.subtract(positionStart)
+        pvec.x = Math.random()
+        pvec.y = Math.random()
+        pvec.z = Math.random()
+        // MotmVector3 R = new MotmVector3(p1p2);
+        rvec.setAll(p1p2)
+        rvec.cross(pvec)
+        // MotmVector3 S = new MotmVector3(R);
+        svec.setAll(rvec)
         // S.cross(p1p2);
-        mMol.S.cross(mMol.p1p2)
+        svec.cross(p1p2)
         //        R.normalize();
         //        S.normalize();
-        mMol.R.normalize()
-        mMol.S.normalize()
+        rvec.normalize()
+        svec.normalize()
 
         var x1: Double
         var y1: Double
@@ -127,8 +111,8 @@ class SegmentAtomToAtomBond(private val mMol: Molecule) {
          * math: two tris per slice, wrapping for numSlices+1 (hit original again to close)
          *    doubled for two colors on each half
          */
-        mVertexData = bufMgr.getFloatArray(2 * 6 * (numSlices + 1) * STRIDE_IN_FLOATS)
-        mOffset = bufMgr.floatArrayIndex
+        mVertexData = BufferManager.getFloatArray(2 * 6 * (numSlices + 1) * STRIDE_IN_FLOATS)
+        mOffset = BufferManager.floatArrayIndex
 
         /*
          * first generate the points, then map them to the position
@@ -159,64 +143,64 @@ class SegmentAtomToAtomBond(private val mMol: Molecule) {
 
             // first top point
 
-            x1 = mMol.R.x * c1 + mMol.S.x * s1
-            y1 = mMol.R.y * c1 + mMol.S.y * s1
-            z1 = mMol.R.z * c1 + mMol.S.z * s1
+            x1 = rvec.x * c1 + svec.x * s1
+            y1 = rvec.y * c1 + svec.y * s1
+            z1 = rvec.z * c1 + svec.z * s1
 
-            mMol.p1[0] = (x1 + positionMid.x).toFloat()
-            mMol.p1[1] = (y1 + positionMid.y).toFloat()
-            mMol.p1[2] = (z1 + positionMid.z).toFloat()
+            p1[0] = (x1 + positionMid.x).toFloat()
+            p1[1] = (y1 + positionMid.y).toFloat()
+            p1[2] = (z1 + positionMid.z).toFloat()
 
 
             // first bottom point
 
-            mMol.p2[0] = (x1 + positionStart.x).toFloat()
-            mMol.p2[1] = (y1 + positionStart.y).toFloat()
-            mMol.p2[2] = (z1 + positionStart.z).toFloat()
+            p2[0] = (x1 + positionStart.x).toFloat()
+            p2[1] = (y1 + positionStart.y).toFloat()
+            p2[2] = (z1 + positionStart.z).toFloat()
 
 
             // SECOND BOTTOM point
-            x2 = mMol.R.x * c2 + mMol.S.x * s2
-            y2 = mMol.R.y * c2 + mMol.S.y * s2
-            z2 = mMol.R.z * c2 + mMol.S.z * s2
+            x2 = rvec.x * c2 + svec.x * s2
+            y2 = rvec.y * c2 + svec.y * s2
+            z2 = rvec.z * c2 + svec.z * s2
 
-            mMol.p3[0] = (x2 + positionStart.x).toFloat()
-            mMol.p3[1] = (y2 + positionStart.y).toFloat()
-            mMol.p3[2] = (z2 + positionStart.z).toFloat()
+            p3[0] = (x2 + positionStart.x).toFloat()
+            p3[1] = (y2 + positionStart.y).toFloat()
+            p3[2] = (z2 + positionStart.z).toFloat()
             // OK that is one triangle.
 
-            n = XYZ.getNormal(mMol.p1, mMol.p2, mMol.p3)
+            n = XYZ.getNormal(p1, p2, p3)
             putTri(n, startColor)
 
             // SECOND triangle NOW
 
             // first top point
 
-            mMol.p1[0] = (x1 + positionMid.x).toFloat()
-            mMol.p1[1] = (y1 + positionMid.y).toFloat()
-            mMol.p1[2] = (z1 + positionMid.z).toFloat()
+            p1[0] = (x1 + positionMid.x).toFloat()
+            p1[1] = (y1 + positionMid.y).toFloat()
+            p1[2] = (z1 + positionMid.z).toFloat()
 
 
             // SECOND BOTTOM point
 
-            mMol.p2[0] = (x2 + positionStart.x).toFloat()
-            mMol.p2[1] = (y2 + positionStart.y).toFloat()
-            mMol.p2[2] = (z2 + positionStart.z).toFloat()
+            p2[0] = (x2 + positionStart.x).toFloat()
+            p2[1] = (y2 + positionStart.y).toFloat()
+            p2[2] = (z2 + positionStart.z).toFloat()
 
 
             // SECOND top point
 
-            x2 = mMol.R.x * c2 + mMol.S.x * s2
-            y2 = mMol.R.y * c2 + mMol.S.y * s2
-            z2 = mMol.R.z * c2 + mMol.S.z * s2
+            x2 = rvec.x * c2 + svec.x * s2
+            y2 = rvec.y * c2 + svec.y * s2
+            z2 = rvec.z * c2 + svec.z * s2
 
-            mMol.p3[0] = (x2 + positionMid.x).toFloat()
-            mMol.p3[1] = (y2 + positionMid.y).toFloat()
-            mMol.p3[2] = (z2 + positionMid.z).toFloat()
+            p3[0] = (x2 + positionMid.x).toFloat()
+            p3[1] = (y2 + positionMid.y).toFloat()
+            p3[2] = (z2 + positionMid.z).toFloat()
 
 
 
-            n = XYZ.getNormal(mMol.p1, mMol.p2, mMol.p3)
+            n = XYZ.getNormal(p1, p2, p3)
             putTri(n, startColor)
 
             /*
@@ -225,70 +209,70 @@ class SegmentAtomToAtomBond(private val mMol: Molecule) {
 
             // first top point
 
-            x1 = mMol.R.x * c1 + mMol.S.x * s1
-            y1 = mMol.R.y * c1 + mMol.S.y * s1
-            z1 = mMol.R.z * c1 + mMol.S.z * s1
+            x1 = rvec.x * c1 + svec.x * s1
+            y1 = rvec.y * c1 + svec.y * s1
+            z1 = rvec.z * c1 + svec.z * s1
 
-            mMol.p1[0] = (x1 + positionEnd.x).toFloat()
-            mMol.p1[1] = (y1 + positionEnd.y).toFloat()
-            mMol.p1[2] = (z1 + positionEnd.z).toFloat()
+            p1[0] = (x1 + positionEnd.x).toFloat()
+            p1[1] = (y1 + positionEnd.y).toFloat()
+            p1[2] = (z1 + positionEnd.z).toFloat()
 
 
             // first bottom point
 
-            mMol.p2[0] = (x1 + positionMid.x).toFloat()
-            mMol.p2[1] = (y1 + positionMid.y).toFloat()
-            mMol.p2[2] = (z1 + positionMid.z).toFloat()
+            p2[0] = (x1 + positionMid.x).toFloat()
+            p2[1] = (y1 + positionMid.y).toFloat()
+            p2[2] = (z1 + positionMid.z).toFloat()
 
 
             // SECOND BOTTOM point
-            x2 = mMol.R.x * c2 + mMol.S.x * s2
-            y2 = mMol.R.y * c2 + mMol.S.y * s2
-            z2 = mMol.R.z * c2 + mMol.S.z * s2
+            x2 = rvec.x * c2 + svec.x * s2
+            y2 = rvec.y * c2 + svec.y * s2
+            z2 = rvec.z * c2 + svec.z * s2
 
-            mMol.p3[0] = (x2 + positionMid.x).toFloat()
-            mMol.p3[1] = (y2 + positionMid.y).toFloat()
-            mMol.p3[2] = (z2 + positionMid.z).toFloat()
+            p3[0] = (x2 + positionMid.x).toFloat()
+            p3[1] = (y2 + positionMid.y).toFloat()
+            p3[2] = (z2 + positionMid.z).toFloat()
             // OK that is one triangle.
 
-            n = XYZ.getNormal(mMol.p1, mMol.p2, mMol.p3)
+            n = XYZ.getNormal(p1, p2, p3)
             putTri(n, endColor)
 
             // SECOND triangle NOW
 
             // first top point
 
-            mMol.p1[0] = (x1 + positionEnd.x).toFloat()
-            mMol.p1[1] = (y1 + positionEnd.y).toFloat()
-            mMol.p1[2] = (z1 + positionEnd.z).toFloat()
+            p1[0] = (x1 + positionEnd.x).toFloat()
+            p1[1] = (y1 + positionEnd.y).toFloat()
+            p1[2] = (z1 + positionEnd.z).toFloat()
 
 
             // SECOND BOTTOM point
 
-            mMol.p2[0] = (x2 + positionMid.x).toFloat()
-            mMol.p2[1] = (y2 + positionMid.y).toFloat()
-            mMol.p2[2] = (z2 + positionMid.z).toFloat()
+            p2[0] = (x2 + positionMid.x).toFloat()
+            p2[1] = (y2 + positionMid.y).toFloat()
+            p2[2] = (z2 + positionMid.z).toFloat()
 
             // SECOND top point
 
-            x2 = mMol.R.x * c2 + mMol.S.x * s2
-            y2 = mMol.R.y * c2 + mMol.S.y * s2
-            z2 = mMol.R.z * c2 + mMol.S.z * s2
+            x2 = rvec.x * c2 + svec.x * s2
+            y2 = rvec.y * c2 + svec.y * s2
+            z2 = rvec.z * c2 + svec.z * s2
 
-            mMol.p3[0] = (x2 + positionEnd.x).toFloat()
-            mMol.p3[1] = (y2 + positionEnd.y).toFloat()
-            mMol.p3[2] = (z2 + positionEnd.z).toFloat()
+            p3[0] = (x2 + positionEnd.x).toFloat()
+            p3[1] = (y2 + positionEnd.y).toFloat()
+            p3[2] = (z2 + positionEnd.z).toFloat()
 
 
 
-            n = XYZ.getNormal(mMol.p1, mMol.p2, mMol.p3)
+            n = XYZ.getNormal(p1, p2, p3)
             putTri(n, endColor)
             i++
 
         }  // end for loop for body
 
-        //bufMgr.setFloatArrayIndex(mOffset);
-        bufMgr.floatArrayIndex = mOffset
+        //BufferManager.setFloatArrayIndex(mOffset);
+        BufferManager.floatArrayIndex = mOffset
     }
 
     private fun putTri(n: FloatArray, color: FloatArray) {
@@ -297,9 +281,9 @@ class SegmentAtomToAtomBond(private val mMol: Molecule) {
         n[1] *= normal_brightness_factor
         n[2] *= normal_brightness_factor
 
-        mVertexData[mOffset++] = mMol.p1[0]
-        mVertexData[mOffset++] = mMol.p1[1]
-        mVertexData[mOffset++] = mMol.p1[2]
+        mVertexData[mOffset++] = p1[0]
+        mVertexData[mOffset++] = p1[1]
+        mVertexData[mOffset++] = p1[2]
         mVertexData[mOffset++] = n[0]
         mVertexData[mOffset++] = n[1]
         mVertexData[mOffset++] = n[2]
@@ -308,9 +292,9 @@ class SegmentAtomToAtomBond(private val mMol: Molecule) {
         mVertexData[mOffset++] = color[2]
         mVertexData[mOffset++] = color[3]
 
-        mVertexData[mOffset++] = mMol.p2[0]
-        mVertexData[mOffset++] = mMol.p2[1]
-        mVertexData[mOffset++] = mMol.p2[2]
+        mVertexData[mOffset++] = p2[0]
+        mVertexData[mOffset++] = p2[1]
+        mVertexData[mOffset++] = p2[2]
         mVertexData[mOffset++] = n[0]
         mVertexData[mOffset++] = n[1]
         mVertexData[mOffset++] = n[2]
@@ -319,9 +303,9 @@ class SegmentAtomToAtomBond(private val mMol: Molecule) {
         mVertexData[mOffset++] = color[2]
         mVertexData[mOffset++] = color[3]
 
-        mVertexData[mOffset++] = mMol.p3[0]
-        mVertexData[mOffset++] = mMol.p3[1]
-        mVertexData[mOffset++] = mMol.p3[2]
+        mVertexData[mOffset++] = p3[0]
+        mVertexData[mOffset++] = p3[1]
+        mVertexData[mOffset++] = p3[2]
         mVertexData[mOffset++] = n[0]
         mVertexData[mOffset++] = n[1]
         mVertexData[mOffset++] = n[2]
@@ -343,6 +327,15 @@ class SegmentAtomToAtomBond(private val mMol: Molecule) {
         private const val STRIDE_IN_BYTES = STRIDE_IN_FLOATS * BYTES_PER_FLOAT
 
         private var normal_brightness_factor = 7f
+
+        val p1p2 = MotmVector3()
+        val pvec = MotmVector3()
+        val rvec = MotmVector3()
+        val svec = MotmVector3()
+        val p1 = FloatArray(3)
+        val p2 = FloatArray(3)
+        val p3 = FloatArray(3)
+        var cache2_valid: Boolean = false
     }
 }
 

@@ -28,6 +28,7 @@ android {
     testOptions {
         execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
+
 }
 
 dependencies {
@@ -43,7 +44,8 @@ dependencies {
 
     implementation deps.okhttp.client
 
-    implementation deps.pdbparser
+    implementation "com.kotmol.kotmolpdbparser:kotmolpdbparser:1.0.3-SNAPSHOT"
+    //implementation deps.pdbparser
 
     testImplementation deps.annotations
     testImplementation deps.junit

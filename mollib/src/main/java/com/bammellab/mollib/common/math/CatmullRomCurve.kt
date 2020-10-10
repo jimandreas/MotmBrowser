@@ -40,39 +40,39 @@ import kotlin.math.min
  * @author dennis.ippel
  */
 class CatmullRomCurve : ICurve.ICurve3D {
-    private var mPoints: MutableList<Vector3>
+    private var mPoints: MutableList<MotmVector3>
     var numPoints: Int = 0
         private set
     private var selectedIndex = -1
-    override val currentTangent: Vector3
-    private val currentPoint: Vector3
+    override val currentTangent: MotmVector3
+    private val currentPoint: MotmVector3
     private var mCalculateTangents: Boolean = false
     private lateinit var segmentLengths: DoubleArray
     private var isClosedCurve: Boolean = false
-    private val tempNext = Vector3()
-    private val tempPrevLen = Vector3()
-    private val tempPointLen = Vector3()
+    private val tempNext = MotmVector3()
+    private val tempPrevLen = MotmVector3()
+    private val tempPointLen = MotmVector3()
 
-    val points: List<Vector3>
+    val points: List<MotmVector3>
         get() = mPoints
 
     init {
         mPoints = Collections.synchronizedList(CopyOnWriteArrayList())
-        currentTangent = Vector3()
-        currentPoint = Vector3()
+        currentTangent = MotmVector3()
+        currentPoint = MotmVector3()
     }
 
-    fun addPoint(point: Vector3) {
+    fun addPoint(point: MotmVector3) {
         mPoints.add(point)
         numPoints++
     }
 
-    fun getPoint(index: Int): Vector3 {
+    fun getPoint(index: Int): MotmVector3 {
         return mPoints[index]
     }
 
 
-    override fun calculatePoint(result: Vector3, t: Double) {
+    override fun calculatePoint(result: MotmVector3, t: Double) {
         if (mCalculateTangents) {
             val prevt = if (t == 0.0) t + DELTA else t - DELTA
             val nextt = if (t == 1.0) t - DELTA else t + DELTA
@@ -86,7 +86,7 @@ class CatmullRomCurve : ICurve.ICurve3D {
         p(result, t)
     }
 
-    fun selectPoint(point: Vector3): Int {
+    fun selectPoint(point: MotmVector3): Int {
         var minDist = java.lang.Double.MAX_VALUE
         selectedIndex = -1
         for (i in 0 until numPoints) {
@@ -114,7 +114,7 @@ class CatmullRomCurve : ICurve.ICurve3D {
         return 0.0
     }
 
-    private fun p(result: Vector3, tIn: Double) {
+    private fun p(result: MotmVector3, tIn: Double) {
         var t = tIn
         if (t < 0) t += 1
         val end = if (isClosedCurve) 0 else 3
@@ -197,11 +197,11 @@ class CatmullRomCurve : ICurve.ICurve3D {
         val segmentDistance = curveLength / resolution
         val numSegments = segmentLengths.size.toDouble()
 
-        val newPoints = Collections.synchronizedList(CopyOnWriteArrayList<Vector3>())
+        val newPoints = Collections.synchronizedList(CopyOnWriteArrayList<MotmVector3>())
         // -- add first control point
         newPoints.add(mPoints[0])
         // -- add first point
-        var point = Vector3()
+        var point = MotmVector3()
         calculatePoint(point, 0.0)
         newPoints.add(point)
 
@@ -211,7 +211,7 @@ class CatmullRomCurve : ICurve.ICurve3D {
         while (i < numSegments) {
             currentLength += segmentLengths[i]
             if (currentLength >= segmentDistance) {
-                point = Vector3()
+                point = MotmVector3()
                 calculatePoint(point, i.toDouble() / (numSegments - 1))
                 newPoints.add(point)
                 currentLength = 0.0
@@ -220,25 +220,25 @@ class CatmullRomCurve : ICurve.ICurve3D {
         }
 
         // -- add last point
-        point = Vector3()
+        point = MotmVector3()
         calculatePoint(point, 1.0)
         newPoints.add(point)
         // -- add last control point
         newPoints.add(mPoints[mPoints.size - 1])
 
         // -- scale control point 1
-        var controlPoint = Vector3.subtractAndCreate(mPoints[1], mPoints[0])
+        var controlPoint = MotmVector3.subtractAndCreate(mPoints[1], mPoints[0])
         var oldDistance = mPoints[1].distanceTo(mPoints[2])
         var newDistance = newPoints[1].distanceTo(newPoints[2])
         controlPoint.multiply(newDistance / oldDistance)
-        newPoints[0] = Vector3.subtractAndCreate(mPoints[1], controlPoint)
+        newPoints[0] = MotmVector3.subtractAndCreate(mPoints[1], controlPoint)
 
         // -- scale control point 2
-        controlPoint = Vector3.subtractAndCreate(mPoints[mPoints.size - 2], mPoints[mPoints.size - 1])
+        controlPoint = MotmVector3.subtractAndCreate(mPoints[mPoints.size - 2], mPoints[mPoints.size - 1])
         oldDistance = mPoints[mPoints.size - 2].distanceTo(mPoints[mPoints.size - 3])
         newDistance = newPoints[newPoints.size - 2].distanceTo(newPoints[newPoints.size - 3])
         controlPoint.multiply(newDistance / oldDistance)
-        newPoints[newPoints.size - 1] = Vector3.subtractAndCreate(mPoints[mPoints.size - 2], controlPoint)
+        newPoints[newPoints.size - 1] = MotmVector3.subtractAndCreate(mPoints[mPoints.size - 2], controlPoint)
 
         mPoints = newPoints
         numPoints = mPoints.size

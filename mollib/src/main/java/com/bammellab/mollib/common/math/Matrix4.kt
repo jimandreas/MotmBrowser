@@ -47,9 +47,9 @@ class Matrix4 {
     private val tmp = DoubleArray(16) //A scratch matrix
     private val mFloat = FloatArray(16) //A float copy of the values, used for sending to GL.
     private val mQuat = Quaternion() //A scratch quaternion.
-    private val vec1 = Vector3() //A scratch Vector3
-    private val vec2 = Vector3() //A scratch Vector3
-    private val vec3 = Vector3() //A scratch Vector3
+    private val vec1 = MotmVector3() //A scratch MotmVector3
+    private val vec2 = MotmVector3() //A scratch MotmVector3
+    private val vec3 = MotmVector3() //A scratch MotmVector3
     private var mMatrix: Matrix4? = null //A scratch Matrix4
 
 
@@ -58,26 +58,26 @@ class Matrix4 {
     //--------------------------------------------------
 
     /**
-     * Creates a new [Vector3] representing the translation component
+     * Creates a new [MotmVector3] representing the translation component
      * of this [Matrix4].
      *
-     * @return [Vector3] representing the translation.
+     * @return [MotmVector3] representing the translation.
      */
-    val translation: Vector3
-        get() = getTranslation(Vector3())
+    val translation: MotmVector3
+        get() = getTranslation(MotmVector3())
 
     /**
-     * Creates a new [Vector3] representing the scaling component
+     * Creates a new [MotmVector3] representing the scaling component
      * of this [Matrix4].
      *
-     * @return [Vector3] representing the scaling.
+     * @return [MotmVector3] representing the scaling.
      */
-    val scaling: Vector3
+    val scaling: MotmVector3
         get() {
             val x = sqrt(doubleValues[M00] * doubleValues[M00] + doubleValues[M01] * doubleValues[M01] + doubleValues[M02] * doubleValues[M02])
             val y = sqrt(doubleValues[M10] * doubleValues[M10] + doubleValues[M11] * doubleValues[M11] + doubleValues[M12] * doubleValues[M12])
             val z = sqrt(doubleValues[M20] * doubleValues[M20] + doubleValues[M21] * doubleValues[M21] + doubleValues[M22] * doubleValues[M22])
-            return Vector3(x, y, z)
+            return MotmVector3(x, y, z)
         }
 
 
@@ -227,13 +227,13 @@ class Matrix4 {
      * axis of the vector space this [Matrix4] creates as well as the 4th column representing
      * the translation of any point that is multiplied by this [Matrix4].
      *
-     * @param xAxis [Vector3] The x axis.
-     * @param yAxis [Vector3] The y axis.
-     * @param zAxis [Vector3] The z axis.
-     * @param pos [Vector3] The translation vector.
+     * @param xAxis [MotmVector3] The x axis.
+     * @param yAxis [MotmVector3] The y axis.
+     * @param zAxis [MotmVector3] The z axis.
+     * @param pos [MotmVector3] The translation vector.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    private fun setAll(xAxis: Vector3, yAxis: Vector3, zAxis: Vector3, pos: Vector3): Matrix4 {
+    private fun setAll(xAxis: MotmVector3, yAxis: MotmVector3, zAxis: MotmVector3, pos: MotmVector3): Matrix4 {
         doubleValues[M00] = xAxis.x
         doubleValues[M01] = yAxis.x
         doubleValues[M02] = zAxis.x
@@ -257,12 +257,12 @@ class Matrix4 {
      * Sets the values of this [Matrix4] to the values corresponding to a Translation x Scale x Rotation.
      * This is useful for composing a model matrix as efficiently as possible, eliminating any extraneous calculations.
      *
-     * @param position [Vector3] representing the translation.
-     * @param scale [Vector3] representing the scaling.
+     * @param position [MotmVector3] representing the translation.
+     * @param scale [MotmVector3] representing the scaling.
      * @param rotation [Quaternion] representing the rotation.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setAll(position: Vector3, scale: Vector3, rotation: Quaternion): Matrix4 {
+    fun setAll(position: MotmVector3, scale: MotmVector3, rotation: Quaternion): Matrix4 {
         // Precompute these factors for speed
         val x2 = rotation.x * rotation.x
         val y2 = rotation.y * rotation.y
@@ -495,12 +495,12 @@ class Matrix4 {
     }
 
     /**
-     * Adds a translation to this [Matrix4] based on the provided [Vector3].
+     * Adds a translation to this [Matrix4] based on the provided [MotmVector3].
      *
-     * @param vec [Vector3] describing the translation components.
+     * @param vec [MotmVector3] describing the translation components.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun translate(vec: Vector3): Matrix4 {
+    fun translate(vec: MotmVector3): Matrix4 {
         doubleValues[M03] += vec.x
         doubleValues[M13] += vec.y
         doubleValues[M23] += vec.z
@@ -523,22 +523,22 @@ class Matrix4 {
     }
 
     /**
-     * Subtracts a translation to this [Matrix4] based on the provided [Vector3].
+     * Subtracts a translation to this [Matrix4] based on the provided [MotmVector3].
      *
-     * @param vec [Vector3] describing the translation components.
+     * @param vec [MotmVector3] describing the translation components.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun negTranslate(vec: Vector3): Matrix4 {
+    fun negTranslate(vec: MotmVector3): Matrix4 {
         return translate(-vec.x, -vec.y, -vec.z)
     }
 
     /**
      * Scales this [Matrix4] based on the provided components.
      *
-     * @param vec [Vector3] describing the scaling on each axis.
+     * @param vec [MotmVector3] describing the scaling on each axis.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun scale(vec: Vector3): Matrix4 {
+    fun scale(vec: MotmVector3): Matrix4 {
         return scale(vec.x, vec.y, vec.z)
     }
 
@@ -584,11 +584,11 @@ class Matrix4 {
      * Post multiplies this [Matrix4] with the rotation specified by the provided
      * axis and angle.
      *
-     * @param axis [Vector3] The axis of rotation.
+     * @param axis [MotmVector3] The axis of rotation.
      * @param angle double The angle of rotation in degrees.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun rotate(axis: Vector3, angle: Double): Matrix4 {
+    fun rotate(axis: MotmVector3, angle: Double): Matrix4 {
         return if (angle == 0.0) this else rotate(mQuat.fromAngleAxis(axis, angle))
     }
 
@@ -596,11 +596,11 @@ class Matrix4 {
      * Post multiplies this [Matrix4] with the rotation specified by the provided
      * cardinal axis and angle.
      *
-     * @param axis [Vector3.Axis] The cardinal axis of rotation.
+     * @param axis [MotmVector3.Axis] The cardinal axis of rotation.
      * @param angle double The angle of rotation in degrees.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun rotate(axis: Vector3.Axis, angle: Double): Matrix4 {
+    fun rotate(axis: MotmVector3.Axis, angle: Double): Matrix4 {
         return if (angle == 0.0) this else rotate(mQuat.fromAngleAxis(axis, angle))
     }
 
@@ -620,23 +620,23 @@ class Matrix4 {
 
     /**
      * Post multiplies this [Matrix4] with the rotation between the two provided
-     * [Vector3]s.
+     * [MotmVector3]s.
      *
-     * @param v1 [Vector3] The base vector.
-     * @param v2 [Vector3] The target vector.
+     * @param v1 [MotmVector3] The base vector.
+     * @param v2 [MotmVector3] The target vector.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun rotate(v1: Vector3, v2: Vector3): Matrix4 {
+    fun rotate(v1: MotmVector3, v2: MotmVector3): Matrix4 {
         return rotate(mQuat.fromRotationBetween(v1, v2))
     }
 
     /**
-     * Sets the translation of this [Matrix4] based on the provided [Vector3].
+     * Sets the translation of this [Matrix4] based on the provided [MotmVector3].
      *
-     * @param vec [Vector3] describing the translation components.
+     * @param vec [MotmVector3] describing the translation components.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setTranslation(vec: Vector3): Matrix4 {
+    fun setTranslation(vec: MotmVector3): Matrix4 {
         doubleValues[M03] = vec.x
         doubleValues[M13] = vec.y
         doubleValues[M23] = vec.z
@@ -655,11 +655,11 @@ class Matrix4 {
     }
 
     /**
-     * Rotates the given [Vector3] by the rotation specified by this [Matrix4].
+     * Rotates the given [MotmVector3] by the rotation specified by this [Matrix4].
      *
-     * @param vec [Vector3] The vector to rotate.
+     * @param vec [MotmVector3] The vector to rotate.
      */
-    fun rotateVector(vec: Vector3) {
+    fun rotateVector(vec: MotmVector3) {
         val x = vec.x * doubleValues[M00] + vec.y * doubleValues[M01] + vec.z * doubleValues[M02]
         val y = vec.x * doubleValues[M10] + vec.y * doubleValues[M11] + vec.z * doubleValues[M12]
         val z = vec.x * doubleValues[M20] + vec.y * doubleValues[M21] + vec.z * doubleValues[M22]
@@ -667,13 +667,13 @@ class Matrix4 {
     }
 
     /**
-     * Projects a give [Vector3] with this [Matrix4] storing
-     * the result in the given [Vector3].
+     * Projects a give [MotmVector3] with this [Matrix4] storing
+     * the result in the given [MotmVector3].
      *
-     * @param vec [Vector3] The vector to multiply by.
-     * @return [Vector3] The resulting vector.
+     * @param vec [MotmVector3] The vector to multiply by.
+     * @return [MotmVector3] The resulting vector.
      */
-    fun projectVector(vec: Vector3): Vector3 {
+    fun projectVector(vec: MotmVector3): MotmVector3 {
         val inv = 1.0 / (doubleValues[M03] * vec.x + doubleValues[M13] * vec.y + doubleValues[M23] * vec.z + doubleValues[M33])
         val x = (doubleValues[M00] * vec.x + doubleValues[M01] * vec.y + doubleValues[M02] * vec.z + doubleValues[M03]) * inv
         val y = (doubleValues[M10] * vec.x + doubleValues[M11] * vec.y + doubleValues[M12] * vec.z + doubleValues[M13]) * inv
@@ -682,14 +682,14 @@ class Matrix4 {
     }
 
     /**
-     * Projects a give [Vector3] with this [Matrix4] storing
-     * the result in a new [Vector3].
+     * Projects a give [MotmVector3] with this [Matrix4] storing
+     * the result in a new [MotmVector3].
      *
-     * @param vec [Vector3] The vector to multiply by.
-     * @return [Vector3] The resulting vector.
+     * @param vec [MotmVector3] The vector to multiply by.
+     * @return [MotmVector3] The resulting vector.
      */
-    fun projectAndCreateVector(vec: Vector3): Vector3 {
-        val r = Vector3()
+    fun projectAndCreateVector(vec: MotmVector3): MotmVector3 {
+        val r = MotmVector3()
         val inv = 1.0 / (doubleValues[M03] * vec.x + doubleValues[M13] * vec.y + doubleValues[M23] * vec.z + doubleValues[M33])
         r.x = (doubleValues[M00] * vec.x + doubleValues[M01] * vec.y + doubleValues[M02] * vec.z + doubleValues[M03]) * inv
         r.y = (doubleValues[M10] * vec.x + doubleValues[M11] * vec.y + doubleValues[M12] * vec.z + doubleValues[M13]) * inv
@@ -804,12 +804,12 @@ class Matrix4 {
     }
 
     /**
-     * Sets this [Matrix4] to a translation matrix based on the provided [Vector3].
+     * Sets this [Matrix4] to a translation matrix based on the provided [MotmVector3].
      *
-     * @param vec [Vector3] describing the translation components.
+     * @param vec [MotmVector3] describing the translation components.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToTranslation(vec: Vector3): Matrix4 {
+    fun setToTranslation(vec: MotmVector3): Matrix4 {
         identity()
         doubleValues[M03] = vec.x
         doubleValues[M13] = vec.y
@@ -834,12 +834,12 @@ class Matrix4 {
     }
 
     /**
-     * Sets this [Matrix4] to a scale matrix based on the provided [Vector3].
+     * Sets this [Matrix4] to a scale matrix based on the provided [MotmVector3].
      *
-     * @param vec [Vector3] describing the scaling components.
+     * @param vec [MotmVector3] describing the scaling components.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToScale(vec: Vector3): Matrix4 {
+    fun setToScale(vec: MotmVector3): Matrix4 {
         identity()
         doubleValues[M00] = vec.x
         doubleValues[M11] = vec.y
@@ -866,11 +866,11 @@ class Matrix4 {
     /**
      * Sets this [Matrix4] to a translation and scaling matrix.
      *
-     * @param translation [Vector3] specifying the translation components.
-     * @param scaling [Vector3] specifying the scaling components.
+     * @param translation [MotmVector3] specifying the translation components.
+     * @param scaling [MotmVector3] specifying the scaling components.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToTranslationAndScaling(translation: Vector3, scaling: Vector3): Matrix4 {
+    fun setToTranslationAndScaling(translation: MotmVector3, scaling: MotmVector3): Matrix4 {
         identity()
         doubleValues[M03] = translation.x
         doubleValues[M13] = translation.y
@@ -906,22 +906,22 @@ class Matrix4 {
     /**
      * Sets this [Matrix4] to the specified rotation around the specified axis.
      *
-     * @param axis [Vector3] The axis of rotation.
+     * @param axis [MotmVector3] The axis of rotation.
      * @param angle double The rotation angle in degrees.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToRotation(axis: Vector3, angle: Double): Matrix4 {
+    fun setToRotation(axis: MotmVector3, angle: Double): Matrix4 {
         return if (angle == 0.0) identity() else setAll(mQuat.fromAngleAxis(axis, angle))
     }
 
     /**
      * Sets this [Matrix4] to the specified rotation around the specified cardinal axis.
      *
-     * @param axis [Vector3.Axis] The axis of rotation.
+     * @param axis [MotmVector3.Axis] The axis of rotation.
      * @param angle double The rotation angle in degrees.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToRotation(axis: Vector3.Axis, angle: Double): Matrix4 {
+    fun setToRotation(axis: MotmVector3.Axis, angle: Double): Matrix4 {
         return if (angle == 0.0) identity() else setAll(mQuat.fromAngleAxis(axis, angle))
     }
 
@@ -939,13 +939,13 @@ class Matrix4 {
     }
 
     /**
-     * Sets this [Matrix4] to the rotation between two [Vector3] objects.
+     * Sets this [Matrix4] to the rotation between two [MotmVector3] objects.
      *
-     * @param v1 [Vector3] The base vector. Should be normalized.
-     * @param v2 [Vector3] The target vector. Should be normalized.
+     * @param v1 [MotmVector3] The base vector. Should be normalized.
+     * @param v2 [MotmVector3] The target vector. Should be normalized.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToRotation(v1: Vector3, v2: Vector3): Matrix4 {
+    fun setToRotation(v1: MotmVector3, v2: MotmVector3): Matrix4 {
         return setAll(mQuat.fromRotationBetween(v1, v2))
     }
 
@@ -978,14 +978,14 @@ class Matrix4 {
     }
 
     /**
-     * Sets this [Matrix4] to a look at matrix with a direction and up [Vector3].
+     * Sets this [Matrix4] to a look at matrix with a direction and up [MotmVector3].
      * You can multiply this with a translation [Matrix4] to get a camera Model-View matrix.
      *
-     * @param direction [Vector3] The look direction.
-     * @param up [Vector3] The up axis.
+     * @param direction [MotmVector3] The look direction.
+     * @param up [MotmVector3] The up axis.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToLookAt(direction: Vector3, up: Vector3): Matrix4 {
+    fun setToLookAt(direction: MotmVector3, up: MotmVector3): Matrix4 {
         vec3.setAll(direction).normalize()
         vec1.setAll(direction).normalize()
         vec1.cross(up).normalize()
@@ -1004,14 +1004,14 @@ class Matrix4 {
     }
 
     /**
-     * Sets this [Matrix4] to a look at matrix with the given position, target and up [Vector3]s.
+     * Sets this [Matrix4] to a look at matrix with the given position, target and up [MotmVector3]s.
      *
-     * @param position [Vector3] The eye position.
-     * @param target [Vector3] The target position.
-     * @param up [Vector3] The up axis.
+     * @param position [MotmVector3] The eye position.
+     * @param target [MotmVector3] The target position.
+     * @param up [MotmVector3] The up axis.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToLookAt(position: Vector3, target: Vector3, up: Vector3): Matrix4 {
+    fun setToLookAt(position: MotmVector3, target: MotmVector3, up: MotmVector3): Matrix4 {
         MatrixDoublePrecision.setLookAtM(doubleValues, 0, position.x, position.y, position.z,
                 target.x, target.y, target.z, up.x, up.y, up.z)
         return this
@@ -1021,30 +1021,30 @@ class Matrix4 {
      * Sets this [Matrix4] to a world matrix with the specified cardinal axis and the origin at the
      * provided position.
      *
-     * @param position [Vector3] The position to use as the origin of the world coordinates.
-     * @param forward [Vector3] The direction of the forward (z) vector.
-     * @param up [Vector3] The direction of the up (y) vector.
+     * @param position [MotmVector3] The position to use as the origin of the world coordinates.
+     * @param forward [MotmVector3] The direction of the forward (z) vector.
+     * @param up [MotmVector3] The direction of the up (y) vector.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToWorld(position: Vector3, forward: Vector3, up: Vector3): Matrix4 {
+    fun setToWorld(position: MotmVector3, forward: MotmVector3, up: MotmVector3): Matrix4 {
         vec1.setAll(forward).normalize()
         vec2.setAll(vec1).cross(up).normalize()
         vec3.setAll(vec2).cross(vec1).normalize()
         return setAll(vec2, vec3, vec1, position)
     }
 
-    private fun getTranslation(vec: Vector3): Vector3 {
+    private fun getTranslation(vec: MotmVector3): MotmVector3 {
         return vec.setAll(doubleValues[M03], doubleValues[M13], doubleValues[M23])
     }
 
     /**
-     * Sets the components of the provided [Vector3] representing the scaling component
+     * Sets the components of the provided [MotmVector3] representing the scaling component
      * of this [Matrix4].
      *
-     * @param vec [Vector3] to store the result in.
-     * @return [Vector3] representing the scaling.
+     * @param vec [MotmVector3] to store the result in.
+     * @return [MotmVector3] representing the scaling.
      */
-    fun getScaling(vec: Vector3): Vector3 {
+    fun getScaling(vec: MotmVector3): MotmVector3 {
         val x = sqrt(doubleValues[M00] * doubleValues[M00] + doubleValues[M01] * doubleValues[M01] + doubleValues[M02] * doubleValues[M02])
         val y = sqrt(doubleValues[M10] * doubleValues[M10] + doubleValues[M11] * doubleValues[M11] + doubleValues[M12] * doubleValues[M12])
         val z = sqrt(doubleValues[M20] * doubleValues[M20] + doubleValues[M21] * doubleValues[M21] + doubleValues[M22] * doubleValues[M22])
@@ -1165,22 +1165,22 @@ class Matrix4 {
         /**
          * Creates a new [Matrix4] representing a rotation.
          *
-         * @param axis [Vector3] The axis of rotation.
+         * @param axis [MotmVector3] The axis of rotation.
          * @param angle double The rotation angle in degrees.
          * @return [Matrix4] The new matrix.
          */
-        fun createRotationMatrix(axis: Vector3, angle: Double): Matrix4 {
+        fun createRotationMatrix(axis: MotmVector3, angle: Double): Matrix4 {
             return Matrix4().setToRotation(axis, angle)
         }
 
         /**
          * Creates a new [Matrix4] representing a rotation.
          *
-         * @param axis [Vector3.Axis] The axis of rotation.
+         * @param axis [MotmVector3.Axis] The axis of rotation.
          * @param angle double The rotation angle in degrees.
          * @return [Matrix4] The new matrix.
          */
-        fun createRotationMatrix(axis: Vector3.Axis, angle: Double): Matrix4 {
+        fun createRotationMatrix(axis: MotmVector3.Axis, angle: Double): Matrix4 {
             return Matrix4().setToRotation(axis, angle)
         }
 
@@ -1212,10 +1212,10 @@ class Matrix4 {
         /**
          * Creates a new [Matrix4] representing a translation.
          *
-         * @param vec [Vector3] describing the translation components.
+         * @param vec [MotmVector3] describing the translation components.
          * @return A new [Matrix4] representing the translation only.
          */
-        fun createTranslationMatrix(vec: Vector3): Matrix4 {
+        fun createTranslationMatrix(vec: MotmVector3): Matrix4 {
             return Matrix4().translate(vec)
         }
 
@@ -1234,10 +1234,10 @@ class Matrix4 {
         /**
          * Creates a new [Matrix4] representing a scaling.
          *
-         * @param vec [Vector3] describing the scaling components.
+         * @param vec [MotmVector3] describing the scaling components.
          * @return A new [Matrix4] representing the scaling only.
          */
-        fun createScaleMatrix(vec: Vector3): Matrix4 {
+        fun createScaleMatrix(vec: MotmVector3): Matrix4 {
             return Matrix4().setToScale(vec)
         }
 

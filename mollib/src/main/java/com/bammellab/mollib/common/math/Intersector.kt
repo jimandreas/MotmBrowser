@@ -37,9 +37,9 @@ import kotlin.math.sqrt
  * (removed triangle and plane - only need intersectRaySphere() - jra)
  */
 object Intersector {
-    private val v0 = Vector3()
-    private val v1 = Vector3()
-    private val v2 = Vector3()
+    private val v0 = MotmVector3()
+    private val v1 = MotmVector3()
+    private val v2 = MotmVector3()
 
 
     @Suppress("UNUSED_VALUE")
@@ -53,30 +53,30 @@ object Intersector {
      * @return True if there is an intersection, false otherwise.
      */
     fun intersectRaySphere(
-            rayStartIn: Vector3, rayEndIn: Vector3,
-            sphereCenterIn: Vector3, sphereRadius: Double,
-            hitPointIn: Vector3): Boolean {
+            rayStartIn: MotmVector3, rayEndIn: MotmVector3,
+            sphereCenterIn: MotmVector3, sphereRadius: Double,
+            hitPointIn: MotmVector3): Boolean {
         var rayStart = rayStartIn
         var rayEnd = rayEndIn
         var sphereCenter = sphereCenterIn
         var hitPoint = hitPointIn
 
-        rayStart = Vector3(rayStart)
-        rayEnd = Vector3(rayEnd)
-        val dir = Vector3.subtractAndCreate(rayEnd, rayStart)
+        rayStart = MotmVector3(rayStart)
+        rayEnd = MotmVector3(rayEnd)
+        val dir = MotmVector3.subtractAndCreate(rayEnd, rayStart)
         dir.normalize()
 
-        sphereCenter = Vector3(sphereCenter)
+        sphereCenter = MotmVector3(sphereCenter)
         val radius2 = sphereRadius * sphereRadius
 
         /*
 		 * Refer to http://paulbourke.net/geometry/circlesphere/ for mathematics
 		 * behind ray-sphere intersection.
 		 */
-        val a = Vector3.dot(dir, dir)
-        val b = 2.0f * Vector3.dot(dir, Vector3.subtractAndCreate(rayStart, sphereCenter))
-        val c = (Vector3.dot(sphereCenter, sphereCenter) + Vector3.dot(rayStart, rayStart)
-                - 2.0f * Vector3.dot(sphereCenter, rayStart) - radius2)
+        val a = MotmVector3.dot(dir, dir)
+        val b = 2.0f * MotmVector3.dot(dir, MotmVector3.subtractAndCreate(rayStart, sphereCenter))
+        val c = (MotmVector3.dot(sphereCenter, sphereCenter) + MotmVector3.dot(rayStart, rayStart)
+                - 2.0f * MotmVector3.dot(sphereCenter, rayStart) - radius2)
 
         // Test for intersection.
         val result = b * b - 4.0 * a * c
@@ -121,10 +121,10 @@ object Intersector {
 
         // If t0 is less than zero, intersection point is at t1.
         return if (t0 < 0) {
-            hitPoint = rayStart.add(Vector3.scaleAndCreate(dir, t1))
+            hitPoint = rayStart.add(MotmVector3.scaleAndCreate(dir, t1))
             true
         } else {
-            hitPoint = rayStart.add(Vector3.scaleAndCreate(dir, t0))
+            hitPoint = rayStart.add(MotmVector3.scaleAndCreate(dir, t0))
             true
         }
     }

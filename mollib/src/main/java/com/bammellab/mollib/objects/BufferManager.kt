@@ -22,18 +22,16 @@
         "deprecation",
         "ConstantConditionIf",
         "LocalVariableName")
+
 package com.bammellab.mollib.objects
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.opengl.GLES20
-
 import timber.log.Timber
-
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Buffer Manager
@@ -57,21 +55,16 @@ import java.util.ArrayList
  * and List interface:
  * https://docs.oracle.com/javase/tutorial/collections/interfaces/list.html
  */
-class BufferManager
+object BufferManager {
 
-private constructor(context: Context) {
+    private var floatArray: FloatArray = FloatArray(150000)
+    private var bufferList: ArrayList<GLArrayEntry> = ArrayList()
 
     var floatArrayIndex: Int
-        get() = sFloatArrayIndex
-        set(sFloatArrayIndex) {
-            BufferManager.sFloatArrayIndex = sFloatArrayIndex
+        get() = currentIndex
+        set(indexIntoFloatArray) {
+            currentIndex = indexIntoFloatArray
         }
-
-    init {
-        //        sContext = context;
-        bufferList = ArrayList()
-        sFloatArray = FloatArray(sFloatArraySize)
-    }
 
     //    public void resetBuffersForNextUsage() {
     //        GLArrayEntry ae;
@@ -94,7 +87,7 @@ private constructor(context: Context) {
 
     fun resetBuffersForNextUsage() {
         var ae: GLArrayEntry
-        sFloatArrayIndex = 0
+        currentIndex = 0
         sBufferUsed = 0
         sReportedUsage = false
         //        sErrorReported = false;
@@ -117,8 +110,8 @@ private constructor(context: Context) {
 
     fun getFloatArray(requestedNumFloats: Int): FloatArray {
         sBufferUsed += requestedNumFloats
-        if (requestedNumFloats + sFloatArrayIndex < sFloatArraySize) {
-            return sFloatArray
+        if (requestedNumFloats + currentIndex < sFloatArraySize) {
+            return floatArray
         }
 
         /*
@@ -132,20 +125,20 @@ private constructor(context: Context) {
         /*
          * OK that is done.   Now reset the vertex data float buffer
          */
-        sFloatArrayIndex = 0
-        return sFloatArray
+        currentIndex = 0
+        return floatArray
     }
 
     /*
      * private class to track the allocated GL vertex buffers
      */
-    private inner class GLArrayEntry internal constructor() {
-        internal val glBuf: IntArray = IntArray(1)
-        internal var numVertices: Int = 0
-        internal var bufferAllocated: Boolean = false
-        internal var bufferInUse: Boolean = false
+    private class GLArrayEntry {
+        val glBuf: IntArray = IntArray(1)
+        var numVertices: Int = 0
+        var bufferAllocated: Boolean = false
+        var bufferInUse: Boolean = false
 
-        internal var nativeFloatBuffer: FloatBuffer? = null
+        var nativeFloatBuffer: FloatBuffer? = null
 
         init {
             bufferAllocated = false
@@ -200,10 +193,10 @@ private constructor(context: Context) {
         }
         bufferList.add(ae)
         ae.bufferInUse = true
-        ae.nativeFloatBuffer!!.put(sFloatArray).position(0)
+        ae.nativeFloatBuffer!!.put(floatArray).position(0)
         GLES20.glGenBuffers(1, ae.glBuf, 0)
-        ae.numVertices = sFloatArrayIndex / STRIDE_IN_FLOATS
-        val numbytes = sFloatArrayIndex * BYTES_PER_FLOAT
+        ae.numVertices = currentIndex / STRIDE_IN_FLOATS
+        val numbytes = currentIndex * BYTES_PER_FLOAT
 
         if (ae.glBuf[0] > 0) {
             GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, ae.glBuf[0])
@@ -293,35 +286,23 @@ private constructor(context: Context) {
 
     }
 
-    companion object {
-        private lateinit var sFloatArray: FloatArray
-        private lateinit var bufferList: ArrayList<GLArrayEntry>
+    private val sVertexDataFloatBuffer: FloatBuffer? = null
+    private var currentIndex: Int = 0
+    private var sBufferUsed: Int = 0
+    private var sReportedUsage: Boolean = false
 
-        private val sVertexDataFloatBuffer: FloatBuffer? = null
-        private var sFloatArrayIndex: Int = 0
-        private var sBufferUsed: Int = 0
-        private var sReportedUsage: Boolean = false
+    private lateinit var this_instance: BufferManager
+    private var initialized: Boolean? = null
 
-        private lateinit var this_instance: BufferManager
-        private var initialized:Boolean? = null
+    private const val INITIAL_FLOAT_BUFFER_SIZE = 150000
+    private const val sFloatArraySize = INITIAL_FLOAT_BUFFER_SIZE
+    private const val POSITION_DATA_SIZE_IN_ELEMENTS = 3
+    private const val NORMAL_DATA_SIZE_IN_ELEMENTS = 3
+    private const val COLOR_DATA_SIZE_IN_ELEMENTS = 4
+    private const val BYTES_PER_FLOAT = 4
+    //    private static final int BYTES_PER_SHORT = 2;
 
-        fun getInstance(context: Context): BufferManager {
-            if (initialized == null) {
-                this_instance = BufferManager(context)
-                initialized = true
-            }
-            return this_instance
-        }
+    private const val STRIDE_IN_FLOATS = POSITION_DATA_SIZE_IN_ELEMENTS + NORMAL_DATA_SIZE_IN_ELEMENTS + COLOR_DATA_SIZE_IN_ELEMENTS
+    private const val STRIDE_IN_BYTES = STRIDE_IN_FLOATS * BYTES_PER_FLOAT
 
-        private const val INITIAL_FLOAT_BUFFER_SIZE = 150000
-        private const val sFloatArraySize = INITIAL_FLOAT_BUFFER_SIZE
-        private const val POSITION_DATA_SIZE_IN_ELEMENTS = 3
-        private const val NORMAL_DATA_SIZE_IN_ELEMENTS = 3
-        private const val COLOR_DATA_SIZE_IN_ELEMENTS = 4
-        private const val BYTES_PER_FLOAT = 4
-        //    private static final int BYTES_PER_SHORT = 2;
-
-        private const val STRIDE_IN_FLOATS = POSITION_DATA_SIZE_IN_ELEMENTS + NORMAL_DATA_SIZE_IN_ELEMENTS + COLOR_DATA_SIZE_IN_ELEMENTS
-        private const val STRIDE_IN_BYTES = STRIDE_IN_FLOATS * BYTES_PER_FLOAT
-    }
 }

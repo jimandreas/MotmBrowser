@@ -15,6 +15,8 @@
 @file:Suppress("unused")
 package com.bammellab.mollib.common.math
 
+import com.kotmol.pdbParser.MotmVector3
+
 /**
  * Copyright 2013 Dennis Ippel
  * Copyright 2013 Jim Andreas kotlin conversion
@@ -29,15 +31,14 @@ package com.bammellab.mollib.common.math
  * specific language governing permissions and limitations under the License.
  */
 
-// import com.kotmol.mollib.common.math.Vector3;
 
 class ICurve {
 
     interface ICurve3D {
 
-        val currentTangent: Vector3
+        val currentTangent: MotmVector3
 
-        fun calculatePoint(result: Vector3, t: Double)
+        fun calculatePoint(result: MotmVector3, t: Double)
 
         fun setCalculateTangents(calculateTangents: Boolean)
     }

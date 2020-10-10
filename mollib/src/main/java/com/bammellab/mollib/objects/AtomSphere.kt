@@ -17,18 +17,18 @@
 @file:Suppress("unused", "always_false")
 package com.bammellab.mollib.objects
 
+import android.app.Activity
 import com.bammellab.mollib.common.math.MathUtil
-import com.bammellab.mollib.protein.Molecule
-import com.bammellab.mollib.protein.PdbAtom
+import com.kotmol.pdbParser.Molecule
+import com.kotmol.pdbParser.PdbAtom
 
-class AtomSphere(private val mMol: Molecule) {
+
+class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
 
     private val numIndices: Int = 0
 
     private val vbo = IntArray(1)
     private val ibo = IntArray(1)
-
-    private val bufMgr: BufferManager = mMol.bufMgr
 
     fun genSphere(
             numSlices: Int,
@@ -58,7 +58,7 @@ class AtomSphere(private val mMol: Molecule) {
         /*
          * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
          */
-        normal_brightness_factor = mMol.dcOffset / 3
+        normal_brightness_factor = (mMol.dcOffset / 3).toFloat()
 
         val location = atom.atomPosition
 
@@ -73,13 +73,13 @@ class AtomSphere(private val mMol: Molecule) {
         }
         val angleStep = 2.0f * Math.PI.toFloat() / numSlices
 
-        val vertexData = bufMgr.getFloatArray(
+        val vertexData = BufferManager.getFloatArray(
                 numSlices * numSlices // number of vertices
 
                         * 3 * 2 // two triangles worth generated per loop
 
                         * STRIDE_IN_FLOATS) // num floats per vertex
-        var offset = bufMgr.floatArrayIndex
+        var offset = BufferManager.floatArrayIndex
 
         /*
          * note the use of less-than-equals - the first point is repeated to complete the circle
@@ -214,7 +214,7 @@ class AtomSphere(private val mMol: Molecule) {
             i++
         }
 
-        bufMgr.floatArrayIndex = offset
+        BufferManager.floatArrayIndex = offset
 
         /*
          * debugging print out of vertices

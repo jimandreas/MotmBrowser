@@ -27,8 +27,10 @@ package com.bammellab.mollib.objects
 
 import android.opengl.GLES20
 import com.bammellab.mollib.common.math.MathUtil
-import com.bammellab.mollib.common.math.Vector3
-import com.bammellab.mollib.protein.Molecule
+import com.bammellab.mollib.common.math.MotmVector3
+import com.kotmol.pdbParser.KotmolVector3
+import com.kotmol.pdbParser.Molecule
+
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -46,21 +48,22 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
     private val vbo = IntArray(1)
     internal val ibo = IntArray(1)
 
-    private val bufMgr: BufferManager = mMol.bufMgr
-
     // TODO:  work on color for atom ends and half-way in the connection
 
     fun genBackboneSegment(
             numSlices: Int,
             radius: Float,
-            position_start: Vector3,
-            position_end: Vector3,
+            positionStartIn: KotmolVector3,
+            positionEndIn: KotmolVector3,
             color: FloatArray) {
 
+
+        val positionStart = MotmVector3( positionStartIn )
+        val positionEnd = MotmVector3( positionEndIn )
         /*
          * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
          */
-        normal_brightness_factor = mMol.dcOffset / 3
+        normal_brightness_factor = (mMol.dcOffset / 3).toFloat()
 
         var i = 0
 //        val j: Int
@@ -78,13 +81,13 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
         /*
          * calculate two vectors that are normal to our backbone segment - R and S.
          */
-        val p1p2 = Vector3()
-        p1p2.setAll(position_end)
-        p1p2.subtract(position_start)
-         val P = Vector3(Math.random(), Math.random(), Math.random())
-        val R = Vector3(p1p2)
+        val p1p2 = MotmVector3()
+        p1p2.setAll(positionEnd)
+        p1p2.subtract(positionStart)
+         val P = MotmVector3(Math.random(), Math.random(), Math.random())
+        val R = MotmVector3(p1p2)
         R.cross(P)
-        val S = Vector3(R)
+        val S = MotmVector3(R)
         S.cross(p1p2)
         R.normalize()
         S.normalize()
@@ -138,16 +141,16 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
             y1 = R.y * c1 + S.y * s1
             z1 = R.z * c1 + S.z * s1
 
-            p1[0] = (x1 + position_end.x).toFloat()
-            p1[1] = (y1 + position_end.y).toFloat()
-            p1[2] = (z1 + position_end.z).toFloat()
+            p1[0] = (x1 + positionEnd.x).toFloat()
+            p1[1] = (y1 + positionEnd.y).toFloat()
+            p1[2] = (z1 + positionEnd.z).toFloat()
 
 
             // first bottom point
 
-            p2[0] = (x1 + position_start.x).toFloat()
-            p2[1] = (y1 + position_start.y).toFloat()
-            p2[2] = (z1 + position_start.z).toFloat()
+            p2[0] = (x1 + positionStart.x).toFloat()
+            p2[1] = (y1 + positionStart.y).toFloat()
+            p2[2] = (z1 + positionStart.z).toFloat()
 
 
             // SECOND BOTTOM point
@@ -155,9 +158,9 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
             y2 = R.y * c2 + S.y * s2
             z2 = R.z * c2 + S.z * s2
 
-            p3[0] = (x2 + position_start.x).toFloat()
-            p3[1] = (y2 + position_start.y).toFloat()
-            p3[2] = (z2 + position_start.z).toFloat()
+            p3[0] = (x2 + positionStart.x).toFloat()
+            p3[1] = (y2 + positionStart.y).toFloat()
+            p3[2] = (z2 + positionStart.z).toFloat()
             // OK that is one triangle.
 
             n = XYZ.getNormal(p1, p2, p3)
@@ -167,16 +170,16 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
 
             // first top point
 
-            p1[0] = (x1 + position_end.x).toFloat()
-            p1[1] = (y1 + position_end.y).toFloat()
-            p1[2] = (z1 + position_end.z).toFloat()
+            p1[0] = (x1 + positionEnd.x).toFloat()
+            p1[1] = (y1 + positionEnd.y).toFloat()
+            p1[2] = (z1 + positionEnd.z).toFloat()
 
 
             // SECOND BOTTOM point
 
-            p2[0] = (x2 + position_start.x).toFloat()
-            p2[1] = (y2 + position_start.y).toFloat()
-            p2[2] = (z2 + position_start.z).toFloat()
+            p2[0] = (x2 + positionStart.x).toFloat()
+            p2[1] = (y2 + positionStart.y).toFloat()
+            p2[2] = (z2 + positionStart.z).toFloat()
 
 
             // SECOND top point
@@ -185,9 +188,9 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
             y2 = R.y * c2 + S.y * s2
             z2 = R.z * c2 + S.z * s2
 
-            p3[0] = (x2 + position_end.x).toFloat()
-            p3[1] = (y2 + position_end.y).toFloat()
-            p3[2] = (z2 + position_end.z).toFloat()
+            p3[0] = (x2 + positionEnd.x).toFloat()
+            p3[1] = (y2 + positionEnd.y).toFloat()
+            p3[2] = (z2 + positionEnd.z).toFloat()
 
             
 

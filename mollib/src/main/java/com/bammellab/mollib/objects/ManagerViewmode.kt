@@ -20,34 +20,25 @@ package com.bammellab.mollib.objects
 
 import android.app.Activity
 import android.app.ActivityManager
-import android.os.SystemClock
-import com.bammellab.mollib.protein.AtomInfo
-import com.bammellab.mollib.protein.Molecule
-import com.bammellab.mollib.protein.PdbAtom
+import com.kotmol.pdbParser.Molecule
+import com.kotmol.pdbParser.PdbAtom
 import timber.log.Timber
 
 // TODO: implement Interface in Activity - for flagging low mem in UI (commented out after lib refactor)
 class ManagerViewmode(private val activity: Activity,
                       private val molecule: Molecule,
-                      private val bufMgr: BufferManager
+                      private val BufferManager: BufferManager
                       ) {
 
-    private val atomSphere: AtomSphere
-    private val atomToAtomBond: SegmentAtomToAtomBond
-    private val mRenderModal: RenderModal
-    private val mRenderNucleic: RenderNucleic
-    private val atomInfo: ParserAtomInfo
+    private val atomSphere: AtomSphere = AtomSphere(activity, molecule)
+    private val atomToAtomBond: SegmentAtomToAtomBond = SegmentAtomToAtomBond(molecule)
+    private val mRenderModal: RenderModal = RenderModal(molecule)
+    private val mRenderNucleic: RenderNucleic = RenderNucleic(molecule)
     private var currentMode: Int = 0
-
-    init {
-        molecule.bufMgr = bufMgr
-        atomSphere = AtomSphere(molecule)
-        atomToAtomBond = SegmentAtomToAtomBond(molecule)
-        mRenderModal = RenderModal(molecule)
-        mRenderNucleic = RenderNucleic(molecule)
-        atomInfo = ParserAtomInfo(activity)
-        atomInfo.parseAtomInfo()
-    }
+    
+    
+    var displayHydrosFlag = false
+    var geometrySlices = 10
 
     fun createView() {
         currentMode = VIEW_INITIAL
@@ -103,11 +94,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
 
     private fun doViewMode() {
 
-        val startTime = SystemClock.uptimeMillis().toFloat()
-        molecule.reportedTimeFlag = false
-        molecule.startOfParseTime = startTime
-
-        bufMgr.resetBuffersForNextUsage()
+        BufferManager.resetBuffersForNextUsage()
 
         /*
          * let's see how much memory there is to play with
@@ -120,7 +107,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
         val initialAvailMem = info2.threshold
         try {
             run bailout@ {
-                Timber.i("THRESHOLD mbyte = " + initialAvailMem / 1024 / 1024)
+                Timber.i("THRESHOLD mbyte = %d", initialAvailMem / 1024 / 1024)
 
                 when (currentMode) {
                     VIEW_RIBBONS -> {
@@ -184,7 +171,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 }
             }
         } catch (e: Exception) {
-            Timber.e(e, "Crashed displaying: %s", molecule.name)
+            Timber.e(e, "Crashed displaying: %s", molecule.molName)
         }
 
     }
@@ -232,8 +219,6 @@ visibleAppThreshold = 94371840 (0x5A00000)
      */
     private fun drawPipeModel() {
 
-        val color = floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f)
-
         var atom1Number: Int
         var atom2Number: Int
         var atom1: PdbAtom?
@@ -243,20 +228,18 @@ visibleAppThreshold = 94371840 (0x5A00000)
             atom1Number = molecule.bondList[i].atomNumber1
             atom2Number = molecule.bondList[i].atomNumber2
 
-            atom1 = molecule.atoms[atom1Number]
-            atom2 = molecule.atoms[atom2Number]
+            atom1 = molecule.atomNumberToAtomInfoHash[atom1Number]
+            atom2 = molecule.atomNumberToAtomInfoHash[atom2Number]
             if (atom1 == null || atom2 == null) {
                 Timber.e("null ptr : atom1: $atom1 atom2: $atom2")
                 continue
             }
 
             atomToAtomBond.genBondCylinders(
-                    molecule.geometrySlices,
+                    geometrySlices,
                     0.25f,
                     atom1,
-                    atom2,
-                    color,
-                    atomInfo)
+                    atom2)
 
         }
     }
@@ -265,8 +248,6 @@ visibleAppThreshold = 94371840 (0x5A00000)
      * Draw: pipe bond model for nucleic atoms
      */
     private fun drawNucleicBonds() {
-
-        val color = floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f)
 
         var atom1Number: Int
         var atom2Number: Int
@@ -285,24 +266,22 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 continue
             }
             // if (!atom1.is_nucleic_atom || !atom2.is_nucleic_atom) {
-            if (atom1.atomType != PdbAtom.IS_NUCLEIC || atom2.atomType != PdbAtom.IS_NUCLEIC) {
+            if (atom1.atomType != PdbAtom.AtomType.IS_NUCLEIC || atom2.atomType != PdbAtom.AtomType.IS_NUCLEIC) {
 
                 continue
             }
 
-            if (!molecule.displayHydrosFlag) {
+            if (!displayHydrosFlag) {
                 if (atom1.elementSymbol == "H" || atom2.elementSymbol == "H") {
 
                     continue
                 }
             }
             atomToAtomBond.genBondCylinders(
-                    molecule.geometrySlices,
+                    geometrySlices,
                     0.25f,
                     atom1,
-                    atom2,
-                    color,
-                    atomInfo)
+                    atom2)
 
         }
     }
@@ -313,8 +292,6 @@ visibleAppThreshold = 94371840 (0x5A00000)
      *        if one of the atoms is a metal
      */
     private fun drawHetatmBonds() {
-
-        val color = floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f)
 
         var atom1Number: Int
         var atom2Number: Int
@@ -332,11 +309,11 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 Timber.e("null ptr : atom1: $atom1 atom2: $atom2")
                 continue
             }
-            if (atom1.atomType != PdbAtom.IS_HETATM && atom2.atomType != PdbAtom.IS_HETATM) {
+            if (atom1.atomType != PdbAtom.AtomType.IS_HETATM && atom2.atomType != PdbAtom.AtomType.IS_HETATM) {
                 continue
             }
 
-            if (!molecule.displayHydrosFlag) {
+            if (!displayHydrosFlag) {
                 if (atom1.elementSymbol == "H" || atom2.elementSymbol == "H") {
 
                     continue
@@ -344,12 +321,10 @@ visibleAppThreshold = 94371840 (0x5A00000)
             }
 
             atomToAtomBond.genBondCylinders(
-                    molecule.geometrySlices,
+                    geometrySlices,
                     0.25f,
                     atom1,
-                    atom2,
-                    color,
-                    atomInfo)
+                    atom2)
 
         }
     }
@@ -387,19 +362,19 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 continue
             }
             // skip HOH (water) molecules
-            if (atom1.atomType == PdbAtom.IS_HETATM && atom1.residueName == "HOH") {
+            if (atom1.atomType == PdbAtom.AtomType.IS_HETATM && atom1.residueName == "HOH") {
                 continue
             }
-            if (atom1.atomType == PdbAtom.IS_NUCLEIC) {
+            if (atom1.atomType == PdbAtom.AtomType.IS_NUCLEIC) {
                 if (sDrawMode and D_NUCLEIC == 0) {
                     continue
                 }
-            } else if (atom1.atomType == PdbAtom.IS_HETATM) {
+            } else if (atom1.atomType == PdbAtom.AtomType.IS_HETATM) {
                 if (sDrawMode and D_HETATM == 0) {
                     continue
                 }
             } else if (atom1.elementSymbol == "H") {
-                if (!molecule.displayHydrosFlag) {
+                if (!displayHydrosFlag) {
                     continue
                 } else if (sDrawMode and D_ALL_ATOMS == 0) {
                     continue
@@ -409,7 +384,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
             }
             if (atom1.atomBondCount == 0) {
                 Timber.e("%s: drawSpheres no bond at atom %d residue %s type %s",
-                        molecule.name, atom1.atomNumber, atom1.residueName, atom1.atomName)
+                        molecule.molName, atom1.atomNumber, atom1.residueName, atom1.atomName)
             }
             elementSymbol = atom1.elementSymbol
             ai = atomInfo.atomNameToAtomInfoHash[elementSymbol]
@@ -442,7 +417,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
                     atom1,
                     useColor)
         }
-        bufMgr.transferToGl()
+        BufferManager.transferToGl()
     }
 
     /*
@@ -502,7 +477,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 color[2] += 1/(float) scaling;
             }
         }
-        bufMgr.transferToGl();
+        BufferManager.transferToGl();
     }
     */
 
@@ -519,7 +494,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
          * calculate usage with normal slices
          */
 
-        molecule.geometrySlices = Molecule.INITIAL_SLICES
+        geometrySlices = Molecule.INITIAL_SLICES
         molecule.sphereGeometrySlices = Molecule.INITIAL_SLICES / 2
         var ribbons: Long = 0
         var sphere: Long = 0
@@ -545,26 +520,26 @@ visibleAppThreshold = 94371840 (0x5A00000)
         initialAvailMem /= 2  // seems like we only get 1/2 to play with
 
         if (ribbons + bonds + sphere > initialAvailMem) {
-            molecule.geometrySlices = molecule.geometrySlices / 2
+            geometrySlices = geometrySlices / 2
 
             if (dmode and D_RIBBONS != 0) {
-                ribbons = molecule.bondAllocation(molecule.geometrySlices).toLong()
+                ribbons = molecule.bondAllocation(geometrySlices).toLong()
             }
             if (dmode and D_BONDS != 0) {
-                bonds = molecule.ribbonAllocation(molecule.geometrySlices).toLong()
+                bonds = molecule.ribbonAllocation(geometrySlices).toLong()
             }
             if (dmode and D_SPHERES != 0) {
-                sphere = molecule.sphereAllocation(molecule.geometrySlices).toLong()
+                sphere = molecule.sphereAllocation(geometrySlices).toLong()
             }
 
             if (ribbons + bonds + sphere > initialAvailMem) {
                 val overdraw = initialAvailMem - ribbons - bonds - sphere
-                Timber.e("***  mema  TROUBLE delta: "
-                        + overdraw
-                        + " r : " + ribbons
-                        + " b: " + bonds
-                        + " s: " + sphere
-                        + " avail: " + initialAvailMem)
+                Timber.e("***  mema  TROUBLE delta: %d r: %d b: %d s: %d avail: %d",
+                        overdraw,
+                        ribbons,
+                        bonds,
+                        sphere,
+                        initialAvailMem)
 
                 /*
                  * whack the sphere quality and try again
@@ -575,24 +550,25 @@ visibleAppThreshold = 94371840 (0x5A00000)
 
                 if (ribbons + bonds + sphere > initialAvailMem) {
                     val overdraw2 = initialAvailMem - ribbons - bonds - sphere
-                    Timber.e("***  mema  STILL TROUBLE delta: "
-                            + overdraw2
-                            + " r : " + ribbons
-                            + " b: " + bonds
-                            + " s: " + sphere
-                            + " avail: " + initialAvailMem)
-                    molecule.geometrySlices = 3
+                    Timber.e("***  mema  TROUBLE delta: %d r: %d b: %d s: %d avail: %d",
+                            overdraw,
+                            ribbons,
+                            bonds,
+                            sphere,
+                            initialAvailMem)
+
+                    geometrySlices = 3
                     molecule.sphereGeometrySlices = 3
                     molecule.ribbonSlices = 5
                     return false
                 } else {
                     val overdraw2 = initialAvailMem - ribbons - bonds - sphere
-                    Timber.e("***  mema  OK NO TROUBLE positive delta: "
-                            + overdraw2
-                            + " r : " + ribbons
-                            + " b: " + bonds
-                            + " s: " + sphere
-                            + " have set sphere to 5")
+                    Timber.e("***  mema  OK No TROUBLE positive delta: %d r: %d b: %d s: %d have set sphere to 5",
+                            overdraw2,
+                            ribbons,
+                            bonds,
+                            sphere)
+
                 }
             }
         }

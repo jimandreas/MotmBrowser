@@ -17,16 +17,12 @@
 @file:Suppress("unused")
 package com.bammellab.mollib.objects
 
-import com.bammellab.mollib.common.math.Vector3
-import com.bammellab.mollib.protein.ChainRenderingDescriptor
-import com.bammellab.mollib.protein.Molecule
-
+import com.kotmol.pdbParser.Molecule
 
 /*
  * draw nice rectangular boxes representing nucleic acids (the ladder)
  */
 class RenderNucleic(private val mMol: Molecule) {
-    private val bufMgr: BufferManager = mMol.bufMgr
 
     private var numIndices = 0
     private val cylinderIndexCount: Int = 0
@@ -77,7 +73,7 @@ class RenderNucleic(private val mMol: Molecule) {
                 }
             }
         }
-        bufMgr.transferToGl()
+        BufferManager.transferToGl()
     }
 
     /*
@@ -96,8 +92,8 @@ class RenderNucleic(private val mMol: Molecule) {
         val theColor = getColor(crd)
         // not all nucleic residues specify their ladder element (5CCW)
 
-        vertexData = bufMgr.getFloatArray(36 * STRIDE_IN_FLOATS)
-        mOffset = bufMgr.floatArrayIndex
+        vertexData = BufferManager.getFloatArray(36 * STRIDE_IN_FLOATS)
+        mOffset = BufferManager.floatArrayIndex
 
         corner1.setAll(crd.nucleicCornerAtom.atomPosition)
 
@@ -239,7 +235,7 @@ class RenderNucleic(private val mMol: Molecule) {
         putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
 
         numIndices = mOffset
-        bufMgr.floatArrayIndex = mOffset
+        BufferManager.floatArrayIndex = mOffset
 
         /* **************************
          * END number 1
@@ -375,7 +371,7 @@ class RenderNucleic(private val mMol: Molecule) {
         putTri(mMol.p1, mMol.p2, mMol.p3, n, theColor)
 
         numIndices = mOffset
-        bufMgr.floatArrayIndex = mOffset
+        BufferManager.floatArrayIndex = mOffset
     }
 
     private fun putTri(p1: FloatArray, p2: FloatArray, p3: FloatArray, n: FloatArray, color: FloatArray) {
