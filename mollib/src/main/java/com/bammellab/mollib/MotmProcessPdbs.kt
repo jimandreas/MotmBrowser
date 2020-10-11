@@ -7,16 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bammellab.mollib.objects.BufferManager
 import com.bammellab.mollib.objects.ManagerViewmode
-import com.bammellab.mollib.protein.Molecule
+import com.kotmol.pdbParser.Molecule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import timber.log.Timber
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
 
 /**
  * common code to parse and display PDB info
@@ -35,12 +32,13 @@ class MotmProcessPdbs(
     private val managePdbFile = ManagePdbFile(activityIn)
     private val loadPdbFromAssets = loadPdbFromAssetsIn
     private lateinit var managerViewmode: ManagerViewmode
-    private val bufferManager = BufferManager.getInstance(activity)
 
     private var nextNameIndex = -1
 
     private val pdbFileNames = pdbFileNamesIn
     private var captureImagesFlag = false
+
+    private var androidFilePath = ""
 
     init {
         if (!loadPdbFromAssets) {
@@ -92,15 +90,24 @@ class MotmProcessPdbs(
             renderer.tossMoleculeToGC()
             val mol = Molecule() // the one place where Molecule is allocated!!
             managerViewmode = ManagerViewmode(
-                    activity, mol, bufferManager)
-            managePdbFile.setup(mol, managerViewmode)
+                    activity, mol)
 
-            bufferManager.resetBuffersForNextUsage()
+            BufferManager.resetBuffersForNextUsage()
 
             if (loadPdbFromAssets) {
-                managePdbFile.parsePdbFileFromAsset(name)
+                managePdbFile.parsePdbFileFromAsset(name, mol)
             } else {
-                managePdbFile.parsePdbFile(name)
+                try {
+                    val myFile = File(androidFilePath, "$name.png")
+                    val fileStream = FileInputStream(myFile)
+
+                    managePdbFile.parsePdbFile(fileStream, mol, name)
+
+                } catch (e: FileNotFoundException) {
+                    Timber.e("$name not found")
+                } catch (e: IOException) {
+                    Timber.e("$name IO Exception")
+                }
             }
 
             glSurfaceView.queueEvent {
@@ -197,6 +204,7 @@ class MotmProcessPdbs(
                     .dropLast(4)
                     .joinToString("/")
 
+            androidFilePath = "$sdcardRoot/PDB/"
 
             for (name in pdbFileNames) {
                 val file = File(sdcardRoot, "/PDB/$name.pdb")

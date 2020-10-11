@@ -27,24 +27,21 @@
 package com.bammellab.mollib
 
 import android.app.Activity
-import android.app.ActivityManager
 import android.graphics.Bitmap
 import android.opengl.GLES20
 import android.opengl.GLES30.glReadPixels
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
-import android.os.SystemClock
-import com.bammellab.mollib.common.math.Vector3
-import com.bammellab.mollib.objects.*
-import com.bammellab.mollib.protein.AtomInfo
-import com.bammellab.mollib.protein.Molecule
-import com.bammellab.mollib.protein.PdbAtom
+import com.bammellab.mollib.common.math.MotmVector3
+import com.bammellab.mollib.objects.BufferManager
+import com.bammellab.mollib.objects.CubeHacked
+import com.bammellab.mollib.objects.Pointer
+import com.bammellab.mollib.objects.XYZ
+import com.kotmol.pdbParser.Molecule
 import timber.log.Timber
 import java.nio.IntBuffer
-import java.util.*
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
-import kotlin.math.max
 
 /*
  *   MVP
@@ -87,6 +84,8 @@ class RendererDisplayPdbFile(
 
     private val floatVector1 = FloatArray(4)
     private val floatVector2 = FloatArray(4)
+    
+    private var displayHydrosFlag = false
 
 
     private var pdbFileName: String = "nofile"
@@ -226,8 +225,7 @@ class RendererDisplayPdbFile(
     private var mCube: CubeHacked? = null
     private var mPointer: Pointer? = null
     private var molecule: Molecule? = null
-
-    private val bufferManager = BufferManager.getInstance(activity)
+    
     private var reportedTimeFlag = false
 
     fun setMolecule(moleculeIn: Molecule) {
@@ -409,7 +407,7 @@ class RendererDisplayPdbFile(
             Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
             val foo = modelMatrix
             doMatrixSetup()
-            bufferManager.render(positionHandle, colorHandle, normalHandle, wireFrameRenderingFlag)
+            BufferManager.render(positionHandle, colorHandle, normalHandle, wireFrameRenderingFlag)
             // DEBUG:  box in scene center
             // mBoundingBox.render(positionHandle, colorHandle, normalHandle, wireFrameRenderingFlag);
 
@@ -426,15 +424,15 @@ class RendererDisplayPdbFile(
 
         if (!reportedTimeFlag) {
             reportedTimeFlag = true
-            val endTime = SystemClock.uptimeMillis().toFloat()
-            val elapsedTime = (endTime - molecule!!.startOfParseTime) / 1000
-            val prettyPrint = String.format("%6.2f", elapsedTime)
-            val activityManager = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
-            val memInfo = ActivityManager.MemoryInfo()
-            activityManager.getMemoryInfo(memInfo)
-            Timber.i("*** RENDERER mema %d seconds %s",
-                    memInfo.availMem / 1024 / 1024,
-                    prettyPrint)
+//            val endTime = SystemClock.uptimeMillis().toFloat()
+//            val elapsedTime = (endTime - molecule!!.startOfParseTime) / 1000
+//            val prettyPrint = String.format("%6.2f", elapsedTime)
+//            val activityManager = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
+//            val memInfo = ActivityManager.MemoryInfo()
+//            activityManager.getMemoryInfo(memInfo)
+//            Timber.i("*** RENDERER mema %d seconds %s",
+//                    memInfo.availMem / 1024 / 1024,
+//                    prettyPrint)
         }
 
 //        if (listener != null) {
@@ -670,7 +668,7 @@ class RendererDisplayPdbFile(
     }
 
     fun toggleHydrogenDisplayMode() {
-        molecule!!.displayHydrosFlag = !molecule!!.displayHydrosFlag
+        displayHydrosFlag = !displayHydrosFlag
     }
 
     fun toggleWireframeFlag() {
@@ -703,209 +701,209 @@ class RendererDisplayPdbFile(
         /*
          * first render the triangles of the molecule
          */
-        var scaleF = 1.5f / molecule!!.dcOffset
-        Matrix.setIdentityM(modelMatrix, 0)
-        Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
-        Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
-        doMatrixSetup()
-        bufferManager.render(positionHandle, colorHandle, normalHandle, wireFrameRenderingFlag)
-
-        // int[] mViewport = new int[]{0, 0, mWidth, mHeight};
-        mViewport[2] = mWidth
-        mViewport[3] = mHeight
-        val x = touchX.toInt()
-        // offset works out to 100 pixels on an Galaxy S2 (800 vertical),
-        //   or 160 on a Nexus 4 (1280 vertical)
-        val y = touchY.toInt() - (max(mHeight.toFloat(), mWidth.toFloat()) * 0.125f).toInt()
-
-        Matrix.setIdentityM(temporaryMatrix, 0)
-
-        /*        int result;
-        result = GLU.gluUnProject(x, mHeight - y, 0.0f, temporaryMatrix, 0,
-                projectionMatrix, 0, mViewport, 0, mFloatVector1, 0);
-
-        result = GLU.gluUnProject(x, mHeight - y, 1.0f, temporaryMatrix, 0,
-                projectionMatrix, 0, mViewport, 0, mFloatVector2, 0);*/
-
-        screenVector1.setAll(
-                (floatVector1[0] / floatVector1[3]).toDouble(),
-                (floatVector1[1] / floatVector1[3]).toDouble(),
-                (floatVector1[2] / floatVector1[3]).toDouble()
-        )
-
-        screenVector2.setAll(
-                (floatVector2[0] / floatVector2[3]).toDouble(),
-                (floatVector2[1] / floatVector2[3]).toDouble(),
-                (floatVector2[2] / floatVector2[3]).toDouble()
-        )
-
-        // now draw the targeted location in screen coords
-        doMatrixSetupViewOnly()
-
-        //        String pretty_print_a = String.format("%6.2f", screenVector1.x);
-        //        String pretty_print_b = String.format("%6.2f", screenVector1.y);
-        //        String pretty_print_c = String.format("%6.2f", screenVector1.z);
-
-        // Timber.i("pointer: " + pretty_print_a + pretty_print_b + pretty_print_c);
-
-        mPointer!!.setup(
-                screenVector1.x.toFloat(),
-                screenVector1.y.toFloat(),
-                -1.01f, scaleCurrentF)
-
-        mPointer!!.render(positionHandle, colorHandle, normalHandle, false /* wireFrameRenderingFlag */)
-
-        /*
-         * move the origin point of the interesecting ray out
-         *   a bit in Z space - so that the origin is always
-         *   towards the camera
-         */
-        tempVector1.setAll(screenVector2)
-        tempVector1.subtract(screenVector1)
-        tempVector1.normalize()
-        tempVector1.multiply(2.0)
-        screenVector1.subtract(tempVector1)
-
-        var selectedAtomIndex: Int
-
-        val gotHit = false
-
-        var atom1: PdbAtom?
-        selectedAtomsList.clear()
-        for (i in 0 until molecule!!.atoms.size) {
-            atom1 = molecule!!.atoms[molecule!!.numList[i]]
-            if (atom1 == null) {
-                Timber.e("drawSpheres: error - got null for " + molecule!!.numList[i])
-                continue
-            }
-            // skip HOH (water) molecules
-            if (atom1.atomType == PdbAtom.IS_HETATM && atom1.residueName == "HOH") {
-                continue
-            }
-
-            //            if (atom1.pickedAtom) {
-            //                atom1.pickedAtom = false;
-            //                managerViewmode.repeatViewMode();
-            //            }
-
-            floatVector2[0] = atom1.atomPosition.x.toFloat()
-            floatVector2[1] = atom1.atomPosition.y.toFloat()
-            floatVector2[2] = atom1.atomPosition.z.toFloat()
-            floatVector2[3] = 1.0f
-
-            // same as for rendering!!
-            // Works!!
-            scaleF = 1.5f / molecule!!.dcOffset
-            Matrix.setIdentityM(modelMatrix, 0)
-            Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
-            Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
-            doMatrixSetup()
-
-            Matrix.multiplyMM(temporaryMatrix, 0, viewMatrix, 0, modelMatrix, 0)
-            Matrix.multiplyMV(floatVector1, 0, temporaryMatrix, 0, floatVector2, 0)
-
-            if (floatVector1[3] == 0f) floatVector1[3] = 1.0f
-
-            testAtomVector.setAll(
-                    (floatVector1[0] / floatVector1[3]).toDouble(),
-                    (floatVector1[1] / floatVector1[3]).toDouble(),
-                    (floatVector1[2] / floatVector1[3]).toDouble()
-            )
-
-            /*  old way of doing the intersection:  */
-            //                got_hit = Intersector.intersectRaySphere(
-            //                        screenVector1, screenVector2,
-            //                        testAtomVector, 0.10f,
-            //                        screen_vector /* if a hit */);
-
-            /* end old way of doing the intersection */
-
-            // following along: http://paulbourke.net/geometry/circlesphere/raysphere.c
-
-            //   -- USE only static allocation in main loop
-            // Vector3 p1_minus_sc = new Vector3();
-            // Vector3 dp = new Vector3();
-
-            val p1_minus_sc = tempVector1
-            val dp = tempVector2
-
-            dp.setAll(screenVector2)
-            dp.subtract(screenVector1)
-            dp.normalize()
-
-            val a = dp.dot(dp)
-
-            p1_minus_sc.setAll(screenVector1)
-            p1_minus_sc.subtract(testAtomVector)
-
-            val b = 2 * dp.dot(p1_minus_sc)
-
-            var c = testAtomVector.dot(testAtomVector)
-            c += screenVector1.dot(screenVector1)
-            c -= 2 * testAtomVector.dot(screenVector1)
-            // c = c - (0.10 * 0.10);
-            // c = c - (0.05 * 0.05);
-            // tempVector1 the "radius" of the target sphere
-            //  based on the size of the molecule
-            val radius = 0.05 * 15.0 / molecule!!.dcOffset
-            c -= radius * radius
-
-            val bb4ac = b * b - 4.0 * a * c
-
-            /*
-             * if >= 0 then we have a hit
-             */
-            if (bb4ac >= 0) {
-
-                val selectedAtom = AtomInfo()
-                selectedAtom.atomTransformedPosition.setAll(testAtomVector)
-                selectedAtom.indexNumber = i
-                selectedAtomsList.add(selectedAtom)
-            }
-        }
-
-        if (selectedAtomsList.isEmpty()) {
-            return
-        }
-        var maxZ = -999999.0
-        selectedAtomIndex = 999999
-        var ai: AtomInfo
-        for (i in selectedAtomsList.indices) {
-            ai = selectedAtomsList[i]
-            val zvalue = ai.atomTransformedPosition.z
-            if (zvalue > maxZ) {
-                selectedAtomIndex = ai.indexNumber
-                maxZ = zvalue
-            }
-        }
-
-        //        if (atom1.atom_number != lastReportedAtom) {
-        //            Log.i("SEL", "atom " + atom1.atom_number);
-        //            lastReportedAtom = atom1.atom_number;
-        //        }
-
-
-        // pop in a cube - try to surround the picked atom
-        scaleF = 1.5f / molecule!!.dcOffset
-        // cube is 8X a molecule
-        // scaleF = scaleF / 8.0f;
-        Matrix.setIdentityM(modelMatrix, 0)
-        Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
-        Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
-
-
-        atom1 = molecule!!.atoms[molecule!!.numList[selectedAtomIndex]]
-        doMatrixSetup()
-        mCube!!.setup(
-                atom1!!.atomPosition.x.toFloat(),
-                atom1.atomPosition.y.toFloat(),
-                atom1.atomPosition.z.toFloat())
-        mCube!!.render(positionHandle, colorHandle, normalHandle, false /* wireFrameRenderingFlag */)
-
-        if (atom1.atomNumber != lastReportedAtom) {
-            Timber.i("atom %s", atom1.atomNumber)
-            lastReportedAtom = atom1.atomNumber
-        }
+//        var scaleF = (1.5f / molecule!!.dcOffset).toFloat()
+//        Matrix.setIdentityM(modelMatrix, 0)
+//        Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
+//        Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
+//        doMatrixSetup()
+//        BufferManager.render(positionHandle, colorHandle, normalHandle, wireFrameRenderingFlag)
+//
+//        // int[] mViewport = new int[]{0, 0, mWidth, mHeight};
+//        mViewport[2] = mWidth
+//        mViewport[3] = mHeight
+//        val x = touchX.toInt()
+//        // offset works out to 100 pixels on an Galaxy S2 (800 vertical),
+//        //   or 160 on a Nexus 4 (1280 vertical)
+//        val y = touchY.toInt() - (max(mHeight.toFloat(), mWidth.toFloat()) * 0.125f).toInt()
+//
+//        Matrix.setIdentityM(temporaryMatrix, 0)
+//
+//        /*        int result;
+//        result = GLU.gluUnProject(x, mHeight - y, 0.0f, temporaryMatrix, 0,
+//                projectionMatrix, 0, mViewport, 0, mFloatVector1, 0);
+//
+//        result = GLU.gluUnProject(x, mHeight - y, 1.0f, temporaryMatrix, 0,
+//                projectionMatrix, 0, mViewport, 0, mFloatVector2, 0);*/
+//
+//        screenVector1.setAll(
+//                (floatVector1[0] / floatVector1[3]).toDouble(),
+//                (floatVector1[1] / floatVector1[3]).toDouble(),
+//                (floatVector1[2] / floatVector1[3]).toDouble()
+//        )
+//
+//        screenVector2.setAll(
+//                (floatVector2[0] / floatVector2[3]).toDouble(),
+//                (floatVector2[1] / floatVector2[3]).toDouble(),
+//                (floatVector2[2] / floatVector2[3]).toDouble()
+//        )
+//
+//        // now draw the targeted location in screen coords
+//        doMatrixSetupViewOnly()
+//
+//        //        String pretty_print_a = String.format("%6.2f", screenVector1.x);
+//        //        String pretty_print_b = String.format("%6.2f", screenVector1.y);
+//        //        String pretty_print_c = String.format("%6.2f", screenVector1.z);
+//
+//        // Timber.i("pointer: " + pretty_print_a + pretty_print_b + pretty_print_c);
+//
+//        mPointer!!.setup(
+//                screenVector1.x.toFloat(),
+//                screenVector1.y.toFloat(),
+//                -1.01f, scaleCurrentF)
+//
+//        mPointer!!.render(positionHandle, colorHandle, normalHandle, false /* wireFrameRenderingFlag */)
+//
+//        /*
+//         * move the origin point of the interesecting ray out
+//         *   a bit in Z space - so that the origin is always
+//         *   towards the camera
+//         */
+//        tempVector1.setAll(screenVector2)
+//        tempVector1.subtract(screenVector1)
+//        tempVector1.normalize()
+//        tempVector1.multiply(2.0)
+//        screenVector1.subtract(tempVector1)
+//
+//        var selectedAtomIndex: Int
+//
+//        val gotHit = false
+//
+//        var atom1: PdbAtom?
+//        selectedAtomsList.clear()
+//        for (i in 0 until molecule!!.atomNumberList.size) {
+//            atom1 = molecule!!.atomNumberToAtomInfoHash[molecule!!.atomNumberList[i]]
+//            if (atom1 == null) {
+//                Timber.e("drawSpheres: error - got null for %d", molecule!!.atomNumberList[i])
+//                continue
+//            }
+//            // skip HOH (water) molecules
+//            if (atom1.atomType == PdbAtom.AtomType.IS_HETATM && atom1.residueName == "HOH") {
+//                continue
+//            }
+//
+//            //            if (atom1.pickedAtom) {
+//            //                atom1.pickedAtom = false;
+//            //                managerViewmode.repeatViewMode();
+//            //            }
+//
+//            floatVector2[0] = atom1.atomPosition.x.toFloat()
+//            floatVector2[1] = atom1.atomPosition.y.toFloat()
+//            floatVector2[2] = atom1.atomPosition.z.toFloat()
+//            floatVector2[3] = 1.0f
+//
+//            // same as for rendering!!
+//            // Works!!
+//            scaleF = (1.5f / molecule!!.dcOffset).toFloat()
+//            Matrix.setIdentityM(modelMatrix, 0)
+//            Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
+//            Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
+//            doMatrixSetup()
+//
+//            Matrix.multiplyMM(temporaryMatrix, 0, viewMatrix, 0, modelMatrix, 0)
+//            Matrix.multiplyMV(floatVector1, 0, temporaryMatrix, 0, floatVector2, 0)
+//
+//            if (floatVector1[3] == 0f) floatVector1[3] = 1.0f
+//
+//            testAtomVector.setAll(
+//                    (floatVector1[0] / floatVector1[3]).toDouble(),
+//                    (floatVector1[1] / floatVector1[3]).toDouble(),
+//                    (floatVector1[2] / floatVector1[3]).toDouble()
+//            )
+//
+//            /*  old way of doing the intersection:  */
+//            //                got_hit = Intersector.intersectRaySphere(
+//            //                        screenVector1, screenVector2,
+//            //                        testAtomVector, 0.10f,
+//            //                        screen_vector /* if a hit */);
+//
+//            /* end old way of doing the intersection */
+//
+//            // following along: http://paulbourke.net/geometry/circlesphere/raysphere.c
+//
+//            //   -- USE only static allocation in main loop
+//            // MotmVector3 p1_minus_sc = new MotmVector3();
+//            // MotmVector3 dp = new MotmVector3();
+//
+//            val p1_minus_sc = tempVector1
+//            val dp = tempVector2
+//
+//            dp.setAll(screenVector2)
+//            dp.subtract(screenVector1)
+//            dp.normalize()
+//
+//            val a = dp.dot(dp)
+//
+//            p1_minus_sc.setAll(screenVector1)
+//            p1_minus_sc.subtract(testAtomVector)
+//
+//            val b = 2 * dp.dot(p1_minus_sc)
+//
+//            var c = testAtomVector.dot(testAtomVector)
+//            c += screenVector1.dot(screenVector1)
+//            c -= 2 * testAtomVector.dot(screenVector1)
+//            // c = c - (0.10 * 0.10);
+//            // c = c - (0.05 * 0.05);
+//            // tempVector1 the "radius" of the target sphere
+//            //  based on the size of the molecule
+//            val radius = 0.05 * 15.0 / molecule!!.dcOffset
+//            c -= radius * radius
+//
+//            val bb4ac = b * b - 4.0 * a * c
+//
+//            /*
+//             * if >= 0 then we have a hit
+//             */
+//            if (bb4ac >= 0) {
+//
+//                val selectedAtom = AtomInfo()
+//                selectedAtom.atomTransformedPosition.setAll(testAtomVector)
+//                selectedAtom.indexNumber = i
+//                selectedAtomsList.add(selectedAtom)
+//            }
+//        }
+//
+//        if (selectedAtomsList.isEmpty()) {
+//            return
+//        }
+//        var maxZ = -999999.0
+//        selectedAtomIndex = 999999
+//        var ai: AtomInfo
+//        for (i in selectedAtomsList.indices) {
+//            ai = selectedAtomsList[i]
+//            val zvalue = ai.atomTransformedPosition.z
+//            if (zvalue > maxZ) {
+//                selectedAtomIndex = ai.indexNumber
+//                maxZ = zvalue
+//            }
+//        }
+//
+//        //        if (atom1.atom_number != lastReportedAtom) {
+//        //            Log.i("SEL", "atom " + atom1.atom_number);
+//        //            lastReportedAtom = atom1.atom_number;
+//        //        }
+//
+//
+//        // pop in a cube - try to surround the picked atom
+//        scaleF = 1.5f / molecule!!.dcOffset
+//        // cube is 8X a molecule
+//        // scaleF = scaleF / 8.0f;
+//        Matrix.setIdentityM(modelMatrix, 0)
+//        Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
+//        Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
+//
+//
+//        atom1 = molecule!!.atoms[molecule!!.numList[selectedAtomIndex]]
+//        doMatrixSetup()
+//        mCube!!.setup(
+//                atom1!!.atomPosition.x.toFloat(),
+//                atom1.atomPosition.y.toFloat(),
+//                atom1.atomPosition.z.toFloat())
+//        mCube!!.render(positionHandle, colorHandle, normalHandle, false /* wireFrameRenderingFlag */)
+//
+//        if (atom1.atomNumber != lastReportedAtom) {
+//            Timber.i("atom %s", atom1.atomNumber)
+//            lastReportedAtom = atom1.atomNumber
+//        }
 
 
     }
@@ -928,7 +926,7 @@ class RendererDisplayPdbFile(
     }
 
     fun doCleanUp() {
-        bufferManager.resetBuffersForNextUsage()
+        BufferManager.resetBuffersForNextUsage()
         molecule = null
         Timber.i("CLEANUP")
     }
@@ -971,13 +969,13 @@ class RendererDisplayPdbFile(
     }
 
     companion object {
-        private val screenVector1 = Vector3()
-        private val screenVector2 = Vector3()
-        private val tempVector1 = Vector3()
-        private val tempVector2 = Vector3()
-        private val testAtomVector = Vector3()
+        private val screenVector1 = MotmVector3()
+        private val screenVector2 = MotmVector3()
+        private val tempVector1 = MotmVector3()
+        private val tempVector2 = MotmVector3()
+        private val testAtomVector = MotmVector3()
 
-        private val selectedAtomsList = ArrayList<AtomInfo>()
+//        private val selectedAtomsList = ArrayList<AtomInfo>()
 
         private const val INITIAL_SCALE = 0.5f
         private var saveScale = 0f

@@ -15,7 +15,6 @@
 @file:Suppress("unused")
 package com.bammellab.mollib.common.math
 
-import com.kotmol.pdbParser.MotmVector3
 
 /**
  * Copyright 2013 Dennis Ippel

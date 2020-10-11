@@ -26,8 +26,7 @@ import timber.log.Timber
 
 // TODO: implement Interface in Activity - for flagging low mem in UI (commented out after lib refactor)
 class ManagerViewmode(private val activity: Activity,
-                      private val molecule: Molecule,
-                      private val BufferManager: BufferManager
+                      private val molecule: Molecule
                       ) {
 
     private val atomSphere: AtomSphere = AtomSphere(activity, molecule)
@@ -545,32 +544,31 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 /*
                  * whack the sphere quality and try again
                  */
-                sphereGeometrySlices = 5
-                ribbonSlices = 5
-                sphere = sphereAllocation(sphereGeometrySlices).toLong()
+//                sphereGeometrySlices = 5
+//                sphere = sphereAllocation(sphereGeometrySlices).toLong()
 
-                if (ribbons + bonds + sphere > initialAvailMem) {
-                    val overdraw2 = initialAvailMem - ribbons - bonds - sphere
-                    Timber.e("***  mema  TROUBLE delta: %d r: %d b: %d s: %d avail: %d",
-                            overdraw,
-                            ribbons,
-                            bonds,
-                            sphere,
-                            initialAvailMem)
-
-                    geometrySlices = 3
-                    sphereGeometrySlices = 3
-                    ribbonSlices = 5
-                    return false
-                } else {
-                    val overdraw2 = initialAvailMem - ribbons - bonds - sphere
-                    Timber.e("***  mema  OK No TROUBLE positive delta: %d r: %d b: %d s: %d have set sphere to 5",
-                            overdraw2,
-                            ribbons,
-                            bonds,
-                            sphere)
-
-                }
+//                if (ribbons + bonds + sphere > initialAvailMem) {
+//                    val overdraw2 = initialAvailMem - ribbons - bonds - sphere
+//                    Timber.e("***  mema  TROUBLE delta: %d r: %d b: %d s: %d avail: %d",
+//                            overdraw,
+//                            ribbons,
+//                            bonds,
+//                            sphere,
+//                            initialAvailMem)
+//
+//                    geometrySlices = 3
+//                    sphereGeometrySlices = 3
+//                    return false
+//                } else {
+//                    val overdraw2 = initialAvailMem - ribbons - bonds - sphere
+//                    Timber.e("***  mema  OK No TROUBLE positive delta: %d r: %d b: %d s: %d have set sphere to 5",
+//                            overdraw2,
+//                            ribbons,
+//                            bonds,
+//                            sphere)
+//
+//                }
+                return false
             }
         }
         return true  // rendering will fit, hopefully
@@ -600,7 +598,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
      *       This calculation overestimates the needed space by a little bit.
      */
     fun ribbonAllocation(numSlices: Int): Int {
-        return ribbonNodeCount * 10 *
+        return molecule.ribbonNodeCount * 10 *
                 6 * (numSlices + 1) * STRIDE_IN_BYTES
     }
 
