@@ -20,9 +20,6 @@ package com.bammellab.motm
 import android.app.ActivityManager
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.util.DisplayMetrics
@@ -34,9 +31,6 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
 import com.bammellab.mollib.RendererDisplayPdbFile
-import com.bammellab.mollib.protein.Molecule.Companion.UI_MESSAGE_FINISHED_PARSING
-import com.bammellab.mollib.protein.Molecule.Companion.UI_MESSAGE_FINISHED_VIEW_CHANGE
-import com.bammellab.mollib.protein.Molecule.Companion.UI_MESSAGE_GL_READY
 import com.bammellab.motm.util.PdbCache
 import timber.log.Timber
 import java.io.InputStream
@@ -58,7 +52,7 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
     private lateinit var gLSurfaceView: GLSurfaceViewDisplayPdbFile
     private lateinit var nextViewProgressCircle: ProgressBar
 
-    private lateinit var mRenderer: RendererDisplayPdbFile
+    private lateinit var renderer: RendererDisplayPdbFile
     private lateinit var pdbList: Array<String>
     private var currentPdbIndex: Int = 0
 
@@ -98,8 +92,8 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
 
-            mRenderer = RendererDisplayPdbFile(this, gLSurfaceView)
-            gLSurfaceView.setRenderer(mRenderer, displayMetrics.density)
+            renderer = RendererDisplayPdbFile(this, gLSurfaceView)
+            gLSurfaceView.setRenderer(renderer, displayMetrics.density)
 
             // This freezes the updates, now adjusted in GLSurfaceView
             // gLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -183,7 +177,7 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
 
     override fun onDestroy() {
         super.onDestroy()
-        mRenderer.doCleanUp()
+        renderer.doCleanUp()
     }
 
     /**
@@ -196,19 +190,19 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
     }
 
     private fun toggleShader() {
-        gLSurfaceView.queueEvent { mRenderer.toggleShader() }
+        gLSurfaceView.queueEvent { renderer.toggleShader() }
     }
 
     private fun toggleHydrogenDisplayMode() {
-        gLSurfaceView.queueEvent { mRenderer.toggleHydrogenDisplayMode() }
+        gLSurfaceView.queueEvent { renderer.toggleHydrogenDisplayMode() }
     }
 
     private fun toggleWireframe() {
-        gLSurfaceView.queueEvent { mRenderer.toggleWireframeFlag() }
+        gLSurfaceView.queueEvent { renderer.toggleWireframeFlag() }
     }
 
     private fun toggleSelect() {
-        gLSurfaceView.queueEvent { mRenderer.toggleSelectFlag() }
+        gLSurfaceView.queueEvent { renderer.toggleSelectFlag() }
     }
 
     fun changeViewIsFinished() {

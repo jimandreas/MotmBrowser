@@ -1423,7 +1423,7 @@ class RenderModal(private val mMol: Molecule) {
 
 
         private const val INITIAL_SLICES = 20
-        private const val RIBBON_INITIAL_SLICES = 3
+        private const val RIBBON_INITIAL_SLICES = 30
 
         private const val ribbonSlices = INITIAL_SLICES
 

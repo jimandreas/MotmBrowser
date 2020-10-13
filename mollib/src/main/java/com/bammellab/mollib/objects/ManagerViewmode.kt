@@ -44,9 +44,6 @@ class ManagerViewmode(private val activity: Activity,
         nextViewMode()
     }
 
-    //    public void repeatViewMode() {
-    //        doViewMode();
-    //    }
     fun nextViewMode() {
 
         if (++currentMode > VIEW_TOTAL_MODES) {
@@ -54,12 +51,6 @@ class ManagerViewmode(private val activity: Activity,
         }
 
         doViewMode()
-
-        /*
-         * let the UI know that the mode change is completed (to flush the spinner)
-         */
-//        val message = Message.obtain(handler, Molecule.UI_MESSAGE_FINISHED_VIEW_CHANGE)
-//        handler.dispatchMessage(message)
     }
 
     /*
@@ -106,7 +97,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
         val initialAvailMem = info2.threshold
         try {
             run bailout@ {
-                Timber.i("THRESHOLD mbyte = %d", initialAvailMem / 1024 / 1024)
+                Timber.i("doViewMode: THRESHOLD mbyte = %d", initialAvailMem / 1024 / 1024)
 
                 when (currentMode) {
                     VIEW_RIBBONS -> {
@@ -168,6 +159,8 @@ visibleAppThreshold = 94371840 (0x5A00000)
                         drawSpheres()
                     }
                 }
+                BufferManager.setBufferLoadingComplete()
+                Timber.e("doViewMode: buffer loading complete")
             }
         } catch (e: Exception) {
             Timber.e(e, "Crashed displaying: %s", molecule.molName)
@@ -176,9 +169,9 @@ visibleAppThreshold = 94371840 (0x5A00000)
     }
 
     /*
-             * obsolete now - but
-             *    it was fun while it lasted
-             */
+     * obsolete now - but
+     *    it was fun while it lasted
+     */
     //            case VIEW_RIBBONS_ONLY:
     //                renderAlphaHelix.renderAlphaHelices();
     //                mRenderBetaRibbon.renderBetaRibbons();
@@ -413,7 +406,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 }
             }
             atomSphere.genSphere(
-                    sphereGeometrySlices,
+                    SPHERE_SLICES,
                     useRadius,
                     atom1,
                     useColor)
@@ -634,9 +627,8 @@ visibleAppThreshold = 94371840 (0x5A00000)
 
         private var sDrawMode: Int = 0
 
-        private const val sphereGeometrySlices = 20 // TODO: make this dynamic
         private const val INITIAL_SLICES = 20
-
+        private const val SPHERE_SLICES = INITIAL_SLICES / 2 // TODO: make this dynamic
         private const val BYTES_PER_FLOAT = 4
         private const val BYTES_PER_SHORT = 2
         

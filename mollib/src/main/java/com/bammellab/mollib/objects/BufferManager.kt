@@ -59,6 +59,13 @@ object BufferManager {
 
     private var floatArray: FloatArray = FloatArray(150000)
     private var bufferList: ArrayList<GLArrayEntry> = ArrayList()
+    private val vertexDataFloatBuffer: FloatBuffer? = null
+    private var currentIndex = 0
+    private var bufferUsedCount = 0
+    private var alreadyReportedUsage = false
+    private var bufferLoadingComplete = false
+
+    private lateinit var this_instance: BufferManager
 
     var floatArrayIndex: Int
         get() = currentIndex
@@ -66,51 +73,36 @@ object BufferManager {
             currentIndex = indexIntoFloatArray
         }
 
-    //    public void resetBuffersForNextUsage() {
-    //        GLArrayEntry ae;
-    //        sFloatArrayIndex = 0;
-    //        sBufferUsed = 0;
-    //        sReportedUsage = false;
-    //
-    //        int i;
-    //        int count = 0;
-    //        for (i = 0; i < bufferList.size(); i++ ) {
-    //            ae = bufferList.get(i);
-    //            if (ae.bufferInUse) {
-    //                count++;
-    //            }
-    //            bufferList.get(i).clearBufferInUse();
-    //        }
-    ////        Timber.w("Dropped " + count + " buffers");
-    //    }
-
-
     fun resetBuffersForNextUsage() {
-        var ae: GLArrayEntry
+        var arrayEntry: GLArrayEntry
         currentIndex = 0
-        sBufferUsed = 0
-        sReportedUsage = false
-        //        sErrorReported = false;
+        bufferUsedCount = 0
+        alreadyReportedUsage = false
+        bufferLoadingComplete = false
 
         var i = 0
 
         while (i < bufferList.size) {
-            ae = bufferList[i]
-            ae.bufferInUse = false
-            if (ae.bufferAllocated) {
-                GLES20.glDeleteBuffers(1, ae.glBuf, 0)
+            arrayEntry = bufferList[i]
+            arrayEntry.bufferInUse = false
+            if (arrayEntry.bufferAllocated) {
+                GLES20.glDeleteBuffers(1, arrayEntry.glBuf, 0)
             }
             bufferList[i].clearBufferInUse()
             i++
         }
         bufferList.clear()
-        //        Timber.w("Dropped " + count + " buffers");
+        Timber.e("RESET BUFFERS")
+    }
+
+    fun setBufferLoadingComplete() {
+        bufferLoadingComplete = true
     }
 
 
     fun getFloatArray(requestedNumFloats: Int): FloatArray {
-        sBufferUsed += requestedNumFloats
-        if (requestedNumFloats + currentIndex < sFloatArraySize) {
+        bufferUsedCount += requestedNumFloats
+        if (requestedNumFloats + currentIndex < FLOAT_BUFFER_SIZE) {
             return floatArray
         }
 
@@ -157,25 +149,25 @@ object BufferManager {
      * 3) copy the float buffer into the GL buffer
      */
     fun transferToGl() {
-        var ae: GLArrayEntry? = null
+        var arrayEntry: GLArrayEntry? = null
         var i = 0
         while (i < bufferList.size) {
-            ae = bufferList[i]
-            if (!ae.bufferInUse) {
+            arrayEntry = bufferList[i]
+            if (!arrayEntry.bufferInUse) {
                 break
             }
             i++
         }
-        if (ae == null || i == bufferList.size) {  // create a record and a buffer
+        if (arrayEntry == null || i == bufferList.size) {  // create a record and a buffer
             //            Timber.i("creating buffer " + i);
 
             try {
-                ae = GLArrayEntry()
+                arrayEntry = GLArrayEntry()
                 // TODO: wrap the FloatBuffer
-                ae.bufferAllocated = true
-                ae.bufferInUse = true
-                ae.nativeFloatBuffer = ByteBuffer
-                        .allocateDirect(INITIAL_FLOAT_BUFFER_SIZE * BYTES_PER_FLOAT)
+                arrayEntry.bufferAllocated = true
+                arrayEntry.bufferInUse = true
+                arrayEntry.nativeFloatBuffer = ByteBuffer
+                        .allocateDirect(FLOAT_BUFFER_SIZE * BYTES_PER_FLOAT)
                         .order(ByteOrder.nativeOrder())
                         .asFloatBuffer()
             } catch (e: Exception) {
@@ -184,24 +176,24 @@ object BufferManager {
                 //                ae = null;
                 return
             } catch (outOfMemoryError: OutOfMemoryError) {
-                val allocated = (i * INITIAL_FLOAT_BUFFER_SIZE * BYTES_PER_FLOAT / 1024 / 1024).toLong()
+                val allocated = (i * FLOAT_BUFFER_SIZE * BYTES_PER_FLOAT / 1024 / 1024).toLong()
                 Timber.e("FAILED to allocate buffer, at index: %d, total alloc mbytes %d", i, allocated)
                 //                ae = null;
                 return
             }
 
         }
-        bufferList.add(ae)
-        ae.bufferInUse = true
-        ae.nativeFloatBuffer!!.put(floatArray).position(0)
-        GLES20.glGenBuffers(1, ae.glBuf, 0)
-        ae.numVertices = currentIndex / STRIDE_IN_FLOATS
+        bufferList.add(arrayEntry)
+        arrayEntry.bufferInUse = true
+        arrayEntry.nativeFloatBuffer!!.put(floatArray).position(0)
+        GLES20.glGenBuffers(1, arrayEntry.glBuf, 0)
+        arrayEntry.numVertices = currentIndex / STRIDE_IN_FLOATS
         val numbytes = currentIndex * BYTES_PER_FLOAT
 
-        if (ae.glBuf[0] > 0) {
-            GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, ae.glBuf[0])
+        if (arrayEntry.glBuf[0] > 0) {
+            GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, arrayEntry.glBuf[0])
             GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, numbytes,
-                    ae.nativeFloatBuffer, GLES20.GL_STATIC_DRAW)
+                    arrayEntry.nativeFloatBuffer, GLES20.GL_STATIC_DRAW)
 
             GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0)
         } else {
@@ -222,31 +214,35 @@ object BufferManager {
             normalAttribute: Int,
             doWireframeRendering: Boolean) {
 
-        var ae: GLArrayEntry
+        var arrayEntry: GLArrayEntry
 
-        if (!sReportedUsage) {
+        if (!bufferLoadingComplete) {
+            return
+        }
 
-            val bufferEfficiency = sBufferUsed / (bufferList.size * sFloatArraySize).toFloat()
+        if (!alreadyReportedUsage) {
+
+            val bufferEfficiency = bufferUsedCount / (bufferList.size * FLOAT_BUFFER_SIZE).toFloat()
             @SuppressLint("DefaultLocale") val prettyPrint = String.format("%6.2f", bufferEfficiency)
 
-            Timber.i("Buffer used: %d triangles: %d buffer percent used: %s",
-                    sBufferUsed, sBufferUsed / STRIDE_IN_FLOATS / 3, prettyPrint)
-            sReportedUsage = true
+            Timber.i("Buffer used: %d floats, %d triangles, buffer percent used: %s",
+                    bufferUsedCount, bufferUsedCount / STRIDE_IN_FLOATS / 3, prettyPrint)
+            alreadyReportedUsage = true
         }
 
         GLES20.glEnable(GLES20.GL_CULL_FACE)
 
         for (i in bufferList.indices) {
-            ae = bufferList[i]
-            if (!ae.bufferAllocated) {
+            arrayEntry = bufferList[i]
+            if (!arrayEntry.bufferAllocated) {
                 continue
             }
 
-            if (!ae.bufferInUse) {
+            if (!arrayEntry.bufferInUse) {
                 continue
             }
-            if (ae.glBuf[0] > 0) {
-                GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, ae.glBuf[0])
+            if (arrayEntry.glBuf[0] > 0) {
+                GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, arrayEntry.glBuf[0])
                 // associate the attributes with the bound buffer
                 GLES20.glVertexAttribPointer(positionAttribute,
                         POSITION_DATA_SIZE_IN_ELEMENTS,
@@ -271,7 +267,7 @@ object BufferManager {
                     GLES20.GL_TRIANGLES
                 }
 
-                GLES20.glDrawArrays(todo, 0, ae.numVertices)
+                GLES20.glDrawArrays(todo, 0, arrayEntry.numVertices)
 
                 GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0)  // release
             }
@@ -286,23 +282,13 @@ object BufferManager {
 
     }
 
-    private val sVertexDataFloatBuffer: FloatBuffer? = null
-    private var currentIndex: Int = 0
-    private var sBufferUsed: Int = 0
-    private var sReportedUsage: Boolean = false
-
-    private lateinit var this_instance: BufferManager
-    private var initialized: Boolean? = null
-
-    private const val INITIAL_FLOAT_BUFFER_SIZE = 150000
-    private const val sFloatArraySize = INITIAL_FLOAT_BUFFER_SIZE
+    private const val FLOAT_BUFFER_SIZE = 150000
     private const val POSITION_DATA_SIZE_IN_ELEMENTS = 3
     private const val NORMAL_DATA_SIZE_IN_ELEMENTS = 3
     private const val COLOR_DATA_SIZE_IN_ELEMENTS = 4
     private const val BYTES_PER_FLOAT = 4
-    //    private static final int BYTES_PER_SHORT = 2;
-
-    private const val STRIDE_IN_FLOATS = POSITION_DATA_SIZE_IN_ELEMENTS + NORMAL_DATA_SIZE_IN_ELEMENTS + COLOR_DATA_SIZE_IN_ELEMENTS
+    private const val STRIDE_IN_FLOATS =
+            POSITION_DATA_SIZE_IN_ELEMENTS + NORMAL_DATA_SIZE_IN_ELEMENTS + COLOR_DATA_SIZE_IN_ELEMENTS
     private const val STRIDE_IN_BYTES = STRIDE_IN_FLOATS * BYTES_PER_FLOAT
 
 }

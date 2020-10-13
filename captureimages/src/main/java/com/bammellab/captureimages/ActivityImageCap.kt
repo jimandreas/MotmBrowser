@@ -16,6 +16,7 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
     private lateinit var glSurfaceView: GLSurfaceViewDisplayPdbFile
     private lateinit var renderer: RendererDisplayPdbFile
     private lateinit var processPdbs : MotmProcessPdbs
+    private val pdbsCaptured = mutableListOf("")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.v("onCreate")
@@ -39,6 +40,7 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
 
         renderer = RendererDisplayPdbFile(this, glSurfaceView)
         glSurfaceView.setRenderer(renderer, displayMetrics.density)
+        renderer.setUpdateListener(this)
 
         // This freezes the updates, now adjusted in GLSurfaceView
         // gLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -52,9 +54,9 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
 
         processPdbs.startProcessing(captureImages = true)
 
-        Handler().postDelayed(Runnable { processPdbs.writeCurrentImage() }, 5000)
-        Handler().postDelayed(Runnable { processPdbs.loadNextPdbFile() }, 7000)
-        Handler().postDelayed(Runnable { processPdbs.writeCurrentImage() }, 10000)
+//        Handler().postDelayed(Runnable { processPdbs.writeCurrentImage() }, 5000)
+//        Handler().postDelayed(Runnable { processPdbs.loadNextPdbFile() }, 7000)
+//        Handler().postDelayed(Runnable { processPdbs.writeCurrentImage() }, 10000)
     }
 
 
@@ -103,7 +105,21 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
         return true
     }
 
-    override fun updateActivity() {
-        Timber.e("Update Activity")
+    override fun updateActivity(pdbName: String) {
+        if (!pdbsCaptured.contains(pdbName)) {
+            pdbsCaptured.add(pdbName)
+            Handler().postDelayed(Runnable {
+                Timber.e("************")
+                Timber.e("WRITE IMAGE")
+                Timber.e("************")
+                processPdbs.writeCurrentImage()
+            }, 2000)
+            Handler().postDelayed(Runnable {
+                Timber.e("************")
+                Timber.e("LOAD NEXT PDB")
+                Timber.e("************")
+                processPdbs.loadNextPdbFile()
+            }, 3000)
+        }
     }
 }

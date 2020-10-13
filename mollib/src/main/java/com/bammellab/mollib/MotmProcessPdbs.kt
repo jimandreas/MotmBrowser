@@ -92,16 +92,20 @@ class MotmProcessPdbs(
             managerViewmode = ManagerViewmode(
                     activity, mol)
 
-            BufferManager.resetBuffersForNextUsage()
-
             if (loadPdbFromAssets) {
                 managePdbFile.parsePdbFileFromAsset(name, mol)
             } else {
                 try {
-                    val myFile = File(androidFilePath, "$name.png")
+                    val myFile = File(androidFilePath, "$name.pdb")
+                    if (!myFile.exists()) {
+                        Timber.i("nope %s does not exist", myFile)
+                    } else {
+                        Timber.i("Yay %s exists", myFile)
+                    }
                     val fileStream = FileInputStream(myFile)
 
                     managePdbFile.parsePdbFile(fileStream, mol, name)
+                    fileStream.close()
 
                 } catch (e: FileNotFoundException) {
                     Timber.e("$name not found")
@@ -121,22 +125,24 @@ class MotmProcessPdbs(
 
 
     fun writeCurrentImage() {
-
+        if (nextNameIndex < 0 || nextNameIndex > pdbFileNames.size-1) {
+            return
+        }
         glSurfaceView.queueEvent {
             val internalSDcard = getDiskCacheDir("foo")
             try {
-                val externalStorageVolumes: Array<out File> =
-                        ContextCompat.getExternalFilesDirs(activity, null)
-                val sdcardRoot = externalStorageVolumes
-                        .last()
-                        .absolutePath
-                        .split("/")
-                        .dropLast(4)
-                        .joinToString("/")
+                // TODO: figure out how to get write permission to physical SDcard
+//                val externalStorageVolumes: Array<out File> =
+//                        ContextCompat.getExternalFilesDirs(activity, null)
+//                val sdcardRoot = externalStorageVolumes
+//                        .last()
+//                        .absolutePath
+//                        .split("/")
+//                        .dropLast(4)
+//                        .joinToString("/")
+//                val myFile = File(sdcardRoot, "/PDB/$pdbName.png")
 
                 val pdbName = pdbFileNames[nextNameIndex]
-                //val myFile = File(sdcardRoot, "/PDB/$pdbName.png")
-
                 val myFile = File("/sdcard/Pictures/", "$pdbName.png")
                 val fileOutputStream = FileOutputStream(myFile)
                 val bm = renderer.readGlBufferToBitmap(200, 500, 700, 700)
@@ -151,6 +157,7 @@ class MotmProcessPdbs(
             } catch (e: IOException) {
                 e.printStackTrace()
             }
+            Timber.e("writeCurrentImage: DONE WRITING")
         }
 
     }
@@ -207,7 +214,7 @@ class MotmProcessPdbs(
             androidFilePath = "$sdcardRoot/PDB/"
 
             for (name in pdbFileNames) {
-                val file = File(sdcardRoot, "/PDB/$name.pdb")
+                val file = File(androidFilePath, "$name.pdb")
                 if (!file.exists()) {
                     if (missingCount < 10) {
                         Timber.e("$file is missing from $path")

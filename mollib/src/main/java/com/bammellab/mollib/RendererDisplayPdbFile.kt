@@ -51,7 +51,7 @@ import javax.microedition.khronos.opengles.GL10
  */
 
 interface UpdateRenderFinished {
-    fun updateActivity()
+    fun updateActivity(name: String)
 }
 
 interface SurfaceCreated {
@@ -63,12 +63,18 @@ class RendererDisplayPdbFile(
         private val glSurfaceView: GLSurfaceViewDisplayPdbFile
 ) : GLSurfaceView.Renderer {
 
+    private var updateListener: UpdateRenderFinished? = null
     private var listener: UpdateRenderFinished? = null
-    private var surfaceCreated : SurfaceCreated? = null
+    private var surfaceCreated: SurfaceCreated? = null
     private var pdbLoaded = false
+    private var listenerIsUpdated = false
 
     fun setSurfaceCreatedListener(listener: SurfaceCreated) {
         surfaceCreated = listener
+    }
+
+    fun setUpdateListener(listener: UpdateRenderFinished) {
+        updateListener = listener
     }
 
     fun setPdbLoadedFlag() {
@@ -84,7 +90,7 @@ class RendererDisplayPdbFile(
 
     private val floatVector1 = FloatArray(4)
     private val floatVector2 = FloatArray(4)
-    
+
     private var displayHydrosFlag = false
 
 
@@ -225,15 +231,20 @@ class RendererDisplayPdbFile(
     private var mCube: CubeHacked? = null
     private var mPointer: Pointer? = null
     private var molecule: Molecule? = null
-    
+
     private var reportedTimeFlag = false
 
     fun setMolecule(moleculeIn: Molecule) {
         molecule = moleculeIn
         reportedTimeFlag = false
+        Timber.v("mol is set")
+        listenerIsUpdated = false
     }
+
     fun tossMoleculeToGC() {
         molecule = null
+        Timber.v("mol is null")
+        listenerIsUpdated = true
     }
 
     override fun onSurfaceCreated(glUnused: GL10, config: EGLConfig) {
@@ -435,9 +446,20 @@ class RendererDisplayPdbFile(
 //                    prettyPrint)
         }
 
-//        if (listener != null) {
-//            mActivity.runOnUiThread { listener!!.updateActivity()}
-//        }
+        if (updateListener != null) {
+            if (molecule != null && molecule!!.molName.isNotEmpty()) {
+                if (!listenerIsUpdated) {
+                    try {
+                        val name = molecule!!.molName!!
+                        Timber.e("onDrawFrame: Update Activity")
+                        activity.runOnUiThread { updateListener!!.updateActivity(name) }
+                        listenerIsUpdated = true
+                    } catch (e: Exception) {
+                        Timber.e("NULL pointer in renderer")
+                    }
+                }
+            }
+        }
     }
 
 
@@ -690,7 +712,6 @@ class RendererDisplayPdbFile(
             glSurfaceView.selectMode = true
         }
     }
-
 
 
     /**
