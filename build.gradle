@@ -20,7 +20,6 @@ buildscript {
             'atsl': '1.0.1',
             'kotlin': '1.4.10',
             'kotlinCoroutines': '1.2.1',
-//            'okhttp': '3.14.1',
             'okhttp': '4.9.0',
             'retrofit': '2.9.0',
     ]
@@ -131,8 +130,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.2'
-//        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.android.tools.build:gradle:4.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
 
     }

@@ -190,8 +190,8 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
 //        private val LOG_TAG = "activity"
     }
 
-    override fun updateActivity() {
-        Timber.e("Update Activity")
+    override fun updateActivity(name: String) {
+        Timber.v("updateActivity")
     }
 
 }
