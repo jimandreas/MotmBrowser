@@ -14,7 +14,7 @@
  * limitations under the License
  */
 
-@file:Suppress("unused", "MemberVisibilityCanBePrivate")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate", "CanBeVal")
 package com.bammellab.mollib.objects
 
 import android.app.Activity
@@ -31,11 +31,11 @@ class ManagerViewmode(private val activity: Activity,
 
     private val atomSphere: AtomSphere = AtomSphere(activity, molecule)
     private val atomToAtomBond: SegmentAtomToAtomBond = SegmentAtomToAtomBond(molecule)
-    private val mRenderModal: RenderModal = RenderModal(molecule)
-    private val mRenderNucleic: RenderNucleic = RenderNucleic(molecule)
+    private val renderModal: RenderModal = RenderModal(molecule)
+    private val renderNucleic: RenderNucleic = RenderNucleic(molecule)
     private var currentMode: Int = 0
-    
-    
+    private var drawMode: Int = 0
+
     var displayHydrosFlag = false
     var geometrySlices = 10
 
@@ -101,28 +101,28 @@ visibleAppThreshold = 94371840 (0x5A00000)
 
                 when (currentMode) {
                     VIEW_RIBBONS -> {
-                        sDrawMode = D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_RIBBONS
-                        calcMemoryUsage(sDrawMode)
-                        mRenderModal.renderModal()
-                        mRenderNucleic.renderNucleic()
+                        drawMode = D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_RIBBONS
+                        calcMemoryUsage(drawMode)
+                        renderModal.renderModal()
+                        renderNucleic.renderNucleic()
                         drawNucleicBonds()
                         drawHetatmBonds()
                         drawSpheres()
                     }
 
                     VIEW_RIBBONS_DEV_ALL -> {
-                        sDrawMode = (D_BALL_RADIUS or D_NUCLEIC or D_HETATM or D_ALL_ATOMS
+                        drawMode = (D_BALL_RADIUS or D_NUCLEIC or D_HETATM or D_ALL_ATOMS
                                 or D_RIBBONS or D_BONDS or D_SPHERES)
                         /*
                  * if there isn't enough memory, then drop back into ribbon mode
                  *    for now.   Save the check for no ribbons for later
                  *    TODO:  handle the no ribbon case
                  */
-                        if (!calcMemoryUsage(sDrawMode)) {
-                            sDrawMode = D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_RIBBONS
+                        if (!calcMemoryUsage(drawMode)) {
+                            drawMode = D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_RIBBONS
                             currentMode = VIEW_RIBBONS
-                            mRenderModal.renderModal()
-                            mRenderNucleic.renderNucleic()
+                            renderModal.renderModal()
+                            renderNucleic.renderNucleic()
                             drawNucleicBonds()
                             drawHetatmBonds()
                             drawSpheres()
@@ -133,29 +133,29 @@ visibleAppThreshold = 94371840 (0x5A00000)
                         }
                         drawPipeModel()
                         drawSpheres()
-                        mRenderModal.renderModal()
-                        mRenderNucleic.renderNucleic()
+                        renderModal.renderModal()
+                        renderNucleic.renderNucleic()
                     }
 
                     VIEW_STICK -> {
-                        sDrawMode = (D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_ALL_ATOMS
+                        drawMode = (D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_ALL_ATOMS
                                 or D_BONDS or D_SPHERES)
-                        calcMemoryUsage(sDrawMode)
+                        calcMemoryUsage(drawMode)
                         drawPipeModel()
                         drawSpheres()
                     }
                     VIEW_BALL_AND_STICK -> {
-                        sDrawMode = (D_BALL_RADIUS or D_NUCLEIC or D_HETATM or D_ALL_ATOMS
+                        drawMode = (D_BALL_RADIUS or D_NUCLEIC or D_HETATM or D_ALL_ATOMS
                                 or D_BONDS or D_SPHERES)
-                        calcMemoryUsage(sDrawMode)
+                        calcMemoryUsage(drawMode)
                         drawPipeModel()
                         drawSpheres()
                     }
 
                     VIEW_SPHERE -> {
-                        sDrawMode = (D_REAL_RADIUS or D_NUCLEIC or D_HETATM or D_ALL_ATOMS
+                        drawMode = (D_REAL_RADIUS or D_NUCLEIC or D_HETATM or D_ALL_ATOMS
                                 or D_SPHERES)
-                        calcMemoryUsage(sDrawMode)
+                        calcMemoryUsage(drawMode)
                         drawSpheres()
                     }
                 }
@@ -342,8 +342,8 @@ visibleAppThreshold = 94371840 (0x5A00000)
          */
         var radius = 0f
         when {
-            sDrawMode and D_REAL_RADIUS == D_REAL_RADIUS -> lookupRadius = true
-            sDrawMode and D_BALL_RADIUS == D_BALL_RADIUS -> radius = 0.50f
+            drawMode and D_REAL_RADIUS == D_REAL_RADIUS -> lookupRadius = true
+            drawMode and D_BALL_RADIUS == D_BALL_RADIUS -> radius = 0.50f
             else -> radius = 0.25f
         }
 
@@ -358,20 +358,20 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 continue
             }
             if (atom1.atomType == PdbAtom.AtomType.IS_NUCLEIC) {
-                if (sDrawMode and D_NUCLEIC == 0) {
+                if (drawMode and D_NUCLEIC == 0) {
                     continue
                 }
             } else if (atom1.atomType == PdbAtom.AtomType.IS_HETATM) {
-                if (sDrawMode and D_HETATM == 0) {
+                if (drawMode and D_HETATM == 0) {
                     continue
                 }
             } else if (atom1.elementSymbol == "H") {
                 if (!displayHydrosFlag) {
                     continue
-                } else if (sDrawMode and D_ALL_ATOMS == 0) {
+                } else if (drawMode and D_ALL_ATOMS == 0) {
                     continue
                 }
-            } else if (sDrawMode and D_ALL_ATOMS == 0) {
+            } else if (drawMode and D_ALL_ATOMS == 0) {
                 continue
             }
             if (atom1.atomBondCount == 0) {
@@ -513,7 +513,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
         initialAvailMem /= 2  // seems like we only get 1/2 to play with
 
         if (ribbons + bonds + sphere > initialAvailMem) {
-            geometrySlices = geometrySlices / 2
+            geometrySlices /= 2
 
             if (dmode and D_RIBBONS != 0) {
                 ribbons = bondAllocation(geometrySlices).toLong()
@@ -534,33 +534,6 @@ visibleAppThreshold = 94371840 (0x5A00000)
                         sphere,
                         initialAvailMem)
 
-                /*
-                 * whack the sphere quality and try again
-                 */
-//                sphereGeometrySlices = 5
-//                sphere = sphereAllocation(sphereGeometrySlices).toLong()
-
-//                if (ribbons + bonds + sphere > initialAvailMem) {
-//                    val overdraw2 = initialAvailMem - ribbons - bonds - sphere
-//                    Timber.e("***  mema  TROUBLE delta: %d r: %d b: %d s: %d avail: %d",
-//                            overdraw,
-//                            ribbons,
-//                            bonds,
-//                            sphere,
-//                            initialAvailMem)
-//
-//                    geometrySlices = 3
-//                    sphereGeometrySlices = 3
-//                    return false
-//                } else {
-//                    val overdraw2 = initialAvailMem - ribbons - bonds - sphere
-//                    Timber.e("***  mema  OK No TROUBLE positive delta: %d r: %d b: %d s: %d have set sphere to 5",
-//                            overdraw2,
-//                            ribbons,
-//                            bonds,
-//                            sphere)
-//
-//                }
                 return false
             }
         }
@@ -624,8 +597,6 @@ visibleAppThreshold = 94371840 (0x5A00000)
         private const val D_RIBBONS = 1 shl 7
         private const val D_BONDS = 1 shl 8
         private const val D_SPHERES = 1 shl 9
-
-        private var sDrawMode: Int = 0
 
         private const val INITIAL_SLICES = 20
         private const val SPHERE_SLICES = INITIAL_SLICES / 2 // TODO: make this dynamic
