@@ -62,4 +62,8 @@
     <string name="drawer_whodunnit">RCSB PDB-101</string>
     <string name="drawer_whodunnit_url">http://pdb101.rcsb.org/</string>
 
+    <!--images from github kotmol repo-->
+
+    <string name="images_url_kotmol_repo">https://github.com/kotmol/KotmolMotmImages/blob/master/docs/img/</string>
+
 </resources>

@@ -48,12 +48,14 @@ class MotmApplication : Application() {
     companion object {
         // URL prefix for web links to RCSB images
         // TODO: selectable RCSB data source (much later!)
-        const val PDB_IMAGE_WEB_PREFIX = "https://www.rcsb.org/pdb/images/"
+//        const val PDB_IMAGE_WEB_PREFIX = "https://www.rcsb.org/pdb/images/"
+        const val PDB_IMAGE_WEB_PREFIX = "https://github.com/kotmol/KotmolMotmImages/blob/master/docs/img/"
 
         const val PDB_MOTM_PREFIX = "https://pdb101.rcsb.org/motm/"
         const val PDB_MOTM_SUFFIX = "#sub-navbar"
 
         const val RCSB_MOTM_IMAGE_PREFIX = "https://cdn.rcsb.org/pdb101/motm/images/tn/"
+
 
         const val RCSB_PDB_INFO_PREFIX = "https://www.rcsb.org/pdb/explore.do?structureId="
         const val RCSB_PDB_INFO_SUFFIX = "#structureID"

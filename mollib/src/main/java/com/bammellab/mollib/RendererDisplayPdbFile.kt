@@ -963,12 +963,19 @@ class RendererDisplayPdbFile(
      *  Convert RGB(#000000) to transparent
      *  @link https://stackoverflow.com/a/5013141/3853712
      */
+    private lateinit var b : IntArray
+    private lateinit var bt: IntArray
+    private lateinit var ib: IntBuffer
+
+    fun allocateReadBitmapArrays() {
+        b = IntArray(400 * 400)
+        bt = IntArray(400 * 400)
+        ib = IntBuffer.wrap(b)
+    }
     fun readGlBufferToBitmap(x: Int, y: Int, w: Int, h: Int): Bitmap? {
-        val b = IntArray(w * (y + h))
-        val bt = IntArray(w * h)
-        val ib: IntBuffer = IntBuffer.wrap(b)
+
         ib.position(0)
-        glReadPixels(x, 0, w, y + h, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib)
+        glReadPixels(x, y, w, h, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib)
         val glError = GLES20.glGetError()
         if (glError != GLES20.GL_NO_ERROR) {
             Timber.e("OnDrawFrame, glerror =  $glError")
@@ -976,10 +983,11 @@ class RendererDisplayPdbFile(
         var i = 0
         var k = 0
         while (i < h) {
-            //remember, that OpenGL bitmap is incompatible with Android bitmap
-            //and so, some correction need.
+            // remember, that OpenGL bitmap is incompatible with Android bitmap
+            // and so, some correction is needed.
             for (j in 0 until w) {
-                var pix = b[(i + y) * w + j]
+                var pix = b[(i /*+ y*/) * w + j]
+                // convert black pixels to transparent
                 if (pix == 0xff000000.toInt()) {
                     pix = 0
                 }

@@ -64,6 +64,7 @@ object BufferManager {
     private var bufferUsedCount = 0
     private var alreadyReportedUsage = false
     private var bufferLoadingComplete = false
+    private var outOfMemoryFlag = false
 
     private lateinit var this_instance: BufferManager
 
@@ -79,6 +80,7 @@ object BufferManager {
         bufferUsedCount = 0
         alreadyReportedUsage = false
         bufferLoadingComplete = false
+        outOfMemoryFlag = false
 
         var i = 0
 
@@ -159,8 +161,9 @@ object BufferManager {
             i++
         }
         if (arrayEntry == null || i == bufferList.size) {  // create a record and a buffer
-            //            Timber.i("creating buffer " + i);
-
+            if (outOfMemoryFlag) {
+                return
+            }
             try {
                 arrayEntry = GLArrayEntry()
                 // TODO: wrap the FloatBuffer
@@ -177,8 +180,8 @@ object BufferManager {
                 return
             } catch (outOfMemoryError: OutOfMemoryError) {
                 val allocated = (i * FLOAT_BUFFER_SIZE * BYTES_PER_FLOAT / 1024 / 1024).toLong()
-                Timber.e("FAILED to allocate buffer, at index: %d, total alloc mbytes %d", i, allocated)
-                //                ae = null;
+                Timber.e("OOMerror transferToGL, at index: %d, total alloc mbytes %d", i, allocated)
+                outOfMemoryFlag = true
                 return
             }
 

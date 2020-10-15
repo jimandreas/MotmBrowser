@@ -49,6 +49,7 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
         windowManager.defaultDisplay.getMetrics(displayMetrics)
 
         renderer = RendererDisplayPdbFile(this, glSurfaceView)
+
         glSurfaceView.setRenderer(renderer, displayMetrics.density)
 
         // This freezes the updates, now adjusted in GLSurfaceView
@@ -62,6 +63,7 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
                 source = FROM_ASSETS)
 
         processPdbs.startProcessing()
+
 
         findViewById<View>(R.id.button_next_obj).setOnClickListener { processPdbs.loadNextPdbFile() }
 

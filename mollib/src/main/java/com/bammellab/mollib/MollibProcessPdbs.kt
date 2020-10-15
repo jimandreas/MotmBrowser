@@ -59,6 +59,9 @@ class MollibProcessPdbs(
 
     override fun surfaceCreatedCallback() {
         Timber.e("SURFACE CREATED CALLBACK")
+        if (loadPdbFrom == FROM_SDCARD) {
+            renderer.allocateReadBitmapArrays()
+        }
         loadNextPdbFile()
     }
 
@@ -150,7 +153,7 @@ class MollibProcessPdbs(
                 val pdbName = pdbFileNames[nextNameIndex]
                 val myFile = File("/sdcard/Pictures/", "$pdbName.png")
                 val fileOutputStream = FileOutputStream(myFile)
-                val bm = renderer.readGlBufferToBitmap(200, 500, 700, 700)
+                val bm = renderer.readGlBufferToBitmap(350, 580, 400, 400)
                 if (bm != null) {
                     bm.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
                     fileOutputStream.flush()

@@ -35,6 +35,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import com.bammellab.motm.MotmApplication.Companion.RCSB_PDB_INFO_SUFFIX
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -230,7 +231,10 @@ class MotmDetailActivity : AppCompatActivity()
 
             // TODO: jra - fix wired in resolution
             var imageUrl = MotmApplication.PDB_IMAGE_WEB_PREFIX
-            imageUrl = imageUrl + pdbId + "_asym_r_500.jpg"
+//            imageUrl = imageUrl + pdbId + "_asym_r_500.jpg" // these images have vanished
+            imageUrl = "$imageUrl$pdbId.png?raw=true"
+
+            Timber.v("image url is %s", imageUrl)
 
             Glide.with(this)
                     .load(imageUrl)
@@ -249,22 +253,22 @@ class MotmDetailActivity : AppCompatActivity()
              * respond to a click on the RCSB PDB imageview button
              *    Vector to the PDB info entry on the RCSB website
              */
-//            pdbLink.setOnClickListener { v ->
-//                val snackbar = Snackbar.make(v, "RCSB PDB info", Snackbar.LENGTH_LONG)
-//
-//                //val pdbOfInterest = v.tag as String
-//
-//                snackbar.setAction("View website") {
-//                    val intent = Intent(Intent.ACTION_VIEW)
-//
-//                    intent.data = Uri.parse(
-//                            MotmApplication.RCSB_PDB_INFO_PREFIX
-//                                    + pdbOfInterest + RCSB_PDB_INFO_SUFFIX
-//                    )
-//                    startActivity(intent)
-//                }
-//                snackbar.show()
-//            }
+            pdbLink.setOnClickListener { v ->
+                val snackbar = Snackbar.make(v, "RCSB PDB info", Snackbar.LENGTH_LONG)
+
+                val pdbOfInterest = v.tag as String
+
+                snackbar.setAction("View website") {
+                    val intent = Intent(Intent.ACTION_VIEW)
+
+                    intent.data = Uri.parse(
+                            MotmApplication.RCSB_PDB_INFO_PREFIX
+                                    + pdbOfInterest + RCSB_PDB_INFO_SUFFIX
+                    )
+                    startActivity(intent)
+                }
+                snackbar.show()
+            }
 
             /*
              * respond to a click on the molecule (PDB)

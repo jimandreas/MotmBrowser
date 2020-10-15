@@ -23,10 +23,6 @@ object MotmPdbNames {
     val pdbNames = listOf(
 
             "1bna",
-
-            "1bln", // crashes
-
-
             "148l",
             "1a0h",
             "1a0i",
