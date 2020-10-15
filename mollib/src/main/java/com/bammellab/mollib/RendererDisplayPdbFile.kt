@@ -368,10 +368,12 @@ class RendererDisplayPdbFile(
     }
 
     override fun onDrawFrame(glUnused: GL10) {
+
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
+
         if (molecule == null) {
             return
         }
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
 
         if (!selectModeFlag) {
             if (scaleCurrentF != scalePrevious) {
@@ -407,8 +409,11 @@ class RendererDisplayPdbFile(
             Matrix.multiplyMV(lightPosInWorldSpace, 0, lightModelMatrix, 0, lightPosInModelSpace, 0)
             Matrix.multiplyMV(lightPosInEyeSpace, 0, viewMatrix, 0, lightPosInWorldSpace, 0)
 
-            // TODO: fix scaling!!
-            val scaleF = .05f
+            var scaleF = 0.05f
+            if (molecule != null) {
+                scaleF = (0.5 / molecule!!.maxPostCenteringVectorMagnitude).toFloat()
+            }
+
 
             /*
              * render the molecule triangles
@@ -933,10 +938,10 @@ class RendererDisplayPdbFile(
      *  cube at 0,0,0
      */
     private fun debugCube() {
-        val scaleF = 0.05f
+        val debugCubeScale = 0.05f
         Matrix.setIdentityM(modelMatrix, 0)
         Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
-        Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
+        Matrix.scaleM(modelMatrix, 0, debugCubeScale, debugCubeScale, debugCubeScale)
 
         doMatrixSetup()
         mCube!!.setup(

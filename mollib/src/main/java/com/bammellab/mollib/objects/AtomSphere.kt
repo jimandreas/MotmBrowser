@@ -19,6 +19,7 @@ package com.bammellab.mollib.objects
 
 import android.app.Activity
 import com.bammellab.mollib.common.math.MathUtil
+import com.bammellab.mollib.objects.GlobalObject.BRIGHTNESS_FACTOR
 import com.kotmol.pdbParser.Molecule
 import com.kotmol.pdbParser.PdbAtom
 
@@ -58,19 +59,19 @@ class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
         /*
          * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
          */
-        normal_brightness_factor = (mMol.dcOffset / 3).toFloat()
+        normal_brightness_factor = (mMol.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR).toFloat()
 
         val location = atom.atomPosition
 
         /*
-         *  debugging picking
+         *  Todo: debugging picking
          */
-        @Suppress("ConstantConditionIf")
-        if (atom.pickedAtom) {
-            color = whiteColor
-            radius = 0.5f
-            // Timber.i("OVERRIDE color atom " + atom.atom_number );
-        }
+//        @Suppress("ConstantConditionIf")
+//        if (atom.pickedAtom) {
+//            color = whiteColor
+//            radius = 0.5f
+//            // Timber.i("OVERRIDE color atom " + atom.atom_number );
+//        }
         val angleStep = 2.0f * Math.PI.toFloat() / numSlices
 
         val vertexData = BufferManager.getFloatArray(

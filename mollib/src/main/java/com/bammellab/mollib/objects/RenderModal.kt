@@ -30,6 +30,7 @@ import timber.log.Timber
 import com.bammellab.mollib.common.math.CatmullRomCurve
 import com.bammellab.mollib.common.math.MathUtil
 import com.bammellab.mollib.common.math.MotmVector3
+import com.bammellab.mollib.objects.GlobalObject.BRIGHTNESS_FACTOR
 import com.bammellab.mollib.objects.SegmentAtomToAtomBond.Companion.cache2_valid
 import com.kotmol.pdbParser.ChainRenderingDescriptor
 import com.kotmol.pdbParser.ChainRenderingDescriptor.SecondaryStructureType
@@ -41,7 +42,7 @@ import kotlin.math.acos
 /*
  * render the polypeptide backbone "ribbon" - follows the Alpha Carbons (CA)
  */
-class RenderModal(private val mMol: Molecule) {
+class RenderModal(private val molecule: Molecule) {
 
 
     private val cylinderIndexCount: Int = 0
@@ -70,8 +71,8 @@ class RenderModal(private val mMol: Molecule) {
         var vnew: MotmVector3
         var j: Int
 
-        for (i in 0 until mMol.listofChainDescriptorLists.size) {
-            chainDescriptorList = mMol.listofChainDescriptorLists[i]
+        for (i in 0 until molecule.listofChainDescriptorLists.size) {
+            chainDescriptorList = molecule.listofChainDescriptorLists[i]
             if (chainDescriptorList.size < 2) {
                 continue
             }
@@ -123,8 +124,10 @@ class RenderModal(private val mMol: Molecule) {
                 }
 
                 guideAtom = chainEntry.guideAtom
-                vnew = MotmVector3(guideAtom!!.atomPosition)
-                guideAtomPoints.addPoint(vnew)
+                if (guideAtom != null) {
+                    vnew = MotmVector3(guideAtom.atomPosition)
+                    guideAtomPoints.addPoint(vnew)
+                }
 
                 chainEntry.curveIndex = j * CSF
 
@@ -1266,7 +1269,7 @@ class RenderModal(private val mMol: Molecule) {
          *    The normals are scaled to fit the viewport as a side-effect
          *    of scaling the molecule coordinates.
          */
-        val normalBrightnessFactor = mMol.dcOffset / 3
+        val normalBrightnessFactor = molecule.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR
 
         n[0] *= -normalBrightnessFactor.toFloat()
         n[1] *= -normalBrightnessFactor.toFloat()

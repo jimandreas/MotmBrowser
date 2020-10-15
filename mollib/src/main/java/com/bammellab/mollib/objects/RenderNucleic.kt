@@ -18,6 +18,7 @@
 package com.bammellab.mollib.objects
 
 import com.bammellab.mollib.common.math.MotmVector3
+import com.bammellab.mollib.objects.GlobalObject.BRIGHTNESS_FACTOR
 import com.kotmol.pdbParser.ChainRenderingDescriptor
 import com.kotmol.pdbParser.Molecule
 
@@ -64,7 +65,7 @@ class RenderNucleic(private val molecule: Molecule) {
         /*
          * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
          */
-        normal_brightness_factor = (molecule.dcOffset / 3).toFloat()
+        normal_brightness_factor = (molecule.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR).toFloat()
 
         var pdbBackboneList: List<*>
         var chainEntry: ChainRenderingDescriptor

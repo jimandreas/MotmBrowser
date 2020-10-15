@@ -19,6 +19,7 @@ package com.bammellab.mollib.objects
 
 import com.bammellab.mollib.common.math.MathUtil
 import com.bammellab.mollib.common.math.MotmVector3
+import com.bammellab.mollib.objects.GlobalObject.BRIGHTNESS_FACTOR
 import com.kotmol.pdbParser.AtomInformationTable
 import com.kotmol.pdbParser.Molecule
 import com.kotmol.pdbParser.PdbAtom
@@ -38,7 +39,7 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
         /*
          * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
          */
-        normal_brightness_factor = (molecule.dcOffset / 3).toFloat()
+        normal_brightness_factor = (molecule.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR).toFloat()
 
         var i = 0
         val startColor: FloatArray

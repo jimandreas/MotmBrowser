@@ -34,36 +34,36 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
     var selectMode = false
     private var lastTouchState = NO_FINGER_DOWN
 
-    private var mRenderer: RendererDisplayPdbFile? = null
+    private var renderer: RendererDisplayPdbFile? = null
 
-    private var mScroller: Scroller? = null
+    private var scroller: Scroller? = null
     private var gestureDetector: GestureDetector? = null
     private var mContext: Context? = null
 
     // Offsets for touch events
     private var previousX: Float = 0.toFloat()
     private var previousY: Float = 0.toFloat()
-    private var mDensity: Float = 0.toFloat()
+    private var density: Float = 0.toFloat()
     private var initialSpacing: Float = 0.toFloat()
 
     private var oldX = 0f
     private var oldY = 0f
 
     private val isAnimationRunning: Boolean
-        get() = !mScroller!!.isFinished
+        get() = !scroller!!.isFinished
 
-    constructor(context: Context) : super(context) {
-        init(context)
+    constructor(contextIn: Context) : super(contextIn) {
+        init(contextIn)
     }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(context)
+    constructor(contextIn: Context, attrs: AttributeSet) : super(contextIn, attrs) {
+        init(contextIn)
     }
 
-    private fun init(context: Context) {
+    private fun init(contextIn: Context) {
 
-        mContext = context
-        mScroller = Scroller(context, null, true)
+        mContext = contextIn
+        scroller = Scroller(contextIn, null, true)
 
         // The scroller doesn't have any built-in animation functions--it just supplies
         // values when we ask it to. So we have to have a way to call it every frame
@@ -77,7 +77,7 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
 
 
         // Create a gesture detector to handle onTouch messages
-        gestureDetector = GestureDetector(context, GestureListener())
+        gestureDetector = GestureDetector(contextIn, GestureListener())
 
         // Turn off long press--this control doesn't use it, and if long press is enabled,
         // you can't scroll for a bit, pause, then scroll some more (the pause is interpreted
@@ -129,8 +129,8 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                     x2 = m.getX(1)
                     y2 = m.getY(1)
 
-                    mRenderer!!.touchX = m.x
-                    mRenderer!!.touchY = m.y
+                    renderer!!.touchX = m.x
+                    renderer!!.touchY = m.y
 
                     oldX = (x1 + x2) / 2.0f
                     oldY = (y1 + y2) / 2.0f
@@ -145,16 +145,16 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                         x2 = m.getX(1)
                         y2 = m.getY(1)
 
-                        mRenderer!!.touchX = m.x
-                        mRenderer!!.touchY = m.y
+                        renderer!!.touchX = m.x
+                        renderer!!.touchY = m.y
 
                         deltax = (x1 + x2) / 2.0f
                         deltax -= oldX
                         deltay = (y1 + y2) / 2.0f
                         deltay -= oldY
 
-                        mRenderer!!.deltaTranslateX = mRenderer!!.deltaTranslateX + deltax / (mDensity * 300f)
-                        mRenderer!!.deltaTranslateY = mRenderer!!.deltaTranslateY - deltay / (mDensity * 300f)
+                        renderer!!.deltaTranslateX = renderer!!.deltaTranslateX + deltax / (density * 300f)
+                        renderer!!.deltaTranslateY = renderer!!.deltaTranslateY - deltay / (density * 300f)
 
                         oldX = (x1 + x2) / 2.0f
                         oldY = (y1 + y2) / 2.0f
@@ -170,21 +170,21 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
 
                             // TODO: adjust this exponent.
                             //   for now, hack into buckets
-                            if (mRenderer!!.scaleCurrentF < 0.1f) {
-                                mRenderer!!.scaleCurrentF = mRenderer!!.scaleCurrentF + -deltaSpacing / 1000f
-                            } else if (mRenderer!!.scaleCurrentF < 0.1f) {
-                                mRenderer!!.scaleCurrentF = mRenderer!!.scaleCurrentF + -deltaSpacing / 500f
-                            } else if (mRenderer!!.scaleCurrentF < 0.5f) {
-                                mRenderer!!.scaleCurrentF = mRenderer!!.scaleCurrentF + -deltaSpacing / 200f
-                            } else if (mRenderer!!.scaleCurrentF < 1f) {
-                                mRenderer!!.scaleCurrentF = mRenderer!!.scaleCurrentF + -deltaSpacing / 50f
-                            } else if (mRenderer!!.scaleCurrentF < 2f) {
-                                mRenderer!!.scaleCurrentF = mRenderer!!.scaleCurrentF + -deltaSpacing / 10f
-                            } else if (mRenderer!!.scaleCurrentF < 5f) {
-                                mRenderer!!.scaleCurrentF = mRenderer!!.scaleCurrentF + -deltaSpacing / 10f
-                            } else if (mRenderer!!.scaleCurrentF > 5f) {
+                            if (renderer!!.scaleCurrentF < 0.1f) {
+                                renderer!!.scaleCurrentF = renderer!!.scaleCurrentF + -deltaSpacing / 1000f
+                            } else if (renderer!!.scaleCurrentF < 0.1f) {
+                                renderer!!.scaleCurrentF = renderer!!.scaleCurrentF + -deltaSpacing / 500f
+                            } else if (renderer!!.scaleCurrentF < 0.5f) {
+                                renderer!!.scaleCurrentF = renderer!!.scaleCurrentF + -deltaSpacing / 200f
+                            } else if (renderer!!.scaleCurrentF < 1f) {
+                                renderer!!.scaleCurrentF = renderer!!.scaleCurrentF + -deltaSpacing / 50f
+                            } else if (renderer!!.scaleCurrentF < 2f) {
+                                renderer!!.scaleCurrentF = renderer!!.scaleCurrentF + -deltaSpacing / 10f
+                            } else if (renderer!!.scaleCurrentF < 5f) {
+                                renderer!!.scaleCurrentF = renderer!!.scaleCurrentF + -deltaSpacing / 10f
+                            } else if (renderer!!.scaleCurrentF > 5f) {
                                 if (deltaSpacing > 0) {
-                                    mRenderer!!.scaleCurrentF = mRenderer!!.scaleCurrentF + -deltaSpacing / 10f
+                                    renderer!!.scaleCurrentF = renderer!!.scaleCurrentF + -deltaSpacing / 10f
                                 }
                             }
                             //                        Log.w("Move", "Spacing is " + mRenderer.mScaleCurrentF + " spacing = " + deltaSpacing);
@@ -200,8 +200,8 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                         x2 = m.getX(1)
                         y2 = m.getY(1)
 
-                        mRenderer!!.touchX = m.x
-                        mRenderer!!.touchY = m.y
+                        renderer!!.touchX = m.x
+                        renderer!!.touchY = m.y
 
                         oldX = (x1 + x2) / 2.0f
                         oldY = (y1 + y2) / 2.0f
@@ -219,18 +219,18 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                 val x = m.x
                 val y = m.y
 
-                mRenderer!!.touchX = m.x
-                mRenderer!!.touchY = m.y
+                renderer!!.touchX = m.x
+                renderer!!.touchY = m.y
 
                 if (m.action == MotionEvent.ACTION_MOVE) {
                     if (lastTouchState != ONE_FINGER_DOWN) {  // handle anything to one finger interaction
                         lastTouchState = ONE_FINGER_DOWN
-                    } else if (mRenderer != null) {
-                        val deltaX = (x - previousX) / mDensity / 2f
-                        val deltaY = (y - previousY) / mDensity / 2f
+                    } else if (renderer != null) {
+                        val deltaX = (x - previousX) / density / 2f
+                        val deltaY = (y - previousY) / density / 2f
 
-                        mRenderer!!.deltaX = mRenderer!!.deltaX + deltaX
-                        mRenderer!!.deltaY = mRenderer!!.deltaY + deltaY
+                        renderer!!.deltaX = renderer!!.deltaX + deltaX
+                        renderer!!.deltaY = renderer!!.deltaY + deltaY
                         // Log.w("touch", ": mDX = " + mRenderer.mDeltaX + " mDY = " + mRenderer.mDeltaY);
                     }
                 }
@@ -274,10 +274,10 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
     }
 
     // Hides superclass method.
-    fun setRenderer(renderer: RendererDisplayPdbFile, density: Float) {
-        mRenderer = renderer
-        mDensity = density
-        super.setRenderer(renderer)
+    fun setRenderer(rendererIn: RendererDisplayPdbFile, densityIn: Float) {
+        renderer = rendererIn
+        density = densityIn
+        super.setRenderer(rendererIn)
     }
 
     /**
@@ -333,7 +333,7 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
      * Force a stop to all pie motion. Called when the user taps during a fling.
      */
     private fun stopScrolling() {
-        mScroller!!.forceFinished(true)
+        scroller!!.forceFinished(true)
 
         onScrollFinished()
     }
