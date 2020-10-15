@@ -17,8 +17,6 @@
 @file:Suppress("unused", "unused_variable", "unused_parameter")
 package com.bammellab.motm
 
-import android.app.ActivityManager
-import android.content.Context
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -28,11 +26,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
-import android.widget.Toast
-import com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
-import com.bammellab.mollib.RendererDisplayPdbFile
+import com.bammellab.mollib.*
+import com.bammellab.mollib.LoadFromSource.FROM_CACHE
 import com.bammellab.motm.util.PdbCache
-import timber.log.Timber
+import com.bammellab.motm.util.Utility.failDialog
 import java.io.InputStream
 
 
@@ -44,16 +41,19 @@ import java.io.InputStream
  * for the one to be displayed initially.
  */
 
-class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
+class MotmGraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
     private lateinit var buttonPreviousObj: Button
     private lateinit var buttonNextObj: Button
     private lateinit var buttonSelect: Button
     private lateinit var buttonChangeViewmode: Button
-    private lateinit var gLSurfaceView: GLSurfaceViewDisplayPdbFile
     private lateinit var nextViewProgressCircle: ProgressBar
 
+    private lateinit var glSurfaceView: GLSurfaceViewDisplayPdbFile
     private lateinit var renderer: RendererDisplayPdbFile
-    private lateinit var pdbList: Array<String>
+
+    private lateinit var processPdbs: MollibProcessPdbs
+
+    private var pdbList: Array<String>? = null
     private var currentPdbIndex: Int = 0
 
     private lateinit var pdbCache: PdbCache
@@ -67,17 +67,19 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
         pdbList = intent.getStringArrayExtra(INTENT_TAG_LIST)
         currentPdbIndex = intent.getIntExtra(INTENT_TAG_INDEX, 0)
 
+        // TODO: complain dialog if the list is empty
+
         setContentView(R.layout.activity_graphics)
         buttonPreviousObj = findViewById(R.id.button_prev_obj)
         buttonNextObj = findViewById(R.id.button_next_obj)
         buttonSelect = findViewById(R.id.button_select)
         buttonChangeViewmode = findViewById(R.id.button_change_viewmode)
-        gLSurfaceView = findViewById(R.id.gl_surface_view)
+        glSurfaceView = findViewById(R.id.gl_surface_view)
         nextViewProgressCircle = findViewById(R.id.next_view_progress_circle)
 
-        pdbCache = PdbCache(this, gLSurfaceView.context)
+        pdbCache = PdbCache(this, glSurfaceView.context)
 
-        //        gLSurfaceView = (GLSurfaceViewDisplayPdbFile) findViewById(R.id.gl_surface_view);
+        /*//        gLSurfaceView = (GLSurfaceViewDisplayPdbFile) findViewById(R.id.gl_surface_view);
         //        nextViewProgressCircle = (ProgressBar) findViewById(R.id.next_view_progress_circle);
 
         // Check if the system supports OpenGL ES 2.0.
@@ -102,77 +104,67 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
             Toast.makeText(this, "Need OpenGL2 support, sorry", Toast.LENGTH_LONG)
                     .show()
             return
+        }*/
+
+        if (!checkForOpengl(this)) {
+            failDialog(this,
+                    R.string.activity_support_requirement,
+                    R.string.activity_support_requirement
+            )
+            return
         }
+
+        // Request an OpenGL ES 2.0 compatible context.
+        glSurfaceView.setEGLContextClientVersion(2)
+
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+
+        renderer = RendererDisplayPdbFile(this, glSurfaceView)
+        glSurfaceView.setRenderer(renderer, displayMetrics.density)
 
         // TODO: fully implement "select".  For now turn it off
         buttonSelect.visibility = View.GONE
         buttonSelect.isClickable = false
 
+        // This freezes the updates, now adjusted in GLSurfaceView
+        // glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+
+        processPdbs = MollibProcessPdbs(
+                this,
+                glSurfaceView,
+                renderer,
+                pdbList!!.toList(),
+                source = FROM_CACHE)
+
         /*
          * Go to next PDB in the list
          */
-        buttonNextObj.setOnClickListener(View.OnClickListener {
-            if (pdbList.isEmpty() || currentPdbIndex < 0 || currentPdbIndex > pdbList.size) {
-                Timber.e("Error with pdb list: list size: %d index requested: %d",
-                        pdbList.size, currentPdbIndex)
-                return@OnClickListener
-            }
-
-            nextViewProgressCircle.visibility = View.VISIBLE
-
-            if (++currentPdbIndex == pdbList.size) {
-                currentPdbIndex = 0
-            }
-            title = pdbList[currentPdbIndex]
-            pdbCache.downloadPdb(pdbList[currentPdbIndex])
-        })
+        buttonNextObj.setOnClickListener { processPdbs.loadNextPdbFile() }
 
         /*
          * Go to previous PDB in the list
          */
-        buttonPreviousObj.setOnClickListener(View.OnClickListener {
-            if (pdbList.isEmpty() || currentPdbIndex < 0 || currentPdbIndex > pdbList.size) {
-                Timber.e("Error with pdb list: list size: %d index requested: %d",
-                        pdbList.size, currentPdbIndex)
-                return@OnClickListener
-            }
-
-            nextViewProgressCircle.visibility = View.VISIBLE
-
-            if (--currentPdbIndex < 0) {
-                currentPdbIndex = pdbList.size - 1
-            }
-            title = pdbList[currentPdbIndex]
-            pdbCache.downloadPdb(pdbList[currentPdbIndex])
-        })
+        buttonPreviousObj.setOnClickListener { processPdbs.loadPrevPdbFile() }
 
         buttonSelect.setOnClickListener { toggleSelect() }
 
         // TODO: update this spinnner
-        buttonChangeViewmode.setOnClickListener {
-            nextViewProgressCircle.visibility = View.VISIBLE
+//        buttonChangeViewmode.setOnClickListener {
+//            nextViewProgressCircle.visibility = View.VISIBLE
 //            gLSurfaceView.queueEvent { mRenderer.nextViewMode() }
-        }
-
-        /*
-         * set the Title as the PDB code
-         */
-        try {
-            title = pdbList[currentPdbIndex]
-        } catch (e: Exception) {
-            Timber.e(e, "failure on pdb file indexing")
-        }
+//        }
 
     }
 
     override fun onResume() {
         super.onResume()
-        gLSurfaceView.onResume()
+        glSurfaceView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        gLSurfaceView.onPause()
+        glSurfaceView.onPause()
     }
 
     override fun onDestroy() {
@@ -186,23 +178,23 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
      * @param stream input stream from cache or from http
      */
     override fun loadPdbFromStream(stream: InputStream) {
-//        gLSurfaceView.queueEvent { mRenderer.loadPdbFromStream(stream) }
+
     }
 
     private fun toggleShader() {
-        gLSurfaceView.queueEvent { renderer.toggleShader() }
+        glSurfaceView.queueEvent { renderer.toggleShader() }
     }
 
     private fun toggleHydrogenDisplayMode() {
-        gLSurfaceView.queueEvent { renderer.toggleHydrogenDisplayMode() }
+        glSurfaceView.queueEvent { renderer.toggleHydrogenDisplayMode() }
     }
 
     private fun toggleWireframe() {
-        gLSurfaceView.queueEvent { renderer.toggleWireframeFlag() }
+        glSurfaceView.queueEvent { renderer.toggleWireframeFlag() }
     }
 
     private fun toggleSelect() {
-        gLSurfaceView.queueEvent { renderer.toggleSelectFlag() }
+        glSurfaceView.queueEvent { renderer.toggleSelectFlag() }
     }
 
     fun changeViewIsFinished() {
@@ -243,33 +235,6 @@ class GraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
 
         return super.onOptionsItemSelected(item)
     }
-
-
-    /**
-     * receive messages from the renderer
-     * Currently:
-     * GL_READY - the GL components are created - instance state can
-     * now be set
-     * UPDATE_RPM - RPM indicator - to be implemented
-     *
-     * @param msg message sent from renderer
-     * @return true - TODO: understand if this means something
-     */
-
-//    override fun handleMessage(msg: Message): Boolean {
-//
-//        // http://stackoverflow.com/a/27659565/3853712
-//
-//
-//        when (msg.what) {
-//            UI_MESSAGE_GL_READY -> {
-//                pdbCache.downloadPdb(pdbList[currentPdbIndex])
-//                runOnUiThread { nextViewProgressCircle.visibility = View.VISIBLE }
-//            }
-//            UI_MESSAGE_FINISHED_PARSING, UI_MESSAGE_FINISHED_VIEW_CHANGE -> runOnUiThread { nextViewProgressCircle.visibility = View.INVISIBLE }
-//        }
-//        return true
-//    }
 
     companion object {
         const val INTENT_TAG_LIST = "pdbList"

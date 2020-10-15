@@ -8,6 +8,7 @@ import android.util.DisplayMetrics
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import com.bammellab.mollib.*
+import com.bammellab.mollib.LoadFromSource.FROM_SDCARD
 import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 
@@ -15,7 +16,7 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
 
     private lateinit var glSurfaceView: GLSurfaceViewDisplayPdbFile
     private lateinit var renderer: RendererDisplayPdbFile
-    private lateinit var processPdbs : MotmProcessPdbs
+    private lateinit var processPdbs : MollibProcessPdbs
     private val pdbsCaptured = mutableListOf("")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,12 +46,12 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
         // This freezes the updates, now adjusted in GLSurfaceView
         // gLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
-        processPdbs = MotmProcessPdbs(
+        processPdbs = MollibProcessPdbs(
                 this,
                 glSurfaceView,
                 renderer,
                 MotmPdbNames.pdbNames,
-                loadPdbFromAssetsIn = false)
+                source = FROM_SDCARD)
 
         processPdbs.startProcessing(captureImages = true)
 
@@ -105,16 +106,16 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
         return true
     }
 
-    override fun updateActivity(pdbName: String) {
-        if (!pdbsCaptured.contains(pdbName)) {
-            pdbsCaptured.add(pdbName)
-            Handler().postDelayed(Runnable {
+    override fun updateActivity(name: String) {
+        if (!pdbsCaptured.contains(name)) {
+            pdbsCaptured.add(name)
+            Handler().postDelayed({
                 Timber.e("************")
                 Timber.e("WRITE IMAGE")
                 Timber.e("************")
                 processPdbs.writeCurrentImage()
             }, 2000)
-            Handler().postDelayed(Runnable {
+            Handler().postDelayed({
                 Timber.e("************")
                 Timber.e("LOAD NEXT PDB")
                 Timber.e("************")

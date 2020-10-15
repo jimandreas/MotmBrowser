@@ -34,12 +34,16 @@ package com.bammellab.motm.util
  that he has performed in musical theater productions, but he would deny it.
  */
 
+import android.app.Activity
+import android.app.ActivityManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Uri
+import androidx.appcompat.app.AlertDialog
+import com.bammellab.motm.R
 
 object Utility {
 
@@ -91,5 +95,28 @@ object Utility {
                     Uri.parse("http://www.youtube.com/watch?v=$id"))
             context.startActivity(intent)
         }
+    }
+
+    fun failDialog(
+            activityIn: Activity,
+            titleString: Int,
+            messageString: Int
+    ) {
+        AlertDialog.Builder(activityIn)
+                .setTitle(activityIn.getString(titleString))
+                .setMessage(activityIn.getString(messageString))
+                .setPositiveButton(activityIn.getString( R.string.affirmative_respose))
+                { _, _ ->
+                    activityIn.finish()
+                } .show()
+    }
+
+    fun checkForOpengl(activityIn: Activity): Boolean {
+        // Check if the system supports OpenGL ES 2.0.
+        val activityManager = activityIn.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val configurationInfo = activityManager.deviceConfigurationInfo
+        val supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000
+
+        return supportsEs2
     }
 }

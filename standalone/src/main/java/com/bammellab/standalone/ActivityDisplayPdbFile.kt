@@ -10,10 +10,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
-import com.bammellab.mollib.MotmProcessPdbs
-import com.bammellab.mollib.RendererDisplayPdbFile
-import com.bammellab.mollib.UpdateRenderFinished
+import com.bammellab.mollib.*
+import com.bammellab.mollib.LoadFromSource.FROM_ASSETS
 import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 
@@ -25,7 +23,7 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
     /** Hold a reference to our GLSurfaceView  */
     private lateinit var glSurfaceView: GLSurfaceViewDisplayPdbFile
     private lateinit var renderer: RendererDisplayPdbFile
-    private lateinit var processPdbs: MotmProcessPdbs
+    private lateinit var processPdbs: MollibProcessPdbs
 
     private var nextViewProgress: ProgressBar? = null
 
@@ -56,12 +54,12 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
         // This freezes the updates, now adjusted in GLSurfaceView
         // glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
-        processPdbs = MotmProcessPdbs(
+        processPdbs = MollibProcessPdbs(
                 this,
                 glSurfaceView,
                 renderer,
                 pdbFileNames2,
-                loadPdbFromAssetsIn = true)
+                source = FROM_ASSETS)
 
         processPdbs.startProcessing()
 
@@ -72,7 +70,7 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
         findViewById<View>(R.id.button_select).setOnClickListener { toggleSelect() }
 
         findViewById<View>(R.id.button_change_viewmode).setOnClickListener {
-            nextViewProgress!!.visibility = View.VISIBLE
+//            nextViewProgress!!.visibility = View.VISIBLE
 //            glSurfaceView.queueEvent { renderer.nextViewMode() }
         }
     }
@@ -83,7 +81,6 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
     private val pdbFileNames2 = listOf(
 
             "1bna",
-            "1bln",
             "1AGU_simple",
             "1amb",
             // "1bn0", // boring

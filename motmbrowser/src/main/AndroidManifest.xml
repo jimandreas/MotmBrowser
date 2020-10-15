@@ -44,7 +44,7 @@
                 android:value="com.bammellab.motm.MainActivity" />
         </activity>
         <activity
-            android:name="com.bammellab.motm.GraphicsActivity"
+            android:name="com.bammellab.motm.MotmGraphicsActivity"
             android:parentActivityName="com.bammellab.motm.MotmDetailActivity"
             android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
             <meta-data

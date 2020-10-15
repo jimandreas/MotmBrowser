@@ -291,11 +291,11 @@ class MotmDetailActivity : AppCompatActivity()
                     }
                     if (i < pdbsStringArray.size) {
                         val intent = Intent(
-                                this@MotmDetailActivity, GraphicsActivity::class.java)
+                                this@MotmDetailActivity, MotmGraphicsActivity::class.java)
                         intent.putExtra(
-                                GraphicsActivity.INTENT_TAG_LIST, pdbsStringArray)
+                                MotmGraphicsActivity.INTENT_TAG_LIST, pdbsStringArray)
                         intent.putExtra(
-                                GraphicsActivity.INTENT_TAG_INDEX, i)
+                                MotmGraphicsActivity.INTENT_TAG_INDEX, i)
                         startActivity(intent)
                     }
                 })

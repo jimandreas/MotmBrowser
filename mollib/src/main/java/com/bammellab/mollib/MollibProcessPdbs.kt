@@ -2,10 +2,9 @@ package com.bammellab.mollib
 
 import android.graphics.Bitmap
 import android.os.Environment
-import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.bammellab.mollib.objects.BufferManager
+import com.bammellab.mollib.LoadFromSource.*
 import com.bammellab.mollib.objects.ManagerViewmode
 import com.kotmol.pdbParser.Molecule
 import kotlinx.coroutines.Dispatchers
@@ -15,22 +14,28 @@ import kotlinx.coroutines.sync.Mutex
 import timber.log.Timber
 import java.io.*
 
+enum class LoadFromSource {
+    FROM_ASSETS,
+    FROM_SDCARD,
+    FROM_CACHE
+}
+
 /**
  * common code to parse and display PDB info
  *   from a PDB folder or from a local asset file.
  */
-class MotmProcessPdbs(
+class MollibProcessPdbs(
         activityIn: AppCompatActivity,
         glSurfaceViewIn: GLSurfaceViewDisplayPdbFile,
         rendererIn: RendererDisplayPdbFile,
         pdbFileNamesIn: List<String>,
-        loadPdbFromAssetsIn: Boolean
+        source: LoadFromSource
 ) : SurfaceCreated {
     private val activity = activityIn
     private val glSurfaceView = glSurfaceViewIn
     private val renderer = rendererIn
     private val managePdbFile = ManagePdbFile(activityIn)
-    private val loadPdbFromAssets = loadPdbFromAssetsIn
+    private val loadPdbFrom = source
     private lateinit var managerViewmode: ManagerViewmode
 
     private var nextNameIndex = -1
@@ -41,7 +46,7 @@ class MotmProcessPdbs(
     private var androidFilePath = ""
 
     init {
-        if (!loadPdbFromAssets) {
+        if (loadPdbFrom == FROM_SDCARD) {
             checkFiles()
         }
         rendererIn.setSurfaceCreatedListener(this)
@@ -92,7 +97,7 @@ class MotmProcessPdbs(
             managerViewmode = ManagerViewmode(
                     activity, mol)
 
-            if (loadPdbFromAssets) {
+            if (loadPdbFrom == FROM_ASSETS) {
                 managePdbFile.parsePdbFileFromAsset(name, mol)
             } else {
                 try {
