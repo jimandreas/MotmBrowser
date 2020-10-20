@@ -72,8 +72,7 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
         findViewById<View>(R.id.button_select).setOnClickListener { toggleSelect() }
 
         findViewById<View>(R.id.button_change_viewmode).setOnClickListener {
-//            nextViewProgress!!.visibility = View.VISIBLE
-//            glSurfaceView.queueEvent { renderer.nextViewMode() }
+            processPdbs.nextViewMode()
         }
     }
 
@@ -82,9 +81,11 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
     // wire in the names and display names
     private val pdbFileNames2 = listOf(
 
+            "1aew_firstloop",
+
             "1bna",
             "1aew",
-            "1aew_firstloop",
+
             "1AGU_simple",
             "1amb",
             // "1bn0", // boring
@@ -135,7 +136,6 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
     fun changeViewIsFinished() {
         runOnUiThread { nextViewProgress!!.visibility = View.INVISIBLE }
     }
-
 
 
     fun noMemoryForAtomView() {

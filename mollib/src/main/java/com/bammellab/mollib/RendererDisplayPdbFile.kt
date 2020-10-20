@@ -63,6 +63,8 @@ class RendererDisplayPdbFile(
         private val glSurfaceView: GLSurfaceViewDisplayPdbFile
 ) : GLSurfaceView.Renderer {
 
+    private var renderCubeFlag = false // set to true for centered cube in view.
+
     private var updateListener: UpdateRenderFinished? = null
     private var listener: UpdateRenderFinished? = null
     private var surfaceCreated: SurfaceCreated? = null
@@ -429,7 +431,12 @@ class RendererDisplayPdbFile(
             // mBoundingBox.render(positionHandle, colorHandle, normalHandle, wireFrameRenderingFlag);
 
             // DEBUG cube
-            debugCube()
+            if (renderCubeFlag) {
+                debugCube()
+            }
+
+            // END of DEBUG cube
+
             val glError = GLES20.glGetError()
             if (glError != GLES20.GL_NO_ERROR) {
                 Timber.e("GLERROR: $glError")

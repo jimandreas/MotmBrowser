@@ -4,13 +4,13 @@ import android.graphics.Bitmap
 import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.bammellab.mollib.LoadFromSource.*
+import com.bammellab.mollib.LoadFromSource.FROM_ASSETS
+import com.bammellab.mollib.LoadFromSource.FROM_SDCARD
 import com.bammellab.mollib.objects.ManagerViewmode
 import com.kotmol.pdbParser.Molecule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.sync.Mutex
 import timber.log.Timber
 import java.io.*
 
@@ -36,7 +36,7 @@ class MollibProcessPdbs(
     private val renderer = rendererIn
     private val managePdbFile = ManagePdbFile(activityIn)
     private val loadPdbFrom = source
-    private lateinit var managerViewmode: ManagerViewmode
+    private var managerViewmode: ManagerViewmode? = null
 
     private var nextNameIndex = -1
 
@@ -71,12 +71,6 @@ class MollibProcessPdbs(
         }
         Timber.v("Next file: %s", pdbFileNames[nextNameIndex])
         commonStuff()
-
-//        if (captureImagesFlag) {
-//            writeCurrentImage()
-//        }
-
-
     }
 
     fun loadPrevPdbFile() {
@@ -86,9 +80,6 @@ class MollibProcessPdbs(
         Timber.v("Prev file: %s", pdbFileNames[nextNameIndex])
         commonStuff()
     }
-
-
-    val mutex = Mutex()
 
     private fun commonStuff() = runBlocking {
         launch(Dispatchers.IO) {
@@ -123,11 +114,18 @@ class MollibProcessPdbs(
             }
 
             glSurfaceView.queueEvent {
-                managerViewmode.createView()
+                managerViewmode!!.createView()
                 renderer.setMolecule(mol)
                 renderer.resetCamera()
             }
-            //}
+        }
+    }
+
+    fun nextViewMode() {
+        if (managerViewmode != null) {
+            glSurfaceView.queueEvent {
+                managerViewmode!!.nextViewMode()
+            }
         }
     }
 
@@ -167,7 +165,6 @@ class MollibProcessPdbs(
             }
             Timber.e("writeCurrentImage: DONE WRITING")
         }
-
     }
 
     /**

@@ -357,6 +357,10 @@ visibleAppThreshold = 94371840 (0x5A00000)
             if (atom1.atomType == PdbAtom.AtomType.IS_HETATM && atom1.residueName == "HOH") {
                 continue
             }
+            // skip TER records
+            if (atom1.atomName == "TER_RECORD") {
+                continue
+            }
             if (atom1.atomType == PdbAtom.AtomType.IS_NUCLEIC) {
                 if (drawMode and D_NUCLEIC == 0) {
                     continue
@@ -375,8 +379,10 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 continue
             }
             if (atom1.atomBondCount == 0) {
-                Timber.e("%s: drawSpheres no bond at atom %d residue %s type %s",
-                        molecule.molName, atom1.atomNumber, atom1.residueName, atom1.atomName)
+                if (atom1.atomName != "TER_RECORD") {
+                    Timber.e("%s: drawSpheres no bond at atom %d residue %s type %s",
+                            molecule.molName, atom1.atomNumber, atom1.residueName, atom1.atomName)
+                }
             }
             elementSymbol = atom1.elementSymbol
             ai = AtomInformationTable.atomSymboltoAtomNumNameColor[elementSymbol]
