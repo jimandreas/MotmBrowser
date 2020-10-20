@@ -83,6 +83,8 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
     private val pdbFileNames2 = listOf(
 
             "1bna",
+            "1aew",
+            "1aew_firstloop",
             "1AGU_simple",
             "1amb",
             // "1bn0", // boring

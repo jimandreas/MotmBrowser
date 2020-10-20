@@ -409,9 +409,10 @@ class RendererDisplayPdbFile(
             Matrix.multiplyMV(lightPosInWorldSpace, 0, lightModelMatrix, 0, lightPosInModelSpace, 0)
             Matrix.multiplyMV(lightPosInEyeSpace, 0, viewMatrix, 0, lightPosInWorldSpace, 0)
 
+            // 0.5 is pretty small but not small enough
             var scaleF = 0.05f
             if (molecule != null) {
-                scaleF = (0.5 / molecule!!.maxPostCenteringVectorMagnitude).toFloat()
+                scaleF = (0.4 / molecule!!.maxPostCenteringVectorMagnitude).toFloat()
             }
 
 
