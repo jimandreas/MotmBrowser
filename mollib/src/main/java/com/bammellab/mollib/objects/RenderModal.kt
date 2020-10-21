@@ -20,13 +20,11 @@
         "unused_parameter",
         "deprecation",
         "ConstantConditionIf",
-        "LocalVariableName")
+        "LocalVariableName", "SameParameterValue")
+
 package com.bammellab.mollib.objects
 
 import android.annotation.SuppressLint
-
-import timber.log.Timber
-
 import com.bammellab.mollib.common.math.CatmullRomCurve
 import com.bammellab.mollib.common.math.MathUtil
 import com.bammellab.mollib.common.math.MotmVector3
@@ -36,7 +34,7 @@ import com.kotmol.pdbParser.ChainRenderingDescriptor
 import com.kotmol.pdbParser.ChainRenderingDescriptor.SecondaryStructureType
 import com.kotmol.pdbParser.Molecule
 import com.kotmol.pdbParser.PdbAtom
-
+import timber.log.Timber
 import kotlin.math.acos
 
 /*
@@ -55,6 +53,8 @@ class RenderModal(private val molecule: Molecule) {
     private val cache1: FloatArray
     private val cache2: FloatArray
 
+    private val debugWhiteStripe = false
+
     init {
         cache1 = FloatArray((RIBBON_INITIAL_SLICES + 1) * 3)
         cache2 = FloatArray((RIBBON_INITIAL_SLICES + 1) * 3)
@@ -66,7 +66,7 @@ class RenderModal(private val molecule: Molecule) {
         var guideAtomPoints: CatmullRomCurve
         var chainDescriptorList: List<*>
         var chainEntry: ChainRenderingDescriptor
-        var mainchainAtom: PdbAtom?
+        var mainChainAtom: PdbAtom?
         var guideAtom: PdbAtom?
         var vnew: MotmVector3
         var j: Int
@@ -90,19 +90,23 @@ class RenderModal(private val molecule: Molecule) {
                  *   start with the CA atom and then switch to the oxygen (guide) atom.
                  */
                 if (j == 0) {
-                    mainchainAtom = chainEntry.backboneAtom
-                    if (mainchainAtom == null) {
+                    mainChainAtom = chainEntry.backboneAtom
+                    if (mainChainAtom == null) {
                         Timber.e("renderModal: backbone atom is null in list, i = $i")
                         return
                     }
 
                     // initial guide spline atom is the mainchain atom
-                    vnew = MotmVector3(mainchainAtom.atomPosition)
+                    vnew = MotmVector3(mainChainAtom.atomPosition)
                     guideAtomPoints.addPoint(vnew)
 
                     //  initial curve atom is the startAtom position
-                    mainchainAtom = chainEntry.startAtom
-                    vnew = MotmVector3(mainchainAtom.atomPosition)
+                    mainChainAtom = chainEntry.startAtom
+                    // start atom will be null for CA-only ribbons
+                    if (mainChainAtom == null) {
+                        mainChainAtom = chainEntry.guideAtom
+                    }
+                    vnew = MotmVector3(mainChainAtom!!.atomPosition)
                     curvePoints.addPoint(vnew)
 
                     guideAtom = chainEntry.guideAtom
@@ -117,9 +121,9 @@ class RenderModal(private val molecule: Molecule) {
                 /*
                  * loop body : hook up all the CA atoms and Oxygen (O) atoms in the separate curves
                  */
-                mainchainAtom = chainEntry.backboneAtom
-                if (mainchainAtom != null) {
-                    vnew = MotmVector3(mainchainAtom.atomPosition)
+                mainChainAtom = chainEntry.backboneAtom
+                if (mainChainAtom != null) {
+                    vnew = MotmVector3(mainChainAtom.atomPosition)
                     curvePoints.addPoint(vnew)
                 }
 
@@ -137,8 +141,8 @@ class RenderModal(private val molecule: Molecule) {
                  */
                 if (j == chainDescriptorList.size - 1) {
                     if (chainEntry.secondaryStructureType == SecondaryStructureType.NUCLEIC) {
-                        mainchainAtom = chainEntry.nucleicEndAtom
-                        vnew = MotmVector3(mainchainAtom.atomPosition)
+                        mainChainAtom = chainEntry.nucleicEndAtom
+                        vnew = MotmVector3(mainChainAtom.atomPosition)
                         curvePoints.addPoint(vnew)
 
                         guideAtom = chainEntry.guideAtom
@@ -160,9 +164,12 @@ class RenderModal(private val molecule: Molecule) {
             }
             chainEntry = chainDescriptorList[j] as ChainRenderingDescriptor
             // add the end atom as last in the curve
-            mainchainAtom = chainEntry.endAtom
-            vnew = MotmVector3(mainchainAtom.atomPosition)
-            curvePoints.addPoint(vnew)
+            mainChainAtom = chainEntry.endAtom
+            // end atom will be null for CA-only ribbons
+            if (mainChainAtom != null) {
+                vnew = MotmVector3(mainChainAtom.atomPosition)
+                curvePoints.addPoint(vnew)
+            }
 
             /*
              * now figure out how to render the list
@@ -215,7 +222,8 @@ class RenderModal(private val molecule: Molecule) {
                         // renderRibbon(curve, start_index, j, descriptor_count);
                         renderHelix(curve, startIndex, j, descriptorCount, chain_list,
                                 SecondaryStructureType.BETA_SHEET)
-                    else -> {}
+                    else -> {
+                    }
                 }
                 startIndex = j
                 currentType = chainEntry.secondaryStructureType
@@ -244,7 +252,8 @@ class RenderModal(private val molecule: Molecule) {
                 // renderRibbon(guide_curve, start_index, j, descriptor_count);
                 // renderRibbon(curve, start_index, j, descriptor_count);
                 renderNucleic(curve, startIndex, j, descriptorCount, chain_list)
-            else -> {}
+            else -> {
+            }
         }
     }
 
@@ -303,8 +312,8 @@ class RenderModal(private val molecule: Molecule) {
         val end = end_index * scaling / descriptor_count
         var endAtom: PdbAtom?
         var guideAtom: PdbAtom?
-        var nextEndAtom: PdbAtom
-        var nextGuideAtom: PdbAtom
+        var nextEndAtom: PdbAtom?
+        var nextGuideAtom: PdbAtom?
 
         /*
          * LOOP: iterate over the curve
@@ -329,18 +338,33 @@ class RenderModal(private val molecule: Molecule) {
             endAtom = currentChainEntry.endAtom
             guideAtom = currentChainEntry.guideAtom
 
-            if (debug)
-                Timber.i("end endAtom %d oxy %d", endAtom.atomNumber, guideAtom!!.atomNumber)
+            if (endAtom == null) {
+                Timber.e("renderNucleic: endAtom is null!! continuing")
+                continue
+            }
+            if (guideAtom == null) {
+                Timber.e("renderNucleic: guideAtom is null!! continuing")
+                continue
+            }
 
             if (chainIndex + 1 < chain_list.size) {
                 val nextChainEntry = chain_list[chainIndex + 1] as ChainRenderingDescriptor
 
                 nextEndAtom = nextChainEntry.endAtom
-                nextGuideAtom = nextChainEntry.guideAtom!!
+                nextGuideAtom = nextChainEntry.guideAtom
             } else {
                 if (debug) Timber.i("AT END **********************")
                 nextEndAtom = endAtom
-                nextGuideAtom = guideAtom!!
+                nextGuideAtom = guideAtom
+            }
+
+            if (nextEndAtom == null) {
+                Timber.e("renderNucleic: nextEndAtom is null continuing")
+                continue
+            }
+            if (nextGuideAtom == null) {
+                Timber.e("renderNucleic: nextGuideAtom is null continuing")
+                continue
             }
 
             //            Timber.i("endAtom " + endAtom.atom_number
@@ -349,7 +373,7 @@ class RenderModal(private val molecule: Molecule) {
             //                    + " oxy-atom " + current_chain_entry.guideAtom.atom_number
             //                    + " index = " + chain_index);
 
-            R1.setAll(MotmVector3(guideAtom!!.atomPosition))
+            R1.setAll(MotmVector3(guideAtom.atomPosition))
             R1.subtract(MotmVector3(endAtom.atomPosition))
 
             delta.setAll(MotmVector3(nextGuideAtom.atomPosition))
@@ -492,7 +516,7 @@ class RenderModal(private val molecule: Molecule) {
 
                     // n = XYZ.getNormal(p1, p2, p3);
                     n = XYZ.getNormal(p3, p2, p1)
-                    if (i == 0) {
+                    if (i == 0 && debugWhiteStripe) {
                         putTri(p1, p2, p3, n, whiteColor)
                         //                    } else if (flag_color) {
                         //                        putTri(p1, p2, p3, n, white_color);
@@ -529,7 +553,7 @@ class RenderModal(private val molecule: Molecule) {
                     // n = XYZ.getNormal(p1, p2, p3);
                     n = XYZ.getNormal(p3, p2, p1)
                     // putTri(p1, p2, p3, n, color);
-                    if (i == 0) {
+                    if (i == 0 && debugWhiteStripe) {
                         putTri(p1, p2, p3, n, whiteColor)
                         //                    } else if (flag_color) {
                         //                        putTri(p1, p2, p3, n, white_color);
@@ -649,8 +673,17 @@ class RenderModal(private val molecule: Molecule) {
             carbon = currentChainEntry.endAtom
             oxygen = currentChainEntry.guideAtom
 
+            if (carbon == null) {
+                Timber.e("RenderHelix: carbon is null continuing")
+                continue
+            }
+            if (oxygen == null) {
+                Timber.e("RenderHelix: oxygen is null continuing")
+                continue
+            }
+
             if (debug)
-                Timber.i("end carbon %d oxy %d", carbon.atomNumber,  oxygen!!.atomNumber)
+                Timber.i("end carbon %d oxy %d", carbon.atomNumber, oxygen!!.atomNumber)
 
             if (chainIndex + 1 < chain_list.size) {
                 val nextChainEntry = chain_list[chainIndex + 1] as ChainRenderingDescriptor
@@ -674,6 +707,16 @@ class RenderModal(private val molecule: Molecule) {
                                 chainIndex, chain_list.size)
                     }*/
                 }
+
+                if (nextCarbon == null) {
+                    Timber.e("RenderHelix: nextCarbon is null continuing")
+                    continue
+                }
+                if (nextOxygen == null) {
+                    Timber.e("RenderHelix: nextOxygen is null continuing")
+                    continue
+                }
+
             } else {
                 if (debug) Timber.i("AT END **********************")
                 nextCarbon = carbon
@@ -689,10 +732,10 @@ class RenderModal(private val molecule: Molecule) {
             //                    + " oxy-atom " + current_chain_entry.guideAtom.atom_number
             //                    + " index = " + chain_index);
 
-            R1.setAll(MotmVector3(oxygen!!.atomPosition))
+            R1.setAll(MotmVector3(oxygen.atomPosition))
             R1.subtract(MotmVector3(carbon.atomPosition))
 
-            delta.setAll(MotmVector3(nextOxygen!!.atomPosition))
+            delta.setAll(MotmVector3(nextOxygen.atomPosition))
             delta.subtract(MotmVector3(nextCarbon.atomPosition))
 
             var weight = (whereInSpline - currentChainEntry.curveIndex).toDouble()
@@ -709,8 +752,8 @@ class RenderModal(private val molecule: Molecule) {
             P1.setAll(positionStart)
             P1.subtract(positionPrevious)
             /*
-                 * attempt to calculate the best fit
-                 */
+             * attempt to calculate the best fit
+             */
             //                R1.setAll(position_start);
             //                R1.subtract(upper_curve);
 
@@ -861,7 +904,7 @@ class RenderModal(private val molecule: Molecule) {
 
                     // n = XYZ.getNormal(p1, p2, p3);
                     n = XYZ.getNormal(p3, p2, p1)
-                    if (i == 0) {
+                    if (i == 0 && debugWhiteStripe) {
                         putTri(p1, p2, p3, n, whiteColor)
                         //                    } else if (flag_color) {
                         //                        putTri(p1, p2, p3, n, white_color);
@@ -898,7 +941,7 @@ class RenderModal(private val molecule: Molecule) {
                     // n = XYZ.getNormal(p1, p2, p3);
                     n = XYZ.getNormal(p3, p2, p1)
                     // putTri(p1, p2, p3, n, color);
-                    if (i == 0) {
+                    if (i == 0 && debugWhiteStripe) {
                         putTri(p1, p2, p3, n, whiteColor)
                         //                    } else if (flag_color) {
                         //                        putTri(p1, p2, p3, n, white_color);
@@ -961,7 +1004,7 @@ class RenderModal(private val molecule: Molecule) {
 
             // n = XYZ.getNormal(p1, p2, p3);
             n = XYZ.getNormal(p3, p2, p1)
-            if (i == 0) {
+            if (i == 0 && debugWhiteStripe) {
                 putTri(p1, p2, p3, n, whiteColor)
                 //                    } else if (flag_color) {
                 //                        putTri(p1, p2, p3, n, white_color);
@@ -998,7 +1041,7 @@ class RenderModal(private val molecule: Molecule) {
             // n = XYZ.getNormal(p1, p2, p3);
             n = XYZ.getNormal(p3, p2, p1)
             // putTri(p1, p2, p3, n, color);
-            if (i == 0) {
+            if (i == 0 && debugWhiteStripe) {
                 putTri(p1, p2, p3, n, whiteColor)
                 //                    } else if (flag_color) {
                 //                        putTri(p1, p2, p3, n, white_color);
@@ -1031,7 +1074,7 @@ class RenderModal(private val molecule: Molecule) {
         var y1: Double
         var z1: Double
         var v1: FloatArray
-        
+
         //        double x2, y2, z2;
         //        double olddot = 1.0;
         //        int state = 0;
@@ -1214,7 +1257,7 @@ class RenderModal(private val molecule: Molecule) {
 
                 // n = XYZ.getNormal(p1, p2, p3);
                 n = XYZ.getNormal(p3, p2, p1)
-                if (i == 0) {
+                if (i == 0 && debugWhiteStripe) {
                     putTri(p1, p2, p3, n, whiteColor)
                 } else {
                     putTri(p1, p2, p3, n, color)
@@ -1249,7 +1292,7 @@ class RenderModal(private val molecule: Molecule) {
                 // n = XYZ.getNormal(p1, p2, p3);
                 n = XYZ.getNormal(p3, p2, p1)
                 // putTri(p1, p2, p3, n, color);
-                if (i == 0) {
+                if (i == 0 && debugWhiteStripe) {
                     putTri(p1, p2, p3, n, whiteColor)
                 } else {
                     putTri(p1, p2, p3, n, color)
@@ -1408,7 +1451,7 @@ class RenderModal(private val molecule: Molecule) {
     companion object {
 
         private const val debug = false
-        private val LOG_TAG = RenderModal::class.java.simpleName
+        //private val LOG_TAG = RenderModal::class.java.simpleName
         private const val CSF = 10  // Curve scale factor, number of points between atoms
 
         private const val POSITION_DATA_SIZE_IN_ELEMENTS = 3
@@ -1420,6 +1463,7 @@ class RenderModal(private val molecule: Molecule) {
 
         private const val STRIDE_IN_FLOATS = POSITION_DATA_SIZE_IN_ELEMENTS + NORMAL_DATA_SIZE_IN_ELEMENTS + COLOR_DATA_SIZE_IN_ELEMENTS
         private const val STRIDE_IN_BYTES = STRIDE_IN_FLOATS * BYTES_PER_FLOAT
+
         // private static final float ELLIPSE_X_FACTOR = 2f / 9f;
         private const val ELLIPSE_X_FACTOR = 1f
         private const val ELLIPSE_Z_FACTOR = 1f

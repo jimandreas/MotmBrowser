@@ -30,6 +30,7 @@ import com.bammellab.mollib.*
 import com.bammellab.mollib.LoadFromSource.FROM_CACHE
 import com.bammellab.motm.util.PdbCache
 import com.bammellab.motm.util.Utility.failDialog
+import timber.log.Timber
 import java.io.InputStream
 
 
@@ -66,6 +67,10 @@ class MotmGraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
 
         pdbList = intent.getStringArrayExtra(INTENT_TAG_LIST)
         currentPdbIndex = intent.getIntExtra(INTENT_TAG_INDEX, 0)
+        if (pdbList == null) {
+            Timber.e("An empty list was passed to the MotmGraphicsActivity, giving up")
+            return
+        }
 
         // TODO: complain dialog if the list is empty
 
@@ -138,14 +143,43 @@ class MotmGraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
                 source = FROM_CACHE)
 
         /*
-         * Go to next PDB in the list
-         */
-        buttonNextObj.setOnClickListener { processPdbs.loadNextPdbFile() }
+        * Go to next PDB in the list
+        */
+        buttonNextObj.setOnClickListener(View.OnClickListener {
+            if (pdbList!!.isEmpty() || currentPdbIndex < 0 || currentPdbIndex > pdbList!!.size) {
+                Timber.e("Error with pdb list: list size: %d index requested: %d",
+                        pdbList!!.size, currentPdbIndex)
+                return@OnClickListener
+            }
+
+            // mNextViewProgressCircle.visibility = View.VISIBLE
+
+            if (++currentPdbIndex == pdbList!!.size) {
+                currentPdbIndex = 0
+            }
+            title = pdbList!![currentPdbIndex]
+            pdbCache.downloadPdb(pdbList!![currentPdbIndex])
+        })
 
         /*
          * Go to previous PDB in the list
          */
-        buttonPreviousObj.setOnClickListener { processPdbs.loadPrevPdbFile() }
+        buttonPreviousObj.setOnClickListener(View.OnClickListener {
+            if (pdbList!!.isEmpty() || currentPdbIndex < 0 || currentPdbIndex > pdbList!!.size) {
+                Timber.e("Error with pdb list: list size: %d index requested: %d",
+                        pdbList!!.size, currentPdbIndex)
+                return@OnClickListener
+            }
+
+            //mNextViewProgressCircle.visibility = View.VISIBLE
+
+            if (--currentPdbIndex < 0) {
+                currentPdbIndex = pdbList!!.size - 1
+            }
+            title = pdbList!![currentPdbIndex]
+            pdbCache.downloadPdb(pdbList!![currentPdbIndex])
+        })
+
 
         buttonSelect.setOnClickListener { toggleSelect() }
 

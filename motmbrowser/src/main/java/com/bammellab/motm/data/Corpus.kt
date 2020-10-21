@@ -39,12 +39,40 @@ object Corpus {
      * NB - base of list is 1!!
      */
 
-    fun motmImageListGet(index: Int) : String {
+    fun motmImageListGet(index: Int): String {
         if (index > motmImageList.size || index < 1) return "INVALIDINDEX"
         return (motmImageList[motmImageList.size - index])
     }
 
     private val motmImageList = listOf(
+
+            "250-Capsaicin_Receptor_TRPV1-5is0_homepage-tn.png",
+            "249-SARSCoV2_RNAdependent_RNA_Polymerase-6yyt_homepage-tn.png",
+            "248-Phytosulfokine_Receptor-4z64_homepage-tn.png",
+            "245-Spliceosomes-3jb9_homepage-tn.png",
+            "244-Photosynthetic_Supercomplexes-5xnl_homepage-tn.png",
+            "242-Voltagegated_Sodium_Channels-6j8j_homepage-tn.png",
+            "243-Coronavirus_Proteases-6lu7_homepage-tn.png",
+            "241-Twenty_Years_of_Molecules-6j4y_homepage-tn.png",
+            "250-Capsaicin_Receptor_TRPV1-5is0_homepage-tn.png",
+            "249-SARSCoV2_RNAdependent_RNA_Polymerase-6yyt_homepage-tn.png",
+            "248-Phytosulfokine_Receptor-4z64_homepage-tn.png",
+            // 246 and 247 are missing
+            "245-Spliceosomes-3jb9_homepage-tn.png",
+            "244-Photosynthetic_Supercomplexes-5xnl_homepage-tn.png",
+            // 243/242 are swapped??
+            "242-Voltagegated_Sodium_Channels-6j8j_homepage-tn.png",
+            "243-Coronavirus_Proteases-6lu7_homepage-tn.png",
+            "241-Twenty_Years_of_Molecules-6j4y_homepage-tn.png",
+            "240-HypoxiaInducible_Factors-1lqb_homepage-tn.png",
+            "239-Phospholipase_A2-1bp2_homepage-tn.png",
+            "238-Ribonucleotide_Reductase-1mrr_3r1r_homepage-tn.png",
+            "237-Nanodiscs_and_HDL-6clz_homepage-tn.png",
+            "236-Cyclin_and_Cyclindependent_Kinase-1fin_homepage-tn.png",
+            "235-AMPA_Receptor-3kg2_homepage-tn.png",
+
+// update 10/2020 (above)(imagesProcessing/ from motm-by-date.  natural order.
+
             "234-MDM2_and_Cancer-MDM2_homepage-tn.png",
             "233-SNitrosylated_Hemoglobin-1buw_homepage-tn.png",
             "232-Measles_Virus_Proteins-4uft_homepage-tn.png",
@@ -77,6 +105,7 @@ object Corpus {
             "205-Nuclear_Pore_Complex-NPC_homepage-tn.png",
 
             // START: note that 203/204 is funky - They are SWAPPED.   And has stayed that way.
+            // note: 10/2020 - still swapped.
 
             "203-PD1_Programmed_Cell_Death_Protein_1-203_homepage-tn.png",
             "204-Aminopeptidase_1_and_Autophagy-4r8f_homepage-tn.png",
@@ -284,21 +313,69 @@ object Corpus {
             "3-1tau-tn.png",
             "2-1cd3_mature-tn.png",
             "1-Myoglobin-geis-0218-myoglobin-tn.png"
-            )
+    )
 
 
-    fun motmTagLinesGet(index: Int) : String {
+    fun motmTagLinesGet(index: Int): String {
         if (index > motmTagLines.size || index < 1) return "INVALIDINDEX"
         return (motmTagLines[motmTagLines.size - index])
     }
 
+    // fgrep the <p> from motm-by-date, then manual edit
+
     val motmTagLines = arrayOf(
+
+//October 2020
+            "TRPV1 is an ion channel that senses heat and contributes to pain sensation.",
+//September 2020
+            "Coronaviruses duplicate their RNA genome using a specialized polymerase",
+//August 2020
+            "Phytosulfokine and other small peptides deliver signals about growth and development in plants.",
+//July 2020
+            "Nerve axons are insulated and protected by a sheath of myelin",
+//June 2020
+            "Coronavirus spike protein binds to receptors on cell surfaces, and is a target for vaccine development.",
+//May 2020
+            "Cryoelectron microscropy is revealing how spliceosomes cut-and-paste messenger RNA molecules.",
+//April 2020
+            "Light is captured by huge supercomplexes of photosystems and antenna systems.",
+//March 2020
+            "Voltage-gated sodium channels transmit signals in a wave through the nervous system.",
+//February 2020
+            "Coronavirus proteases are attractive targets for the design of antiviral drugs.",
+//January 2020
+            "Celebrating the structural biology revolution",
+//December 2019
+            "HIF-Î± is a molecular switch that responds to changing oxygen levels.",
+//November 2019
+            "Phospholipase A2 breaks membrane lipids, forming molecules that contribute to inflammation and pain signaling.",
+//October 2019
+            "Ribonucleotide reductase creates the building blocks of DNA",
+//September 2019
+            "Nanodiscs conveniently package a small piece of membrane for experimental studies.",
+//August 2019
+            "Cyclins and cyclin-dependent kinases control when cells divide, making them important targets for cancer therapy.",
+//July 2019
+            "Receptors for the neurotransmitter glutamate in our brain come in several shapes and sizes.",
+//June 2019
             "MDM2 controls the action of p53 tumor suppressor, making it a target for cancer chemotherapy.",
+//May 2019
             "Nitric oxide is attached to a conserved cysteine in hemoglobin and then released to control the flow of blood.",
+//April 2019
             "Small biomineral crystals are used to build bone, eggshells and even tiny compasses.",
+//March 2019
             "Six proteins in measles virus work together to infect cells.",
+//February 2019
             "Initiation factors for protein synthesis interact through disordered chains.",
+//January 2019
             "RNA aptamers are being engineered to track molecules inside living cells",
+
+//            "MDM2 controls the action of p53 tumor suppressor, making it a target for cancer chemotherapy.",
+//            "Nitric oxide is attached to a conserved cysteine in hemoglobin and then released to control the flow of blood.",
+//            "Small biomineral crystals are used to build bone, eggshells and even tiny compasses.",
+//            "Six proteins in measles virus work together to infect cells.",
+//            "Initiation factors for protein synthesis interact through disordered chains.",
+//            "RNA aptamers are being engineered to track molecules inside living cells",
             "Biological evolution is being harnessed in the lab to create new enzymes.",
             "Telomerase maintains the ends of our chromosomes.",
             "Bacteria become resistant to aminoglycosides by destroying them or changing their target.",
@@ -532,7 +609,7 @@ object Corpus {
             "Bacteriophage phiX174 hijacks bacterial cells and forces them to make new copies of the virus",
             "Myoglobin was the first protein to have its atomic structure determined, revealing how it stores oxygen in muscle cells."
 
-            )
+    )
 
     private val monthNames = arrayOf(
             "January",
@@ -548,9 +625,10 @@ object Corpus {
             "November",
             "December"
     )
+
     fun motmDateByKey(key: Int): String {
-        if (key < 1) return("INVALID DATE")
-        val month = (key-1) % 12
+        if (key < 1) return ("INVALID DATE")
+        val month = (key - 1) % 12
         val year = (key - 1) / 12 + 2000
 
         val retString = monthNames[month] + " " + String.format("%4d", year)
@@ -561,19 +639,43 @@ object Corpus {
 
     // extracted via grep from motm-by-date file
 
-    fun motmTitleGet(index: Int) : String {
+    fun motmTitleGet(index: Int): String {
         if (index > corpus.size || index < 1) return "INVALID INDEX"
         return (corpus[corpus.size - index])
     }
 
-    fun invertPosition(index: Int) : Int {
+    fun invertPosition(index: Int): Int {
         if (index > corpus.size || index < 0) return 0
         return (corpus.size - index - 1)
     }
 
+    // grep the href in the motm-by-date file
+
     val corpus = listOf(
+
+            /* //motm/250 */ "Capsaicin Receptor TRPV1",
+            /* //motm/249 */ "SARS-CoV-2 RNA-dependent RNA Polymerase",
+            /* //motm/248 */ "Phytosulfokine Receptor",
+            /* //motm/247 */ "Myelin-associated Glycoprotein",
+            /* //motm/246 */ "SARS-CoV-2 Spike",
+            /* //motm/245 */ "Spliceosomes",
+            /* //motm/244 */ "Photosynthetic Supercomplexes",
+            /* //motm/243 */ "Voltage-gated Sodium Channels",
+            /* //motm/242 */ "Coronavirus Proteases",
+            /* //motm/241 */ "Twenty Years of Molecules",
+            /* //motm/240 */ "Hypoxia-Inducible Factors",
+            /* //motm/239 */ "Phospholipase A2",
+            /* //motm/238 */ "Ribonucleotide Reductase",
+            /* //motm/237 */ "Nanodiscs and HDL",
+            /* //motm/236 */ "Cyclin and Cyclin-dependent Kinase",
+            /* //motm/235 */ "AMPA Receptor",
             /* //motm/234 */ "MDM2 and Cancer",
             /* //motm/233 */ "S-Nitrosylated Hemoglobin",
+
+            // update 10/2020 above
+
+//            /* //motm/234 */ "MDM2 and Cancer",
+//            /* //motm/233 */ "S-Nitrosylated Hemoglobin",
             /* //motm/232 */ "Proteins and Biominerals",
             /* //motm/231 */ "Measles Virus Proteins",
             /* //motm/230 */ "Initiation Factor eIF4E",
@@ -807,5 +909,5 @@ object Corpus {
             /* //motm/2 */ "Bacteriophage phiX174",
             /* //motm/1 */ "Myoglobin"
 
-            )
+    )
 }

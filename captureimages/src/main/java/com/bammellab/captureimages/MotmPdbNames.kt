@@ -21,7 +21,7 @@ package com.bammellab.captureimages
 object MotmPdbNames {
 
     val pdbNames = listOf(
-
+/*
             "1bna",
             "148l",
             "1a0h",
@@ -246,8 +246,16 @@ object MotmPdbNames {
             "1i7x",
             "1i9a",
             "1ibk",
+
+
+
+
             "1ibl",
-            "1ibm",
+            "1ibm", // BIG
+
+
+
+
             "1ibn",
             "1ice",
             "1idc",
@@ -284,6 +292,8 @@ object MotmPdbNames {
             "1jsp",
             "1jv2",
             "1jz7",
+
+
             "1jz8",
             "1k4r",
             "1k4t",
@@ -474,7 +484,9 @@ object MotmPdbNames {
             "1vsz",
             "1w0e",
             "1w36",
-            "1w63",
+            "1w63",  // 82K atoms!
+
+
             "1wa5",
             "1wb1",
             "1wfb",
@@ -559,6 +571,8 @@ object MotmPdbNames {
             "2fp4",
             "2frv",
             "2fug",
+
+ */
             "2g30",
             "2gfp",
             "2gls",
@@ -641,7 +655,7 @@ object MotmPdbNames {
             "2tbv",
             "2toh",
             "2uvb",
-            "2uvc",
+            // "2uvc",  // obsolete, is now 4V59 - 170K atoms!
             "2uwm",
             "2v01",
             "2vaa",

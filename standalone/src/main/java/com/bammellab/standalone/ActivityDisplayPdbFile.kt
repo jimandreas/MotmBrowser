@@ -82,6 +82,7 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
     private val pdbFileNames2 = listOf(
 
             "1aew_firstloop",
+            "1f6g",
 
             "1bna",
             "1aew",
