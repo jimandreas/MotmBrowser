@@ -42,14 +42,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.bammellab.motm.data.Corpus
 import com.bammellab.motm.data.Corpus.motmTitleGet
+import com.bammellab.motm.data.MotmImageDownload
 import com.bammellab.motm.pdb.PdbFetcherCoroutine
 import timber.log.Timber
 
 class MotmDetailActivity : AppCompatActivity()
 /* implements View.OnTouchListener */ {
-    
+
     private lateinit var motmTitle: TextView
-    private lateinit var leakText: TextView
+    private lateinit var pdbText: TextView
     private lateinit var moreButton: FloatingActionButton
     private lateinit var pdbLayout: LinearLayout
 
@@ -60,7 +61,7 @@ class MotmDetailActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pdb_detail)
         motmTitle = findViewById(R.id.pdb_title)
-        leakText = findViewById(R.id.pdb_text)
+        pdbText = findViewById(R.id.pdb_text)
         moreButton = findViewById(R.id.more_button)
         pdbLayout = findViewById(R.id.pdb_detail_layout)
 
@@ -146,7 +147,7 @@ class MotmDetailActivity : AppCompatActivity()
             @Suppress("DEPRECATION")
             Html.fromHtml(descRaw)
         }
-        leakText.text = desc
+        pdbText.text = desc
 
 
         /*
@@ -171,12 +172,18 @@ class MotmDetailActivity : AppCompatActivity()
     }
 
 
-
     private fun loadBackdrop() {
         val imageView = findViewById<ImageView>(R.id.backdrop)
+        var url: String = ""
 
-        val image = Corpus.motmImageListGet(motmNumber)
-        val url = MotmApplication.RCSB_MOTM_IMAGE_PREFIX + image
+//        val image = Corpus.motmImageListGet(motmNumber)
+//        val url = MotmApplication.RCSB_MOTM_IMAGE_PREFIX + image
+
+        url = MotmImageDownload.getFirstTiffImageURL(motmNumber)
+        if (url == "") {
+            val image = Corpus.motmImageListGet(motmNumber)
+            url = MotmApplication.RCSB_MOTM_IMAGE_PREFIX + image
+        }
         Glide.with(this)
                 .load(url)
                 .fitCenter()
@@ -210,7 +217,7 @@ class MotmDetailActivity : AppCompatActivity()
                 @Suppress("DEPRECATION")
                 Html.fromHtml(descRaw)
             }
-            leakText.text = desc
+            pdbText.text = desc
 
             val view = LayoutInflater.from(this)
                     .inflate(R.layout.pdb_card, pdbLayout, false) as CardView
@@ -286,7 +293,7 @@ class MotmDetailActivity : AppCompatActivity()
                     /*
                      * get the index of our chosen PDB to pass along to the viewer
                      */
-                    var i  = 0
+                    var i = 0
                     while (i < pdbsStringArray.size) {
                         if (pdbsStringArray[i] == pdbOfInterest) {
                             break
@@ -324,7 +331,7 @@ class MotmDetailActivity : AppCompatActivity()
     // this brings the UI back to where it left off when the detail was selected
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         // Timber.i("Option item selected")
-        return when(item?.itemId) {
+        return when (item?.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 true
