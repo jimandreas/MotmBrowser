@@ -22,10 +22,11 @@
 
     <color name="theme_accent">#FF4081</color>
 
-    <color name="colorCreamy">#fffacd</color>
+    <color name="colorCreamy">#3F51B5</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 </resources>
 
 <!--<color name="colorPrimary">#3F51B5</color>-->
+<!--<color name="colorCreamy">#fffacd</color>-->

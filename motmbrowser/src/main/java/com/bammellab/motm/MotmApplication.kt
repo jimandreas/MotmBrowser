@@ -50,6 +50,7 @@ class MotmApplication : Application() {
         // TODO: selectable RCSB data source (much later!)
 //        const val PDB_IMAGE_WEB_PREFIX = "https://www.rcsb.org/pdb/images/"
         const val PDB_IMAGE_WEB_PREFIX = "https://github.com/kotmol/KotmolMotmImages/blob/master/docs/img/"
+        const val PDB_MOTM_PNG_WEB_PREFIX = "https://github.com/kotmol/KotmolMotmImages/blob/master/docs/motm_png/"
 
         const val PDB_MOTM_PREFIX = "https://pdb101.rcsb.org/motm/"
         const val PDB_MOTM_SUFFIX = "#sub-navbar"

@@ -174,18 +174,20 @@ class MotmDetailActivity : AppCompatActivity()
 
     private fun loadBackdrop() {
         val imageView = findViewById<ImageView>(R.id.backdrop)
-        var url: String = ""
+        var pngURL: String = ""
 
 //        val image = Corpus.motmImageListGet(motmNumber)
 //        val url = MotmApplication.RCSB_MOTM_IMAGE_PREFIX + image
 
-        url = MotmImageDownload.getFirstTiffImageURL(motmNumber)
-        if (url == "") {
+        var motmPngUrl = MotmApplication.PDB_MOTM_PNG_WEB_PREFIX
+        pngURL = MotmImageDownload.getFirstTiffImageURL(motmNumber)
+        pngURL = "$motmPngUrl$pngURL.png?raw=true"
+        if (pngURL == "") {
             val image = Corpus.motmImageListGet(motmNumber)
-            url = MotmApplication.RCSB_MOTM_IMAGE_PREFIX + image
+            pngURL = MotmApplication.RCSB_MOTM_IMAGE_PREFIX + image
         }
         Glide.with(this)
-                .load(url)
+                .load(pngURL)
                 .fitCenter()
                 .into(imageView)
 
@@ -236,7 +238,7 @@ class MotmDetailActivity : AppCompatActivity()
             //                pdb_card_text.setText(desc);
             //            }
 
-            // TODO: jra - fix wired in resolution
+
             var imageUrl = MotmApplication.PDB_IMAGE_WEB_PREFIX
 //            imageUrl = imageUrl + pdbId + "_asym_r_500.jpg" // these images have vanished
             imageUrl = "$imageUrl$pdbId.png?raw=true"
