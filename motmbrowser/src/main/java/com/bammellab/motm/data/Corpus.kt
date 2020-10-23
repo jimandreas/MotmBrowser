@@ -44,20 +44,13 @@ object Corpus {
         return (motmImageList[motmImageList.size - index])
     }
 
-    private val motmImageList = listOf(
+    val motmImageList = listOf(
 
             "250-Capsaicin_Receptor_TRPV1-5is0_homepage-tn.png",
             "249-SARSCoV2_RNAdependent_RNA_Polymerase-6yyt_homepage-tn.png",
             "248-Phytosulfokine_Receptor-4z64_homepage-tn.png",
-            "245-Spliceosomes-3jb9_homepage-tn.png",
-            "244-Photosynthetic_Supercomplexes-5xnl_homepage-tn.png",
-            "242-Voltagegated_Sodium_Channels-6j8j_homepage-tn.png",
-            "243-Coronavirus_Proteases-6lu7_homepage-tn.png",
-            "241-Twenty_Years_of_Molecules-6j4y_homepage-tn.png",
-            "250-Capsaicin_Receptor_TRPV1-5is0_homepage-tn.png",
-            "249-SARSCoV2_RNAdependent_RNA_Polymerase-6yyt_homepage-tn.png",
-            "248-Phytosulfokine_Receptor-4z64_homepage-tn.png",
-            // 246 and 247 are missing
+            "247-Myelinassociated_Glycoprotein-5lf5_homepage3-tn.png",
+            "246-Coronavirus_Spike-6crz_6vxx_homepage2-tn.png",
             "245-Spliceosomes-3jb9_homepage-tn.png",
             "244-Photosynthetic_Supercomplexes-5xnl_homepage-tn.png",
             // 243/242 are swapped??

@@ -32,7 +32,6 @@ object MotmImageDownload {
             "248-Phytosulfokine_Receptor-4z64_Figure",
             "248-Phytosulfokine_Receptor-4mn8_4lsx",
             "247",
-            "5lf5_composite3",
             "247-Myelinassociated_Glycoprotein-Myelin",
             "247-Myelinassociated_Glycoprotein-1pkq_1bx2",
             "246",
