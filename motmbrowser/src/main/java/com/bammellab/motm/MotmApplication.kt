@@ -28,10 +28,8 @@ import timber.log.Timber
 
 class MotmApplication : Application() {
 
-    lateinit var retrofit: Retrofit
+    //lateinit var retrofit: Retrofit
     var context: Context = this
-    val pdbs = PDBs()
-    val motmCategories = MotmCategories()
     val okHttpClient = OkHttpClient()
     var saveSelectedTabNumber = 0
     
@@ -39,26 +37,9 @@ class MotmApplication : Application() {
         super.onCreate()
 
         Timber.plant(Timber.DebugTree())
-        retrofit = Retrofit.Builder()
-                .baseUrl("https://www.rcsb.org/pdb/rest/")
-                .addConverterFactory(SimpleXmlConverterFactory.create())
-                .build()
-    }
-
-    companion object {
-        // URL prefix for web links to RCSB images
-        // TODO: selectable RCSB data source (much later!)
-//        const val PDB_IMAGE_WEB_PREFIX = "https://www.rcsb.org/pdb/images/"
-        const val PDB_IMAGE_WEB_PREFIX = "https://github.com/kotmol/KotmolMotmImages/blob/master/docs/img/"
-        const val PDB_MOTM_PNG_WEB_PREFIX = "https://github.com/kotmol/KotmolMotmImages/blob/master/docs/motm_png/"
-
-        const val PDB_MOTM_PREFIX = "https://pdb101.rcsb.org/motm/"
-        const val PDB_MOTM_SUFFIX = "#sub-navbar"
-
-        const val RCSB_MOTM_IMAGE_PREFIX = "https://cdn.rcsb.org/pdb101/motm/images/tn/"
-
-
-        const val RCSB_PDB_INFO_PREFIX = "https://www.rcsb.org/pdb/explore.do?structureId="
-        const val RCSB_PDB_INFO_SUFFIX = "#structureID"
+//        retrofit = Retrofit.Builder()
+//                .baseUrl("https://www.rcsb.org/pdb/rest/")
+//                .addConverterFactory(SimpleXmlConverterFactory.create())
+//                .build()
     }
 }

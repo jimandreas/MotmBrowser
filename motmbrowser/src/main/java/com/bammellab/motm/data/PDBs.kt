@@ -27,7 +27,7 @@ import com.google.common.collect.Multimap
  * PDB reference list
  */
 
-class PDBs {
+object PDBs {
     val pdbsByMonth: Multimap<Int, String> = ArrayListMultimap.create()
 
     init {

@@ -31,10 +31,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.bammellab.motm.data.Corpus
 import com.bammellab.motm.data.Corpus.motmTitleGet
 import com.bammellab.motm.data.MotmByCategory
+import com.bammellab.motm.data.URLs.RCSB_MOTM_IMAGE_PREFIX
+import com.bumptech.glide.Glide
 import timber.log.Timber
 
 class MotmCategoryFragment : androidx.fragment.app.Fragment() {
@@ -197,7 +198,7 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
             if (isNumeric(motm)) {
                 val imageIndex = Integer.valueOf(motm)
                 val imageString = Corpus.motmImageListGet(imageIndex)
-                val url = MotmApplication.RCSB_MOTM_IMAGE_PREFIX + imageString
+                val url = RCSB_MOTM_IMAGE_PREFIX + imageString
                 Glide.with(holder.imageView.context)
                         .load(url)
                         .fitCenter()
@@ -253,7 +254,7 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
             if (str == null || str.isEmpty()) {
                 return false
             }
-            for (i in 0 until str.length) {
+            for (i in str.indices) {
                 if (str[i] < '0' || str[i] > '9') {
                     return false
                 }

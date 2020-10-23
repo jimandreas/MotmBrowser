@@ -31,11 +31,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.bammellab.motm.data.Corpus
 import com.bammellab.motm.data.Corpus.invertPosition
 import com.bammellab.motm.data.Corpus.motmTagLinesGet
 import com.bammellab.motm.data.Corpus.motmTitleGet
+import com.bammellab.motm.data.URLs.RCSB_MOTM_IMAGE_PREFIX
+import com.bumptech.glide.Glide
 import timber.log.Timber
 import java.util.*
 
@@ -135,7 +136,7 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
 
             val image = Corpus.motmImageListGet(invertPosition + 1)
 
-            val url = MotmApplication.RCSB_MOTM_IMAGE_PREFIX + image
+            val url = RCSB_MOTM_IMAGE_PREFIX + image
             Glide.with(holder.imageView.context)
                     .load(url)
                     .fitCenter()

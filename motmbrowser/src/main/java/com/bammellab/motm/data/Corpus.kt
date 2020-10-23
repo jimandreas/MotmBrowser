@@ -27,14 +27,7 @@ package com.bammellab.motm.data
  */
 
 object Corpus {
-    //    public static final Map<Integer, String> pdbsByMonth
-    //            = ImmutableMap.<Integer, String>builder()
-    //            .put(1, "one")
-    //            .put(2, "two")
-    //            // ...
-    //            .put(15, "fifteen")
-    //            .build();
-
+    
     /*
      * NB - base of list is 1!!
      */

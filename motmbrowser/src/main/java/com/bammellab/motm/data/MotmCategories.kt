@@ -19,9 +19,9 @@ package com.bammellab.motm.data
 import com.bammellab.motm.MotmSection
 import java.util.*
 
-class MotmCategories {
+object MotmCategories {
 
-    private val categoryList: MutableMap<MotmSection, String> = EnumMap(com.bammellab.motm.MotmSection::class.java)
+    private val categoryList: MutableMap<MotmSection, String> = EnumMap(MotmSection::class.java)
 
     init {
         categoryList[MotmSection.FRAG_SECTION_HEALTH] = "Health and Disease"

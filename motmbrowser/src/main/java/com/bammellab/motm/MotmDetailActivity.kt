@@ -35,15 +35,22 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
-import com.bammellab.motm.MotmApplication.Companion.RCSB_PDB_INFO_SUFFIX
+import com.bammellab.motm.data.Corpus
+import com.bammellab.motm.data.Corpus.motmTitleGet
+import com.bammellab.motm.data.MotmImageDownload
+import com.bammellab.motm.data.PDBs
+import com.bammellab.motm.data.URLs.PDB_IMAGE_WEB_PREFIX
+import com.bammellab.motm.data.URLs.PDB_MOTM_PNG_WEB_PREFIX
+import com.bammellab.motm.data.URLs.PDB_MOTM_PREFIX
+import com.bammellab.motm.data.URLs.PDB_MOTM_SUFFIX
+import com.bammellab.motm.data.URLs.RCSB_MOTM_IMAGE_PREFIX
+import com.bammellab.motm.data.URLs.RCSB_PDB_INFO_PREFIX
+import com.bammellab.motm.data.URLs.RCSB_PDB_INFO_SUFFIX
+import com.bammellab.motm.pdb.PdbFetcherCoroutine
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import com.bammellab.motm.data.Corpus
-import com.bammellab.motm.data.Corpus.motmTitleGet
-import com.bammellab.motm.data.MotmImageDownload
-import com.bammellab.motm.pdb.PdbFetcherCoroutine
 import timber.log.Timber
 
 class MotmDetailActivity : AppCompatActivity()
@@ -124,7 +131,7 @@ class MotmDetailActivity : AppCompatActivity()
         sb.append("</i><br>")
 
         /*if (motmCategory != MotmCategoryFragment.Companion.getFRAG_ALL_MOTM()) {
-            MotmCategories categories = MotmApplication.INSTANCE.getMotmCategories();
+            MotmCategories categories = getMotmCategories();
             String categoryString;
             if (categories.categoryList.containsKey(motmCategory)) {
                 sb.append("Category: <b>");
@@ -161,9 +168,9 @@ class MotmDetailActivity : AppCompatActivity()
                 val intent = Intent(Intent.ACTION_VIEW)
 
                 intent.data = Uri.parse(
-                        MotmApplication.PDB_MOTM_PREFIX
+                        PDB_MOTM_PREFIX
                                 + motmNumber
-                                + MotmApplication.PDB_MOTM_SUFFIX
+                                + PDB_MOTM_SUFFIX
                 )
                 startActivity(intent)
             }
@@ -174,17 +181,17 @@ class MotmDetailActivity : AppCompatActivity()
 
     private fun loadBackdrop() {
         val imageView = findViewById<ImageView>(R.id.backdrop)
-        var pngURL: String = ""
+        var pngURL: String
 
 //        val image = Corpus.motmImageListGet(motmNumber)
-//        val url = MotmApplication.RCSB_MOTM_IMAGE_PREFIX + image
+//        val url = RCSB_MOTM_IMAGE_PREFIX + image
 
-        var motmPngUrl = MotmApplication.PDB_MOTM_PNG_WEB_PREFIX
+        val motmPngUrl = PDB_MOTM_PNG_WEB_PREFIX
         pngURL = MotmImageDownload.getFirstTiffImageURL(motmNumber)
         pngURL = "$motmPngUrl$pngURL.png?raw=true"
         if (pngURL == "") {
             val image = Corpus.motmImageListGet(motmNumber)
-            pngURL = MotmApplication.RCSB_MOTM_IMAGE_PREFIX + image
+            pngURL = RCSB_MOTM_IMAGE_PREFIX + image
         }
         Glide.with(this)
                 .load(pngURL)
@@ -200,12 +207,11 @@ class MotmDetailActivity : AppCompatActivity()
         //                .into(imageView);
 
 
-        /*         * experiment with adding cards to the layouts
+        /*
+         * experiment with adding cards to the layouts
          */
 
-        val app = application as MotmApplication
-        val pdbList = app.pdbs
-        val pdbs = pdbList.pdbsByMonth.get(motmNumber)
+        val pdbs = PDBs.pdbsByMonth.get(motmNumber)
         val pdbsStringArray = pdbs.toTypedArray()
         for (pdbId in pdbs) {
             Timber.i("pdbId is %s", pdbId)
@@ -239,7 +245,7 @@ class MotmDetailActivity : AppCompatActivity()
             //            }
 
 
-            var imageUrl = MotmApplication.PDB_IMAGE_WEB_PREFIX
+            var imageUrl = PDB_IMAGE_WEB_PREFIX
 //            imageUrl = imageUrl + pdbId + "_asym_r_500.jpg" // these images have vanished
             imageUrl = "$imageUrl$pdbId.png?raw=true"
 
@@ -271,7 +277,7 @@ class MotmDetailActivity : AppCompatActivity()
                     val intent = Intent(Intent.ACTION_VIEW)
 
                     intent.data = Uri.parse(
-                            MotmApplication.RCSB_PDB_INFO_PREFIX
+                            RCSB_PDB_INFO_PREFIX
                                     + pdbOfInterest + RCSB_PDB_INFO_SUFFIX
                     )
                     startActivity(intent)
@@ -314,13 +320,8 @@ class MotmDetailActivity : AppCompatActivity()
                 })
                 snackbar.show()
             })
-            /*
-             * use Retrofit to load the PDB info from RCSB.org
-             */
-            val retro = app.retrofit
-
             // load the text field via retrofit
-            val fetcher = PdbFetcherCoroutine(pdbId, pdbCardText, retro)
+            val fetcher = PdbFetcherCoroutine(pdbId, pdbCardText)
             fetcher.pdbFetcherCoroutine()
         }
     }
@@ -338,7 +339,7 @@ class MotmDetailActivity : AppCompatActivity()
                 onBackPressed()
                 true
             }
-            else -> super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item!!)
         }
     }
 

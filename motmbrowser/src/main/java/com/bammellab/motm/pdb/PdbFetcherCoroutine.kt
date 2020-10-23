@@ -14,22 +14,26 @@
  * limitations under the License
  */
 
+@file:Suppress("deprecation")
 package com.bammellab.motm.pdb
 
 import android.widget.TextView
+import com.bammellab.motm.data.URLs
+import com.bammellab.motm.data.URLs.RCSB_PDB_INFO_PREFIX
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import timber.log.Timber
 
 
 class PdbFetcherCoroutine(
         private val pdbid: String,
-        private val pdbTextView: TextView,
-        private val retrofit: Retrofit) : Callback<Pdb> {
+        private val pdbTextView: TextView
+) : Callback<Pdb> {
 
     fun pdbFetcherCoroutine() = runBlocking {
 
@@ -40,7 +44,11 @@ class PdbFetcherCoroutine(
     }
 
     private fun loadTextViaRetrofit() {
-        val pdbApi = retrofit.create(PdbApi::class.java)
+//        val retrofit = Retrofit.Builder()
+//                .baseUrl("https://www.rcsb.org/pdb/rest/")
+//                .addConverterFactory(SimpleXmlConverterFactory.create())
+//                .build()
+        val pdbApi = URLs.retrofit.create(PdbApi::class.java)
         val pdbRequest = pdbApi.getPdbInfo(pdbid)
         pdbRequest.enqueue(this)
     }
