@@ -1,4 +1,5 @@
 package com.bammellab.standalone
+
 import android.os.Handler
 import com.bammellab.mollib.BuildConfig
 import timber.log.Timber
@@ -14,6 +15,7 @@ import timber.log.Timber
 enum class MainContext {
 
     INSTANCE;
+
     var handler: Handler? = null
 
     init {

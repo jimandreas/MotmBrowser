@@ -1,84 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:id="@+id/activity_graphics_layout"
-	android:orientation="vertical"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_graphics_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-	<com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
-		android:id="@+id/gl_surface_view"
-		android:layout_width="0dp"
-		android:layout_height="0dp"
-		tools:ignore="MissingConstraints"
-		app:layout_constraintRight_toRightOf="parent"
-		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toBottomOf="parent" />
+    <com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
+        android:id="@+id/gl_surface_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
-	<Button
-		android:id="@+id/button_prev_obj"
-		android:layout_width="wrap_content"
-		android:layout_weight="1"
-		android:layout_height="48dp"
-		android:text="@string/button_prev_obj"
-		tools:ignore="ButtonStyle"
-		app:layout_constraintBottom_toBottomOf="parent"
-		android:layout_marginBottom="8dp"
-		app:layout_constraintRight_toLeftOf="@+id/button_select"
-		android:layout_marginEnd="8dp"
-		/>
-	<Button
-		android:id="@+id/button_next_obj"
-		android:layout_width="wrap_content"
-		android:layout_weight="1"
-		android:layout_height="48dp"
-		android:text="@string/button_next_obj"
-		tools:ignore="ButtonStyle"
-		app:layout_constraintBottom_toBottomOf="parent"
-		android:layout_marginBottom="8dp"
-		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintRight_toLeftOf="@+id/button_prev_obj"
-		app:layout_constraintHorizontal_bias="0.69"
-		android:layout_marginEnd="8dp"
-		 />
-	<Button
-		android:id="@+id/button_select"
-		android:layout_width="wrap_content"
-		android:layout_weight="1"
-		android:layout_height="48dp"
-		android:text="@string/button_select"
-		tools:ignore="ButtonStyle"
-		app:layout_constraintBottom_toBottomOf="parent"
-		android:layout_marginBottom="8dp"
-		app:layout_constraintRight_toLeftOf="@+id/button_change_viewmode"
-		android:layout_marginEnd="8dp"
-		 />
-	<Button
-		android:id="@+id/button_change_viewmode"
-		android:layout_width="88dp"
-		android:layout_weight="1"
-		android:layout_height="wrap_content"
-		android:text="@string/button_change_view"
-		tools:ignore="ButtonStyle"
-		app:layout_constraintRight_toRightOf="parent"
-		app:layout_constraintBottom_toBottomOf="parent"
-		android:layout_marginBottom="8dp" />
+    <Button
+        android:id="@+id/button_prev_obj"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:text="@string/button_prev_obj"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/button_select"
+        tools:ignore="ButtonStyle" />
+
+    <Button
+        android:id="@+id/button_next_obj"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:text="@string/button_next_obj"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.69"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/button_prev_obj"
+        tools:ignore="ButtonStyle" />
+
+    <Button
+        android:id="@+id/button_select"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:text="@string/button_select"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/button_change_viewmode"
+        tools:ignore="ButtonStyle" />
+
+    <Button
+        android:id="@+id/button_change_viewmode"
+        android:layout_width="88dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:text="@string/button_change_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="ButtonStyle" />
 
 
-	<ProgressBar
-		android:id="@+id/next_view_progress_circle"
-		style="?android:attr/progressBarStyleLarge"
-		android:layout_gravity="right|top"
-		android:indeterminate="true"
-		android:visibility="invisible"
-		tools:visibility="visible"
-		tools:ignore="RtlHardcoded"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintRight_toRightOf="parent"
-		android:layout_width="76dp"
-		android:layout_height="76dp" />
+    <ProgressBar
+        android:id="@+id/next_view_progress_circle"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="76dp"
+        android:layout_height="76dp"
+        android:layout_gravity="right|top"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlHardcoded"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

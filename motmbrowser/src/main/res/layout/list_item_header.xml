@@ -30,28 +30,27 @@
 
     <ImageView
         android:id="@+id/blue_ninepatch"
-        android:background="@drawable/nine_patch_decent_blue"
         android:layout_width="250dp"
-        android:contentDescription="@string/molecule_in_question"
-        android:layout_marginStart="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/motmheader"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
-        />
+        android:background="@drawable/nine_patch_decent_blue"
+        android:contentDescription="@string/molecule_in_question"
+        app:layout_constraintBottom_toBottomOf="@+id/motmheader"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/motmheader"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/molecule_in_question"
         android:textColor="@android:color/black"
         app:layout_constraintLeft_toLeftOf="@+id/blue_ninepatch"
         app:layout_constraintRight_toRightOf="@+id/blue_ninepatch"
         app:layout_constraintTop_toTopOf="@+id/blue_ninepatch"
-        tools:text="desc goes here"
-        android:layout_marginStart="8dp" />
+        tools:text="desc goes here" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

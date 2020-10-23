@@ -6,6 +6,7 @@ package com.bammellab.standalone;
  */
 
 import com.bammellab.mollib.objects.XYZ;
+
 import android.test.AndroidTestCase;
 
 public class XYZtest extends AndroidTestCase {
@@ -15,42 +16,41 @@ public class XYZtest extends AndroidTestCase {
     public void testGetNormal() {
         int numTests = 6;
         float p1_tests[][] = {
-                { 0f, 0f, 0f },
-                { 0f, 0f, 0f },
-                { 0f, 0f, 0f },
-                { 0f, 0f, 0f },
-                { 0f, 0f, 0f },
-                { 0f, 0f, 0f }
+                {0f, 0f, 0f},
+                {0f, 0f, 0f},
+                {0f, 0f, 0f},
+                {0f, 0f, 0f},
+                {0f, 0f, 0f},
+                {0f, 0f, 0f}
         };
 
         float p2_tests[][] = {
-                { 1f, 0f, 0f },
-                { 0f, 0f, 1f },
-                { -1f, 0f, 0f },
-                { 0f, 0f, -1f },
-                { 1f, 1f, 0f },
-                { 10f, 10f, 0f }
+                {1f, 0f, 0f},
+                {0f, 0f, 1f},
+                {-1f, 0f, 0f},
+                {0f, 0f, -1f},
+                {1f, 1f, 0f},
+                {10f, 10f, 0f}
         };
 
         float p3_tests[][] = {
-                { 0f, 1f, 0f },
-                { 0f, 1f, 0f },
-                { 0f, 1f, 0f },
-                { 0f, 1f, 0f },
-                { 0f, 1f, 0f },
-                { 0f, 10f, 0f }
+                {0f, 1f, 0f},
+                {0f, 1f, 0f},
+                {0f, 1f, 0f},
+                {0f, 1f, 0f},
+                {0f, 1f, 0f},
+                {0f, 10f, 0f}
         };
 
         float result[];
         float vx, vy, vz;
 
-        for (int i = 0; i < numTests; i++ ) {
+        for (int i = 0; i < numTests; i++) {
             result = XYZ.Companion.getNormal(
                     p1_tests[i],
                     p2_tests[i],
                     p3_tests[i]
             );
-
 
 
             vx = result[0];

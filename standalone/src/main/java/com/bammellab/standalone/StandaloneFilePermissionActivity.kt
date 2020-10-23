@@ -43,7 +43,7 @@ class StandaloneFilePermissionActivity : AppCompatActivity() {
                 false
             }
         } else { //permission is automatically granted on sdk<23 upon installation
-            Timber.i( "Permission is granted")
+            Timber.i("Permission is granted")
             true
         }
     }

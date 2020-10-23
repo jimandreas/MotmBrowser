@@ -12,6 +12,7 @@
  * specific language governing permissions and limitations under the License.
  */
 @file:Suppress("unused", "unused_variable")
+
 package com.bammellab.mollib.common.math
 
 import kotlin.math.*
@@ -327,7 +328,7 @@ class Quaternion {
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
     private fun fromAxes(xx: Double, xy: Double, xz: Double, yx: Double, yy: Double, yz: Double,
-                 zx: Double, zy: Double, zz: Double): Quaternion {
+                         zx: Double, zy: Double, zz: Double): Quaternion {
         // The trace is the sum of the diagonal elements; see
         // http://mathworld.wolfram.com/MatrixTrace.html
         val t = xx + yy + zz

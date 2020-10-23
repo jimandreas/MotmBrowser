@@ -15,6 +15,7 @@
  */
 
 @file:Suppress("unused")
+
 package com.bammellab.mollib.objects
 
 import com.bammellab.mollib.common.math.Matrix4
@@ -64,16 +65,16 @@ End Function
      * Shaders
      */
 
-/*
- * note - I remove the square function on the illumination fall-off
- * Things were just too dark.   Look for the following term commented out.  - jim a
- *  "* distance"
- *  Also upped the diffuse to 0.6 as a base.
- */
+    /*
+     * note - I remove the square function on the illumination fall-off
+     * Things were just too dark.   Look for the following term commented out.  - jim a
+     *  "* distance"
+     *  Also upped the diffuse to 0.6 as a base.
+     */
 // Vertex Shader from lesson 2
 //    does all the lighting in the vertex shader - fragment shader just passes through
 //  the color calculation
- // A constant representing the combined model/view/projection matrix.
+    // A constant representing the combined model/view/projection matrix.
 // A constant representing the combined model/view matrix.
 // The position of the light in eye space.
 // Per-vertex position information we will pass in.
@@ -224,8 +225,8 @@ End Function
 
         fun normalize(p1: FloatArray): FloatArray {
             val mag = sqrt((p1[0] * p1[0] +
-                            p1[1] * p1[1] +
-                            p1[2] * p1[2]).toDouble()).toFloat()
+                    p1[1] * p1[1] +
+                    p1[2] * p1[2]).toDouble()).toFloat()
             T[0] = p1[0] / mag
             T[1] = p1[1] / mag
             T[2] = p1[2] / mag

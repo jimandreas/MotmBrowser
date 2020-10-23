@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bammellab.motm.disklrucache
+package com.bammellab.mollib.disklrucache
 
 import java.io.ByteArrayOutputStream
 import java.io.Closeable
@@ -101,7 +101,7 @@ internal class StrictLineReader
     @Throws(IOException::class)
     @Synchronized
     override fun close() {
-            inputStream!!.close()
+        inputStream!!.close()
     }
 
     /**

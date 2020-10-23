@@ -3,6 +3,6 @@
 
     <item android:color="@color/theme_accent" android:state_selected="true" />
     <item android:color="@color/theme_accent" android:state_pressed="true" />
-    <item android:color="@color/window_background" android:state_pressed="false"/>
+    <item android:color="@color/window_background" android:state_pressed="false" />
 
 </selector>

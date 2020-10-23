@@ -48,8 +48,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var drawerLayout: DrawerLayout
     private val listener = PageChangeListener()
-    private lateinit var viewPager : ViewPager
-    lateinit var app : MotmApplication
+    private lateinit var viewPager: ViewPager
+    lateinit var app: MotmApplication
 
     fun setSavedTabNumber(tab: Int) {
         app.saveSelectedTabNumber = tab
@@ -151,7 +151,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewPager.addOnPageChangeListener(listener)
     }
 
-    inner class PageChangeListener: ViewPager.OnPageChangeListener {
+    inner class PageChangeListener : ViewPager.OnPageChangeListener {
         private var currentTab = 0
         override fun onPageScrollStateChanged(state: Int) {
             Timber.i("onPageScrollStateChanged %d", state)
@@ -166,7 +166,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             setSavedTabNumber(position)
 
         }
-        internal fun getCurrentSelected() : Int {
+
+        internal fun getCurrentSelected(): Int {
             return currentTab
         }
     }

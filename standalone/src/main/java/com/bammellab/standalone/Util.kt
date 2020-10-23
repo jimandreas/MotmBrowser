@@ -13,12 +13,12 @@ fun failDialog(
         titleString: Int
 ) {
     AlertDialog.Builder(activityIn)
-        .setTitle(activityIn.getString(titleString))
+            .setTitle(activityIn.getString(titleString))
             //.setMessage(activityIn.getString(messageString))
             .setPositiveButton(activityIn.getString(R.string.affirmative_respose))
             { _, _ ->
                 activityIn.finish()
-            } .show()
+            }.show()
 
 }
 

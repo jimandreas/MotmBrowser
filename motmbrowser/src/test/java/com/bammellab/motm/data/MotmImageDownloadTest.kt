@@ -18,7 +18,7 @@ internal class MotmImageDownloadTest {
     }
 
     @Test
-    @DisplayName( "test getFirstTiffImageURL lookup function")
+    @DisplayName("test getFirstTiffImageURL lookup function")
     fun testGetFirstTiffImageURL() {
 
         // test not present / error condition
@@ -37,6 +37,6 @@ internal class MotmImageDownloadTest {
         match = MotmImageDownload.getFirstTiffImageURL(1)
         assertNotEquals("", match)
         assertEquals("https://cdn.rcsb.org/pdb101/motm/tiff/1-Myoglobin-geis-myoglobin.tif",
-         match)
+                match)
     }
 }

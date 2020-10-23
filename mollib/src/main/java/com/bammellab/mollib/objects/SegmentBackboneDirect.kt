@@ -23,6 +23,7 @@
         "ConstantConditionIf",
         "LocalVariableName",
         "PropertyName")
+
 package com.bammellab.mollib.objects
 
 import android.opengl.GLES20
@@ -59,8 +60,8 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
             color: FloatArray) {
 
 
-        val positionStart = MotmVector3( positionStartIn )
-        val positionEnd = MotmVector3( positionEndIn )
+        val positionStart = MotmVector3(positionStartIn)
+        val positionEnd = MotmVector3(positionEndIn)
         /*
          * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
          */
@@ -85,7 +86,7 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
         val p1p2 = MotmVector3()
         p1p2.setAll(positionEnd)
         p1p2.subtract(positionStart)
-         val P = MotmVector3(Math.random(), Math.random(), Math.random())
+        val P = MotmVector3(Math.random(), Math.random(), Math.random())
         val R = MotmVector3(p1p2)
         R.cross(P)
         val S = MotmVector3(R)
@@ -193,7 +194,7 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
             p3[1] = (y2 + positionEnd.y).toFloat()
             p3[2] = (z2 + positionEnd.z).toFloat()
 
-            
+
 
             n = XYZ.getNormal(p1, p2, p3)
             putTri(p1, p2, p3, n, color)

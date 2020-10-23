@@ -1451,6 +1451,7 @@ class RenderModal(private val molecule: Molecule) {
     companion object {
 
         private const val debug = false
+
         //private val LOG_TAG = RenderModal::class.java.simpleName
         private const val CSF = 10  // Curve scale factor, number of points between atoms
 

@@ -15,6 +15,7 @@
  */
 
 @file:Suppress("unused")
+
 package com.bammellab.mollib.objects
 
 import com.bammellab.mollib.common.math.MathUtil
@@ -33,8 +34,7 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             numSlices: Int,
             radius: Float,
             atom1: PdbAtom,
-            atom2: PdbAtom)
-    {
+            atom2: PdbAtom) {
 
         /*
          * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
@@ -59,7 +59,7 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
         elementSymbol = atom2.elementSymbol
         ai = AtomInformationTable.atomSymboltoAtomNumNameColor[elementSymbol]
         endColor = ai?.color ?: floatArrayOf(1.0f, 1.0f, 1.0f, 1.0f) // white for unknown
-        
+
 
         // debugging
         //        position_start.x = 0;

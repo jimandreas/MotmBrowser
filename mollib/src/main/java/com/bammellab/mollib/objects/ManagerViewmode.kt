@@ -15,6 +15,7 @@
  */
 
 @file:Suppress("unused", "MemberVisibilityCanBePrivate", "CanBeVal")
+
 package com.bammellab.mollib.objects
 
 import android.app.Activity
@@ -27,7 +28,7 @@ import timber.log.Timber
 // TODO: implement Interface in Activity - for flagging low mem in UI (commented out after lib refactor)
 class ManagerViewmode(private val activity: Activity,
                       private val molecule: Molecule
-                      ) {
+) {
 
     private val atomSphere: AtomSphere = AtomSphere(activity, molecule)
     private val atomToAtomBond: SegmentAtomToAtomBond = SegmentAtomToAtomBond(molecule)
@@ -96,7 +97,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
         activityManager2.getMemoryInfo(info2)
         val initialAvailMem = info2.threshold
         try {
-            run bailout@ {
+            run bailout@{
                 Timber.i("doViewMode: THRESHOLD mbyte = %d", initialAvailMem / 1024 / 1024)
 
                 when (currentMode) {
@@ -608,7 +609,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
         private const val SPHERE_SLICES = INITIAL_SLICES / 2 // TODO: make this dynamic
         private const val BYTES_PER_FLOAT = 4
         private const val BYTES_PER_SHORT = 2
-        
+
         private const val POSITION_DATA_SIZE_IN_ELEMENTS = 3
         private const val NORMAL_DATA_SIZE_IN_ELEMENTS = 3
         private const val COLOR_DATA_SIZE_IN_ELEMENTS = 4

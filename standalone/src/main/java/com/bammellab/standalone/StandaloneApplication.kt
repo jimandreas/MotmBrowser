@@ -12,7 +12,8 @@ class StandaloneApplication : Application() {
         Timber.tag("XYZZY")
         context = this
     }
+
     companion object {
-        lateinit var context : Context
+        lateinit var context: Context
     }
 }

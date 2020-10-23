@@ -17,9 +17,10 @@ object MotmImageDownload {
         if (match + 1 > imageList.size - 1) {
             return ""
         }
-        return imageList[match+1]
+        return imageList[match + 1]
 
     }
+
     private val imageList = listOf(
 
             "250",

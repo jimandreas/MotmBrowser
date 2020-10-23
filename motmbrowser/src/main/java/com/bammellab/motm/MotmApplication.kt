@@ -15,6 +15,7 @@
  */
 
 @file:Suppress("unused", "unused_variable", "unused_parameter", "deprecation")
+
 package com.bammellab.motm
 
 import android.app.Application
@@ -32,7 +33,7 @@ class MotmApplication : Application() {
     var context: Context = this
     val okHttpClient = OkHttpClient()
     var saveSelectedTabNumber = 0
-    
+
     override fun onCreate() {
         super.onCreate()
 

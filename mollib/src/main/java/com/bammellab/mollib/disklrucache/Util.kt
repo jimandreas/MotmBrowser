@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bammellab.motm.disklrucache
+package com.bammellab.mollib.disklrucache
 
 import java.io.Closeable
 import java.io.File
@@ -71,9 +71,6 @@ internal object Util {
 
         }
     }
-
-
-
 
 
 }

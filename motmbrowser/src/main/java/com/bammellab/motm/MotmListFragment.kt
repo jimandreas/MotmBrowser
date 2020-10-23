@@ -19,6 +19,7 @@
  */
 
 @file:Suppress("unused", "unused_variable", "unused_parameter")
+
 package com.bammellab.motm
 
 import android.content.Context
@@ -107,7 +108,7 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 //            holder.boundString = motmList[position]
             val invertPosition = invertPosition(position)
-            holder.boundString = (invertPosition+1).toString() // motm tables are one based, position starts at zero
+            holder.boundString = (invertPosition + 1).toString() // motm tables are one based, position starts at zero
 
             holder.mView.setOnClickListener { v ->
                 val context = v.context
@@ -129,7 +130,7 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
                     + Corpus.motmDateByKey(invertPosition + 1)
                     + "</i><br>"
 //                    + Corpus.motmDescByKey[position + 1])
-                    + motmTagLinesGet(invertPosition+1))
+                    + motmTagLinesGet(invertPosition + 1))
 
             holder.textView.text = spannedString
             holder.textView2.visibility = View.GONE

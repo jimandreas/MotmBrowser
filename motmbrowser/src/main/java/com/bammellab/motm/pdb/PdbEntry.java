@@ -30,17 +30,17 @@ public class PdbEntry {
     @Attribute
     private String title;
 
-    @Attribute(required=false)
+    @Attribute(required = false)
     private String pubmedId;   // not always present
 
     @Attribute
     private String expMethod;
 
-    @Attribute(required=false)
+    @Attribute(required = false)
     private double resolution;
 
     //     Can also be "replacedBy"
-    @Attribute(required=false)
+    @Attribute(required = false)
     private String replaces;
 
     @Attribute
@@ -66,8 +66,7 @@ public class PdbEntry {
 
     @Override
     public String toString() {
-        @SuppressWarnings("StringBufferReplaceableByString")
-        final StringBuilder sb = new StringBuilder("PdbEntry{");
+        @SuppressWarnings("StringBufferReplaceableByString") final StringBuilder sb = new StringBuilder("PdbEntry{");
         sb.append("structureId='").append(structureId).append('\n');
         sb.append(", title='").append(title).append('\n');
         sb.append(", pubmedId='").append(pubmedId).append('\n');

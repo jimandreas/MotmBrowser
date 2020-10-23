@@ -16,10 +16,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         tools:ignore="AllowBackup">
-        <activity android:name="com.bammellab.standalone.ActivityDisplayPdbFile"
+        <activity
+            android:name="com.bammellab.standalone.ActivityDisplayPdbFile"
             android:label="@string/activity_load_pdb_file_title"
-            android:theme="@style/Theme.DesignDemo2">
-        </activity>
+            android:theme="@style/Theme.DesignDemo2"></activity>
         <!--
                Don't override application title. See http://stackoverflow.com/questions/3462431/how-to-name-android-application
               We will set this in code instead.
@@ -27,8 +27,8 @@
         <activity
             android:name="com.bammellab.standalone.StandaloneFilePermissionActivity"
             android:label="@string/activity_file_permission_please"
-            android:theme="@style/Theme.DesignDemo2"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:theme="@style/Theme.DesignDemo2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -13,6 +13,7 @@
  */
 
 @file:Suppress("unused")
+
 package com.bammellab.mollib.common.math
 
 import com.kotmol.pdbParser.KotmolVector3
@@ -888,30 +889,37 @@ class MotmVector3 {
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
         val X = MotmVector3(1.0, 0.0, 0.0)
+
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
         val Y = MotmVector3(0.0, 1.0, 0.0)
+
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
         val Z = MotmVector3(0.0, 0.0, 1.0)
+
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
         val NEG_X = MotmVector3(-1.0, 0.0, 0.0)
+
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
         val NEG_Y = MotmVector3(0.0, -1.0, 0.0)
+
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
         val NEG_Z = MotmVector3(0.0, 0.0, -1.0)
+
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
         val ZERO = MotmVector3(0.0, 0.0, 0.0)
+
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */

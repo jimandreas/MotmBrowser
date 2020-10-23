@@ -971,7 +971,7 @@ class RendererDisplayPdbFile(
      *  Convert RGB(#000000) to transparent
      *  @link https://stackoverflow.com/a/5013141/3853712
      */
-    private lateinit var b : IntArray
+    private lateinit var b: IntArray
     private lateinit var bt: IntArray
     private lateinit var ib: IntBuffer
 
@@ -980,6 +980,7 @@ class RendererDisplayPdbFile(
         bt = IntArray(400 * 400)
         ib = IntBuffer.wrap(b)
     }
+
     fun readGlBufferToBitmap(x: Int, y: Int, w: Int, h: Int): Bitmap? {
 
         ib.position(0)

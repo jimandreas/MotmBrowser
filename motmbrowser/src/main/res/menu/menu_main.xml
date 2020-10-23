@@ -5,18 +5,18 @@
     <item
         android:id="@+id/action_wireframe"
         android:orderInCategory="100"
-        app:showAsAction="never"
-        android:title="@string/action_wireframe" />
+        android:title="@string/action_wireframe"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_shading"
         android:orderInCategory="100"
-        app:showAsAction="never"
-        android:title="@string/action_shading" />
+        android:title="@string/action_shading"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_hydrogens"
         android:orderInCategory="100"
-        app:showAsAction="never"
-        android:title="@string/action_hydrogens" />
+        android:title="@string/action_hydrogens"
+        app:showAsAction="never" />
 </menu>

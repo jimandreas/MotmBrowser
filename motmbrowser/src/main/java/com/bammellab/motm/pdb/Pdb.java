@@ -20,6 +20,7 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import java.util.List;
+
 @SuppressWarnings("all") // template for generated code
 
 // for more information:

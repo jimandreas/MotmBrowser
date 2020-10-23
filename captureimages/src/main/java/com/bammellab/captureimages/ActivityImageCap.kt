@@ -16,7 +16,7 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
 
     private lateinit var glSurfaceView: GLSurfaceViewDisplayPdbFile
     private lateinit var renderer: RendererDisplayPdbFile
-    private lateinit var processPdbs : MollibProcessPdbs
+    private lateinit var processPdbs: MollibProcessPdbs
     private val pdbsCaptured = mutableListOf("")
 
     override fun onCreate(savedInstanceState: Bundle?) {

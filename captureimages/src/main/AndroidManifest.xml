@@ -19,7 +19,7 @@
         <activity
             android:name="com.bammellab.captureimages.ActivityImageCap"
             android:label="@string/activity_capture_images"
-            android:theme="@style/Theme.DesignDemo2"/>
+            android:theme="@style/Theme.DesignDemo2" />
         <!--
                Don't override application title. See http://stackoverflow.com/questions/3462431/how-to-name-android-application
               We will set this in code instead.
@@ -27,9 +27,8 @@
         <activity
             android:name="com.bammellab.captureimages.CaptureImagesFilePermissionActivity"
             android:label="@string/activity_capture_images"
-            android:theme="@style/Theme.DesignDemo2"
             android:noHistory="true"
-            >
+            android:theme="@style/Theme.DesignDemo2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

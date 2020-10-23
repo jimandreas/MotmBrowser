@@ -7,6 +7,7 @@
         "ConstantConditionIf",
         "LocalVariableName",
         "PropertyName")
+
 package com.bammellab.motm.util
 
 /*
@@ -105,10 +106,10 @@ object Utility {
         AlertDialog.Builder(activityIn)
                 .setTitle(activityIn.getString(titleString))
                 .setMessage(activityIn.getString(messageString))
-                .setPositiveButton(activityIn.getString( R.string.affirmative_respose))
+                .setPositiveButton(activityIn.getString(R.string.affirmative_respose))
                 { _, _ ->
                     activityIn.finish()
-                } .show()
+                }.show()
     }
 
     fun checkForOpengl(activityIn: Activity): Boolean {

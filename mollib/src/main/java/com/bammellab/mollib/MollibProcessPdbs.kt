@@ -131,7 +131,7 @@ class MollibProcessPdbs(
 
 
     fun writeCurrentImage() {
-        if (nextNameIndex < 0 || nextNameIndex > pdbFileNames.size-1) {
+        if (nextNameIndex < 0 || nextNameIndex > pdbFileNames.size - 1) {
             return
         }
         glSurfaceView.queueEvent {

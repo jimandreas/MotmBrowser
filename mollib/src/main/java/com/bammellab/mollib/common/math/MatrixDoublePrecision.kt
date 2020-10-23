@@ -16,6 +16,7 @@
  */
 
 @file:Suppress("unused")
+
 package com.bammellab.mollib.common.math
 
 import kotlin.math.cos
@@ -574,7 +575,7 @@ object MatrixDoublePrecision {
      * @param zIn scale factor z
      */
     private fun setRotateM(rm: DoubleArray, rmOffset: Int,
-                   aIn: Double, xIn: Double, yIn: Double, zIn: Double) {
+                           aIn: Double, xIn: Double, yIn: Double, zIn: Double) {
         var a = aIn
         var x = xIn
         var y = yIn

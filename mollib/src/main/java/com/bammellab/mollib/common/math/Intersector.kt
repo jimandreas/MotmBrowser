@@ -19,6 +19,7 @@
         "ConstantConditionIf",
         "LocalVariableName",
         "ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE")
+
 package com.bammellab.mollib.common.math
 
 import android.annotation.SuppressLint
@@ -44,14 +45,14 @@ object Intersector {
 
     @Suppress("UNUSED_VALUE")
             /**
-     * Intersects a ray defined by the start and end point and a sphere, returning the intersection point in intersection.
-     * @param rayStartIn Startpoint of the ray
-     * @param rayEndIn Endpoint of the ray
-     * @param sphereCenterIn The center of the sphere
-     * @param sphereRadius The radius of the sphere
-     * @param hitPointIn The intersection point (optional)
-     * @return True if there is an intersection, false otherwise.
-     */
+             * Intersects a ray defined by the start and end point and a sphere, returning the intersection point in intersection.
+             * @param rayStartIn Startpoint of the ray
+             * @param rayEndIn Endpoint of the ray
+             * @param sphereCenterIn The center of the sphere
+             * @param sphereRadius The radius of the sphere
+             * @param hitPointIn The intersection point (optional)
+             * @return True if there is an intersection, false otherwise.
+             */
     fun intersectRaySphere(
             rayStartIn: MotmVector3, rayEndIn: MotmVector3,
             sphereCenterIn: MotmVector3, sphereRadius: Double,
