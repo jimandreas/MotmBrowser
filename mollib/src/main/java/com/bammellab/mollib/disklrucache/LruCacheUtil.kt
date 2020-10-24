@@ -24,7 +24,7 @@ import java.io.StringWriter
 import java.nio.charset.Charset
 
 /** Junk drawer of utility methods.  */
-internal object Util {
+internal object LruCacheUtil {
 
     val US_ASCII: Charset = Charset.forName("US-ASCII")
     val UTF_8: Charset = Charset.forName("UTF-8")

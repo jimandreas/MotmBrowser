@@ -29,8 +29,8 @@ import android.widget.Button
 import android.widget.ProgressBar
 import com.bammellab.mollib.*
 import com.bammellab.mollib.LoadFromSource.FROM_CACHE
-import com.bammellab.motm.util.PdbCache
-import com.bammellab.motm.util.Utility.failDialog
+import com.bammellab.mollib.Utility.checkForOpengl
+import com.bammellab.mollib.Utility.failDialog
 import timber.log.Timber
 import java.io.InputStream
 
@@ -43,7 +43,7 @@ import java.io.InputStream
  * for the one to be displayed initially.
  */
 
-class MotmGraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
+class MotmGraphicsActivity : AppCompatActivity() {
     private lateinit var buttonPreviousObj: Button
     private lateinit var buttonNextObj: Button
     private lateinit var buttonSelect: Button
@@ -57,8 +57,6 @@ class MotmGraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
 
     private var pdbList: Array<String>? = null
     private var currentPdbIndex: Int = 0
-
-    private lateinit var pdbCache: PdbCache
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,35 +81,6 @@ class MotmGraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
         glSurfaceView = findViewById(R.id.gl_surface_view)
         nextViewProgressCircle = findViewById(R.id.next_view_progress_circle)
 
-        pdbCache = PdbCache(this, glSurfaceView.context)
-
-        /*//        gLSurfaceView = (GLSurfaceViewDisplayPdbFile) findViewById(R.id.gl_surface_view);
-        //        nextViewProgressCircle = (ProgressBar) findViewById(R.id.next_view_progress_circle);
-
-        // Check if the system supports OpenGL ES 2.0.
-        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        val configurationInfo = activityManager.deviceConfigurationInfo
-        val supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000
-
-        if (supportsEs2) {
-            // Request an OpenGL ES 2.0 compatible context.
-            gLSurfaceView.setEGLContextClientVersion(2)
-
-            val displayMetrics = DisplayMetrics()
-            windowManager.defaultDisplay.getMetrics(displayMetrics)
-
-            renderer = RendererDisplayPdbFile(this, gLSurfaceView)
-            gLSurfaceView.setRenderer(renderer, displayMetrics.density)
-
-            // This freezes the updates, now adjusted in GLSurfaceView
-            // gLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        } else {
-            Timber.e("No support of OPENGL ES2")
-            Toast.makeText(this, "Need OpenGL2 support, sorry", Toast.LENGTH_LONG)
-                    .show()
-            return
-        }*/
-
         if (!checkForOpengl(this)) {
             failDialog(this,
                     R.string.activity_support_requirement,
@@ -133,52 +102,25 @@ class MotmGraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
         buttonSelect.visibility = View.GONE
         buttonSelect.isClickable = false
 
-        // This freezes the updates, now adjusted in GLSurfaceView
-        // glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-
         processPdbs = MollibProcessPdbs(
                 this,
                 glSurfaceView,
                 renderer,
                 pdbList!!.toList(),
-                source = FROM_CACHE)
+                loadPdbFrom = FROM_CACHE)
 
         /*
         * Go to next PDB in the list
         */
         buttonNextObj.setOnClickListener(View.OnClickListener {
-            if (pdbList!!.isEmpty() || currentPdbIndex < 0 || currentPdbIndex > pdbList!!.size) {
-                Timber.e("Error with pdb list: list size: %d index requested: %d",
-                        pdbList!!.size, currentPdbIndex)
-                return@OnClickListener
-            }
-
-            // mNextViewProgressCircle.visibility = View.VISIBLE
-
-            if (++currentPdbIndex == pdbList!!.size) {
-                currentPdbIndex = 0
-            }
-            title = pdbList!![currentPdbIndex]
-            pdbCache.downloadPdb(pdbList!![currentPdbIndex])
+            processPdbs.loadNextPdbFile()
         })
 
         /*
          * Go to previous PDB in the list
          */
         buttonPreviousObj.setOnClickListener(View.OnClickListener {
-            if (pdbList!!.isEmpty() || currentPdbIndex < 0 || currentPdbIndex > pdbList!!.size) {
-                Timber.e("Error with pdb list: list size: %d index requested: %d",
-                        pdbList!!.size, currentPdbIndex)
-                return@OnClickListener
-            }
-
-            //mNextViewProgressCircle.visibility = View.VISIBLE
-
-            if (--currentPdbIndex < 0) {
-                currentPdbIndex = pdbList!!.size - 1
-            }
-            title = pdbList!![currentPdbIndex]
-            pdbCache.downloadPdb(pdbList!![currentPdbIndex])
+            processPdbs.loadPrevPdbFile()
         })
 
 
@@ -207,14 +149,7 @@ class MotmGraphicsActivity : AppCompatActivity(), PdbCache.PdbCallback {
         renderer.doCleanUp()
     }
 
-    /**
-     * Queue up the PDB parsing in the library
-     *
-     * @param stream input stream from cache or from http
-     */
-    override fun loadPdbFromStream(stream: InputStream) {
 
-    }
 
     private fun toggleShader() {
         glSurfaceView.queueEvent { renderer.toggleShader() }

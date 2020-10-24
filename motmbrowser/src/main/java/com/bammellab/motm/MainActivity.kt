@@ -35,12 +35,13 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.ViewPager
+import com.bammellab.mollib.Utility
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.MODE_SCROLLABLE
-import com.bammellab.motm.util.Utility
+
 import timber.log.Timber
 import java.util.*
 

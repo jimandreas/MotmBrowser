@@ -44,7 +44,7 @@ import java.nio.charset.Charset
  * We currently check in constructor that the charset is one of US-ASCII, UTF-8 and ISO-8859-1.
  * The default charset is US_ASCII.
  */
-internal class StrictLineReader
+internal class LruCacheStrictLineReader
 /**
  * Constructs a new `LineReader` with the specified capacity and charset.
  *

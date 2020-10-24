@@ -1,11 +1,24 @@
+/*
+ *  Copyright 2020 James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
+ */
+
 package com.bammellab.mollib
 
 import android.graphics.Bitmap
 import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.bammellab.mollib.LoadFromSource.FROM_ASSETS
-import com.bammellab.mollib.LoadFromSource.FROM_SDCARD
+import com.bammellab.mollib.LoadFromSource.*
+import com.bammellab.mollib.disklrucache.PdbCache
 import com.bammellab.mollib.objects.ManagerViewmode
 import com.kotmol.pdbParser.Molecule
 import kotlinx.coroutines.Dispatchers
@@ -25,31 +38,24 @@ enum class LoadFromSource {
  *   from a PDB folder or from a local asset file.
  */
 class MollibProcessPdbs(
-        activityIn: AppCompatActivity,
-        glSurfaceViewIn: GLSurfaceViewDisplayPdbFile,
-        rendererIn: RendererDisplayPdbFile,
-        pdbFileNamesIn: List<String>,
-        source: LoadFromSource
-) : SurfaceCreated {
-    private val activity = activityIn
-    private val glSurfaceView = glSurfaceViewIn
-    private val renderer = rendererIn
-    private val managePdbFile = ManagePdbFile(activityIn)
-    private val loadPdbFrom = source
+        private val activity: AppCompatActivity,
+        private val glSurfaceView: GLSurfaceViewDisplayPdbFile,
+        private val renderer: RendererDisplayPdbFile,
+        private val pdbFileNames: List<String>,
+        private val loadPdbFrom: LoadFromSource
+) : SurfaceCreated, PdbCache.PdbCallback  {
+    private val managePdbFile = ManagePdbFile(activity)
     private var managerViewmode: ManagerViewmode? = null
-
     private var nextNameIndex = -1
-
-    private val pdbFileNames = pdbFileNamesIn
     private var captureImagesFlag = false
-
     private var androidFilePath = ""
+    private lateinit var pdbCache: PdbCache
 
     init {
         if (loadPdbFrom == FROM_SDCARD) {
             checkFiles()
         }
-        rendererIn.setSurfaceCreatedListener(this)
+        renderer.setSurfaceCreatedListener(this)
     }
 
     fun startProcessing(captureImages: Boolean = false) {
@@ -57,10 +63,17 @@ class MollibProcessPdbs(
         captureImagesFlag = captureImages
     }
 
+    /**
+     * at the time of surfaceCreatedCallback() the Opengl system is up an running
+     * If FROM_SDCARD mode is set, then the goal is to capture images.
+     * If FROM_CACHE mode is set, then PDBs are to be downloaded into an LRU cache.
+     */
     override fun surfaceCreatedCallback() {
         Timber.e("SURFACE CREATED CALLBACK")
-        if (loadPdbFrom == FROM_SDCARD) {
-            renderer.allocateReadBitmapArrays()
+        when (loadPdbFrom) {
+            FROM_SDCARD -> renderer.allocateReadBitmapArrays()
+            FROM_CACHE -> pdbCache = PdbCache(activity)
+            else -> {}
         }
         loadNextPdbFile()
     }
@@ -91,25 +104,29 @@ class MollibProcessPdbs(
             managerViewmode = ManagerViewmode(
                     activity, mol)
 
-            if (loadPdbFrom == FROM_ASSETS) {
-                managePdbFile.parsePdbFileFromAsset(name, mol)
-            } else {
-                try {
-                    val myFile = File(androidFilePath, "$name.pdb")
-                    if (!myFile.exists()) {
-                        Timber.i("nope %s does not exist", myFile)
-                    } else {
-                        Timber.i("Yay %s exists", myFile)
+            when (loadPdbFrom) {
+                FROM_ASSETS -> {managePdbFile.parsePdbFileFromAsset(name, mol)}
+                FROM_SDCARD -> {
+                    try {
+                        val myFile = File(androidFilePath, "$name.pdb")
+                        if (!myFile.exists()) {
+                            Timber.i("nope %s does not exist", myFile)
+                        } else {
+                            Timber.i("Yay %s exists", myFile)
+                        }
+                        val fileStream = FileInputStream(myFile)
+
+                        managePdbFile.parsePdbFile(fileStream, mol, name)
+                        fileStream.close()
+
+                    } catch (e: FileNotFoundException) {
+                        Timber.e("$name not found")
+                    } catch (e: IOException) {
+                        Timber.e("$name IO Exception")
                     }
-                    val fileStream = FileInputStream(myFile)
-
-                    managePdbFile.parsePdbFile(fileStream, mol, name)
-                    fileStream.close()
-
-                } catch (e: FileNotFoundException) {
-                    Timber.e("$name not found")
-                } catch (e: IOException) {
-                    Timber.e("$name IO Exception")
+                }
+                FROM_CACHE -> {
+                    pdbCache.downloadPdb(name)
                 }
             }
 
@@ -235,6 +252,15 @@ class MollibProcessPdbs(
                         System.currentTimeMillis() - currentTime)
             }
         }
+    }
+
+    /**
+     * Queue up the PDB parsing in the library
+     *
+     * @param stream input stream from cache or from http
+     */
+    override fun loadPdbFromStream(stream: InputStream) {
+
     }
 
 

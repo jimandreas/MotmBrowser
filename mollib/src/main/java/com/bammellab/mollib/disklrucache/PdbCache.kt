@@ -1,20 +1,33 @@
+/*
+ *  Copyright 2020 James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
+ */
+
 @file:Suppress("unused", "unused_variable", "unused_parameter", "deprecation")
 
-package com.bammellab.motm.util
+package com.bammellab.mollib.disklrucache
 
 
 import android.app.Activity
-import android.content.Context
 import android.os.Environment
 import android.widget.Toast
-import com.bammellab.mollib.disklrucache.DiskLruCache
+import com.bammellab.mollib.common.util.ConnectionUtil
 import okhttp3.*
 import timber.log.Timber
 import java.io.*
 import java.util.zip.GZIPInputStream
 
-class PdbCache(private val activity: Activity, private val context: Context) {
-    private var diskLruCache: DiskLruCache? = null
+class PdbCache(private val activity: Activity) {
+    private var lruCacheDisk: LruCacheDisk? = null
+    private val connectionUtil = ConnectionUtil(activity)
     private val client: OkHttpClient
 
     interface PdbCallback {
@@ -25,15 +38,11 @@ class PdbCache(private val activity: Activity, private val context: Context) {
         val okBuilder = OkHttpClient.Builder()
         client = okBuilder.build()
         initDiskCache()
-    }//        Cache cache = new Cache(new File(context.getCacheDir(), CACHE_DIR), CACHE_SIZE);
-    //        okBuilder.cache(cache).addInterceptor(new CachingControlInterceptor());
-    //        HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor();
-    //        logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-    //        okBuilder.addInterceptor(logInterceptor);
+    }
 
     fun downloadPdb(pdbid: String) {
 
-        Thread(Runnable { downloadPdbBackground(pdbid) }).start()
+        Thread { downloadPdbBackground(pdbid) }.start()
     }
 
     /**
@@ -54,14 +63,14 @@ class PdbCache(private val activity: Activity, private val context: Context) {
             return
         }
 
-        if (!Utility.isNetworkAvailable(context)) {
+        if (!connectionUtil.isOnline()) {
             activity.runOnUiThread {
-                Toast.makeText(context, "No networking available, sorry", Toast.LENGTH_LONG)
+                Toast.makeText(activity, "No networking available, sorry", Toast.LENGTH_LONG)
                         .show()
-                activity.finish()
             }
             return
         }
+        // TODO: pull out this hardwired URL
         val url = ("https://files.rcsb.org/download/"
                 + pdbid
                 + ".pdb.gz")
@@ -116,7 +125,7 @@ class PdbCache(private val activity: Activity, private val context: Context) {
             return originalResponse.newBuilder()
                     //                    .header("Cache-Control", (Utility.isNetworkAvailable()) ?
                     //                            "public, max-age=60" :  "public, max-stale=604800")
-                    .header("Cache-Control", if (Utility.isNetworkAvailable(context))
+                    .header("Cache-Control", if (connectionUtil.isOnline())
                         "public, max-age=60"
                     else
                         "public, only-if-cached, max-stale=604800")
@@ -137,25 +146,25 @@ class PdbCache(private val activity: Activity, private val context: Context) {
         val diskCacheDir = getDiskCacheDir(CACHE_DIR)
         Timber.d("initDiskCache: entering, diskCacheDir is %s", diskCacheDir)
 
-        Thread(Runnable {
+        Thread {
             if (!diskCacheDir.exists()) {
                 diskCacheDir.mkdirs()
             }
             try {
-                diskLruCache = DiskLruCache.open(
+                lruCacheDisk = LruCacheDisk.open(
                         diskCacheDir, 1, 1, CACHE_SIZE.toLong())
-                if (diskLruCache == null) {
+                if (lruCacheDisk == null) {
                     Timber.e("error on DiskLruCache.open() call")
                 } else {
                     Timber.d("diskLruCache set, dir is %s", diskCacheDir)
                 }
             } catch (e: IOException) {
-                diskLruCache = null
+                lruCacheDisk = null
                 Timber.e(e, "failed disk cache open")
             } finally {
                 Timber.d("exiting diskLruCache setup block")
             }
-        }).start()
+        }.start()
     }
 
     /**
@@ -169,6 +178,7 @@ class PdbCache(private val activity: Activity, private val context: Context) {
      * @param uniqueName A unique directory name to append to the cache dir
      * @return The cache dir
      */
+    @Suppress("SameParameterValue")
     private fun getDiskCacheDir(uniqueName: String): File {
 
         // Check if media is mounted or storage is built-in, if so, try and use external cache dir
@@ -180,15 +190,15 @@ class PdbCache(private val activity: Activity, private val context: Context) {
 
         cachePath = if (Environment.MEDIA_MOUNTED == state || !Environment.isExternalStorageRemovable()) {
 
-            // File cacheDir = context.getExternalCacheDir();
-            val cacheDir = context.getExternalFilesDir(null)
+            // File cacheDir = activity.getExternalCacheDir();
+            val cacheDir = activity.getExternalFilesDir(null)
             if (cacheDir != null) {
-                context.getExternalFilesDir(null)!!.path
+                activity.getExternalFilesDir(null)!!.path
             } else {
-                context.filesDir.path
+                activity.filesDir.path
             }
         } else {
-            context.cacheDir.path
+            activity.cacheDir.path
         }
 
         fullPath = cachePath + File.separator + uniqueName
@@ -198,13 +208,13 @@ class PdbCache(private val activity: Activity, private val context: Context) {
     private fun downloadPdbFromHttp(downloadInputStream: InputStream?,
                                     pdbid: String) {
         var cacheStream: InputStream? = null
-        if (diskLruCache == null) {
+        if (lruCacheDisk == null) {
             Timber.e("null cache - error on setup")
             return
         }
-        val editor: DiskLruCache.Editor
+        val editor: LruCacheDisk.Editor
         try {
-            editor = diskLruCache!!.edit(pdbid)
+            editor = lruCacheDisk!!.edit(pdbid)
         } catch (e: IOException) {
             Timber.e("unhandled error on diskLruCache edit of %s", pdbid)
             return
@@ -248,11 +258,11 @@ class PdbCache(private val activity: Activity, private val context: Context) {
 
     private fun queryLruCache(pdbid: String): InputStream? {
 
-        if (diskLruCache == null) {
+        if (lruCacheDisk == null) {
             return null
         }
         try {
-            val snapshot = diskLruCache!!.get(pdbid) ?: return null
+            val snapshot = lruCacheDisk!!.get(pdbid) ?: return null
             return snapshot.getInputStream(VALUE_IDX)
         } catch (e: IOException) {
             Timber.e(e, "IO exception on LRU cache query")

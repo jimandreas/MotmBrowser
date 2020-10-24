@@ -25,6 +25,8 @@ object URLs {
     const val RCSB_PDB_INFO_PREFIX = "https://www.rcsb.org/pdb/explore.do?structureId="
     const val RCSB_PDB_INFO_SUFFIX = "#structureID"
 
+    const val RCSB_PDB_DOWNLOAD = "https://files.rcsb.org/download/"
+
     var retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://www.rcsb.org/pdb/rest/")
             .addConverterFactory(SimpleXmlConverterFactory.create())
