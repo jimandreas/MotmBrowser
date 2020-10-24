@@ -25,14 +25,15 @@ import timber.log.Timber
 import java.io.*
 import java.util.zip.GZIPInputStream
 
+interface PdbCallback {
+    fun loadPdbFromStream(stream: InputStream)
+}
+
 class PdbCache(private val activity: Activity) {
     private var lruCacheDisk: LruCacheDisk? = null
     private val connectionUtil = ConnectionUtil(activity)
     private val client: OkHttpClient
-
-    interface PdbCallback {
-        fun loadPdbFromStream(stream: InputStream)
-    }
+    private var pdbCallback : PdbCallback? = null
 
     init {
         val okBuilder = OkHttpClient.Builder()
@@ -40,8 +41,11 @@ class PdbCache(private val activity: Activity) {
         initDiskCache()
     }
 
-    fun downloadPdb(pdbid: String) {
+    fun initPdbCallback(cb: PdbCallback) {
+        pdbCallback = cb
+    }
 
+    fun downloadPdb(pdbid: String) {
         Thread { downloadPdbBackground(pdbid) }.start()
     }
 
@@ -59,7 +63,12 @@ class PdbCache(private val activity: Activity) {
 
         var inputStream = queryLruCache(pdbid)
         if (inputStream != null) {
-            (activity as PdbCallback).loadPdbFromStream(inputStream)
+            if (pdbCallback != null) {
+                pdbCallback!!.loadPdbFromStream(inputStream)
+            } else {
+                Timber.e("downloadPdbBackgroun: Error callback not set")
+            }
+
             return
         }
 
@@ -248,7 +257,11 @@ class PdbCache(private val activity: Activity) {
 
         } finally {
             if (cacheStream != null) {
-                (activity as PdbCallback).loadPdbFromStream(cacheStream)
+                if (pdbCallback != null) {
+                    pdbCallback!!.loadPdbFromStream(cacheStream)
+                } else {
+                    Timber.e("downloadPdbBackgroun: Error callback not set")
+                }
                 // cacheStream.close()  NOTE: is closed later in reader thread, do not close here!!
             } else {
                 Timber.e("unhandled error on LRU caching")

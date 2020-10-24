@@ -22,14 +22,11 @@ import com.kotmol.pdbParser.ParserPdbFile
 import timber.log.Timber
 import java.io.FileInputStream
 import java.io.IOException
+import java.io.InputStream
 
 class ManagePdbFile(
         private val activity: Activity
-
 ) {
-
-    private lateinit var pdbFile: ParserPdbFile
-
     fun parsePdbFile(stream: FileInputStream, mol: Molecule, pdbName: String) {
         val retainedMessages = mutableListOf<String>()
         ParserPdbFile
@@ -40,6 +37,18 @@ class ManagePdbFile(
                 .doBondProcessing(true)
                 .parse()
     }
+
+    fun parsePdbInputStream(stream: InputStream, mol: Molecule, pdbName: String) {
+        val retainedMessages = mutableListOf<String>()
+        ParserPdbFile
+                .Builder(mol)
+                .setMoleculeName(pdbName)
+                .setMessageStrings(retainedMessages)
+                .loadPdbFromStream(stream)
+                .doBondProcessing(true)
+                .parse()
+    }
+
 
     fun parsePdbFileFromAsset(pdbAssetName: String, mol: Molecule) {
         val name = "$pdbAssetName.pdb"
@@ -58,6 +67,4 @@ class ManagePdbFile(
             return
         }
     }
-
-
 }

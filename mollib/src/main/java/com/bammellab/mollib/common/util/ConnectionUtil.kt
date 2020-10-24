@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import timber.log.Timber
 
 
 /**
@@ -66,7 +67,7 @@ class ConnectionUtil(private val context: Context) : LifecycleObserver {
     }
 
     init {
-        val connectivityMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE)
+        connectivityMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE)
                 as ConnectivityManager?
         (context as AppCompatActivity).lifecycle.addObserver(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -94,13 +95,17 @@ class ConnectionUtil(private val context: Context) : LifecycleObserver {
      * https://developer.android.com/reference/android/net/ConnectivityManager#getNetworkInfo(int)
      */
     fun isOnline(): Boolean {
+        if (connectivityMgr == null) {
+            Timber.e("ConnectionUtil: isOnline: connetivityMgr is null, quitting")
+            return false
+        }
         isConnected = false
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             // Checking internet connectivity
             var activeNetwork: NetworkInfo? = null
-            if (connectivityMgr != null) {
-                activeNetwork = connectivityMgr!!.activeNetworkInfo // Deprecated in API 29
-            }
+
+            activeNetwork = connectivityMgr!!.activeNetworkInfo // Deprecated in API 29
+
             isConnected = activeNetwork != null
         } else {
             val allNetworks: Array<Network> = connectivityMgr!!.allNetworks // added in API 21 (Lollipop)
@@ -125,6 +130,10 @@ class ConnectionUtil(private val context: Context) : LifecycleObserver {
      */
     fun activeNetwork(): Int {
 
+        if (connectivityMgr == null) {
+            Timber.e("ConnectionUtil: activeNetwork: connetivityMgr is null, quitting")
+            return NO_NETWORK_AVAILABLE
+        }
         val activeNetwork = connectivityMgr!!.activeNetworkInfo // Deprecated in API 29
         if (activeNetwork != null) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val capabilities = connectivityMgr!!.getNetworkCapabilities(connectivityMgr!!.activeNetwork)

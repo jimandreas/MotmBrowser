@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bammellab.mollib.LoadFromSource.*
 import com.bammellab.mollib.disklrucache.PdbCache
+import com.bammellab.mollib.disklrucache.PdbCallback
 import com.bammellab.mollib.objects.ManagerViewmode
 import com.kotmol.pdbParser.Molecule
 import kotlinx.coroutines.Dispatchers
@@ -43,13 +44,14 @@ class MollibProcessPdbs(
         private val renderer: RendererDisplayPdbFile,
         private val pdbFileNames: List<String>,
         private val loadPdbFrom: LoadFromSource
-) : SurfaceCreated, PdbCache.PdbCallback  {
+) : SurfaceCreated, PdbCallback {
     private val managePdbFile = ManagePdbFile(activity)
     private var managerViewmode: ManagerViewmode? = null
     private var nextNameIndex = -1
     private var captureImagesFlag = false
     private var androidFilePath = ""
     private lateinit var pdbCache: PdbCache
+    private lateinit var mol : Molecule
 
     init {
         if (loadPdbFrom == FROM_SDCARD) {
@@ -72,7 +74,10 @@ class MollibProcessPdbs(
         Timber.e("SURFACE CREATED CALLBACK")
         when (loadPdbFrom) {
             FROM_SDCARD -> renderer.allocateReadBitmapArrays()
-            FROM_CACHE -> pdbCache = PdbCache(activity)
+            FROM_CACHE -> {
+                pdbCache = PdbCache(activity)
+                pdbCache.initPdbCallback(this)
+            }
             else -> {}
         }
         loadNextPdbFile()
@@ -100,7 +105,7 @@ class MollibProcessPdbs(
             val name = pdbFileNames[nextNameIndex]
             activity.runOnUiThread { activity.title = name }
             renderer.tossMoleculeToGC()
-            val mol = Molecule() // the one place where Molecule is allocated!!
+            mol = Molecule() // the one place where Molecule is allocated!!
             managerViewmode = ManagerViewmode(
                     activity, mol)
 
@@ -255,13 +260,10 @@ class MollibProcessPdbs(
     }
 
     /**
-     * Queue up the PDB parsing in the library
-     *
-     * @param stream input stream from cache or from http
+     * callback from pdbCache when the pdb is in the cache or download is complete
      */
     override fun loadPdbFromStream(stream: InputStream) {
-
+        managePdbFile.parsePdbInputStream(stream, mol, pdbFileNames[nextNameIndex])
+        stream.close()
     }
-
-
 }
