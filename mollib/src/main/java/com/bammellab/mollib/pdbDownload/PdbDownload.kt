@@ -13,13 +13,13 @@
 
 @file:Suppress("unused", "unused_variable", "unused_parameter", "deprecation")
 
-package com.bammellab.mollib.disklrucache
-
-
 import android.app.Activity
 import android.os.Environment
 import android.widget.Toast
 import com.bammellab.mollib.common.util.ConnectionUtil
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import timber.log.Timber
 import java.io.*
@@ -29,48 +29,40 @@ interface PdbCallback {
     fun loadPdbFromStream(stream: InputStream)
 }
 
-class PdbCache(private val activity: Activity) {
-    private var lruCacheDisk: LruCacheDisk? = null
+class PdbDownload(private val activity: Activity) {
     private val connectionUtil = ConnectionUtil(activity)
     private val client: OkHttpClient
-    private var pdbCallback : PdbCallback? = null
+    private var pdbCallback: PdbCallback? = null
 
     init {
         val okBuilder = OkHttpClient.Builder()
         client = okBuilder.build()
-        initDiskCache()
     }
 
     fun initPdbCallback(cb: PdbCallback) {
         pdbCallback = cb
     }
 
-    fun downloadPdb(pdbid: String) {
-        Thread { downloadPdbBackground(pdbid) }.start()
+    fun downloadPdb(pdbid: String) = runBlocking {
+        launch(Dispatchers.IO) {
+            downloadPdbBackground(pdbid)
+        }
     }
 
+
     /**
-     * First query the LruCache - and process the (ungzipped) stream from the cache
-     * if available.
      *
-     * Otherwise, attempt to download the gzip'ed pdb file from the
-     * RCSB.org service.   Save it as an ungzip'ed file in the cache,
-     * and process it from the cache.
+     * Attempt to download the gzip'ed pdb file from the
+     * RCSB.org service.   Save it as an ungzip'ed file in the filesystem
      *
      * @param pdbid - the PDB file identifier
      */
+
     private fun downloadPdbBackground(pdbid: String) {
 
-        var inputStream = queryLruCache(pdbid)
-        if (inputStream != null) {
-            if (pdbCallback != null) {
-                pdbCallback!!.loadPdbFromStream(inputStream)
-            } else {
-                Timber.e("downloadPdbBackgroun: Error callback not set")
-            }
+        Timber.v("downloadPdbBackground: pdbid $pdbid")
 
-            return
-        }
+        var inputStream: InputStream? = null
 
         if (!connectionUtil.isOnline()) {
             activity.runOnUiThread {
@@ -79,6 +71,7 @@ class PdbCache(private val activity: Activity) {
             }
             return
         }
+
         // TODO: pull out this hardwired URL
         val url = ("https://files.rcsb.org/download/"
                 + pdbid
@@ -87,9 +80,10 @@ class PdbCache(private val activity: Activity) {
                 .url(url)
                 .build()
         try {
+            Timber.v("downloadPdbBackground: download from net: pdbid $pdbid")
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    //Timber.e(e, "Failed to load %s", call.request().url)
+                    Timber.e(e, "downloadPdbBackground: Failed to load %s", call.request().url)
                 }
 
                 @Throws(IOException::class)
@@ -102,9 +96,7 @@ class PdbCache(private val activity: Activity) {
                     //                        Timber.i(responseHeaders.name(i) + ": " + responseHeaders.value(i));
                     //                    }
 
-                    Timber.i("loaded the PDB!")
-
-                    // inputStream = GZIPInputStream(response.body()!!.byteStream())
+                    Timber.i("downloading the PDB in GZIP form: pdbid $pdbid")
                     val responseBody = response.body
                     inputStream = GZIPInputStream(responseBody!!.byteStream())
                     downloadPdbFromHttp(inputStream, pdbid)
@@ -142,39 +134,6 @@ class PdbCache(private val activity: Activity) {
         }
     }
 
-    /**
-     * Initializes the disk cache.  Note that this includes disk access so this should not be
-     * executed on the main/UI thread. By default an PdbCache does not initialize the disk
-     * cache when it is created, instead you should call initDiskCache() to initialize it on a
-     * background thread.
-     */
-    private fun initDiskCache() {
-
-        // Set up disk cache
-
-        val diskCacheDir = getDiskCacheDir(CACHE_DIR)
-        Timber.d("initDiskCache: entering, diskCacheDir is %s", diskCacheDir)
-
-        Thread {
-            if (!diskCacheDir.exists()) {
-                diskCacheDir.mkdirs()
-            }
-            try {
-                lruCacheDisk = LruCacheDisk.open(
-                        diskCacheDir, 1, 1, CACHE_SIZE.toLong())
-                if (lruCacheDisk == null) {
-                    Timber.e("error on DiskLruCache.open() call")
-                } else {
-                    Timber.d("diskLruCache set, dir is %s", diskCacheDir)
-                }
-            } catch (e: IOException) {
-                lruCacheDisk = null
-                Timber.e(e, "failed disk cache open")
-            } finally {
-                Timber.d("exiting diskLruCache setup block")
-            }
-        }.start()
-    }
 
     /**
      * Get a usable cache directory (external if available, internal otherwise).
@@ -216,23 +175,14 @@ class PdbCache(private val activity: Activity) {
 
     private fun downloadPdbFromHttp(downloadInputStream: InputStream?,
                                     pdbid: String) {
-        var cacheStream: InputStream? = null
-        if (lruCacheDisk == null) {
-            Timber.e("null cache - error on setup")
-            return
-        }
-        val editor: LruCacheDisk.Editor
-        try {
-            editor = lruCacheDisk!!.edit(pdbid)
-        } catch (e: IOException) {
-            Timber.e("unhandled error on diskLruCache edit of %s", pdbid)
-            return
-        }
+        var inputStreamAfterDownload: InputStream? = null
 
         try {
             val dataInputStream = DataInputStream(downloadInputStream!!)
-            val outputStream = editor.newOutputStream(VALUE_IDX)
-            val dataOutputStream = DataOutputStream(outputStream)
+            val myFile = getDiskCacheDir(pdbid)
+            val fileOutputStream = FileOutputStream(myFile)
+
+            val dataOutputStream = DataOutputStream(fileOutputStream)
 
             val buffer = ByteArray(10240)
             var length = dataInputStream.read(buffer)
@@ -243,50 +193,27 @@ class PdbCache(private val activity: Activity) {
             dataInputStream.close()
             dataOutputStream.close()
             downloadInputStream.close()
-            outputStream.close()
-            editor.commit()
-            // OK the PDB should be in the cache now
-            cacheStream = queryLruCache(pdbid)
+
+            inputStreamAfterDownload = FileInputStream(getDiskCacheDir(pdbid))
+
 
         } catch (e: IOException) {
-            Timber.e(e, "IO Exception on lru cache download")
-            try {
-                editor.abort()
-            } catch (ignored: IOException) {
-            }
+            Timber.e(e, "downloadPdbFromHttp: error on download")
 
         } finally {
-            if (cacheStream != null) {
+
+            if (inputStreamAfterDownload != null) {
                 if (pdbCallback != null) {
-                    pdbCallback!!.loadPdbFromStream(cacheStream)
+                    Timber.v("download finished - call loadPdbFromStream: pdbid $pdbid")
+                    pdbCallback!!.loadPdbFromStream(inputStreamAfterDownload)
                 } else {
                     Timber.e("downloadPdbBackgroun: Error callback not set")
                 }
                 // cacheStream.close()  NOTE: is closed later in reader thread, do not close here!!
             } else {
-                Timber.e("unhandled error on LRU caching")
+                Timber.e("downloadPdbFromHttp: unhandled error on download")
             }
         }
     }
 
-    private fun queryLruCache(pdbid: String): InputStream? {
-
-        if (lruCacheDisk == null) {
-            return null
-        }
-        try {
-            val snapshot = lruCacheDisk!!.get(pdbid) ?: return null
-            return snapshot.getInputStream(VALUE_IDX)
-        } catch (e: IOException) {
-            Timber.e(e, "IO exception on LRU cache query")
-        }
-
-        return null
-    }
-
-    companion object {
-        private const val CACHE_SIZE = 10 * 1024 * 1024
-        private const val CACHE_DIR = "pdbFileCache"
-        private const val VALUE_IDX = 0  // which LRU cache meta const value to use
-    }
 }

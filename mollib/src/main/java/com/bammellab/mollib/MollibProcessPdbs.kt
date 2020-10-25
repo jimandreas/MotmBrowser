@@ -13,13 +13,13 @@
 
 package com.bammellab.mollib
 
+import PdbCallback
+import PdbDownload
 import android.graphics.Bitmap
 import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bammellab.mollib.LoadFromSource.*
-import com.bammellab.mollib.disklrucache.PdbCache
-import com.bammellab.mollib.disklrucache.PdbCallback
 import com.bammellab.mollib.objects.ManagerViewmode
 import com.kotmol.pdbParser.Molecule
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +31,7 @@ import java.io.*
 enum class LoadFromSource {
     FROM_ASSETS,
     FROM_SDCARD,
-    FROM_CACHE
+    FROM_RCSB_OR_CACHE
 }
 
 /**
@@ -50,7 +50,7 @@ class MollibProcessPdbs(
     private var nextNameIndex = -1
     private var captureImagesFlag = false
     private var androidFilePath = ""
-    private lateinit var pdbCache: PdbCache
+    private lateinit var pdbDownload: PdbDownload
     private lateinit var mol : Molecule
 
     init {
@@ -68,15 +68,15 @@ class MollibProcessPdbs(
     /**
      * at the time of surfaceCreatedCallback() the Opengl system is up an running
      * If FROM_SDCARD mode is set, then the goal is to capture images.
-     * If FROM_CACHE mode is set, then PDBs are to be downloaded into an LRU cache.
+     * If FROM_CACHE mode is set, then PDBs are to be downloaded
      */
     override fun surfaceCreatedCallback() {
         Timber.e("SURFACE CREATED CALLBACK")
         when (loadPdbFrom) {
             FROM_SDCARD -> renderer.allocateReadBitmapArrays()
-            FROM_CACHE -> {
-                pdbCache = PdbCache(activity)
-                pdbCache.initPdbCallback(this)
+            FROM_RCSB_OR_CACHE -> {
+                pdbDownload = PdbDownload(activity)
+                pdbDownload.initPdbCallback(this)
             }
             else -> {}
         }
@@ -129,17 +129,19 @@ class MollibProcessPdbs(
                     } catch (e: IOException) {
                         Timber.e("$name IO Exception")
                     }
+
+                    glSurfaceView.queueEvent {
+                        managerViewmode!!.createView()
+                        renderer.setMolecule(mol)
+                        renderer.resetCamera()
+                    }
                 }
-                FROM_CACHE -> {
-                    pdbCache.downloadPdb(name)
+                FROM_RCSB_OR_CACHE -> {
+                    pdbDownload.downloadPdb(name)
                 }
             }
 
-            glSurfaceView.queueEvent {
-                managerViewmode!!.createView()
-                renderer.setMolecule(mol)
-                renderer.resetCamera()
-            }
+
         }
     }
 
@@ -265,5 +267,11 @@ class MollibProcessPdbs(
     override fun loadPdbFromStream(stream: InputStream) {
         managePdbFile.parsePdbInputStream(stream, mol, pdbFileNames[nextNameIndex])
         stream.close()
+        Timber.e("loadPdbFromStream: Start up the RENDERER")
+        glSurfaceView.queueEvent {
+            managerViewmode!!.createView()
+            renderer.setMolecule(mol)
+            renderer.resetCamera()
+        }
     }
 }

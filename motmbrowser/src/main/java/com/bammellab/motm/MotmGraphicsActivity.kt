@@ -28,11 +28,10 @@ import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import com.bammellab.mollib.*
-import com.bammellab.mollib.LoadFromSource.FROM_CACHE
+import com.bammellab.mollib.LoadFromSource.FROM_RCSB_OR_CACHE
 import com.bammellab.mollib.Utility.checkForOpengl
 import com.bammellab.mollib.Utility.failDialog
 import timber.log.Timber
-import java.io.InputStream
 
 
 /**
@@ -107,7 +106,7 @@ class MotmGraphicsActivity : AppCompatActivity() {
                 glSurfaceView,
                 renderer,
                 pdbList!!.toList(),
-                loadPdbFrom = FROM_CACHE)
+                loadPdbFrom = FROM_RCSB_OR_CACHE)
 
         /*
         * Go to next PDB in the list

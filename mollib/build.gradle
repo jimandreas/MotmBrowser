@@ -50,4 +50,5 @@ dependencies {
     testImplementation deps.annotations
     testImplementation deps.junit
     testImplementation deps.truth
+    testImplementation deps.commonsio
 }

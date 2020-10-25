@@ -9,6 +9,8 @@ import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import com.bammellab.mollib.*
 import com.bammellab.mollib.LoadFromSource.FROM_SDCARD
+import com.bammellab.mollib.Utility.checkForOpengl
+import com.bammellab.mollib.Utility.failDialog
 import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 
@@ -51,7 +53,7 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
                 glSurfaceView,
                 renderer,
                 MotmPdbNames.pdbNames,
-                source = FROM_SDCARD)
+                loadPdbFrom = FROM_SDCARD)
 
         processPdbs.startProcessing(captureImages = true)
 
