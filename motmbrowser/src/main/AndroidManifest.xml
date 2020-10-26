@@ -36,6 +36,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.bammellab.motm.MotmDetailActivity"
             android:parentActivityName="com.bammellab.motm.MainActivity">
@@ -43,6 +44,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bammellab.motm.MainActivity" />
         </activity>
+
         <activity
             android:name="com.bammellab.motm.MotmGraphicsActivity"
             android:parentActivityName="com.bammellab.motm.MotmDetailActivity"
@@ -51,6 +53,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bammellab.motm.MotmDetailActivity" />
         </activity>
+
+        <activity
+            android:name="com.bammellab.motm.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName="com.bammellab.gamepadtest.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>

@@ -2,6 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
+
+def versionMajor = 2
+def versionMinor = 0
+def versionPatch = 6
+def versionBuild = 2061
+
 android {
     compileSdkVersion buildConfig.compileSdk
 
@@ -11,12 +17,15 @@ android {
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
 
-        versionCode buildConfig.version.code
-        versionName buildConfig.version.name
+        versionCode versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         resConfigs 'en'
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+    }
+    buildFeatures {
+        dataBinding = true
     }
     signingConfigs {
         release
@@ -87,11 +96,15 @@ dependencies {
     implementation deps.kotlin.coroutines.jdk
     implementation deps.kotlin.coroutines.android
 
-    implementation deps.android.support.appcompat
-    implementation deps.android.support.constraintLayout
-    implementation deps.android.x.coreKtx
     implementation deps.android.material
-    implementation deps.android.support.cardview
+    implementation deps.android.x.appcompat
+    implementation deps.android.x.constraintLayout
+    implementation deps.android.x.coreKtx
+    implementation deps.android.x.cardview
+    implementation deps.android.x.lifecycle
+    implementation deps.android.x.navigationfrag
+    implementation deps.android.x.navigationui
+    implementation deps.android.x.legacypreference
 
     implementation deps.okhttp.client
     implementation deps.retrofit.client
@@ -100,8 +113,6 @@ dependencies {
     implementation deps.timber
     implementation deps.picasso
     implementation deps.guava
-
-
     implementation deps.glide
     kapt deps.glide
 

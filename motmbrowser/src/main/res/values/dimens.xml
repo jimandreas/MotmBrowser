@@ -19,4 +19,19 @@
     <dimen name="card_margin">16dp</dimen>
     <dimen name="card_margin_skinny">1dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="separator">1dp</dimen>
+    <dimen name="default_padding">8dp</dimen>
+    <dimen name="higher_padding">16dp</dimen>
+    <dimen name="very_big_padding">80dp</dimen>
+
+    <!--these overrides help keep the landscape size a bit narrower-->
+    <dimen name="recycler_scroll_width">@dimen/custom_match_parent</dimen>
+    <dimen name="recycler_padding_start">@dimen/default_padding</dimen>
+
 </resources>
