@@ -21,6 +21,7 @@
 
 <resources>
     <string name="app_name">Motm browser</string>
+    <string name="app_title">Molecule Of The Month Browser</string>
 
     <string name="title_browse">Browse</string>
     <string name="title_search">Search</string>

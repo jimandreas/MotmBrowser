@@ -1,26 +1,19 @@
 /*
- * Copyright (C) 2016-2018 James Andreas
- *
- * From code from various sources (iosched, Sunshine advanced, Cheesesquare):
- *
- *  Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
+ *  Copyright 2020 James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
  */
 
 @file:Suppress("unused", "unused_variable", "unused_parameter")
 
-package com.bammellab.motm
+package com.bammellab.motm.browse
 
 import android.content.Context
 import android.content.Intent
@@ -32,11 +25,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bammellab.motm.R
 import com.bammellab.motm.data.Corpus
 import com.bammellab.motm.data.Corpus.invertPosition
 import com.bammellab.motm.data.Corpus.motmTagLinesGet
 import com.bammellab.motm.data.Corpus.motmTitleGet
 import com.bammellab.motm.data.URLs.RCSB_MOTM_IMAGE_PREFIX
+import com.bammellab.motm.detail.MotmDetailActivity
 import com.bumptech.glide.Glide
 import timber.log.Timber
 import java.util.*

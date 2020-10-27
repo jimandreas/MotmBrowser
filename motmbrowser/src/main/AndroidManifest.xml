@@ -19,16 +19,18 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.bammellab.motm.MotmApplication"
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme.NoActionBar"
-        tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.bammellab.motm.MainActivity">
+        android:roundIcon="@mipmap/ic_launcher"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name="com.bammellab.motm.MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,7 +40,7 @@
         </activity>
 
         <activity
-            android:name="com.bammellab.motm.MotmDetailActivity"
+            android:name="com.bammellab.motm.detail.MotmDetailActivity"
             android:parentActivityName="com.bammellab.motm.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -46,18 +48,18 @@
         </activity>
 
         <activity
-            android:name="com.bammellab.motm.MotmGraphicsActivity"
-            android:parentActivityName="com.bammellab.motm.MotmDetailActivity"
+            android:name="com.bammellab.motm.graphics.MotmGraphicsActivity"
+            android:parentActivityName="com.bammellab.motm.detail.MotmDetailActivity"
             android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bammellab.motm.MotmDetailActivity" />
+                android:value="com.bammellab.motm.detail.MotmDetailActivity" />
         </activity>
 
         <activity
-            android:name="com.bammellab.motm.AboutActivity"
+            android:name="com.bammellab.motm.about.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName="com.bammellab.gamepadtest.MainActivity"
+            android:parentActivityName="com.bammellab.motm.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
     </application>

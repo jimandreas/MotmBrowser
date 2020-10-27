@@ -16,7 +16,7 @@
 
 package com.bammellab.motm.data
 
-import com.bammellab.motm.MotmSection
+import com.bammellab.motm.browse.MotmSection
 import java.util.*
 
 object MotmCategories {

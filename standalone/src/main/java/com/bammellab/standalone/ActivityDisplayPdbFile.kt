@@ -60,7 +60,7 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
                 glSurfaceView,
                 renderer,
                 pdbFileNames2,
-                source = FROM_ASSETS)
+                loadPdbFrom = FROM_ASSETS)
 
         processPdbs.startProcessing()
 
