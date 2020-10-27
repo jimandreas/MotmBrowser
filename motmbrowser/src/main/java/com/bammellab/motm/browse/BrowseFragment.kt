@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.bammellab.motm.databinding.FragmentBrowseBinding
+import com.google.android.material.tabs.TabLayout.MODE_SCROLLABLE
 import java.util.*
 
 
@@ -50,6 +51,10 @@ class BrowseFragment : Fragment() {
         adapter.addFragment(MotmListFragment(), "All")
 
         binding.viewpager.adapter = adapter
+
+        val tabs = binding.tabs
+        tabs.setupWithViewPager(binding.viewpager)
+        tabs.tabMode = MODE_SCROLLABLE
     }
 
     private fun createFragment(section: MotmSection): Fragment {
