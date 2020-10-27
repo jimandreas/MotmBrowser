@@ -8,9 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import com.bammellab.motm.databinding.FragmentBrowseBinding
+import java.util.*
 
 
 class BrowseFragment : Fragment() {
@@ -33,9 +34,52 @@ class BrowseFragment : Fragment() {
         binding.viewModel = scanViewModel
         bcontext = binding.root.context
 
-
+        setupViewPager()
 
         return binding.root
     }
+
+    private fun setupViewPager() {
+        val adapter = Adapter(this.parentFragmentManager)
+
+        adapter.addFragment(createFragment(MotmSection.FRAG_SECTION_HEALTH), "Health and Disease")
+        adapter.addFragment(createFragment(MotmSection.FRAG_SECTION_LIFE), "Life")
+        adapter.addFragment(createFragment(MotmSection.FRAG_SECTION_BIOTEC), "Biotech/Nanotech")
+        adapter.addFragment(createFragment(MotmSection.FRAG_SECTION_STRUCTURES), "Structures")
+        // all Motm entries - no headers - just a list ordered by the increasing pub date
+        adapter.addFragment(MotmListFragment(), "All")
+
+        binding.viewpager.adapter = adapter
+    }
+
+    private fun createFragment(section: MotmSection): Fragment {
+        val fragment = MotmCategoryFragment()
+        fragment.setCategory(section)
+        return fragment
+    }
+
+    internal class Adapter(fm: FragmentManager) :
+            androidx.fragment.app.FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        private val fragmentList = ArrayList<Fragment>()
+        private val titleList = ArrayList<String>()
+
+        fun addFragment(fragment: Fragment, title: String) {
+            fragmentList.add(fragment)
+            titleList.add(title)
+        }
+
+        override fun getItem(position: Int): Fragment {
+            return fragmentList[position]
+        }
+
+        override fun getCount(): Int {
+            return fragmentList.size
+        }
+
+        override fun getPageTitle(position: Int): CharSequence? {
+            return titleList[position]
+        }
+    }
+
 
 }
