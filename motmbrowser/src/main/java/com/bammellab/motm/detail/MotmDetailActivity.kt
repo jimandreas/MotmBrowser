@@ -19,14 +19,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import com.bammellab.motm.R
 import com.bammellab.motm.data.Corpus
@@ -43,18 +41,16 @@ import com.bammellab.motm.data.URLs.RCSB_PDB_INFO_SUFFIX
 import com.bammellab.motm.graphics.MotmGraphicsActivity
 import com.bammellab.motm.pdb.PdbFetcherCoroutine
 import com.bumptech.glide.Glide
-import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 
 class MotmDetailActivity : AppCompatActivity()
 /* implements View.OnTouchListener */ {
 
-    private lateinit var motmTitle: TextView
-    private lateinit var pdbText: TextView
-    private lateinit var moreButton: FloatingActionButton
+    private lateinit var motmDescription: TextView
+    private lateinit var pdbDate: TextView
     private lateinit var pdbLayout: LinearLayout
+
 
     private var motmNumber: Int = 0
 
@@ -62,10 +58,11 @@ class MotmDetailActivity : AppCompatActivity()
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pdb_detail)
-        motmTitle = findViewById(R.id.pdb_title)
-        pdbText = findViewById(R.id.pdb_text)
-        moreButton = findViewById(R.id.more_button)
+        val motmTitle = findViewById<TextView>(R.id.card_detail_motm_title)
+        motmDescription = findViewById(R.id.card_detail_motm_description)
+        pdbDate = findViewById(R.id.card_detail_motm_date)
         pdbLayout = findViewById(R.id.pdb_detail_layout)
+        val motmDetailCard = findViewById<CardView>(R.id.motm_detail_card)
 
         //val intent = intent
         val motmNumberString = intent.getStringExtra(EXTRA_NAME)
@@ -84,57 +81,30 @@ class MotmDetailActivity : AppCompatActivity()
             motmNumber = 1
         }
 
-        /*
-         * use special instructions to allow assignment to the IntDef type,
-         *   see: http://stackoverflow.com/a/27659565/3853712
-         */
-        //val motmCategory = intent.getIntExtra(EXTRA_CATEGORY, 0)
-
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        val collapsingToolbar = findViewById<CollapsingToolbarLayout>(R.id.collapsing_toolbar)
-
-        collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
-        collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar)
+//        val collapsingToolbar = findViewById<CollapsingToolbarLayout>(R.id.collapsing_toolbar)
+//
+//        collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
+//        collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar)
 
         val motmName = motmTitleGet(this.motmNumber)
-        collapsingToolbar.title = motmName
+//        collapsingToolbar.title = motmName
+        motmTitle.text = motmName
 
-        loadBackdrop()
+        //        motmTitle.text = Corpus.motmDescByKey[this.motmNumber]
+        motmDescription.text = Corpus.motmTagLines[Corpus.motmTagLines.size - this.motmNumber]
 
-//        motmTitle.text = Corpus.motmDescByKey[this.motmNumber]
-        motmTitle.text = Corpus.motmTagLines[Corpus.motmTagLines.size - this.motmNumber]
 
         /*
-         * getting fancier on assembling the Motm description in the detail view
+         * getting fancier on assembling the Motm date in the detail view
          */
         var descRaw: String
-        //        String desc_raw = "<i>"
-        //                        + Corpus.motmDateByKey.get(this.motmNumber)
-        //                        + "</i><br>"
-        //                        + "Category: asdf<br>Subcategory:xyz";
-
-
         val sb = StringBuilder()
 
         sb.append("<i>")
-//        sb.append(Corpus.motmDateByKey[this.motmNumber])
         sb.append(Corpus.motmDateByKey(this.motmNumber))
         sb.append("</i><br>")
-
-        /*if (motmCategory != MotmCategoryFragment.Companion.getFRAG_ALL_MOTM()) {
-            MotmCategories categories = getMotmCategories();
-            String categoryString;
-            if (categories.categoryList.containsKey(motmCategory)) {
-                sb.append("Category: <b>");
-                categoryString = categories.categoryList.get(motmCategory);
-                sb.append(categoryString);
-                sb.append("</b>");
-            }
-        }*/
 
         descRaw = sb.toString()
 
@@ -149,17 +119,14 @@ class MotmDetailActivity : AppCompatActivity()
             @Suppress("DEPRECATION")
             Html.fromHtml(descRaw)
         }
-        pdbText.text = desc
+        pdbDate.text = desc
 
+        loadBackdrop()
 
-        /*
-         * FAB button (floating action button = FAB) to get more information
-         *    Vector to the Motm website for this particular Motm entry
-         */
-        moreButton.setOnClickListener { view ->
-            val snackbar = Snackbar.make(view, "MotM website", Snackbar.LENGTH_LONG)
-
-            snackbar.setAction("View website") {
+        motmDetailCard.setOnClickListener { view ->
+//            val snackbar = Snackbar.make(view, "MotM website", Snackbar.LENGTH_LONG)
+//
+//            snackbar.setAction("View website") {
                 val intent = Intent(Intent.ACTION_VIEW)
 
                 intent.data = Uri.parse(
@@ -169,8 +136,8 @@ class MotmDetailActivity : AppCompatActivity()
                 )
                 startActivity(intent)
             }
-            snackbar.show()
-        }
+//            snackbar.show()
+//        }
     }
 
 
@@ -201,44 +168,26 @@ class MotmDetailActivity : AppCompatActivity()
         ////                .placeholder(R.drawable.ic_loading)
         //                .into(imageView);
 
-
         /*
-         * experiment with adding cards to the layouts
+         * populate the Motm detail recyclerview with the PDB entries discussed
+         * in the monthly feature.
          */
-
         val pdbs = PDBs.pdbsByMonth.get(motmNumber)
         val pdbsStringArray = pdbs.toTypedArray()
         for (pdbId in pdbs) {
-            Timber.i("pdbId is %s", pdbId)
-
-            val descRaw = "<big><bold>$pdbId</bold></big>"
-            val desc: CharSequence
-            desc = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                Html.fromHtml(descRaw,
-                        Html.FROM_HTML_MODE_LEGACY)
-            } else {
-                @Suppress("DEPRECATION")
-                Html.fromHtml(descRaw)
-            }
-            pdbText.text = desc
-
             val view = LayoutInflater.from(this)
                     .inflate(R.layout.pdb_card, pdbLayout, false) as CardView
 
             pdbLayout.addView(view)
-            val pdbCardTitle = view.findViewById<TextView>(R.id.pdb_title)
-            val pdbCardText = view.findViewById<TextView>(R.id.pdb_text)
-            val im = view.findViewById<ImageView>(R.id.pdb_image)
-            val pdbLink = view.findViewById<ImageView>(R.id.pdb_link)
+
+            val pdbCardTitle = view.findViewById<TextView>(R.id.card_detail_pdb_identifier)
+            val pdbCardText = view.findViewById<TextView>(R.id.card_detail_pdb_description)
+            val im = view.findViewById<ImageView>(R.id.card_detail_pdb_image)
+            val pdbLink = view.findViewById<ImageView>(R.id.card_detail_rcsb_link)
 
             if (pdbCardTitle != null) {
                 pdbCardTitle.text = pdbId
             }
-
-            //            if (pdb_card_text != null) {
-            //                pdb_card_text.setText(desc);
-            //            }
-
 
             var imageUrl = PDB_IMAGE_WEB_PREFIX
 //            imageUrl = imageUrl + pdbId + "_asym_r_500.jpg" // these images have vanished
@@ -253,11 +202,6 @@ class MotmDetailActivity : AppCompatActivity()
 
             pdbLink.tag = pdbId
             im.tag = pdbId
-            //            pdb_link.setOnTouchListener(this);
-            //            pdb_card_text.setOnTouchListener(this);
-            //            pdb_card_title.setOnTouchListener(this);
-            //            im.setOnTouchListener(this);
-
 
             /*
              * respond to a click on the RCSB PDB imageview button
@@ -320,12 +264,6 @@ class MotmDetailActivity : AppCompatActivity()
             fetcher.pdbFetcherCoroutine()
         }
     }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.sample_actions, menu)
-        return true
-    }
-
 
     // this brings the UI back to where it left off when the detail was selected
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
