@@ -75,7 +75,8 @@
     <!--  Search fragment strings -->
 
     <string name="temp_contents">cardview temp contents</string>
-    <string name="no_controllers">No Controllers Found</string>
+    <string name="search_stuff">search for what?</string>
+    <string name="search_x_string">X</string>
     <string name="funky">Funky placeholder</string>
 
     <!--preferences-->

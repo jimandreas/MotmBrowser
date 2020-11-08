@@ -30,7 +30,7 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        // fragment_search.xml
         binding = FragmentSearchBinding.inflate(inflater)
         binding.lifecycleOwner = this
         contextLocal = binding.root.context

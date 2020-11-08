@@ -34,4 +34,8 @@
     <dimen name="recycler_scroll_width">@dimen/custom_match_parent</dimen>
     <dimen name="recycler_padding_start">@dimen/default_padding</dimen>
 
+    <!--search string-->
+    <dimen name="text_size">20sp</dimen>
+    <dimen name="small_padding">2dp</dimen>
+
 </resources>

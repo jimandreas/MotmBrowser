@@ -2,27 +2,65 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.bammellab.motm.search.SearchViewModel" />
     </data>
 
-    <ScrollView
-        android:layout_width="@dimen/custom_match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="60dp">
+        android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_list_thing"
-            android:layout_width="@dimen/recycler_scroll_width"
+        <EditText
+            android:id="@+id/nickname_edit"
+            style="@style/SearchEntryStyle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fadeScrollbars="false"
-            android:paddingStart="@dimen/recycler_padding_start"
-            android:paddingEnd="@dimen/default_padding"
-            android:scrollbars="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-    </ScrollView>
+            android:ems="10"
+            android:hint="@string/search_stuff"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toStartOf="@+id/x_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="Autofill" />
+
+        <Button
+            android:id="@+id/x_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/search_x_string"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="@dimen/custom_match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/x_button">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_list_thing"
+                android:layout_width="@dimen/recycler_scroll_width"
+                android:layout_height="wrap_content"
+                android:fadeScrollbars="false"
+                android:paddingStart="@dimen/recycler_padding_start"
+                android:paddingEnd="@dimen/default_padding"
+                android:scrollbars="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
