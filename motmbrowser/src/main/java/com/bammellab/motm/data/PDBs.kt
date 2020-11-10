@@ -1,21 +1,14 @@
 /*
- * Copyright (C) 2016-2018James Andreas
- *
- * From code from various sources (iosched, Sunshine advanced, Cheesesquare):
- *
- *  Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
+ *  Copyright 2020 James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
  */
 
 package com.bammellab.motm.data
@@ -175,7 +168,7 @@ object PDBs {
         pdbsByMonth.put(38, "1k4c")
         pdbsByMonth.put(38, "1lnq")
         pdbsByMonth.put(38, "2crd")
-        pdbsByMonth.put(39, "1bgl")
+        // pdbsByMonth.put(39, "1bgl") obsolete replaced by 4V4O
         pdbsByMonth.put(39, "1efa")
         pdbsByMonth.put(39, "1krv")
         pdbsByMonth.put(39, "1tlf")
@@ -847,7 +840,14 @@ object PDBs {
         pdbsByMonth.put(161, "1igt")
         pdbsByMonth.put(161, "2aai")
         pdbsByMonth.put(161, "3srp")
-        pdbsByMonth.put(161, "3u5d")
+
+        /*
+        * Entry 3U5D was removed from the distribution of released
+        * PDB entries (status Obsolete) on 2014-12-09.  It has been replaced
+        * (superseded) by 4V88.
+        */
+
+        // pdbsByMonth.put(161, "3u5d")
         pdbsByMonth.put(161, "3u5e")
         pdbsByMonth.put(161, "4imv")
         pdbsByMonth.put(162, "1dfn")
@@ -858,8 +858,8 @@ object PDBs {
         pdbsByMonth.put(163, "2kod")
         pdbsByMonth.put(163, "2lm3")
         pdbsByMonth.put(163, "3h47")
-        pdbsByMonth.put(163, "3j3q")
-        pdbsByMonth.put(163, "3j3y")
+        // pdbsByMonth.put(163, "3j3q") // no PDB file
+        // pdbsByMonth.put(163, "3j3y") // ditto
         pdbsByMonth.put(163, "3mge")
         pdbsByMonth.put(163, "3p05")
         pdbsByMonth.put(164, "3gwv")
@@ -871,7 +871,7 @@ object PDBs {
         pdbsByMonth.put(165, "4egg")
         pdbsByMonth.put(166, "1fnt")
         // too big 56322 pdbsByMonth.put(166, "1pma")
-        pdbsByMonth.put(166, "3l5q")
+        // pdbsByMonth.put(166, "3l5q") // obsolete
         pdbsByMonth.put(166, "3unf")
         // pdbsByMonth.put(166, "4CR2") // too big 80172
         pdbsByMonth.put(167, "1br0")
@@ -1117,8 +1117,8 @@ object PDBs {
         pdbsByMonth.put(210, "5swd")
         pdbsByMonth.put(210, "5swe")
         pdbsByMonth.put(211, "2hil")
-        pdbsByMonth.put(211, "3jc8")
-        pdbsByMonth.put(211, "3jc9")
+        // pdbsByMonth.put(211, "3jc8") // no PDB file too big Atom Count: 107640!!
+        // pdbsByMonth.put(211, "3jc9") // ditto
         pdbsByMonth.put(212, "3csh")
         pdbsByMonth.put(212, "3gss")
         pdbsByMonth.put(212, "3gss")
@@ -1267,7 +1267,7 @@ object PDBs {
         pdbsByMonth.put(236, "2euf")
         pdbsByMonth.put(236, "5l2t")
         pdbsByMonth.put(236, "5l2s")
-        pdbsByMonth.put(237, "4v6m")
+        // pdbsByMonth.put(237, "4v6m")  // no PDB file too big Atom Count: 163040 !!
         pdbsByMonth.put(237, "6clz")
         pdbsByMonth.put(237, "2n5e")
         pdbsByMonth.put(238, "1mrr")
@@ -1311,13 +1311,13 @@ object PDBs {
         pdbsByMonth.put(243, "6a95")
         pdbsByMonth.put(243, "5vb8")
         pdbsByMonth.put(243, "6p6w")
-        pdbsByMonth.put(244, "5xnl")
-        pdbsByMonth.put(244, "6kac")
+      //  pdbsByMonth.put(244, "5xnl") // 99K atoms
+      //  pdbsByMonth.put(244, "6kac") // 78K
         pdbsByMonth.put(244, "6kad")
         pdbsByMonth.put(244, "5zji")
         pdbsByMonth.put(244, "6nwa")
         pdbsByMonth.put(244, "5xnl")
-        pdbsByMonth.put(245, "3jb9")
+        // pdbsByMonth.put(245, "3jb9") // 86K atoms
         pdbsByMonth.put(245, "6n7p")
         pdbsByMonth.put(245, "1mh1")
         pdbsByMonth.put(245, "1ryf")

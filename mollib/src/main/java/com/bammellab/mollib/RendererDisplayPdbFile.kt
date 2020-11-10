@@ -60,7 +60,7 @@ class RendererDisplayPdbFile(
         private val glSurfaceView: GLSurfaceViewDisplayPdbFile
 ) : GLSurfaceView.Renderer {
 
-    private var renderCubeFlag = true // set to true for centered cube in view.
+    private var renderCubeFlag = false // set to true for centered cube in view.
 
     private var updateListener: UpdateRenderFinished? = null
     private var listener: UpdateRenderFinished? = null
