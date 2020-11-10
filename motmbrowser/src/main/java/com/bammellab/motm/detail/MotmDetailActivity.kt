@@ -42,6 +42,7 @@ import com.bammellab.motm.graphics.MotmGraphicsActivity
 import com.bammellab.motm.pdb.PdbFetcherCoroutine
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import timber.log.Timber
 
 class MotmDetailActivity : AppCompatActivity()
@@ -155,18 +156,18 @@ class MotmDetailActivity : AppCompatActivity()
             val image = Corpus.motmImageListGet(motmNumber)
             pngURL = RCSB_MOTM_IMAGE_PREFIX + image
         }
-        Glide.with(this)
-                .load(pngURL)
-                .fitCenter()
-                .into(imageView)
+//        Glide.with(this)
+//                .load(pngURL)
+//                .fitCenter()
+//                .into(imageView)
 
-        //        Picasso.with(this)
-        //                .load(url)
-        //                .centerInside()
-        //                .resize(100, 100)
-        ////                .error(R.drawable.ic_no_wifi)
-        ////                .placeholder(R.drawable.ic_loading)
-        //                .into(imageView);
+                Picasso.with(this)
+                        .load(pngURL)
+                        .centerInside()
+                        .resize(400, 400)
+        //                .error(R.drawable.ic_no_wifi)
+                        .placeholder(R.drawable.ic_message_24px)
+                        .into(imageView);
 
         /*
          * populate the Motm detail recyclerview with the PDB entries discussed
@@ -191,6 +192,12 @@ class MotmDetailActivity : AppCompatActivity()
 
             var imageUrl = PDB_IMAGE_WEB_PREFIX
 //            imageUrl = imageUrl + pdbId + "_asym_r_500.jpg" // these images have vanished
+            // now the PDB images are partitioned into folders based on the first
+            // digit of the PDB name.   Github only allows 1000 images per folder.
+            // Hence the partitioning.
+
+            imageUrl += pdbId[0]
+            imageUrl += "/"
             imageUrl = "$imageUrl$pdbId.png?raw=true"
 
             Timber.v("image url is %s", imageUrl)

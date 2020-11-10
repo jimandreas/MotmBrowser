@@ -16,12 +16,11 @@ package com.bammellab.motm.pdb
 import android.widget.TextView
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
 import okio.IOException
-import timber.log.Timber
 
 
 /**
@@ -31,7 +30,7 @@ import timber.log.Timber
 class PdbFetcherCoroutine(
         private val pdbid: String,
         private val pdbTextView: TextView
-)  {
+) {
 
     fun pdbFetcherCoroutine() = runBlocking {
 
@@ -39,27 +38,34 @@ class PdbFetcherCoroutine(
             //loadTextViaRetrofit()
             getPdbInfo(pdbid)
         }
-        job.join()
+        //job.join()
     }
 
 
-        data class PDBdata(
-                val pdbx_descriptor: String = "",
-                val title: String = ""
-        )
-        data class PDBstruct(
-                val struct: PDBdata
-        )
+    data class PDBdata(
+            val pdbx_descriptor: String = "",
+            val title: String = ""
+    )
 
-        fun getPdbInfo(pdb: String) {
-            val client = OkHttpClient()
+    data class PDBstruct(
+            val struct: PDBdata
+    )
 
-            val request = Request.Builder()
-                    .url("https://data.rcsb.org/rest/v1/core/entry/$pdb")
-                    .build()
 
-            try {
-                client.newCall(request).execute().use { response ->
+    private val client = OkHttpClient()
+
+    fun getPdbInfo(pdb: String) {
+        val request = Request.Builder()
+                .url("https://data.rcsb.org/rest/v1/core/entry/$pdb")
+                .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                response.use {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
                     val body = response.body?.string()
@@ -68,14 +74,42 @@ class PdbFetcherCoroutine(
                     val thingie = gson.fromJson(body!!, PDBstruct::class.java)
 
                     if (thingie != null) {
-                        pdbTextView.text = thingie.struct.title
+                        setText(thingie.struct.title)
                     }
-                    //return thingie.struct
                 }
-            } catch (e: Exception) {
-                Timber.e(e, "OKHTTP Failure on $pdbid")
             }
+        })
+    }
+    fun setText(text: String) = runBlocking {
+        val job = launch(Main) {
+            pdbTextView.text = text
         }
+    }
+
+}
+
+    /*val request = Request.Builder()
+            .url("https://data.rcsb.org/rest/v1/core/entry/$pdb")
+            .build()
+
+    try {
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            val body = response.body?.string()
+            //println(body)
+            val gson = GsonBuilder().create()
+            val thingie = gson.fromJson(body!!, PDBstruct::class.java)
+
+            if (thingie != null) {
+                pdbTextView.text = thingie.struct.title
+            }
+            //return thingie.struct
+        }
+    } catch (e: Exception) {
+        Timber.e(e, "OKHTTP Failure on $pdbid")
+    }*/
+
 
 /*
 
@@ -102,4 +136,3 @@ class PdbFetcherCoroutine(
     }
 */
 
-}
