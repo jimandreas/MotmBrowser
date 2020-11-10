@@ -166,7 +166,7 @@ class MotmDetailActivity : AppCompatActivity()
                         .centerInside()
                         .resize(400, 400)
         //                .error(R.drawable.ic_no_wifi)
-                        .placeholder(R.drawable.ic_message_24px)
+        //                .placeholder(R.drawable.ic_message_24px)
                         .into(imageView);
 
         /*

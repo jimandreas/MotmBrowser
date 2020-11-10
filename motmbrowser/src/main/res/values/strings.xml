@@ -38,7 +38,7 @@
     <string name="molecule_in_question">molecule in question</string>
 
     <string name="test_text1">PDBN</string>
-    <string name="test_text2">PDB Description goes here</string>
+    <string name="test_text2">PDB Description goes here. PDB Description goes here. PDB Description goes here. PDB Description goes here. PDB Description goes here.</string>
 
     <!--Snackbar strings-->
     <string name="snackbar_go_to_3d">3D viewer</string>
