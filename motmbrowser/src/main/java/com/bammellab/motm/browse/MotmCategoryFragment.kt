@@ -34,28 +34,21 @@ import com.bammellab.motm.detail.MotmDetailActivity
 import com.bumptech.glide.Glide
 import timber.log.Timber
 
+/**
+ * This Fragment displays the list of Molecule Of The Month features.
+ * Each list is organized into various subsections as indicated by
+ * the lists in the MotmByCategory file.
+ */
 class MotmCategoryFragment : androidx.fragment.app.Fragment() {
-
-//    private lateinit var mCategory: MotmSection
 
     private lateinit var motmList: Array<String>
 
-    var mCategory: MotmSection = MotmSection.FRAG_SECTION_LIFE
-    /**
-     * Called by MainActivity
-     * @param category   which list to display in the MotmByCategroy
-     */
+    var currentCategory: MotmSection = MotmSection.FRAG_SECTION_LIFE
 
-    init {
-        setCategory(mCategory)
-    }
     fun setCategory(category: MotmSection) {
-        mCategory = category
-        /*
-        * convert list of MOTM information from string array to list
-        *    TODO: shift to string array in static form initially
-        */
-        motmList = when (mCategory) {
+        currentCategory = category
+
+        motmList = when (currentCategory) {
             MotmSection.FRAG_SECTION_HEALTH -> MotmByCategory.MotmCategory1
             MotmSection.FRAG_SECTION_LIFE -> MotmByCategory.MotmCategory2
             MotmSection.FRAG_SECTION_BIOTEC -> MotmByCategory.MotmCategory3
@@ -63,14 +56,13 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         // unpack the saved state
         if (savedInstanceState != null) {
             val ser = savedInstanceState.getSerializable(WHICH_CATEGORY)
             if (ser is MotmSection) {
-                mCategory = ser
+                currentCategory = ser
             }
         }
 
@@ -91,17 +83,13 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
      */
     override fun onSaveInstanceState(outState: Bundle) {
 //        outState.putInt(WHICH_CATEGORY, mCategory)
-        outState.putSerializable(WHICH_CATEGORY, mCategory)
+        outState.putSerializable(WHICH_CATEGORY, currentCategory)
         super.onSaveInstanceState(outState)
     }
 
 
     inner class SimpleStringRecyclerViewAdapter(context: Context, private val motmList: Array<String>)
         : RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolderMotm>() {
-
-//        private val mTypedValue = TypedValue()
-//        private val mBackground: Int
-
 
         // handle testing for headers or regular MOTM views in adapter
         override fun getItemViewType(position: Int): Int {
@@ -113,8 +101,8 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
                 VIEW_TYPE_MOTM
         }
 
-        inner class ViewHolderMotm(val mView: View, viewType: Int)
-            : RecyclerView.ViewHolder(mView), View.OnClickListener {
+        inner class ViewHolderMotm(val v: View, viewType: Int)
+            : RecyclerView.ViewHolder(v), View.OnClickListener {
             var boundString: String? = null
             lateinit var imageView: ImageView
             lateinit var textView: TextView
@@ -124,12 +112,12 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
             init {
                 when (viewType) {
                     VIEW_TYPE_MOTM -> {
-                        imageView = mView.findViewById(R.id.avatar)
-                        textView = mView.findViewById(R.id.motmtext1)
-                        textView2 = mView.findViewById(R.id.motmtext2)
+                        imageView = v.findViewById(R.id.avatar)
+                        textView = v.findViewById(R.id.motmtext1)
+                        textView2 = v.findViewById(R.id.motmtext2)
                     }
                     VIEW_TYPE_HEADER -> {
-                        textViewHeader = mView.findViewById(R.id.motmheader)
+                        textViewHeader = v.findViewById(R.id.motmheader)
                     }
                 }
             }
@@ -177,7 +165,7 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
             /*
              * handle clicks on molecules.  clicks on headers are ignored
              */
-            holder.mView.setOnClickListener(View.OnClickListener { v ->
+            holder.v.setOnClickListener(View.OnClickListener { v ->
                 val context = v.context
                 val str = holder.boundString
                 if (!isNumeric(str)) {
@@ -185,7 +173,7 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
                 }
                 val intent = Intent(context, MotmDetailActivity::class.java)
                 intent.putExtra(MotmDetailActivity.EXTRA_NAME, str)
-                intent.putExtra(MotmDetailActivity.EXTRA_CATEGORY, mCategory)
+                intent.putExtra(MotmDetailActivity.EXTRA_CATEGORY, currentCategory)
                 context.startActivity(intent)
             })
 
