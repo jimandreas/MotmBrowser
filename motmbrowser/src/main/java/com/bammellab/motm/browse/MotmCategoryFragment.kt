@@ -29,7 +29,7 @@ import com.bammellab.motm.R
 import com.bammellab.motm.data.Corpus
 import com.bammellab.motm.data.Corpus.motmTitleGet
 import com.bammellab.motm.data.MotmByCategory
-import com.bammellab.motm.data.URLs.RCSB_MOTM_IMAGE_PREFIX
+import com.bammellab.motm.data.URLs.PDB_MOTM_THUMB_WEB_PREFIX
 import com.bammellab.motm.detail.MotmDetailActivity
 import com.bumptech.glide.Glide
 import timber.log.Timber
@@ -186,7 +186,7 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
             if (isNumeric(motm)) {
                 val imageIndex = Integer.valueOf(motm)
                 val imageString = Corpus.motmImageListGet(imageIndex)
-                val url = RCSB_MOTM_IMAGE_PREFIX + imageString
+                val url = "$PDB_MOTM_THUMB_WEB_PREFIX$imageString?raw=true"
                 Glide.with(holder.imageView.context)
                         .load(url)
                         .fitCenter()

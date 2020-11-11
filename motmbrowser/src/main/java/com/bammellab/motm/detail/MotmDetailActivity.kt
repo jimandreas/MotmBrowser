@@ -35,6 +35,7 @@ import com.bammellab.motm.data.URLs.PDB_IMAGE_WEB_PREFIX
 import com.bammellab.motm.data.URLs.PDB_MOTM_PNG_WEB_PREFIX
 import com.bammellab.motm.data.URLs.PDB_MOTM_PREFIX
 import com.bammellab.motm.data.URLs.PDB_MOTM_SUFFIX
+import com.bammellab.motm.data.URLs.PDB_MOTM_THUMB_WEB_PREFIX
 import com.bammellab.motm.data.URLs.RCSB_MOTM_IMAGE_PREFIX
 import com.bammellab.motm.data.URLs.RCSB_PDB_INFO_PREFIX
 import com.bammellab.motm.data.URLs.RCSB_PDB_INFO_SUFFIX
