@@ -11,21 +11,20 @@
  *  limitations under the License
  */
 
-package com.bammellab.motm.settings
+package com.bammellab.motm.util
 
-import android.os.Bundle
-import androidx.preference.PreferenceFragmentCompat
-import com.bammellab.motm.BuildConfig
-import com.bammellab.motm.R
+import android.content.Context
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 
-class SettingsFragment : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.root_preferences, rootKey)
+object Util {
 
-        val versionPreference = findPreference("app_version")
-        val currentVersionString = BuildConfig.VERSION_NAME
-        versionPreference.summary = currentVersionString
+    // copy / paste from wikipedia DeviceUtil:
+
+    fun hideSoftKeyboard(view: View) {
+        val keyboard = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        // Not using getCurrentFocus as that sometimes is null, but the keyboard is still up.
+        keyboard.hideSoftInputFromWindow(view.windowToken, 0)
     }
+
 }
-
-

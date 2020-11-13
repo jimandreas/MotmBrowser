@@ -26,6 +26,8 @@
 
     </style>
 
-
+    <style name="SearchViewStyle" parent="@style/Widget.AppCompat.Toolbar">
+        <item name="navigationIcon">@drawable/ic_arrow_back_24px</item>
+    </style>
 
 </resources>

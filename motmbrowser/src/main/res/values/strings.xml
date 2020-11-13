@@ -73,11 +73,24 @@
     <string name="images_url_kotmol_repo">https://github.com/kotmol/KotmolMotmImages/blob/master/docs/img/</string>
 
     <!--  Search fragment strings -->
+    <string name="search_recent_header">Recent searches:</string>
+    <string name="search_hint">Search Molecules and PDB entries</string>
+    <string name="search_no_results_found">No results found</string>
+    <string name="search_empty_message">No results found.</string>
+    <string name="search_history_empty_title">No recent search entries</string>
+    <string name="search_menu_clear_all_history">Clear history</string>
+    <string name="search_button_clear_search_string">Click here to clear the search string</string>
 
-    <string name="temp_contents">cardview temp contents</string>
-    <string name="search_stuff">search for what?</string>
-    <string name="search_x_string">X</string>
-    <string name="funky">Funky placeholder</string>
+    <plurals name="search_results_with_placeholders">
+        <item quantity="one">Matches: %d Entry</item>
+        <item quantity="other">Matches: %d Entries</item>
+    </plurals>
+
+    <string name="search_motm_search_results">Molecule of the Month</string>
+    <string name="search_pdb_search_results">Protein Data Bank</string>
+    <string name="search_expand_search_results">Press to expand search results</string>
+    <string name="search_collapse_search_results">Press to collapse search results</string>
+
 
     <!--preferences-->
 

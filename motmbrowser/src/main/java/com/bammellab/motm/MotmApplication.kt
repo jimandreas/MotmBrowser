@@ -16,6 +16,7 @@ package com.bammellab.motm
 
 import android.app.Application
 import android.content.Context
+import com.bammellab.motm.util.PrefsUtil
 import okhttp3.OkHttpClient
 import timber.log.Timber
 
@@ -28,5 +29,7 @@ class MotmApplication : Application() {
         super.onCreate()
 
         Timber.plant(Timber.DebugTree())
+
+        PrefsUtil.prefsContext = context
     }
 }

@@ -39,4 +39,11 @@
     <dimen name="text_size">20sp</dimen>
     <dimen name="small_padding">2dp</dimen>
 
+    <!--search items-->
+    <dimen name="list_item_vertical_padding">16dp</dimen>
+    <dimen name="list_item_horizontal_padding">16dp</dimen>
+    <dimen name="list_item_default_height">55dp</dimen>
+    <dimen name="list_item_header_padding">8dp</dimen>
+    <dimen name="section_header_item_height">56dp</dimen>
+
 </resources>

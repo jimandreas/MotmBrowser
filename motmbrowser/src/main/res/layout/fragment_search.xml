@@ -1,66 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  Copyright 2020 James Andreas
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License
+  -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:visibility="visible">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.bammellab.motm.search.SearchViewModel" />
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="6dp">
 
-        <EditText
-            android:id="@+id/nickname_edit"
-            style="@style/SearchEntryStyle"
-            android:layout_width="0dp"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/search_toolbar"
+            android:theme="@style/SearchViewStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/search_stuff"
-            android:inputType="textPersonName"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toStartOf="@+id/x_button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="Autofill" />
+            android:clipChildren="false"
+            android:paddingLeft="@dimen/list_item_header_padding"
+            android:paddingRight="@dimen/list_item_header_padding"
+            app:contentInsetStartWithNavigation="0dp"
+            >
 
-        <Button
-            android:id="@+id/x_button"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/search_x_string"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                <EditText
+                    android:id="@+id/edittext_in_fragment_search"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="@string/search_hint"
+                    android:imeOptions="flagNoExtractUi|actionSearch"
+                    android:inputType="textNoSuggestions" />
 
-        <ScrollView
-            android:id="@+id/scrollView2"
-            android:layout_width="@dimen/custom_match_parent"
+                <ImageButton
+                    android:id="@+id/clear_button_in_fragment_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/actionBarItemBackground"
+                    android:padding="@dimen/list_item_horizontal_padding"
+                    app:srcCompat="@drawable/ic_clear_grey_24px"
+                    android:contentDescription="@string/search_button_clear_search_string"/>
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/search_container_matches"
+            android:name="com.bammellab.motm.search.SearchMatchesFragment"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="60dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/x_button">
+            tools:layout="@layout/fragment_search_matches" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_list_thing"
-                android:layout_width="@dimen/recycler_scroll_width"
-                android:layout_height="wrap_content"
-                android:fadeScrollbars="false"
-                android:paddingStart="@dimen/recycler_padding_start"
-                android:paddingEnd="@dimen/default_padding"
-                android:scrollbars="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-        </ScrollView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/search_container_recent"
+            android:name="com.bammellab.motm.search.RecentSearchesFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_search_recent" />
+
+    </FrameLayout>
+</LinearLayout>

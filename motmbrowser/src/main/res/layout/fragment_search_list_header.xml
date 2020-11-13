@@ -31,31 +31,58 @@
         android:gravity="center_vertical">
 
         <ImageView
-            android:id="@+id/recycler_list_left_graphic"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:contentDescription="@string/molecule_in_question"
+            android:id="@+id/search_header_expand_collapse_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_arrow_drop_down_grey_24px"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="ContentDescription"
             tools:layout_constraintLeft_creator="1"
             tools:layout_constraintTop_creator="1" />
 
         <TextView
-            android:id="@+id/recycler_list_top_textline"
+            android:id="@+id/search_header_title_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:contentDescription="@string/molecule_in_question"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.04"
-            app:layout_constraintStart_toEndOf="@+id/recycler_list_left_graphic"
+            app:layout_constraintEnd_toStartOf="@+id/search_header_expand_collapse_icon"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
             tools:text="desc goes here" />
 
+        <TextView
+            android:id="@+id/search_matches_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/molecule_in_question"
+            app:layout_constraintEnd_toStartOf="@+id/search_header_expand_collapse_icon"
 
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_header_title_text"
+            tools:text="matches number goes here" />
+
+        <TextView
+            android:id="@+id/search_expand_collapse_hint_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/search_expand_search_results"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/search_header_expand_collapse_icon"
+            app:layout_constraintTop_toBottomOf="@+id/search_matches_text"
+            tools:text="placeholder text" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

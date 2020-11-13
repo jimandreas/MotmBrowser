@@ -15,6 +15,9 @@
 
 package com.bammellab.motm.data
 
+import timber.log.Timber
+import java.util.*
+
 /**
  * PDB reference list
  */
@@ -878,6 +881,35 @@ object Corpus {
             /* //motm/1 */ "Myoglobin"
 
     )
+
+    /**
+     * iterate through the titles and taglines
+     * If there is a match with either, collect both lists, merge them,
+     * remove dups, and then assemble a MotmEntryInfo list with the index and
+     * associated content.
+     */
+    data class MotmEntryInfo(val theIndexNumber: Int, val tagLine: String, val corpusLine: String)
+    fun searchMotmInfo(searchTerm: String): List<MotmEntryInfo> {
+        val startTime = System.currentTimeMillis()
+        val s = searchTerm.toLowerCase(Locale.ROOT)
+        val matchTag = (motmTagLines
+                .withIndex().filter {it.value.toLowerCase(Locale.ROOT).contains(s)}
+                .map { it.index }).toIntArray()
+        val matchCorpus = (corpus
+                .withIndex().filter {it.value.toLowerCase(Locale.ROOT).contains(s)}
+                .map { it.index }).toIntArray()
+
+        val mergeBothLists = (intArrayOf(*matchTag, *matchCorpus).sortedByDescending { it }).distinct()
+
+        val resultsList = mergeBothLists.map {
+            MotmEntryInfo(it, motmTagLines[it], corpus[it])}
+
+        Timber.v("TIME LAPSED: %d milliseconds, %d matches",
+                System.currentTimeMillis() - startTime,
+                resultsList.size)
+
+        return resultsList
+    }
 
 
 }
