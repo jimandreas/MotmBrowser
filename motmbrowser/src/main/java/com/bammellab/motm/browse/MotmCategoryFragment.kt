@@ -103,7 +103,7 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
 
         inner class ViewHolderMotm(val v: View, viewType: Int)
             : RecyclerView.ViewHolder(v), View.OnClickListener {
-            var boundString: String? = null
+            var motmName: String? = null
             lateinit var imageView: ImageView
             lateinit var textView: TextView
             lateinit var textView2: TextView
@@ -160,20 +160,20 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
         }
 
         override fun onBindViewHolder(holder: ViewHolderMotm, position: Int) {
-            holder.boundString = motmList[position]
+            holder.motmName = motmList[position]
 
             /*
              * handle clicks on molecules.  clicks on headers are ignored
              */
             holder.v.setOnClickListener(View.OnClickListener { v ->
                 val context = v.context
-                val str = holder.boundString
+                val str = holder.motmName
                 if (!isNumeric(str)) {
                     return@OnClickListener
                 }
                 val intent = Intent(context, MotmDetailActivity::class.java)
-                intent.putExtra(MotmDetailActivity.EXTRA_NAME, str)
-                intent.putExtra(MotmDetailActivity.EXTRA_CATEGORY, currentCategory)
+                intent.putExtra(MotmDetailActivity.MOTM_EXTRA_NAME, str)
+                intent.putExtra(MotmDetailActivity.MOTM_EXTRA_CATEGORY, currentCategory)
                 context.startActivity(intent)
             })
 

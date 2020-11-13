@@ -111,7 +111,7 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
 
                 Timber.i("OnClick: bound string is %s", holder.boundString)
                 val intent = Intent(context, MotmDetailActivity::class.java)
-                intent.putExtra(MotmDetailActivity.EXTRA_NAME, holder.boundString)
+                intent.putExtra(MotmDetailActivity.MOTM_EXTRA_NAME, holder.boundString)
                 //                intent.putExtra(MotmDetailActivity.EXTRA_CATEGORY,
                 //                        MotmSection.FRAG_ALL_MOTM);
                 context.startActivity(intent)

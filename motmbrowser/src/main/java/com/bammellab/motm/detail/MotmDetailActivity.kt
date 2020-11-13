@@ -35,7 +35,6 @@ import com.bammellab.motm.data.URLs.PDB_IMAGE_WEB_PREFIX
 import com.bammellab.motm.data.URLs.PDB_MOTM_PNG_WEB_PREFIX
 import com.bammellab.motm.data.URLs.PDB_MOTM_PREFIX
 import com.bammellab.motm.data.URLs.PDB_MOTM_SUFFIX
-import com.bammellab.motm.data.URLs.PDB_MOTM_THUMB_WEB_PREFIX
 import com.bammellab.motm.data.URLs.RCSB_MOTM_IMAGE_PREFIX
 import com.bammellab.motm.data.URLs.RCSB_PDB_INFO_PREFIX
 import com.bammellab.motm.data.URLs.RCSB_PDB_INFO_SUFFIX
@@ -67,11 +66,14 @@ class MotmDetailActivity : AppCompatActivity()
         val motmDetailCard = findViewById<CardView>(R.id.motm_detail_card)
 
         //val intent = intent
-        val motmNumberString = intent.getStringExtra(EXTRA_NAME)
+        val motmNumberString = intent.getStringExtra(MOTM_EXTRA_NAME)
         // be careful about arriving back here from somewhere else without the extra
         if (motmNumberString != null) {
             try {
                 motmNumber = Integer.parseInt(motmNumberString)
+            } catch (e: NumberFormatException) {
+                Timber.e("MotmDetailActivity: Error on name as a number $motmNumberString")
+                motmNumber = 1
             } finally {
                 if (motmNumber < 0 || motmNumber > 300) {
                     Timber.e("motmNumber out of range, %d, should be between 0 and 300", motmNumber)
@@ -259,9 +261,9 @@ class MotmDetailActivity : AppCompatActivity()
                         val intent = Intent(
                                 this@MotmDetailActivity, MotmGraphicsActivity::class.java)
                         intent.putExtra(
-                                MotmGraphicsActivity.INTENT_TAG_LIST, pdbsStringArray)
+                                MotmGraphicsActivity.PDB_NAME_LIST, pdbsStringArray)
                         intent.putExtra(
-                                MotmGraphicsActivity.INTENT_TAG_INDEX, i)
+                                MotmGraphicsActivity.PDB_NAME_LIST_INDEX, i)
                         startActivity(intent)
                     }
                 })
@@ -286,7 +288,7 @@ class MotmDetailActivity : AppCompatActivity()
     }
 
     companion object {
-        const val EXTRA_NAME = "motm"
-        const val EXTRA_CATEGORY = "category"
+        const val MOTM_EXTRA_NAME = "motm"
+        const val MOTM_EXTRA_CATEGORY = "category"
     }
 }

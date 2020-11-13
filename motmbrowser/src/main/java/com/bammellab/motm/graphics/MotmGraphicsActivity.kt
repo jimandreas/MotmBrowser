@@ -61,8 +61,8 @@ class MotmGraphicsActivity : AppCompatActivity() {
 //        val handler = Handler(
 //                Looper.getMainLooper(), this)
 
-        pdbList = intent.getStringArrayExtra(INTENT_TAG_LIST)
-        currentPdbIndex = intent.getIntExtra(INTENT_TAG_INDEX, 0)
+        pdbList = intent.getStringArrayExtra(PDB_NAME_LIST)
+        currentPdbIndex = intent.getIntExtra(PDB_NAME_LIST_INDEX, 0)
         if (pdbList == null) {
             Timber.e("An empty list was passed to the MotmGraphicsActivity, giving up")
             return
@@ -204,7 +204,7 @@ class MotmGraphicsActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val INTENT_TAG_LIST = "pdbList"
-        const val INTENT_TAG_INDEX = "pdb_list_index"
+        const val PDB_NAME_LIST = "pdbList"
+        const val PDB_NAME_LIST_INDEX = "pdb_list_index"
     }
 }

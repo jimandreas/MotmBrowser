@@ -16,6 +16,7 @@
 package com.bammellab.motm.search
 
 import android.content.Context
+import android.content.Intent
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +31,8 @@ import com.bammellab.motm.data.Corpus.motmTitleGet
 import com.bammellab.motm.data.PdbInfo
 import com.bammellab.motm.data.URLs.PDB_IMAGE_WEB_PREFIX
 import com.bammellab.motm.data.URLs.PDB_MOTM_THUMB_WEB_PREFIX
+import com.bammellab.motm.detail.MotmDetailActivity
+import com.bammellab.motm.graphics.MotmGraphicsActivity
 import com.bammellab.motm.util.PrefsUtil
 import com.bumptech.glide.Glide
 
@@ -181,6 +184,7 @@ class SearchAdapter(
             VIEW_TYPE_MOTM -> {
 
                 val motmIndex = motmInfoList[position - 1].theIndexNumber
+                holder.motmName = motmTitleGet(motmIndex)
                 val spannedString = Html.fromHtml(
                     "<strong><big>"
                             + motmTitleGet(motmIndex)
@@ -269,14 +273,33 @@ class SearchAdapter(
                     notifyDataSetChanged()
                 }
                 VIEW_TYPE_MOTM -> {
-                    Timber.v("Molecule clicked")
                     addSearchString(searchTerm)
+                    val motmIndex = motmInfoList[position - 1].theIndexNumber
+                    Timber.v("Molecule clicked, Motm number $motmIndex")
+                    val intent = Intent(context, MotmDetailActivity::class.java)
+                    intent.putExtra(MotmDetailActivity.MOTM_EXTRA_NAME, motmIndex.toString())
+                    context.startActivity(intent)
                 }
                 VIEW_TYPE_PDB -> {
                     Timber.v("PDB clicked")
                     addSearchString(searchTerm)
-//                    holder.recyclerListTopTextline.text = pdbInfoList[position-1].pdbName
-//                    holder.recyclerListBodyTextline.text = pdbInfoList[position-1].pdbInfo
+
+                    val adjustedIndex =
+                            if (ifMotmListCollapsed()) {
+                                position - 2
+                            } else {
+                                position - motmInfoList.size - 2
+                            }
+                    val pdbName = pdbInfoList[adjustedIndex].pdbName
+
+                    val pdbList = listOf(pdbName).toTypedArray()
+                    val intent = Intent(
+                            context, MotmGraphicsActivity::class.java)
+                    intent.putExtra(
+                            MotmGraphicsActivity.PDB_NAME_LIST, pdbList)
+                    intent.putExtra(
+                            MotmGraphicsActivity.PDB_NAME_LIST_INDEX, 0)
+                    context.startActivity(intent)
                 }
             }
         })
@@ -325,9 +348,8 @@ class SearchAdapter(
         lateinit var searchExpandCollapseHint: TextView
         lateinit var imageView: ImageView
         lateinit var recyclerListTopTextline: TextView
-
-        //lateinit var recyclerListBodyTextline: TextView
         lateinit var recyclerListLeftGraphic: ImageView
+        var motmName: String = ""
 
 
         init {
