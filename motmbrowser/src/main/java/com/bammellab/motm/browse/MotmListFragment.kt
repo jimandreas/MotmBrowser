@@ -41,13 +41,7 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
         val rv = inflater.inflate(
                 R.layout.fragment_recyclerview, container, false) as RecyclerView
         setupRecyclerView(rv)
-        setHasOptionsMenu(true)
         return rv
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.motm_all_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {

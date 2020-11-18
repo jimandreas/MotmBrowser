@@ -120,7 +120,7 @@ dependencies {
     implementation deps.android.x.lifecycle
     implementation deps.android.x.navigationfrag
     implementation deps.android.x.navigationui
-    implementation deps.android.x.legacypreference
+    implementation deps.android.x.preference
 
     implementation deps.okhttp.client
     implementation deps.retrofit.client

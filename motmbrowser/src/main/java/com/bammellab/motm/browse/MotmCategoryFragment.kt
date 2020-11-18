@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bammellab.motm.R
@@ -39,13 +40,13 @@ import timber.log.Timber
  * Each list is organized into various subsections as indicated by
  * the lists in the MotmByCategory file.
  */
-class MotmCategoryFragment : androidx.fragment.app.Fragment() {
+class MotmCategoryFragment() : Fragment() {
 
-    private lateinit var motmList: Array<String>
+    private var motmList: Array<String>? = null
 
     var currentCategory: MotmSection = MotmSection.FRAG_SECTION_LIFE
 
-    fun setCategory(category: MotmSection) {
+    fun fragmentCategory(category : MotmSection) {
         currentCategory = category
 
         motmList = when (currentCategory) {
@@ -66,14 +67,17 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-        val rv = inflater.inflate(
+        val recyclerView = inflater.inflate(
                 R.layout.fragment_recyclerview, container, false) as RecyclerView
 
-        rv.layoutManager = LinearLayoutManager(rv.context)
+        recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
 
-        val adapter = SimpleStringRecyclerViewAdapter(requireActivity(), motmList)
-        rv.adapter = adapter
-        return rv
+        if (motmList != null) {
+            val adapter = SimpleStringRecyclerViewAdapter(requireActivity(), motmList!!)
+            recyclerView.adapter = adapter
+        }
+
+        return recyclerView
     }
 
     /*
@@ -177,7 +181,7 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
                 context.startActivity(intent)
             })
 
-            val motm = this@MotmCategoryFragment.motmList[position]
+            val motm = motmList[position]
 
             /*
              * If the motm is numeric - then this refers to a Molecule of the Month
@@ -223,7 +227,7 @@ class MotmCategoryFragment : androidx.fragment.app.Fragment() {
             } else {
                 Timber.i("not numeric: %s", motm)
                 val spannedString = Html.fromHtml("<strong><big>"
-                        + this@MotmCategoryFragment.motmList[position]
+                        + motmList[position]
                         + "</big></strong><br><i>"
                         //                            + Corpus.motmDateByKey.get(position + 1)
                         //                            + "</i><br>"

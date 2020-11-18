@@ -29,7 +29,7 @@ object Corpus {
      */
 
     fun motmImageListGet(index: Int): String {
-        if (index > motmImageList.size || index < 1) return "INVALIDINDEX"
+        if (index > motmImageList.size-1 || index < 1) return "INVALIDINDEX"
         return (motmImageList[index])
     }
 
@@ -300,7 +300,7 @@ object Corpus {
 
 
     fun motmTagLinesGet(index: Int): String {
-        if (index > motmTagLines.size || index < 1) return "INVALIDINDEX"
+        if (index > motmTagLines.size-1 || index < 1) return "INVALIDINDEX"
         return (motmTagLines[index])
     }
 

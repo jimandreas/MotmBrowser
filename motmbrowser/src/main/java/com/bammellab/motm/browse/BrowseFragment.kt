@@ -72,7 +72,7 @@ class BrowseFragment : Fragment() {
 
     private fun createFragment(section: MotmSection): Fragment {
         val fragment = MotmCategoryFragment()
-        fragment.setCategory(section)
+        fragment.fragmentCategory(section)
         return fragment
     }
 
