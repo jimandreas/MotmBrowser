@@ -27,8 +27,9 @@ class AboutActivity : AppCompatActivity() {
         setContentView(R.layout.activity_about)
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        title = ""
 
-        findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout).title = title
+        //findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout).title = title
 
     }
 

@@ -294,7 +294,8 @@ object Corpus {
             "247-Myelinassociated_Glycoprotein-5lf5_homepage3-tn.png",
             "248-Phytosulfokine_Receptor-4z64_homepage-tn.png",
             "249-SARSCoV2_RNAdependent_RNA_Polymerase-6yyt_homepage-tn.png",
-            "250-Capsaicin_Receptor_TRPV1-5is0_homepage-tn.png"
+            "250-Capsaicin_Receptor_TRPV1-5is0_homepage-tn.png",
+            "251-Adenylyl_Cyclase-6r3q_homepage-tn.png"
 
     )
 
@@ -307,6 +308,8 @@ object Corpus {
     // fgrep the <p> from motm-by-date, then manual edit, reverse with :g/^/m0
 
     val motmTagLines = arrayOf(
+
+
 
             "Myoglobin was the first protein to have its atomic structure determined, revealing how it stores oxygen in muscle cells.",
             "Bacteriophage phiX174 hijacks bacterial cells and forces them to make new copies of the virus",
@@ -540,14 +543,14 @@ object Corpus {
             "Bacteria become resistant to aminoglycosides by destroying them or changing their target.",
             "Telomerase maintains the ends of our chromosomes.",
             "Biological evolution is being harnessed in the lab to create new enzymes.",
-            "RNA aptamers are being engineered to track molecules inside living cells",
-//January 2019
-            "Initiation factors for protein synthesis interact through disordered chains.",
-//February 2019
-            "Six proteins in measles virus work together to infect cells.",
-//March 2019
-            "Small biomineral crystals are used to build bone, eggshells and even tiny compasses.",
-//April 2019
+            "RNA aptamers are being engineered to track molecules inside living cells", //January 2019
+
+            "Initiation factors for protein synthesis interact through disordered chains.",//February 2019
+
+            "Six proteins in measles virus work together to infect cells.",//March 2019
+
+            "Small biomineral crystals are used to build bone, eggshells and even tiny compasses.",//April 2019
+
             "Nitric oxide is attached to a conserved cysteine in hemoglobin and then released to control the flow of blood.",
 //May 2019
             "MDM2 controls the action of p53 tumor suppressor, making it a target for cancer chemotherapy.",
@@ -580,10 +583,11 @@ object Corpus {
 //July 2020
             "Phytosulfokine and other small peptides deliver signals about growth and development in plants.",
 //August 2020
-            "Coronaviruses duplicate their RNA genome using a specialized polymerase",
-//September 2020
-            "TRPV1 is an ion channel that senses heat and contributes to pain sensation."
-//October 2020
+            "Coronaviruses duplicate their RNA genome using a specialized polymerase",//September 2020
+
+            "TRPV1 is an ion channel that senses heat and contributes to pain sensation.",//October 2020
+
+            "Adenylyl cyclase creates second messengers to amplify signals from G-protein coupled receptors"  // Nov 2020
 
     )
 
@@ -629,6 +633,7 @@ object Corpus {
 
     val corpus = listOf(
 
+            /* //motm/251 */ "Adenylyl Cyclase",  // NOV 2020
             /* //motm/250 */ "Capsaicin Receptor TRPV1",
             /* //motm/249 */ "SARS-CoV-2 RNA-dependent RNA Polymerase",
             /* //motm/248 */ "Phytosulfokine Receptor",
@@ -883,6 +888,8 @@ object Corpus {
     )
 
     /**
+     * SEARCHING:
+     *
      * iterate through the titles and taglines
      * If there is a match with either, collect both lists, merge them,
      * remove dups, and then assemble a MotmEntryInfo list with the index and

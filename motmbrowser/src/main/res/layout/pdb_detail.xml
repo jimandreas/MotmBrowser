@@ -71,14 +71,15 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/motm_detail_card"
+                style="@style/MyCardViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/card_margin">
 
                 <LinearLayout
-                    style="@style/Widget.CardContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:paddingBottom="@dimen/default_padding"
                     android:paddingTop="@dimen/default_padding">
 
@@ -87,7 +88,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@android:color/black" />
+                        />
 
                     <TextView
                         android:id="@+id/card_detail_motm_description"
@@ -95,15 +96,14 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:maxLines="20"
-                        android:textColor="@android:color/black" />
+                        />
 
 
                     <TextView
                         android:id="@+id/card_detail_motm_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
-                        android:textColor="@android:color/black" />
+                         />
 
                 </LinearLayout>
 

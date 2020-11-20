@@ -119,7 +119,7 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
                     + Corpus.motmDateByKey(invertPosition + 1)
                     + "</i><br>"
 //                    + Corpus.motmDescByKey[position + 1])
-                    + motmTagLinesGet(invertPosition + 1))
+                    + motmTagLinesGet(invertPosition))
 
             holder.textView.text = spannedString
             holder.textView2.visibility = View.GONE
