@@ -189,7 +189,6 @@ class MotmCategoryFragment() : Fragment() {
              */
             if (isNumeric(motm)) {
                 val imageIndex = Integer.valueOf(motm)
-                val invertPosition = Corpus.invertPosition(position)
                 val imageString = Corpus.motmImageListGet(imageIndex-1)
                 val url = "$PDB_MOTM_THUMB_WEB_PREFIX$imageString?raw=true"
                 Glide.with(holder.imageView.context)

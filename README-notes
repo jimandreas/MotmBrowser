@@ -65,3 +65,10 @@ depends on preloaded pdb files in name.pdb.gz format.  The dir on the device que
 
     /storage/emulated/0/PDB/  - i.e. the PDB folder at the root directory
 
+
+
+# vim reverse order of lines
+# https://vim.fandom.com/wiki/Reverse_order_of_lines
+
+`:g/^/m0`
+
