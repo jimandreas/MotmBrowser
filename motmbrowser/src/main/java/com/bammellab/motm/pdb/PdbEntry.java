@@ -12,6 +12,7 @@
  */
 
 package com.bammellab.motm.pdb;
+/*
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -149,3 +150,4 @@ public class PdbEntry {
     }
 
 }
+*/

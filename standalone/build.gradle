@@ -103,7 +103,7 @@ dependencies {
     implementation deps.android.x.preference
 
     implementation deps.okhttp.client
-    implementation deps.retrofit.client
+//    implementation deps.retrofit.client
 
     implementation deps.pdbparser
     implementation deps.timber

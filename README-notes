@@ -1,6 +1,13 @@
 Notes & Todo
 ============
 
+BUGS:
+motm full size images sometimes have composite-number with multiple composites.
+This is not handled currently and the image can be blank.
+e.g.: 75-TissueFactor-2hft-composite-0.png
+64-Kinesin-3kin-composite-0.png
+Appears to be just these two entries for now.
+
 IDEA
 lysozyme "movie" - sequence through the various work at UofO on lysozyme variants!!
 sept 2000

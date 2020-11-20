@@ -392,7 +392,9 @@ object PDBs {
         pdbsByMonth.put(79, "1iyt")
         pdbsByMonth.put(79, "1mwp")
         pdbsByMonth.put(79, "1owt")
-        pdbsByMonth.put(79, "1rw6")
+        //pdbsByMonth.put(79, "1rw6")
+        //     Entry 1RW6 was removed from the distribution of released PDB entries (status Obsolete) on 2011-07-13.
+        //    It has been replaced (superseded) by 3NYL.
         pdbsByMonth.put(79, "2beg")
         pdbsByMonth.put(80, "1d2n")
         pdbsByMonth.put(80, "1g3i")
@@ -926,7 +928,9 @@ object PDBs {
         pdbsByMonth.put(176, "3vkh")
         pdbsByMonth.put(177, "1z6t")
         pdbsByMonth.put(177, "2p1h")
-        pdbsByMonth.put(177, "3iz8")
+        // pdbsByMonth.put(177, "3iz8")
+        //Entry 3IZ8 was removed from the distribution of released PDB entries (status Obsolete) on 2014-12-10.
+        //It has been replaced (superseded) by 4V4L.
         // too big 70203 pdbsByMonth.put(177, "3j2t")
         pdbsByMonth.put(177, "3lqq")
         pdbsByMonth.put(177, "3sfz")

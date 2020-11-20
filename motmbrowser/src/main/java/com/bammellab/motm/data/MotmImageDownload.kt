@@ -584,8 +584,10 @@ object MotmImageDownload {
             "76-Hemagglutinin-1ruz-membrane",
             "76-Hemagglutinin-HA-action",
             "75",
-            "75-TissueFactor-2hft-composite",
+
             "75-TissueFactor-1dan-composite",
+            "75-TissueFactor-2hft-composite", // needs fixing -number
+
             "74",
             "74-alpha-Amylase-1ppi",
             "74-alpha-Amylase-industrial",
@@ -617,8 +619,10 @@ object MotmImageDownload {
             "65-Self-SplicingRNA-1u6b",
             "65-Self-SplicingRNA-1mme",
             "64",
-            "64-Kinesin-3kin-composite",
+
             "64-Kinesin-3kin-2ncd",
+            "64-Kinesin-3kin-composite",  // needs fixing - number suffix
+
             "63",
             "63-T-CellReceptor-1tcr",
             "63-T-CellReceptor-MHC",

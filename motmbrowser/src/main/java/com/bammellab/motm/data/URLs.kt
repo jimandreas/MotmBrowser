@@ -15,8 +15,8 @@
 
 package com.bammellab.motm.data
 
-import retrofit2.Retrofit
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory
+//import retrofit2.Retrofit
+//import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 
 /**
  * The paths to:
@@ -41,10 +41,10 @@ object URLs {
 
     const val RCSB_PDB_DOWNLOAD = "https://files.rcsb.org/download/"
 
-    var retrofit: Retrofit = Retrofit.Builder()
+/*    var retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://www.rcsb.org/pdb/rest/")
             .addConverterFactory(SimpleXmlConverterFactory.create())
-            .build()
+            .build()*/
 
 
 }

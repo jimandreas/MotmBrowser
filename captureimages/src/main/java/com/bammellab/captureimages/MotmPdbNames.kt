@@ -515,7 +515,9 @@ object MotmPdbNames {
             "1rva",
             "1rvc",
             "1rvf",
-            "1rw6",
+           //  "1rw6",
+            //     Entry 1RW6 was removed from the distribution of released PDB entries (status Obsolete) on 2011-07-13.
+            //    It has been replaced (superseded) by 3NYL.
             "1rwt",
             "1ryf",
             "1rys",
@@ -926,7 +928,9 @@ object MotmPdbNames {
             "3iyq",
             "3iyr",
             "3iz4",
-            "3iz8",
+            // "3iz8",
+            // Entry 3IZ8 was removed from the distribution of released PDB entries (status Obsolete) on 2014-12-10.
+            //It has been replaced (superseded) by 4V4L.
             "3j1t",
             "3j2u",
             // "3j3q", no pdb file too big
