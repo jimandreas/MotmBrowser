@@ -164,7 +164,7 @@ class MotmDetailActivity : AppCompatActivity()
 //                .fitCenter()
 //                .into(imageView)
 
-                Picasso.with(this)
+                Picasso.get()
                         .load(pngURL)
                         .centerInside()
                         .resize(400, 400)

@@ -11,7 +11,7 @@
  *  limitations under the License
  */
 
-@file:Suppress("UnnecessaryVariable")
+@file:Suppress("UnnecessaryVariable", "IfThenToSafeAccess")
 
 package com.bammellab.motm.browse
 
@@ -23,16 +23,22 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import com.bammellab.motm.MainActivity
 import com.bammellab.motm.databinding.FragmentBrowseBinding
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.MODE_SCROLLABLE
+import timber.log.Timber
 import java.util.*
 
 
 class BrowseFragment : Fragment() {
 
-    private lateinit var scanViewModel: BrowseViewModel
+    private lateinit var browseViewModel: BrowseViewModel
     private lateinit var binding: FragmentBrowseBinding
     private lateinit var bcontext: Context
+    private lateinit var tabs : TabLayout
+    private lateinit var bfc : BrowseFragmentCache
+    private lateinit var adapter: Adapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,40 +46,37 @@ class BrowseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentBrowseBinding.inflate(inflater)
-        binding.lifecycleOwner = this
+        Timber.e("Browse On Create View")
+        bfc = (activity as MainActivity).getFragmentCacheHandle()
+        if (bfc.binding != null) {
+            binding = bfc!!.binding!!
+        } else {
+            binding = FragmentBrowseBinding.inflate(inflater)
+            bfc.binding = binding
 
-        scanViewModel =
-            ViewModelProvider(this).get(BrowseViewModel::class.java)
-        binding.viewModel = scanViewModel
-        bcontext = binding.root.context
+            browseViewModel =
+                    ViewModelProvider(this).get(BrowseViewModel::class.java)
+            binding.viewModel = browseViewModel
+            binding.lifecycleOwner = this
+            bcontext = binding.root.context
 
-        setupViewPager()
+            adapter = Adapter(this.parentFragmentManager)
 
-        return binding.root
-    }
+            adapter.addFragment(bfc.getFragByTag("Health and Disease"), "Health and Disease")
+            adapter.addFragment(bfc.getFragByTag("Life"), "Life")
+            adapter.addFragment(bfc.getFragByTag("Biotech/Nanotech"), "Biotech/Nanotech")
+            adapter.addFragment(bfc.getFragByTag("Structures"), "Structures")
+            // all Motm entries - no headers - just a list ordered by the increasing pub date
+            adapter.addFragment(bfc.getFragByTag("All"), "All")
 
-    private fun setupViewPager() {
-        val adapter = Adapter(this.parentFragmentManager)
+            binding.viewpager.adapter = adapter
+        }
 
-        adapter.addFragment(createFragment(MotmSection.FRAG_SECTION_HEALTH), "Health and Disease")
-        adapter.addFragment(createFragment(MotmSection.FRAG_SECTION_LIFE), "Life")
-        adapter.addFragment(createFragment(MotmSection.FRAG_SECTION_BIOTEC), "Biotech/Nanotech")
-        adapter.addFragment(createFragment(MotmSection.FRAG_SECTION_STRUCTURES), "Structures")
-        // all Motm entries - no headers - just a list ordered by the increasing pub date
-        adapter.addFragment(MotmListFragment(), "All")
-
-        binding.viewpager.adapter = adapter
-
-        val tabs = binding.tabs
+        tabs = binding.tabs
         tabs.setupWithViewPager(binding.viewpager)
         tabs.tabMode = MODE_SCROLLABLE
-    }
 
-    private fun createFragment(section: MotmSection): Fragment {
-        val fragment = MotmCategoryFragment()
-        fragment.fragmentCategory(section)
-        return fragment
+        return binding.root
     }
 
     internal class Adapter(fm: FragmentManager) :

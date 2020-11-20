@@ -31,6 +31,10 @@ android {
         textReport true
         textOutput 'stdout'
         lintConfig rootProject.file('lint.xml')
+        disable "UnsafeExperimentalUsageError",
+            "UnsafeExperimentalUsageWarning",
+            "UnusedResources",
+            "VectorRaster"
 
         // (borrowed from Jake Wharton - not true here as yet)
         // We run a full lint analysis as build part in CI, so skip vital checks for assemble task.
@@ -63,8 +67,5 @@ dependencies {
     implementation "com.kotmol.kotmolpdbparser:kotmolpdbparser:1.0.3-SNAPSHOT"
     //implementation deps.pdbparser
 
-    testImplementation deps.annotations
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
-    testImplementation 'com.google.truth:truth:1.1'
-    testImplementation deps.commonsio
+
 }

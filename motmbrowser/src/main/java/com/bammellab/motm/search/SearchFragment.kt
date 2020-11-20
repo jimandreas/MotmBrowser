@@ -104,22 +104,14 @@ class SearchFragment :
         return true
     }
 
-
-            /* override fun onQueryTextSubmit(queryText: String): Boolean {
-                 Timber.v("Submit text: $queryText")
-                 return true
-             }
-
-             override fun onQueryTextChange(queryText: String): Boolean {
- //            searchView.setCloseButtonVisibility(queryText)
-                 val searchString = queryText.trim { it <= ' ' }
-                 startSearch(searchString, false)
-                 return true
-             }*/
-
     override fun onStart() {
         super.onStart()
-        showPanel(PANEL_RECENT_SEARCHES)
+        val searchString = searchEditText.text
+        if (searchString.isEmpty()) {
+            showPanel(PANEL_RECENT_SEARCHES)
+        } else if (getActivePanel() == PANEL_RECENT_SEARCHES) {
+            showPanel(PANEL_SEARCH_RESULTS)
+        }
         searchMatchesFragment.setCallbackInAdapter(this)
     }
 
@@ -152,7 +144,7 @@ class SearchFragment :
 
     private fun startSearch(term: String) {
 
-        if (TextUtils.isEmpty(term)) {
+        if (term.isEmpty()) {
             showPanel(PANEL_RECENT_SEARCHES)
         } else if (getActivePanel() == PANEL_RECENT_SEARCHES) {
             showPanel(PANEL_SEARCH_RESULTS)

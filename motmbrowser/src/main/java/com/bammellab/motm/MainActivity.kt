@@ -23,6 +23,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
+import com.bammellab.motm.browse.BrowseFragmentCache
 import com.bammellab.motm.settings.SettingsFragment.Companion.bashTheTheme
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import timber.log.Timber
@@ -34,6 +35,7 @@ class MainActivity :
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var navView: BottomNavigationView
+    private var fragmentCache: BrowseFragmentCache? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,5 +93,14 @@ class MainActivity :
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         Timber.v("shared preference changed, key: $key")
+    }
+
+    fun getFragmentCacheHandle(): BrowseFragmentCache {
+        if (fragmentCache == null) {
+            fragmentCache = BrowseFragmentCache()
+        }
+
+        return fragmentCache!!
+
     }
 }

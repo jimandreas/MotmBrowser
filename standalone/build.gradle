@@ -97,7 +97,7 @@ dependencies {
     implementation deps.kotlin.coroutines.android
 
     implementation deps.android.material
-    implementation deps.android.x.constraintLayout
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation deps.android.x.coreKtx
     implementation deps.android.x.cardview
     implementation deps.android.x.preference
@@ -107,6 +107,6 @@ dependencies {
 
     implementation deps.pdbparser
     implementation deps.timber
-    implementation deps.picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation deps.guava
 }

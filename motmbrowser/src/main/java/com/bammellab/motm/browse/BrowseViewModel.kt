@@ -19,6 +19,8 @@ import androidx.lifecycle.ViewModel
 
 class BrowseViewModel : ViewModel() {
 
+
+
     private val _browseInfoStringArray
             = MutableLiveData<List<String>>().apply {
         value = listOf("")
@@ -34,6 +36,8 @@ class BrowseViewModel : ViewModel() {
     fun onClick() {
 
     }
+
+
 }
 
 

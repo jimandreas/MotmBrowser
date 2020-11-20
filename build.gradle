@@ -32,7 +32,7 @@ buildscript {
     ext.versions = [
         'supportLibrary'  : '29.1.0',
         'atsl'            : '1.0.1',
-        'kotlin'          : '1.4.10',
+        'kotlin'          : '1.4.20',
         'kotlinCoroutines': '1.2.1',
         'okhttp'          : '4.9.0',
         'retrofit'        : '2.9.0',
@@ -131,7 +131,7 @@ buildscript {
         junit            : 'org.junit.jupiter:junit-jupiter:5.6.0',
         truth            : 'com.google.truth:truth:1.0.1',
         annotations      : 'org.jetbrains:annotations:16.0.1',
-        commonsio        : 'commons-io:commons-io:2.8.0'
+        // commonsio        : 'commons-io:commons-io:2.8.0'
     ]
 
     ext.isCiBuild = System.getenv('CI') == 'true'

@@ -191,7 +191,7 @@ class SearchAdapter(
                             + "</big></strong><br><i>"
                             + Corpus.motmDateByKey(motmIndex)
                             + "</i><br>"
-                            + Corpus.motmTagLines[motmIndex]
+                            + Corpus.motmTagLinesGet(motmIndex-1)
                 )
                 holder.recyclerListTopTextline.text = spannedString
 

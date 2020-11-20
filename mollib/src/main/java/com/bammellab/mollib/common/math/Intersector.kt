@@ -114,7 +114,7 @@ object Intersector {
         @SuppressLint("DefaultLocale") val prettyPrintX = String.format("%6.2f", sphereCenter.x)
         @SuppressLint("DefaultLocale") val prettyPrintY = String.format("%6.2f", sphereCenter.y)
         @SuppressLint("DefaultLocale") val prettyPrintZ = String.format("%6.2f", sphereCenter.z)
-        Timber.i("Intersector:" + prettyPrintX + prettyPrintY + prettyPrintZ + "result " + result + " t1 is " + t1)
+        Timber.i("Intersector: $prettyPrintX  $prettyPrintY $prettyPrintZ result $result t1 $t1")
 
         // If t1 is less than zero, the object is in the ray's negative direction
         // and consequently ray misses the sphere.

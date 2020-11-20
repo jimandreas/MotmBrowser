@@ -1,3 +1,16 @@
+/*
+ *  Copyright 2020 James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
+ */
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -45,6 +58,10 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding true // https://developer.android.com/topic/libraries/view-binding
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -57,6 +74,10 @@ android {
         textReport true
         textOutput 'stdout'
         lintConfig rootProject.file('lint.xml')
+        disable "UnsafeExperimentalUsageError",
+            "UnsafeExperimentalUsageWarning",
+            "UnusedResources",
+            "VectorRaster"
 
         checkDependencies true
         checkTestSources true
@@ -71,18 +92,7 @@ android {
     }
 }
 
-/*
- *  Copyright 2020 James Andreas
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *       http://www.apache.org/licenses/LICENSE-2.0
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License
- */
+
 
 // signing solution courtesy of http://gist.github.com/gabrielemariotti/6856974
 
@@ -114,7 +124,7 @@ dependencies {
 
     implementation deps.android.material
     implementation deps.android.x.appcompat
-    implementation deps.android.x.constraintLayout
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation deps.android.x.coreKtx
     implementation deps.android.x.cardview
     implementation deps.android.x.lifecycle
@@ -128,7 +138,7 @@ dependencies {
 
     implementation deps.pdbparser
     implementation deps.timber
-    implementation deps.picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation deps.guava
     implementation deps.glide
     kapt deps.glide

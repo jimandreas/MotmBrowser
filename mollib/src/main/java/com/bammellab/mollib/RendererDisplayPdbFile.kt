@@ -633,7 +633,7 @@ class RendererDisplayPdbFile(
 
             // If the compilation failed, delete the shader.
             if (compileStatus[0] == 0) {
-                Timber.e("Error compiling shader: " + GLES20.glGetShaderInfoLog(shaderHandle))
+                Timber.e("Error compiling shader: ${GLES20.glGetShaderInfoLog(shaderHandle)}")
                 GLES20.glDeleteShader(shaderHandle)
                 shaderHandle = 0
             }
@@ -681,7 +681,7 @@ class RendererDisplayPdbFile(
 
             // If the link failed, delete the program.
             if (linkStatus[0] == 0) {
-                Timber.e("Error compiling program: " + GLES20.glGetProgramInfoLog(programHandle))
+                Timber.e("Error compiling shader: ${GLES20.glGetShaderInfoLog(programHandle)}")
                 GLES20.glDeleteProgram(programHandle)
                 programHandle = 0
             }
