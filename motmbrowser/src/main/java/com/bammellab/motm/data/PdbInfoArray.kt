@@ -11,6 +11,8 @@
  *  limitations under the License
  */
 
+@file:Suppress("ReplaceCallWithBinaryOperator")
+
 package com.bammellab.motm.data
 
 import timber.log.Timber
@@ -24,10 +26,13 @@ object PdbInfo {
      * iterate through the fruits and a list of entries
      * where the name contains the search string
      */
-    fun searchPdbInfo(searchTerm: String): List<PdbInfo.PdbEntryInfo> {
+    fun searchPdbInfo(searchTerm: String): List<PdbEntryInfo> {
         val startTime = System.currentTimeMillis()
         val s = searchTerm.toLowerCase(Locale.ROOT)
-        val match = PdbInfo.pdbInfoList.filter { it.pdbInfo.toLowerCase(Locale.ROOT).contains(s) }
+        val match = PdbInfo.pdbInfoList.filter {
+            it.pdbInfo.toLowerCase(Locale.ROOT).contains(s)
+                    || it.pdbName.toLowerCase(Locale.ROOT).equals(s)
+        }
         Timber.v("TIME LAPSED: %d milliseoncs, %d matches",
                 System.currentTimeMillis() - startTime,
                  match.size)

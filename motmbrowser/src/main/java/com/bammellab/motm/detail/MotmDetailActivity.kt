@@ -96,8 +96,7 @@ class MotmDetailActivity : AppCompatActivity()
 //        collapsingToolbar.title = motmName
         motmTitle.text = motmName
 
-        //        motmTitle.text = Corpus.motmDescByKey[this.motmNumber]
-        motmDescription.text = Corpus.motmTagLines[Corpus.motmTagLines.size - this.motmNumber]
+        motmDescription.text = Corpus.motmTagLinesGet(this.motmNumber-1)
 
 
         /*

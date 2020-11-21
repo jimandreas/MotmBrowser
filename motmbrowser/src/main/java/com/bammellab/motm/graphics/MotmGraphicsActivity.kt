@@ -22,6 +22,7 @@ import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
 import android.widget.Button
 import android.widget.ProgressBar
 import com.bammellab.mollib.*
@@ -96,8 +97,14 @@ class MotmGraphicsActivity : AppCompatActivity() {
         glSurfaceView.setRenderer(renderer, displayMetrics.density)
 
         // TODO: fully implement "select".  For now turn it off
-        buttonSelect.visibility = View.GONE
+        buttonSelect.visibility = GONE
         buttonSelect.isClickable = false
+
+        // if there is only one PDB in the list, then there is no "next" or "previous"
+        if (pdbList!!.size == 1) {
+            buttonNextObj.visibility = GONE
+            buttonPreviousObj.visibility = GONE
+        }
 
         processPdbs = MollibProcessPdbs(
                 this,

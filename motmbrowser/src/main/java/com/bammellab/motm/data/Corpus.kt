@@ -301,16 +301,14 @@ object Corpus {
 
 
     fun motmTagLinesGet(index: Int): String {
-        if (index > motmTagLines.size-1 || index < 1) return "INVALIDINDEX"
+        val size = motmTagLines.size
+        if (index > motmTagLines.size-1 || index < 0) return "INVALIDINDEX"
         return (motmTagLines[index])
     }
 
     // fgrep the <p> from motm-by-date, then manual edit, reverse with :g/^/m0
 
     val motmTagLines = arrayOf(
-
-
-
             "Myoglobin was the first protein to have its atomic structure determined, revealing how it stores oxygen in muscle cells.",
             "Bacteriophage phiX174 hijacks bacterial cells and forces them to make new copies of the virus",
             "DNA polymerase makes an accurate copy of the cell's genome",

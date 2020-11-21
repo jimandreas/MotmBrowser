@@ -65,14 +65,6 @@ class SearchAdapter(
         viewModel = vm
     }
 
-    fun setPdbInfoList(theList: List<PdbInfo.PdbEntryInfo>) {
-        pdbInfoList = theList
-    }
-
-    fun setMotmInfoList(theList: List<Corpus.MotmEntryInfo>) {
-        motmInfoList = theList
-    }
-
     /**
      * the view is dependent on the 4 states - both lists collapsed,
      * one or the other collapsed, or both lists expanded.
@@ -184,18 +176,18 @@ class SearchAdapter(
             VIEW_TYPE_MOTM -> {
 
                 val motmIndex = motmInfoList[position - 1].theIndexNumber
-                holder.motmName = motmTitleGet(motmIndex)
+                holder.motmName = motmTitleGet(motmIndex+1)
                 val spannedString = Html.fromHtml(
                     "<strong><big>"
-                            + motmTitleGet(motmIndex)
+                            + motmTitleGet(motmIndex+1)
                             + "</big></strong><br><i>"
-                            + Corpus.motmDateByKey(motmIndex)
+                            + Corpus.motmDateByKey(motmIndex+1)
                             + "</i><br>"
-                            + Corpus.motmTagLinesGet(motmIndex-1)
+                            + Corpus.motmTagLinesGet(motmIndex)
                 )
                 holder.recyclerListTopTextline.text = spannedString
 
-                val imageString = Corpus.motmImageListGet(motmIndex)
+                val imageString = Corpus.motmImageListGet(motmIndex+1)
                 val url = "$PDB_MOTM_THUMB_WEB_PREFIX$imageString?raw=true"
                 Glide.with(holder.recyclerListLeftGraphic.context)
                     .load(url)
@@ -274,7 +266,7 @@ class SearchAdapter(
                 }
                 VIEW_TYPE_MOTM -> {
                     addSearchString(searchTerm)
-                    val motmIndex = motmInfoList[position - 1].theIndexNumber
+                    val motmIndex = motmInfoList[position - 1].theIndexNumber + 1
                     Timber.v("Molecule clicked, Motm number $motmIndex")
                     val intent = Intent(context, MotmDetailActivity::class.java)
                     intent.putExtra(MotmDetailActivity.MOTM_EXTRA_NAME, motmIndex.toString())
