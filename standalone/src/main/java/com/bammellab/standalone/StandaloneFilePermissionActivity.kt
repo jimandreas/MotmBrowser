@@ -1,14 +1,26 @@
+/*
+ *  Copyright 2020 Bammellab / James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
+ */
+
 package com.bammellab.standalone
 
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.bammellab.standalone.R
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
@@ -30,15 +42,15 @@ class StandaloneFilePermissionActivity : AppCompatActivity() {
 
     // see this handy answer:
     //  http://stackoverflow.com/questions/33162152/storage-permission-error-in-marshmallow
-    fun isStoragePermissionGranted(): Boolean {
+    private fun isStoragePermissionGranted(): Boolean {
         return if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 Timber.i("Permission is granted")
                 true
             } else {
                 Timber.i("Permission is revoked")
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
                 message(" Please say ALLOW and try again")
                 false
             }

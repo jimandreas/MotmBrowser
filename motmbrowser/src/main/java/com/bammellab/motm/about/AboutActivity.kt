@@ -15,7 +15,6 @@ package com.bammellab.motm.about
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.bammellab.motm.MainActivity
 import com.bammellab.motm.R

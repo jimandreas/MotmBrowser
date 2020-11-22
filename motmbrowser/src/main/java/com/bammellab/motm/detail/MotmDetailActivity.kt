@@ -126,7 +126,7 @@ class MotmDetailActivity : AppCompatActivity()
 
         loadBackdrop()
 
-        motmDetailCard.setOnClickListener { view ->
+        motmDetailCard.setOnClickListener {
 //            val snackbar = Snackbar.make(view, "MotM website", Snackbar.LENGTH_LONG)
 //
 //            snackbar.setAction("View website") {
@@ -169,7 +169,7 @@ class MotmDetailActivity : AppCompatActivity()
                         .resize(400, 400)
         //                .error(R.drawable.ic_no_wifi)
         //                .placeholder(R.drawable.ic_message_24px)
-                        .into(imageView);
+                        .into(imageView)
 
         /*
          * populate the Motm detail recyclerview with the PDB entries discussed

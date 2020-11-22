@@ -11,10 +11,12 @@
  *  limitations under the License
  */
 
+@file:Suppress("UNUSED_VARIABLE")
+
 package com.bammellab.mollib
 
-import PdbCallback
-import PdbDownload
+import com.bammellab.mollib.pdbDownload.PdbCallback
+import com.bammellab.mollib.pdbDownload.PdbDownload
 import android.graphics.Bitmap
 import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
@@ -115,19 +117,22 @@ class MollibProcessPdbs(
                     try {
                         val myFile = File(androidFilePath, "$name.pdb")
                         if (!myFile.exists()) {
-                            Timber.i("nope %s does not exist", myFile)
+                            Timber.e("nope $myFile does not exist")
                         } else {
-                            Timber.i("Yay %s exists", myFile)
+                            Timber.i("Yay $myFile exists")
                         }
                         val fileStream = FileInputStream(myFile)
 
                         managePdbFile.parsePdbFile(fileStream, mol, name)
                         fileStream.close()
 
-                    } catch (e: FileNotFoundException) {
-                        Timber.e("$name not found")
+                    }catch (e: AccessDeniedException) {
+                        Timber.e(e, "$name ACCESS DENIED!!!!!!!!!!!!")
+                    }
+                    catch (e: FileNotFoundException) {
+                        Timber.e(e, "$name not found")
                     } catch (e: IOException) {
-                        Timber.e("$name IO Exception")
+                        Timber.e(e, "$name IO Exception")
                     }
 
                     glSurfaceView.queueEvent {

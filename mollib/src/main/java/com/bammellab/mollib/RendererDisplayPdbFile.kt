@@ -460,7 +460,7 @@ class RendererDisplayPdbFile(
             if (molecule != null && molecule!!.molName.isNotEmpty()) {
                 if (!listenerIsUpdated) {
                     try {
-                        val name = molecule!!.molName!!
+                        val name = molecule!!.molName
                         Timber.e("onDrawFrame: Update Activity")
                         activity.runOnUiThread { updateListener!!.updateActivity(name) }
                         listenerIsUpdated = true

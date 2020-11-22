@@ -12,6 +12,8 @@
  */
 
 
+@file:Suppress("UnnecessaryVariable", "unused")
+
 package com.bammellab.mollib
 
 import android.app.Activity

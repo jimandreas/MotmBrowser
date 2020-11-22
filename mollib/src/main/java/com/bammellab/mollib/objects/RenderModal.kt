@@ -83,7 +83,7 @@ class RenderModal(private val molecule: Molecule) {
             guideAtomPoints = CatmullRomCurve()
             j = 0
             while (j < chainDescriptorList.size) {
-                chainEntry = chainDescriptorList[j] as ChainRenderingDescriptor
+                chainEntry = chainDescriptorList[j]
                 /*
                  * initial condition- start with CA atom and add the 1st carbon to
                  *   set up the curve.   For the guide curve (used in HELIX and SHEET)
@@ -162,7 +162,7 @@ class RenderModal(private val molecule: Molecule) {
             if (j-- == 0) { // if null list then keep looping
                 continue
             }
-            chainEntry = chainDescriptorList[j] as ChainRenderingDescriptor
+            chainEntry = chainDescriptorList[j]
             // add the end atom as last in the curve
             mainChainAtom = chainEntry.endAtom
             // end atom will be null for CA-only ribbons
@@ -683,7 +683,7 @@ class RenderModal(private val molecule: Molecule) {
             }
 
             if (debug)
-                Timber.i("end carbon %d oxy %d", carbon.atomNumber, oxygen!!.atomNumber)
+                Timber.i("end carbon %d oxy %d", carbon.atomNumber, oxygen.atomNumber)
 
             if (chainIndex + 1 < chain_list.size) {
                 val nextChainEntry = chain_list[chainIndex + 1] as ChainRenderingDescriptor

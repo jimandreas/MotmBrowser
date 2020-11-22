@@ -11,7 +11,7 @@
  *  limitations under the License
  */
 
-@file:Suppress("deprecation")
+@file:Suppress("deprecation", "unused")
 
 package com.bammellab.motm.data
 

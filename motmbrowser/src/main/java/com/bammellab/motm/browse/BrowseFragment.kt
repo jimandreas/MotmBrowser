@@ -49,7 +49,7 @@ class BrowseFragment : Fragment() {
         Timber.e("Browse On Create View")
         bfc = (activity as MainActivity).getFragmentCacheHandle()
         if (bfc.binding != null) {
-            binding = bfc!!.binding!!
+            binding = bfc.binding!!
         } else {
             binding = FragmentBrowseBinding.inflate(inflater)
             bfc.binding = binding

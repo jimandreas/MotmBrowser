@@ -53,7 +53,7 @@ class ManagePdbFile(
     fun parsePdbFileFromAsset(pdbAssetName: String, mol: Molecule) {
         val name = "$pdbAssetName.pdb"
         try {
-            val inputStream = activity.assets.open(name, AssetManager.ACCESS_BUFFER);
+            val inputStream = activity.assets.open(name, AssetManager.ACCESS_BUFFER)
             val retainedMessages = mutableListOf<String>()
             ParserPdbFile
                     .Builder(mol)

@@ -11,6 +11,8 @@
  *  limitations under the License
  */
 
+@file:Suppress("UNUSED_VARIABLE")
+
 package com.bammellab.motm.pdb
 
 import android.widget.TextView
@@ -54,7 +56,7 @@ class PdbFetcherCoroutine(
 
     private val client = OkHttpClient()
 
-    fun getPdbInfo(pdb: String) {
+    private fun getPdbInfo(pdb: String) {
         val request = Request.Builder()
                 .url("https://data.rcsb.org/rest/v1/core/entry/$pdb")
                 .build()

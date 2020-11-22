@@ -42,6 +42,16 @@ android {
         abortOnError false
     }
 
+    buildTypes {
+        release {
+            // save build/outputs/mapping/<build-type>/mapping.txt file!
+            // https://developer.android.com/studio/build/shrink-code#decode-stack-trace
+            minifyEnabled true // <-- enable minification
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
     testOptions {
         execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }

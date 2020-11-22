@@ -40,7 +40,7 @@ import timber.log.Timber
  * Each list is organized into various subsections as indicated by
  * the lists in the MotmByCategory file.
  */
-class MotmCategoryFragment() : Fragment() {
+class MotmCategoryFragment : Fragment() {
 
     private var motmList: Array<String>? = null
 

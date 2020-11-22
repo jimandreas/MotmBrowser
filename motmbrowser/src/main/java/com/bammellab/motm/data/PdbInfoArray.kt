@@ -29,7 +29,7 @@ object PdbInfo {
     fun searchPdbInfo(searchTerm: String): List<PdbEntryInfo> {
         val startTime = System.currentTimeMillis()
         val s = searchTerm.toLowerCase(Locale.ROOT)
-        val match = PdbInfo.pdbInfoList.filter {
+        val match = pdbInfoList.filter {
             it.pdbInfo.toLowerCase(Locale.ROOT).contains(s)
                     || it.pdbName.toLowerCase(Locale.ROOT).equals(s)
         }
@@ -39,7 +39,7 @@ object PdbInfo {
         return match
     }
 
-    val pdbInfoList = listOf(
+    private val pdbInfoList = listOf(
             PdbEntryInfo("143d", "SOLUTION STRUCTURE OF THE HUMAN TELOMERIC REPEAT D(AG3[T2AG3]3) OF THE G-QUADRUPLEX"),
             PdbEntryInfo("148l", "A COVALENT ENZYME-SUBSTRATE INTERMEDIATE WITH SACCHARIDE DISTORTION IN A MUTANT T4 LYSOZYME"),
             PdbEntryInfo("173d", "MULTIPLE BINDING MODES OF ANTICANCER DRUG ACTINOMYCIN D: X-RAY, MOLECULAR MODELING, AND SPECTROSCOPIC STUDIES OF D(GAAGCTTC)2-ACTINOMYCIN D COMPLEXES AND ITS HOST DNA"),

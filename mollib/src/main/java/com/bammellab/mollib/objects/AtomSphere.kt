@@ -14,7 +14,7 @@
  * limitations under the License
  */
 
-@file:Suppress("unused", "always_false")
+@file:Suppress("unused", "always_false", "UNUSED_VARIABLE")
 
 package com.bammellab.mollib.objects
 
@@ -38,8 +38,6 @@ class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
             atom: PdbAtom,
             colorIn: FloatArray /*RGBA*/
     ) {
-        var radius = radiusIn
-        var color = colorIn
         var i = 0
         var j: Int
         var vx1: Float
@@ -89,38 +87,38 @@ class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
         while (i < numSlices) {
             j = 0
             while (j < numSlices) {
-                vx1 = (radius.toDouble()
+                vx1 = (radiusIn.toDouble()
                         * MathUtil.sin((angleStep / 2.0f * i.toFloat()).toDouble())
                         * MathUtil.sin((angleStep * j.toFloat()).toDouble())).toFloat()
-                vy1 = (radius * MathUtil.cos((angleStep / 2.0f * i.toFloat()).toDouble())).toFloat()
-                vz1 = (radius.toDouble()
+                vy1 = (radiusIn * MathUtil.cos((angleStep / 2.0f * i.toFloat()).toDouble())).toFloat()
+                vz1 = (radiusIn.toDouble()
                         * MathUtil.sin((angleStep / 2.0f * i.toFloat()).toDouble())
                         * MathUtil.cos((angleStep * j.toFloat()).toDouble())).toFloat()
 
                 // down one latitude
-                vx2 = (radius.toDouble()
+                vx2 = (radiusIn.toDouble()
                         * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()).toDouble())
                         * MathUtil.sin((angleStep * j.toFloat()).toDouble())).toFloat()
-                vy2 = (radius * MathUtil.cos((angleStep / 2.0f * (i + 1).toFloat()).toDouble())).toFloat()
-                vz2 = (radius.toDouble()
+                vy2 = (radiusIn * MathUtil.cos((angleStep / 2.0f * (i + 1).toFloat()).toDouble())).toFloat()
+                vz2 = (radiusIn.toDouble()
                         * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()).toDouble())
                         * MathUtil.cos((angleStep * j.toFloat()).toDouble())).toFloat()
 
                 // down one longitude and over one latitude
-                vx3 = (radius.toDouble()
+                vx3 = (radiusIn.toDouble()
                         * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()).toDouble())
                         * MathUtil.sin((angleStep * (j + 1).toFloat()).toDouble())).toFloat()
-                vy3 = (radius * MathUtil.cos((angleStep / 2.0f * (i + 1).toFloat()).toDouble())).toFloat()
-                vz3 = (radius.toDouble()
+                vy3 = (radiusIn * MathUtil.cos((angleStep / 2.0f * (i + 1).toFloat()).toDouble())).toFloat()
+                vz3 = (radiusIn.toDouble()
                         * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()).toDouble())
                         * MathUtil.cos((angleStep * (j + 1).toFloat()).toDouble())).toFloat()
 
                 // over one longitude at same latitude
-                vx4 = (radius.toDouble()
+                vx4 = (radiusIn.toDouble()
                         * MathUtil.sin((angleStep / 2.0f * i.toFloat()).toDouble())
                         * MathUtil.sin((angleStep * (j + 1).toFloat()).toDouble())).toFloat()
-                vy4 = (radius * MathUtil.cos((angleStep / 2.0f * i.toFloat()).toDouble())).toFloat()
-                vz4 = (radius.toDouble()
+                vy4 = (radiusIn * MathUtil.cos((angleStep / 2.0f * i.toFloat()).toDouble())).toFloat()
+                vz4 = (radiusIn.toDouble()
                         * MathUtil.sin((angleStep / 2.0f * i.toFloat()).toDouble())
                         * MathUtil.cos((angleStep * (j + 1).toFloat()).toDouble())).toFloat()
 
@@ -130,42 +128,42 @@ class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
                 vertexData[offset++] = vy1 + location.y.toFloat()
                 vertexData[offset++] = vz1 + location.z.toFloat()
 
-                vertexData[offset++] = vx1 / radius * normal_brightness_factor
-                vertexData[offset++] = vy1 / radius * normal_brightness_factor
-                vertexData[offset++] = vz1 / radius * normal_brightness_factor
+                vertexData[offset++] = vx1 / radiusIn * normal_brightness_factor
+                vertexData[offset++] = vy1 / radiusIn * normal_brightness_factor
+                vertexData[offset++] = vz1 / radiusIn * normal_brightness_factor
 
-                vertexData[offset++] = color[0]
-                vertexData[offset++] = color[1]
-                vertexData[offset++] = color[2]
-                vertexData[offset++] = color[3]
+                vertexData[offset++] = colorIn[0]
+                vertexData[offset++] = colorIn[1]
+                vertexData[offset++] = colorIn[2]
+                vertexData[offset++] = colorIn[3]
 
                 // second (bottom)
                 vertexData[offset++] = vx2 + location.x.toFloat()
                 vertexData[offset++] = vy2 + location.y.toFloat()
                 vertexData[offset++] = vz2 + location.z.toFloat()
 
-                vertexData[offset++] = vx2 / radius * normal_brightness_factor
-                vertexData[offset++] = vy2 / radius * normal_brightness_factor
-                vertexData[offset++] = vz2 / radius * normal_brightness_factor
+                vertexData[offset++] = vx2 / radiusIn * normal_brightness_factor
+                vertexData[offset++] = vy2 / radiusIn * normal_brightness_factor
+                vertexData[offset++] = vz2 / radiusIn * normal_brightness_factor
 
-                vertexData[offset++] = color[0]
-                vertexData[offset++] = color[1]
-                vertexData[offset++] = color[2]
-                vertexData[offset++] = color[3]
+                vertexData[offset++] = colorIn[0]
+                vertexData[offset++] = colorIn[1]
+                vertexData[offset++] = colorIn[2]
+                vertexData[offset++] = colorIn[3]
 
                 // third (bottom and over)
                 vertexData[offset++] = vx3 + location.x.toFloat()
                 vertexData[offset++] = vy3 + location.y.toFloat()
                 vertexData[offset++] = vz3 + location.z.toFloat()
 
-                vertexData[offset++] = vx3 / radius * normal_brightness_factor
-                vertexData[offset++] = vy3 / radius * normal_brightness_factor
-                vertexData[offset++] = vz3 / radius * normal_brightness_factor
+                vertexData[offset++] = vx3 / radiusIn * normal_brightness_factor
+                vertexData[offset++] = vy3 / radiusIn * normal_brightness_factor
+                vertexData[offset++] = vz3 / radiusIn * normal_brightness_factor
 
-                vertexData[offset++] = color[0]
-                vertexData[offset++] = color[1]
-                vertexData[offset++] = color[2]
-                vertexData[offset++] = color[3]
+                vertexData[offset++] = colorIn[0]
+                vertexData[offset++] = colorIn[1]
+                vertexData[offset++] = colorIn[2]
+                vertexData[offset++] = colorIn[3]
 
                 // second triangle
 
@@ -174,42 +172,42 @@ class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
                 vertexData[offset++] = vy1 + location.y.toFloat()
                 vertexData[offset++] = vz1 + location.z.toFloat()
 
-                vertexData[offset++] = vx1 / radius * normal_brightness_factor
-                vertexData[offset++] = vy1 / radius * normal_brightness_factor
-                vertexData[offset++] = vz1 / radius * normal_brightness_factor
+                vertexData[offset++] = vx1 / radiusIn * normal_brightness_factor
+                vertexData[offset++] = vy1 / radiusIn * normal_brightness_factor
+                vertexData[offset++] = vz1 / radiusIn * normal_brightness_factor
 
-                vertexData[offset++] = color[0]
-                vertexData[offset++] = color[1]
-                vertexData[offset++] = color[2]
-                vertexData[offset++] = color[3]
+                vertexData[offset++] = colorIn[0]
+                vertexData[offset++] = colorIn[1]
+                vertexData[offset++] = colorIn[2]
+                vertexData[offset++] = colorIn[3]
 
                 // second (bottom and over this time)
                 vertexData[offset++] = vx3 + location.x.toFloat()
                 vertexData[offset++] = vy3 + location.y.toFloat()
                 vertexData[offset++] = vz3 + location.z.toFloat()
 
-                vertexData[offset++] = vx3 / radius * normal_brightness_factor
-                vertexData[offset++] = vy3 / radius * normal_brightness_factor
-                vertexData[offset++] = vz3 / radius * normal_brightness_factor
+                vertexData[offset++] = vx3 / radiusIn * normal_brightness_factor
+                vertexData[offset++] = vy3 / radiusIn * normal_brightness_factor
+                vertexData[offset++] = vz3 / radiusIn * normal_brightness_factor
 
-                vertexData[offset++] = color[0]
-                vertexData[offset++] = color[1]
-                vertexData[offset++] = color[2]
-                vertexData[offset++] = color[3]
+                vertexData[offset++] = colorIn[0]
+                vertexData[offset++] = colorIn[1]
+                vertexData[offset++] = colorIn[2]
+                vertexData[offset++] = colorIn[3]
 
                 // third (over)
                 vertexData[offset++] = vx4 + location.x.toFloat()
                 vertexData[offset++] = vy4 + location.y.toFloat()
                 vertexData[offset++] = vz4 + location.z.toFloat()
 
-                vertexData[offset++] = vx4 / radius * normal_brightness_factor
-                vertexData[offset++] = vy4 / radius * normal_brightness_factor
-                vertexData[offset++] = vz4 / radius * normal_brightness_factor
+                vertexData[offset++] = vx4 / radiusIn * normal_brightness_factor
+                vertexData[offset++] = vy4 / radiusIn * normal_brightness_factor
+                vertexData[offset++] = vz4 / radiusIn * normal_brightness_factor
 
-                vertexData[offset++] = color[0]
-                vertexData[offset++] = color[1]
-                vertexData[offset++] = color[2]
-                vertexData[offset++] = color[3]
+                vertexData[offset++] = colorIn[0]
+                vertexData[offset++] = colorIn[1]
+                vertexData[offset++] = colorIn[2]
+                vertexData[offset++] = colorIn[3]
                 j++
 
             }

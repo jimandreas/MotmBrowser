@@ -11,7 +11,7 @@
  *  limitations under the License
  */
 
-@file:Suppress("LiftReturnOrAssignment", "UnnecessaryVariable", "DEPRECATION")
+@file:Suppress("LiftReturnOrAssignment", "UnnecessaryVariable", "DEPRECATION", "unused")
 
 package com.bammellab.motm.search
 
@@ -194,7 +194,7 @@ class SearchAdapter(
                     .fitCenter()
                     .into(holder.recyclerListLeftGraphic)
 
-                holder.imageView.visibility = View.VISIBLE
+
             }
             /*
              * The PDB list is after the MOTM list.
@@ -240,7 +240,7 @@ class SearchAdapter(
         /*
          * handle clicks on molecules.  clicks on headers are ignored
          */
-        holder.v.setOnClickListener(View.OnClickListener { v ->
+        holder.v.setOnClickListener {
             when (holder.itemViewType) {
                 VIEW_TYPE_HEADER_MOTM -> {
                     if (toggleMotmMatchesListState()) {
@@ -294,7 +294,7 @@ class SearchAdapter(
                     context.startActivity(intent)
                 }
             }
-        })
+        }
 
     }
 
@@ -338,7 +338,6 @@ class SearchAdapter(
         lateinit var searchHeaderMatchesText: TextView
         lateinit var searchHeaderExpandArrow: ImageView
         lateinit var searchExpandCollapseHint: TextView
-        lateinit var imageView: ImageView
         lateinit var recyclerListTopTextline: TextView
         lateinit var recyclerListLeftGraphic: ImageView
         var motmName: String = ""
@@ -354,7 +353,6 @@ class SearchAdapter(
                     searchExpandCollapseHint = v.findViewById(R.id.search_expand_collapse_hint_text)
                 }
                 VIEW_TYPE_MOTM, VIEW_TYPE_PDB -> {
-                    imageView = v.findViewById(R.id.recycler_list_left_graphic)
                     recyclerListTopTextline = v.findViewById(R.id.recycler_list_top_textline)
                     //recyclerListBodyTextline = v.findViewById(R.id.recycler_list_body_textline)
                     recyclerListLeftGraphic = v.findViewById(R.id.recycler_list_left_graphic)
@@ -363,7 +361,7 @@ class SearchAdapter(
         }
 
         override fun onClick(v: View) {
-            Timber.i("onClick - in ViewHolderMotm");
+            Timber.i("onClick - in ViewHolderMotm")
         }
     }
 
@@ -371,21 +369,21 @@ class SearchAdapter(
      * return the expand / collapse state string for the search list header.
      */
     private var motmMatchesListCollapsed = true
-    fun ifMotmListCollapsed(): Boolean {
+    private fun ifMotmListCollapsed(): Boolean {
         return motmMatchesListCollapsed
     }
 
-    fun toggleMotmMatchesListState(): Boolean {
+    private fun toggleMotmMatchesListState(): Boolean {
         motmMatchesListCollapsed = !motmMatchesListCollapsed
         return motmMatchesListCollapsed
     }
 
     private var pdbMatchesListCollapsed = true
-    fun ifPdbListCollapsed(): Boolean {
+    private fun ifPdbListCollapsed(): Boolean {
         return pdbMatchesListCollapsed
     }
 
-    fun togglePdbMatchesListState(): Boolean {
+    private fun togglePdbMatchesListState(): Boolean {
         pdbMatchesListCollapsed = !pdbMatchesListCollapsed
         return pdbMatchesListCollapsed
     }

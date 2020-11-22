@@ -13,6 +13,8 @@
 
 @file:Suppress("unused", "unused_variable", "unused_parameter", "deprecation")
 
+package com.bammellab.mollib.pdbDownload
+
 import android.app.Activity
 import android.os.Environment
 import android.widget.Toast
@@ -62,7 +64,7 @@ class PdbDownload(private val activity: Activity) {
 
         Timber.v("downloadPdbBackground: pdbid $pdbid")
 
-        var inputStream: InputStream? = null
+        var inputStream: InputStream?
 
         if (!connectionUtil.isOnline()) {
             activity.runOnUiThread {

@@ -45,8 +45,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles(
                     file('src/main/proguard-rules.pro')
             )
@@ -77,7 +77,14 @@ android {
         disable "UnsafeExperimentalUsageError",
             "UnsafeExperimentalUsageWarning",
             "UnusedResources",
-            "VectorRaster"
+            "VectorRaster",
+            "StaticFieldLeak",
+            "UseCompoundDrawables",
+            "TypographyEllipsis",
+            "IconLauncherShape",
+            "IconLocation",
+            "Autofill",
+            "RtlEnabled"
 
         checkDependencies true
         checkTestSources true

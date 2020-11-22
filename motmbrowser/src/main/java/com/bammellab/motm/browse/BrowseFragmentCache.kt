@@ -20,9 +20,7 @@ import androidx.fragment.app.Fragment
 import com.bammellab.motm.databinding.FragmentBrowseBinding
 import timber.log.Timber
 
-class BrowseFragmentCache() {
-
-    var tab : Int = -1
+class BrowseFragmentCache {
 
     var binding: FragmentBrowseBinding? = null
 
@@ -46,7 +44,7 @@ class BrowseFragmentCache() {
     }
 
     fun getFragByTag(tag: String): Fragment {
-        val fragmentEntry = fragList.find { it -> it.tag == tag }
+        val fragmentEntry = fragList.find { it.tag == tag }
         return fragmentEntry!!.frag
     }
 

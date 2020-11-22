@@ -43,7 +43,7 @@ class MainActivity :
         // Listen for preference changes
         val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         prefs.registerOnSharedPreferenceChangeListener(this)
-        bashTheTheme(prefs!!, resources)
+        bashTheTheme(prefs, resources)
 
         setContentView(R.layout.activity_main)
 

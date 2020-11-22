@@ -74,7 +74,7 @@ class RenderNucleic(private val molecule: Molecule) {
         for (i in 0 until molecule.listofChainDescriptorLists.size) {
             pdbBackboneList = molecule.listofChainDescriptorLists[i]
             for (j in pdbBackboneList.indices) {
-                chainEntry = pdbBackboneList[j] as ChainRenderingDescriptor
+                chainEntry = pdbBackboneList[j]
                 if (chainEntry.nucleicType == ChainRenderingDescriptor.NucleicType.PURINE) {
                     // Log.d("LOG_TAG", "purine: " + atom.atom_number);
                     render(chainEntry, 3)

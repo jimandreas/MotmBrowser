@@ -16,7 +16,6 @@
 package com.bammellab.motm.search
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -30,7 +29,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bammellab.motm.R
 import com.bammellab.motm.util.Util.hideSoftKeyboard
-
 import timber.log.Timber
 
 class SearchFragment :

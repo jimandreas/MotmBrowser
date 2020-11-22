@@ -1,3 +1,18 @@
+/*
+ *  Copyright 2020 Bammellab / James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
+ */
+
+@file:Suppress("UNUSED_VARIABLE", "SameParameterValue")
+
 package com.bammellab.captureimages
 
 import android.Manifest
@@ -37,13 +52,13 @@ class CaptureImagesFilePermissionActivity : AppCompatActivity() {
         val available = isExternalStorageAvailable()
 
         return if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 Timber.i("Permission is granted")
                 true
             } else {
-                Timber.i("Permission is revoked")
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                Timber.e("Permission is revoked!!!!!!!!!!!!!!!!!!!")
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
                 message(" Please say ALLOW and try again")
                 false
             }
@@ -56,12 +71,12 @@ class CaptureImagesFilePermissionActivity : AppCompatActivity() {
 
     private fun isExternalStorageReadOnly(): Boolean {
         val extStorageState: String = Environment.getExternalStorageState()
-        return Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)
+        return Environment.MEDIA_MOUNTED_READ_ONLY == extStorageState
     }
 
     private fun isExternalStorageAvailable(): Boolean {
         val extStorageState: String = Environment.getExternalStorageState()
-        return Environment.MEDIA_MOUNTED.equals(extStorageState)
+        return Environment.MEDIA_MOUNTED == extStorageState
     }
 
 

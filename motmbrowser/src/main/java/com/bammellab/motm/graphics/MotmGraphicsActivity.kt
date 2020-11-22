@@ -16,20 +16,21 @@
 package com.bammellab.motm.graphics
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
-import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
 import android.widget.Button
 import android.widget.ProgressBar
-import com.bammellab.mollib.*
+import androidx.appcompat.app.AppCompatActivity
+import com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
 import com.bammellab.mollib.LoadFromSource.FROM_RCSB_OR_CACHE
+import com.bammellab.mollib.MollibProcessPdbs
+import com.bammellab.mollib.RendererDisplayPdbFile
 import com.bammellab.mollib.Utility.checkForOpengl
 import com.bammellab.mollib.Utility.failDialog
 import com.bammellab.motm.R
+import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 
 
@@ -90,11 +91,12 @@ class MotmGraphicsActivity : AppCompatActivity() {
         // Request an OpenGL ES 2.0 compatible context.
         glSurfaceView.setEGLContextClientVersion(2)
 
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
+//        val displayMetrics = DisplayMetrics()
+//        windowManager.defaultDisplay.getMetrics(displayMetrics)
 
+        val config = resources.configuration
         renderer = RendererDisplayPdbFile(this, glSurfaceView)
-        glSurfaceView.setRenderer(renderer, displayMetrics.density)
+        glSurfaceView.setRenderer(renderer, config.densityDpi.toFloat())
 
         // TODO: fully implement "select".  For now turn it off
         buttonSelect.visibility = GONE
@@ -116,16 +118,16 @@ class MotmGraphicsActivity : AppCompatActivity() {
         /*
         * Go to next PDB in the list
         */
-        buttonNextObj.setOnClickListener(View.OnClickListener {
+        buttonNextObj.setOnClickListener {
             processPdbs.loadNextPdbFile()
-        })
+        }
 
         /*
          * Go to previous PDB in the list
          */
-        buttonPreviousObj.setOnClickListener(View.OnClickListener {
+        buttonPreviousObj.setOnClickListener {
             processPdbs.loadPrevPdbFile()
-        })
+        }
 
 
         buttonSelect.setOnClickListener { toggleSelect() }
