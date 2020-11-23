@@ -15,14 +15,12 @@
 
 package com.bammellab.mollib
 
-import com.bammellab.mollib.pdbDownload.PdbCallback
-import com.bammellab.mollib.pdbDownload.PdbDownload
 import android.graphics.Bitmap
-import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.bammellab.mollib.LoadFromSource.*
 import com.bammellab.mollib.objects.ManagerViewmode
+import com.bammellab.mollib.pdbDownload.PdbCallback
+import com.bammellab.mollib.pdbDownload.PdbDownload
 import com.kotmol.pdbParser.Molecule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,7 +49,6 @@ class MollibProcessPdbs(
     private var managerViewmode: ManagerViewmode? = null
     private var nextNameIndex = -1
     private var captureImagesFlag = false
-    private var androidFilePath = ""
     private lateinit var pdbDownload: PdbDownload
     private lateinit var mol : Molecule
 
@@ -115,7 +112,8 @@ class MollibProcessPdbs(
                 FROM_ASSETS -> {managePdbFile.parsePdbFileFromAsset(name, mol)}
                 FROM_SDCARD -> {
                     try {
-                        val myFile = File(androidFilePath, "$name.pdb")
+                        val cacheDir = activity.externalCacheDir
+                        val myFile = File(cacheDir, "$name.pdb")
                         if (!myFile.exists()) {
                             Timber.e("nope $myFile does not exist")
                         } else {
@@ -126,10 +124,9 @@ class MollibProcessPdbs(
                         managePdbFile.parsePdbFile(fileStream, mol, name)
                         fileStream.close()
 
-                    }catch (e: AccessDeniedException) {
+                    } catch (e: AccessDeniedException) {
                         Timber.e(e, "$name ACCESS DENIED!!!!!!!!!!!!")
-                    }
-                    catch (e: FileNotFoundException) {
+                    } catch (e: FileNotFoundException) {
                         Timber.e(e, "$name not found")
                     } catch (e: IOException) {
                         Timber.e(e, "$name IO Exception")
@@ -145,8 +142,6 @@ class MollibProcessPdbs(
                     pdbDownload.downloadPdb(name)
                 }
             }
-
-
         }
     }
 
@@ -164,7 +159,7 @@ class MollibProcessPdbs(
             return
         }
         glSurfaceView.queueEvent {
-            val internalSDcard = getDiskCacheDir("foo")
+            val internalSDcard = activity.externalCacheDir
             try {
                 // TODO: figure out how to get write permission to physical SDcard
 //                val externalStorageVolumes: Array<out File> =
@@ -178,7 +173,7 @@ class MollibProcessPdbs(
 //                val myFile = File(sdcardRoot, "/PDB/$pdbName.png")
 
                 val pdbName = pdbFileNames[nextNameIndex]
-                val myFile = File("/sdcard/Pictures/", "$pdbName.png")
+                val myFile = File(internalSDcard, "Pictures/$pdbName.png")
                 val fileOutputStream = FileOutputStream(myFile)
                 val bm = renderer.readGlBufferToBitmap(350, 580, 400, 400)
                 if (bm != null) {
@@ -188,42 +183,12 @@ class MollibProcessPdbs(
                 }
 
             } catch (e: FileNotFoundException) {
-                e.printStackTrace()
+                Timber.e("FileNotFound")
             } catch (e: IOException) {
-                e.printStackTrace()
+                Timber.e("IOException")
             }
             Timber.e("writeCurrentImage: DONE WRITING")
         }
-    }
-
-    /**
-     *
-     * @link: https://gist.github.com/granoeste/5574148
-     */
-    private fun getDiskCacheDir(uniqueName: String): File {
-
-        // Check if media is mounted or storage is built-in, if so, try and use external cache dir
-        // otherwise use internal cache dir
-
-        val state = Environment.getExternalStorageState()
-        val cachePath: String
-        val fullPath: String
-
-        cachePath = if (Environment.MEDIA_MOUNTED == state || !Environment.isExternalStorageRemovable()) {
-
-            // File cacheDir = context.getExternalCacheDir();
-            val cacheDir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-            if (cacheDir != null) {
-                activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.path
-            } else {
-                activity.filesDir.path
-            }
-        } else {
-            activity.cacheDir.path
-        }
-
-        fullPath = cachePath + File.separator + uniqueName
-        return File(fullPath)
     }
 
     private fun checkFiles() = runBlocking {
@@ -231,12 +196,8 @@ class MollibProcessPdbs(
             Timber.v("checkFiles: I'm working in thread ${Thread.currentThread().name}")
             val currentTime = System.currentTimeMillis()
             var missingCount = 0
-            val path = "/mnt/sdcard/PDB"
 
-
-            // https://developer.android.com/training/data-storage/app-specific#external
-
-            val externalStorageVolumes: Array<out File> =
+            /*val externalStorageVolumes: Array<out File> =
                     ContextCompat.getExternalFilesDirs(activity, null)
             val sdcardRoot = externalStorageVolumes
                     .last()
@@ -245,22 +206,24 @@ class MollibProcessPdbs(
                     .dropLast(4)
                     .joinToString("/")
 
-            androidFilePath = "$sdcardRoot/PDB/"
+            androidFilePath = "$sdcardRoot/PDB/"*/
 
+//            val cacheDir = activity.cacheDir
+            val cacheDir = activity.externalCacheDir
             for (name in pdbFileNames) {
-                val file = File(androidFilePath, "$name.pdb")
+                val file = File(cacheDir, "$name.pdb")
                 if (!file.exists()) {
                     if (missingCount < 10) {
-                        Timber.e("$file is missing from $path")
+                        Timber.e("$file is missing from $cacheDir")
                     }
                     missingCount++
                 }
             }
             if (missingCount > 0) {
-                Timber.e("There were $missingCount missing files (%d ms)",
+                Timber.e("There were $missingCount missing files from path $cacheDir (%d ms)",
                         System.currentTimeMillis() - currentTime)
             } else {
-                Timber.v("There were $missingCount missing files (%d ms)",
+                Timber.v("There were $missingCount missing files from path $cacheDir (%d ms)",
                         System.currentTimeMillis() - currentTime)
             }
         }

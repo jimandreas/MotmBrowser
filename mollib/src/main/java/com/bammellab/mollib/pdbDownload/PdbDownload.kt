@@ -217,5 +217,4 @@ class PdbDownload(private val activity: Activity) {
             }
         }
     }
-
 }

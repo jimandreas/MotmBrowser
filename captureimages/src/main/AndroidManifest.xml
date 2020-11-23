@@ -16,12 +16,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.bammellab.captureimages"
     tools:ignore="GoogleAppIndexingWarning">
-    <!-- We require OpenGL ES 2.0 -->
+    <!-- Requires OpenGL ES 2.0 -->
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.bammellab.captureimages.CaptureImagesApplication"
@@ -31,19 +29,9 @@
         <activity
             android:name="com.bammellab.captureimages.ActivityImageCap"
             android:label="@string/activity_capture_images"
-            android:theme="@style/Theme.DesignDemo2" />
-        <!--
-               Don't override application title. See http://stackoverflow.com/questions/3462431/how-to-name-android-application
-              We will set this in code instead.
-        -->
-        <activity
-            android:name="com.bammellab.captureimages.CaptureImagesFilePermissionActivity"
-            android:label="@string/activity_capture_images"
-            android:noHistory="true"
             android:theme="@style/Theme.DesignDemo2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
