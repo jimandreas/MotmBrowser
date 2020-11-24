@@ -109,11 +109,18 @@ class MollibProcessPdbs(
                     activity, mol)
 
             when (loadPdbFrom) {
-                FROM_ASSETS -> {managePdbFile.parsePdbFileFromAsset(name, mol)}
+                FROM_ASSETS -> {
+                    managePdbFile.parsePdbFileFromAsset(name, mol)
+                    glSurfaceView.queueEvent {
+                        managerViewmode!!.createView()
+                        renderer.setMolecule(mol)
+                        renderer.resetCamera()
+                    }
+                }
                 FROM_SDCARD -> {
                     try {
                         val cacheDir = activity.externalCacheDir
-                        val myFile = File(cacheDir, "$name.pdb")
+                        val myFile = File(cacheDir, "PDB/$name.pdb")
                         if (!myFile.exists()) {
                             Timber.e("nope $myFile does not exist")
                         } else {
@@ -161,19 +168,8 @@ class MollibProcessPdbs(
         glSurfaceView.queueEvent {
             val internalSDcard = activity.externalCacheDir
             try {
-                // TODO: figure out how to get write permission to physical SDcard
-//                val externalStorageVolumes: Array<out File> =
-//                        ContextCompat.getExternalFilesDirs(activity, null)
-//                val sdcardRoot = externalStorageVolumes
-//                        .last()
-//                        .absolutePath
-//                        .split("/")
-//                        .dropLast(4)
-//                        .joinToString("/")
-//                val myFile = File(sdcardRoot, "/PDB/$pdbName.png")
-
                 val pdbName = pdbFileNames[nextNameIndex]
-                val myFile = File(internalSDcard, "Pictures/$pdbName.png")
+                val myFile = File(internalSDcard, "Thumbs/$pdbName.png")
                 val fileOutputStream = FileOutputStream(myFile)
                 val bm = renderer.readGlBufferToBitmap(350, 580, 400, 400)
                 if (bm != null) {
@@ -197,21 +193,9 @@ class MollibProcessPdbs(
             val currentTime = System.currentTimeMillis()
             var missingCount = 0
 
-            /*val externalStorageVolumes: Array<out File> =
-                    ContextCompat.getExternalFilesDirs(activity, null)
-            val sdcardRoot = externalStorageVolumes
-                    .last()
-                    .absolutePath
-                    .split("/")
-                    .dropLast(4)
-                    .joinToString("/")
-
-            androidFilePath = "$sdcardRoot/PDB/"*/
-
-//            val cacheDir = activity.cacheDir
             val cacheDir = activity.externalCacheDir
             for (name in pdbFileNames) {
-                val file = File(cacheDir, "$name.pdb")
+                val file = File(cacheDir, "PDB/$name.pdb")
                 if (!file.exists()) {
                     if (missingCount < 10) {
                         Timber.e("$file is missing from $cacheDir")

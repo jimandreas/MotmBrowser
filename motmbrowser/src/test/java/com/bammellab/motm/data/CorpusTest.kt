@@ -17,13 +17,12 @@ package com.bammellab.motm.data
 
 import com.bammellab.motm.data.Corpus.motmDateByKey
 import com.bammellab.motm.data.Corpus.motmImageList
-import junit.framework.Assert.assertEquals
-import org.hamcrest.CoreMatchers.*
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
-import java.lang.NumberFormatException
 
 
 /**
@@ -56,7 +55,7 @@ class CorpusTest {
             val listSize = motmImageList.size
             val entry = iter.value
             val num = entry.substringBefore('-')
-            when (motmImageList.size - iter.index) {
+            when (iter.index+1) {
                 243 -> assertEquals("242", num)
                 242 -> assertEquals("243", num)
 
@@ -69,7 +68,7 @@ class CorpusTest {
                         fail("bad value $num for integer at index ${motmImageList.size - iter.index}")
                     }
 
-                    assertEquals(num.toInt(), motmImageList.size - iter.index)
+                    assertEquals(num.toInt(), iter.index+1)
                 }
             }
         }

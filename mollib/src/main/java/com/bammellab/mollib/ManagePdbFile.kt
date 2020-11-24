@@ -36,6 +36,7 @@ class ManagePdbFile(
                 .loadPdbFromStream(stream)
                 .doBondProcessing(true)
                 .parse()
+        stream.close()
     }
 
     fun parsePdbInputStream(stream: InputStream, mol: Molecule, pdbName: String) {
@@ -47,6 +48,7 @@ class ManagePdbFile(
                 .loadPdbFromStream(stream)
                 .doBondProcessing(true)
                 .parse()
+        stream.close()
     }
 
 
@@ -62,6 +64,7 @@ class ManagePdbFile(
                     .loadPdbFromStream(inputStream)
                     .doBondProcessing(true)
                     .parse()
+            inputStream.close()
         } catch (e: IOException) {
             Timber.e("Could not access asset: $name")
             return

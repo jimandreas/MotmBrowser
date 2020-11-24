@@ -31,9 +31,7 @@ android {
         textReport true
         textOutput 'stdout'
         lintConfig rootProject.file('lint.xml')
-        disable "UnsafeExperimentalUsageError",
-            "UnsafeExperimentalUsageWarning",
-            "UnusedResources",
+        disable "UnusedResources",
             "VectorRaster"
 
         // (borrowed from Jake Wharton - not true here as yet)

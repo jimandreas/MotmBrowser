@@ -66,10 +66,9 @@ android {
         // added to keep going
         abortOnError false
 
-        disable "UnsafeExperimentalUsageError",
-            "UnsafeExperimentalUsageWarning",
-            "UnusedResources",
+        disable "UnusedResources",
             "VectorRaster",
+            "VectorPath",
             "StaticFieldLeak",
             "UseCompoundDrawables",
             "TypographyEllipsis",
