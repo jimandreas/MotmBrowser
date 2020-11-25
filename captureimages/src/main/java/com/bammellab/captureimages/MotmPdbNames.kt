@@ -420,7 +420,7 @@ object MotmPdbNames {
             "1n4e",
             "1n6g",
             "1n73",
-            "1n9d",
+            // "1n9d", // Entry 1N9D was removed from the distribution of released PDB entries (status Obsolete) on 2009-05-19.
             "1nca",
             "1nci",
             "1nek",

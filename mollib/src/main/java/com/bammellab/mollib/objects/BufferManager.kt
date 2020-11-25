@@ -94,7 +94,6 @@ object BufferManager {
             i++
         }
         bufferList.clear()
-        Timber.e("RESET BUFFERS")
     }
 
     fun setBufferLoadingComplete() {

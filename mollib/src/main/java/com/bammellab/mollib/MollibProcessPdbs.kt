@@ -22,9 +22,7 @@ import com.bammellab.mollib.objects.ManagerViewmode
 import com.bammellab.mollib.pdbDownload.PdbCallback
 import com.bammellab.mollib.pdbDownload.PdbDownload
 import com.kotmol.pdbParser.Molecule
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.io.*
 
@@ -37,6 +35,9 @@ enum class LoadFromSource {
 /**
  * common code to parse and display PDB info
  *   from a PDB folder or from a local asset file.
+ *
+ *   See also:
+ *   https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md#structured-concurrency-lifecycle-and-coroutine-parent-child-hierarchy
  */
 class MollibProcessPdbs(
         private val activity: AppCompatActivity,
@@ -51,10 +52,11 @@ class MollibProcessPdbs(
     private var captureImagesFlag = false
     private lateinit var pdbDownload: PdbDownload
     private lateinit var mol : Molecule
+    private val scope = MainScope()
 
     init {
         if (loadPdbFrom == FROM_SDCARD) {
-            checkFiles()
+            checkFilesLaunch()
         }
         renderer.setSurfaceCreatedListener(this)
     }
@@ -82,7 +84,7 @@ class MollibProcessPdbs(
         loadNextPdbFile()
     }
 
-    fun loadNextPdbFile() {
+    fun loadNextPdbFile() = scope.launch {
         if (++nextNameIndex == pdbFileNames.size) {
             nextNameIndex = 0
         }
@@ -90,7 +92,7 @@ class MollibProcessPdbs(
         commonStuff()
     }
 
-    fun loadPrevPdbFile() {
+    fun loadPrevPdbFile() = scope.launch {
         if (nextNameIndex-- == 0) {
             nextNameIndex = pdbFileNames.size - 1
         }
@@ -98,8 +100,8 @@ class MollibProcessPdbs(
         commonStuff()
     }
 
-    private fun commonStuff() = runBlocking {
-        launch(Dispatchers.IO) {
+    private suspend fun commonStuff() {
+        val data = withContext(Dispatchers.IO) {
             //mutex.withLock {
             val name = pdbFileNames[nextNameIndex]
             activity.runOnUiThread { activity.title = name }
@@ -124,7 +126,7 @@ class MollibProcessPdbs(
                         if (!myFile.exists()) {
                             Timber.e("nope $myFile does not exist")
                         } else {
-                            Timber.i("Yay $myFile exists")
+                            Timber.v("Yay $name exists")
                         }
                         val fileStream = FileInputStream(myFile)
 
@@ -187,8 +189,11 @@ class MollibProcessPdbs(
         }
     }
 
-    private fun checkFiles() = runBlocking {
-        launch(Dispatchers.IO) { // will get dispatched to ForkJoinPool.commonPool (or equivalent)
+    private fun checkFilesLaunch() = scope.launch() {
+        checkFiles()
+    }
+    private suspend fun checkFiles() {
+        val data = withContext(Dispatchers.IO) { // will get dispatched to ForkJoinPool.commonPool (or equivalent)
             Timber.v("checkFiles: I'm working in thread ${Thread.currentThread().name}")
             val currentTime = System.currentTimeMillis()
             var missingCount = 0
@@ -214,12 +219,11 @@ class MollibProcessPdbs(
     }
 
     /**
-     * callback from pdbCache when the pdb is in the cache or download is complete
+     * callback from PdbDownload when the pdb is in the cache or download is complete
      */
     override fun loadPdbFromStream(stream: InputStream) {
         managePdbFile.parsePdbInputStream(stream, mol, pdbFileNames[nextNameIndex])
         stream.close()
-        Timber.e("loadPdbFromStream: Start up the RENDERER")
         glSurfaceView.queueEvent {
             managerViewmode!!.createView()
             renderer.setMolecule(mol)

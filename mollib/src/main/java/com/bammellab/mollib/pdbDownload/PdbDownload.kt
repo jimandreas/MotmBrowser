@@ -16,12 +16,13 @@
 package com.bammellab.mollib.pdbDownload
 
 import android.app.Activity
-import android.os.Environment
 import android.widget.Toast
 import com.bammellab.mollib.common.util.ConnectionUtil
+import com.bammellab.mollib.pdbDownload.MollibDefs.RCSB_DOWNLOAD_PATH
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import okhttp3.*
 import timber.log.Timber
 import java.io.*
@@ -45,10 +46,29 @@ class PdbDownload(private val activity: Activity) {
         pdbCallback = cb
     }
 
-    fun downloadPdb(pdbid: String) = runBlocking {
-        launch(Dispatchers.IO) {
+    // https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md#structured-concurrency-lifecycle-and-coroutine-parent-child-hierarchy
+    suspend fun downloadPdb(pdbid: String) {
+        val data = withContext(Dispatchers.IO) {
             downloadPdbBackground(pdbid)
         }
+    }
+
+    private fun checkCacheForPdb(pdbid: String): Boolean {
+
+        try {
+            val cacheDir = activity.externalCacheDir
+            makeDirIfNotThere(cacheDir!!)
+            val file = File(cacheDir, "PDB/$pdbid.pdb")
+            if (file.exists()) {
+                Timber.v("file already exists, reading")
+                val inputStream = FileInputStream(file)
+                pdbCallback!!.loadPdbFromStream(inputStream)
+                return true
+            }
+        } catch (e: Exception) {
+            Timber.e("IO error")
+        }
+        return false
     }
 
 
@@ -62,6 +82,9 @@ class PdbDownload(private val activity: Activity) {
 
     private fun downloadPdbBackground(pdbid: String) {
 
+        if (checkCacheForPdb(pdbid)) {
+            return
+        }
         Timber.v("downloadPdbBackground: pdbid $pdbid")
 
         var inputStream: InputStream?
@@ -74,8 +97,7 @@ class PdbDownload(private val activity: Activity) {
             return
         }
 
-        // TODO: pull out this hardwired URL
-        val url = ("https://files.rcsb.org/download/"
+        val url = (RCSB_DOWNLOAD_PATH
                 + pdbid
                 + ".pdb.gz")
         val request = Request.Builder()
@@ -113,77 +135,26 @@ class PdbDownload(private val activity: Activity) {
     }
 
     /**
-     * see also:
-     * https://github.com/square/okhttp/wiki/Interceptors
-     * and
-     * http://stackoverflow.com/a/37848518/3853712
-     * Status: non operational
+     * this routine reads in the pdb file
+     * in 10K chunks and writes it to a temp "xyxxy"
+     * file.
+     * When complete it renames the "xyzzy" file to the
+     * real PDB.   This avoids partial reads looking like
+     * valid files.
      */
-    private inner class CachingControlInterceptor : Interceptor {
-        @Throws(IOException::class)
-        override fun intercept(chain: Interceptor.Chain): Response {
-            val request = chain.request()
-
-            val originalResponse = chain.proceed(request)
-            return originalResponse.newBuilder()
-                    //                    .header("Cache-Control", (Utility.isNetworkAvailable()) ?
-                    //                            "public, max-age=60" :  "public, max-stale=604800")
-                    .header("Cache-Control", if (connectionUtil.isOnline())
-                        "public, max-age=60"
-                    else
-                        "public, only-if-cached, max-stale=604800")
-                    .build()
-        }
-    }
-
-
-    /**
-     * Get a usable cache directory (external if available, internal otherwise).
-     *
-     * MODIFIED: to remove "external storage" permission from manifest.
-     * The permission is not needed on API 19+ for app specific
-     * external storage.
-     * http://youtu.be/C28pvd2plBA?t=8m11s
-     *
-     * @param uniqueName A unique directory name to append to the cache dir
-     * @return The cache dir
-     */
-    @Suppress("SameParameterValue")
-    private fun getDiskCacheDir(uniqueName: String): File {
-
-        // Check if media is mounted or storage is built-in, if so, try and use external cache dir
-        // otherwise use internal cache dir
-
-        val state = Environment.getExternalStorageState()
-        val cachePath: String
-        val fullPath: String
-
-        cachePath = if (Environment.MEDIA_MOUNTED == state || !Environment.isExternalStorageRemovable()) {
-
-            // File cacheDir = activity.getExternalCacheDir();
-            val cacheDir = activity.getExternalFilesDir(null)
-            if (cacheDir != null) {
-                activity.getExternalFilesDir(null)!!.path
-            } else {
-                activity.filesDir.path
-            }
-        } else {
-            activity.cacheDir.path
-        }
-
-        fullPath = cachePath + File.separator + uniqueName
-        return File(fullPath)
-    }
-
     private fun downloadPdbFromHttp(downloadInputStream: InputStream?,
                                     pdbid: String) {
         var inputStreamAfterDownload: InputStream? = null
 
         try {
-            val dataInputStream = DataInputStream(downloadInputStream!!)
-            val myFile = getDiskCacheDir(pdbid)
-            val fileOutputStream = FileOutputStream(myFile)
+            val cacheDir = activity.externalCacheDir
+            makeDirIfNotThere(cacheDir!!)
+            val realFile = File(cacheDir, "PDB/$pdbid.pdb")
+            val file = File(cacheDir, "PDB/xyzzy")
 
+            val fileOutputStream = FileOutputStream(file)
+
+            val dataInputStream = DataInputStream(downloadInputStream!!)
             val dataOutputStream = DataOutputStream(fileOutputStream)
 
             val buffer = ByteArray(10240)
@@ -195,8 +166,10 @@ class PdbDownload(private val activity: Activity) {
             dataInputStream.close()
             dataOutputStream.close()
             downloadInputStream.close()
+            fileOutputStream.close()
+            file.renameTo(realFile)
 
-            inputStreamAfterDownload = FileInputStream(getDiskCacheDir(pdbid))
+            inputStreamAfterDownload = FileInputStream(realFile)
 
 
         } catch (e: IOException) {
@@ -215,6 +188,15 @@ class PdbDownload(private val activity: Activity) {
             } else {
                 Timber.e("downloadPdbFromHttp: unhandled error on download")
             }
+        }
+    }
+
+    private fun makeDirIfNotThere(filePath: File) {
+        try {
+            val dir = File(filePath, "PDB")
+            dir.mkdir()
+        } catch (e: Exception) {
+            Timber.e(e, "Failure on PDB dir creation")
         }
     }
 }

@@ -249,7 +249,7 @@ object PDBs {
         pdbsByMonth.put(52, "1hgu")
         pdbsByMonth.put(52, "1hwg")
         pdbsByMonth.put(52, "1hwh")
-        pdbsByMonth.put(52, "1n9d")
+        // pdbsByMonth.put(52, "1n9d") // Entry 1N9D was removed from the distribution of released PDB entries (status Obsolete) on 2009-05-19.
         pdbsByMonth.put(52, "3hhr")
         pdbsByMonth.put(53, "1ezx")
         pdbsByMonth.put(53, "1k9o")

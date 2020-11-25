@@ -161,7 +161,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
                     }
                 }
                 BufferManager.setBufferLoadingComplete()
-                Timber.e("doViewMode: buffer loading complete")
+                Timber.v("doViewMode: buffer loading complete")
             }
         } catch (e: Exception) {
             Timber.e(e, "Crashed displaying: %s", molecule.molName)
