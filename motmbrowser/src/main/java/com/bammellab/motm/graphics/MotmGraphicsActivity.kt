@@ -96,7 +96,7 @@ class MotmGraphicsActivity : AppCompatActivity() {
 
         val config = resources.configuration
         renderer = RendererDisplayPdbFile(this, glSurfaceView)
-        glSurfaceView.setRenderer(renderer, config.densityDpi.toFloat())
+        glSurfaceView.setRenderer(renderer, config.densityDpi)
 
         // TODO: fully implement "select".  For now turn it off
         buttonSelect.visibility = GONE
@@ -154,8 +154,6 @@ class MotmGraphicsActivity : AppCompatActivity() {
         super.onDestroy()
         renderer.doCleanUp()
     }
-
-
 
     private fun toggleShader() {
         glSurfaceView.queueEvent { renderer.toggleShader() }

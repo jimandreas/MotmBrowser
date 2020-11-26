@@ -117,6 +117,7 @@ class MollibProcessPdbs(
                         managerViewmode!!.createView()
                         renderer.setMolecule(mol)
                         renderer.resetCamera()
+                        glSurfaceView.requestRender()
                     }
                 }
                 FROM_SDCARD -> {
@@ -145,6 +146,7 @@ class MollibProcessPdbs(
                         managerViewmode!!.createView()
                         renderer.setMolecule(mol)
                         renderer.resetCamera()
+                        glSurfaceView.requestRender()
                     }
                 }
                 FROM_RCSB_OR_CACHE -> {
@@ -158,6 +160,7 @@ class MollibProcessPdbs(
         if (managerViewmode != null) {
             glSurfaceView.queueEvent {
                 managerViewmode!!.nextViewMode()
+                glSurfaceView.requestRender()
             }
         }
     }
@@ -228,6 +231,7 @@ class MollibProcessPdbs(
             managerViewmode!!.createView()
             renderer.setMolecule(mol)
             renderer.resetCamera()
+            glSurfaceView.requestRender()
         }
     }
 }

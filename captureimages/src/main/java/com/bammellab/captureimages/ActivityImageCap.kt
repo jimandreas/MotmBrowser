@@ -53,8 +53,9 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
 
         val config = resources.configuration
         renderer = RendererDisplayPdbFile(this, glSurfaceView)
-        glSurfaceView.setRenderer(renderer, config.densityDpi.toFloat())
+        glSurfaceView.setRenderer(renderer, config.densityDpi)
         renderer.setUpdateListener(this)
+        renderer.overrideInitialScale(.6f) // thumbnail size
 
         // This freezes the updates, now adjusted in GLSurfaceView
         // gLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);

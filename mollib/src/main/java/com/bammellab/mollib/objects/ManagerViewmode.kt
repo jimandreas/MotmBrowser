@@ -25,15 +25,14 @@ import com.kotmol.pdbParser.Molecule
 import com.kotmol.pdbParser.PdbAtom
 import timber.log.Timber
 
-// TODO: implement Interface in Activity - for flagging low mem in UI (commented out after lib refactor)
 class ManagerViewmode(private val activity: Activity,
-                      private val molecule: Molecule
+                      private val mol: Molecule
 ) {
 
-    private val atomSphere: AtomSphere = AtomSphere(activity, molecule)
-    private val atomToAtomBond: SegmentAtomToAtomBond = SegmentAtomToAtomBond(molecule)
-    private val renderModal: RenderModal = RenderModal(molecule)
-    private val renderNucleic: RenderNucleic = RenderNucleic(molecule)
+    private val atomSphere: AtomSphere = AtomSphere(activity, mol)
+    private val atomToAtomBond: SegmentAtomToAtomBond = SegmentAtomToAtomBond(mol)
+    private val renderModal: RenderModal = RenderModal(mol)
+    private val renderNucleic: RenderNucleic = RenderNucleic(mol)
     private var currentMode: Int = 0
     private var drawMode: Int = 0
 
@@ -54,34 +53,6 @@ class ManagerViewmode(private val activity: Activity,
         doViewMode()
     }
 
-    /*
-
-calculated:
-
-39 456 000 bonds: 7 094 400
-
-105 120 000 bonds: 21 148 800  2nv3 more hydros
-
-     tablet
-availMem = 152 883 200 (0x91CD000)
-foregroundAppThreshold = 19 796 992 (0x12E1400)
-hiddenAppThreshold = 46 472 192 (0x2C51C00)
-visibleAppThreshold = 25 891 840 (0x18B1400)
-secondaryServerThreshold = 46472192 (0x2C51C00)
-threshold = 46472192 (0x2C51C00)
-totalMem = 839122944 (0x32040000)
-lowMemory = false
-
-   nexus phone
-availMem = 1 305 042 944 (0x4DC96000)
-foregroundAppThreshold = 75 497 472 (0x4800000)
-hiddenAppThreshold = 150 994 944 (0x9000000)
-lowMemory = false
-secondaryServerThreshold = 150994944 (0x9000000)
-threshold = 150994944 (0x9000000)
-totalMem = 1924923392 (0x72BC0000)
-visibleAppThreshold = 94371840 (0x5A00000)
-     */
 
     private fun doViewMode() {
 
@@ -90,8 +61,6 @@ visibleAppThreshold = 94371840 (0x5A00000)
         /*
          * let's see how much memory there is to play with
          */
-
-
         val activityManager2 = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
         val info2 = ActivityManager.MemoryInfo()
         activityManager2.getMemoryInfo(info2)
@@ -115,10 +84,10 @@ visibleAppThreshold = 94371840 (0x5A00000)
                         drawMode = (D_BALL_RADIUS or D_NUCLEIC or D_HETATM or D_ALL_ATOMS
                                 or D_RIBBONS or D_BONDS or D_SPHERES)
                         /*
-                 * if there isn't enough memory, then drop back into ribbon mode
-                 *    for now.   Save the check for no ribbons for later
-                 *    TODO:  handle the no ribbon case
-                 */
+                         * if there isn't enough memory, then drop back into ribbon mode
+                         *    for now.   Save the check for no ribbons for later
+                         *    TODO:  handle the no ribbon case
+                         */
                         if (!calcMemoryUsage(drawMode)) {
                             drawMode = D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_RIBBONS
                             currentMode = VIEW_RIBBONS
@@ -164,7 +133,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
                 Timber.v("doViewMode: buffer loading complete")
             }
         } catch (e: Exception) {
-            Timber.e(e, "Crashed displaying: %s", molecule.molName)
+            Timber.e(e, "Crashed displaying: %s", mol.molName)
         }
 
     }
@@ -197,14 +166,6 @@ visibleAppThreshold = 94371840 (0x5A00000)
     // String pretty_print = String.format("%6.2f", elapsed_time);
 
 
-    /*
-         * old diags follow:
-         */
-
-    //        Log.v(LOG_TAG,"*** mema " + info.availMem/1024/1024
-    //            + " getMemoryClass() = " + activityManager.getMemoryClass());
-    //
-    //        Timber.i("finished visualization in" + pretty_print + " seconds. " + start_time + " " + end_time);
 
 
     /*
@@ -217,12 +178,12 @@ visibleAppThreshold = 94371840 (0x5A00000)
         var atom1: PdbAtom?
         var atom2: PdbAtom?
 
-        for (i in 0 until molecule.bondList.size) {
-            atom1Number = molecule.bondList[i].atomNumber1
-            atom2Number = molecule.bondList[i].atomNumber2
+        for (i in 0 until mol.bondList.size) {
+            atom1Number = mol.bondList[i].atomNumber1
+            atom2Number = mol.bondList[i].atomNumber2
 
-            atom1 = molecule.atomNumberToAtomInfoHash[atom1Number]
-            atom2 = molecule.atomNumberToAtomInfoHash[atom2Number]
+            atom1 = mol.atomNumberToAtomInfoHash[atom1Number]
+            atom2 = mol.atomNumberToAtomInfoHash[atom2Number]
             if (atom1 == null || atom2 == null) {
                 Timber.e("null ptr : atom1: $atom1 atom2: $atom2")
                 continue
@@ -247,12 +208,12 @@ visibleAppThreshold = 94371840 (0x5A00000)
         var atom1: PdbAtom?
         var atom2: PdbAtom?
 
-        for (i in 0 until molecule.bondList.size) {
-            atom1Number = molecule.bondList[i].atomNumber1
-            atom2Number = molecule.bondList[i].atomNumber2
+        for (i in 0 until mol.bondList.size) {
+            atom1Number = mol.bondList[i].atomNumber1
+            atom2Number = mol.bondList[i].atomNumber2
 
-            atom1 = molecule.atomNumberToAtomInfoHash[atom1Number]
-            atom2 = molecule.atomNumberToAtomInfoHash[atom2Number]
+            atom1 = mol.atomNumberToAtomInfoHash[atom1Number]
+            atom2 = mol.atomNumberToAtomInfoHash[atom2Number]
 
             if (atom1 == null || atom2 == null) {
                 Timber.e("null ptr : atom1: $atom1 atom2: $atom2")
@@ -291,12 +252,12 @@ visibleAppThreshold = 94371840 (0x5A00000)
         var atom1: PdbAtom?
         var atom2: PdbAtom?
 
-        for (i in 0 until molecule.bondList.size) {
-            atom1Number = molecule.bondList[i].atomNumber1
-            atom2Number = molecule.bondList[i].atomNumber2
+        for (i in 0 until mol.bondList.size) {
+            atom1Number = mol.bondList[i].atomNumber1
+            atom2Number = mol.bondList[i].atomNumber2
 
-            atom1 = molecule.atomNumberToAtomInfoHash[atom1Number]
-            atom2 = molecule.atomNumberToAtomInfoHash[atom2Number]
+            atom1 = mol.atomNumberToAtomInfoHash[atom1Number]
+            atom2 = mol.atomNumberToAtomInfoHash[atom2Number]
 
             if (atom1 == null || atom2 == null) {
                 Timber.e("null ptr : atom1: $atom1 atom2: $atom2")
@@ -348,10 +309,10 @@ visibleAppThreshold = 94371840 (0x5A00000)
             else -> radius = 0.25f
         }
 
-        for (i in 0 until molecule.atomNumberList.size) {
-            atom1 = molecule.atomNumberToAtomInfoHash[molecule.atomNumberList[i]]
+        for (i in 0 until mol.atomNumberList.size) {
+            atom1 = mol.atomNumberToAtomInfoHash[mol.atomNumberList[i]]
             if (atom1 == null) {
-                Timber.e("drawSpheres: error - got null for %d", molecule.atomNumberList[i])
+                Timber.e("drawSpheres: error - got null for %d", mol.atomNumberList[i])
                 continue
             }
             // skip HOH (water) molecules
@@ -382,7 +343,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
             if (atom1.atomBondCount == 0) {
                 if (atom1.atomName != "TER_RECORD") {
                     Timber.e("%s: drawSpheres no bond at atom %d residue %s type %s",
-                            molecule.molName, atom1.atomNumber, atom1.residueName, atom1.atomName)
+                            mol.molName, atom1.atomNumber, atom1.residueName, atom1.atomName)
                 }
             }
             elementSymbol = atom1.elementSymbol
@@ -552,12 +513,12 @@ visibleAppThreshold = 94371840 (0x5A00000)
      *   based on the "slices" or number of facets in the geometry
      */
     fun bondAllocation(numSlices: Int): Int {
-        return molecule.bondList.size *
+        return mol.bondList.size *
                 2 * 6 * (numSlices + 1) * STRIDE_IN_BYTES
     }
 
     fun sphereAllocation(numSlices: Int): Int {
-        return (molecule.atomNumberList.size *
+        return (mol.atomNumberList.size *
                 numSlices * numSlices // number of vertices
 
                 * 3 * 2 // two triangles worth generated per loop
@@ -571,7 +532,7 @@ visibleAppThreshold = 94371840 (0x5A00000)
      *       This calculation overestimates the needed space by a little bit.
      */
     fun ribbonAllocation(numSlices: Int): Int {
-        return molecule.ribbonNodeCount * 10 *
+        return mol.ribbonNodeCount * 10 *
                 6 * (numSlices + 1) * STRIDE_IN_BYTES
     }
 

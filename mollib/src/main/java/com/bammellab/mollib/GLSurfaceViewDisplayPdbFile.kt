@@ -26,6 +26,8 @@ import android.opengl.GLSurfaceView
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_UP
+import android.view.SurfaceHolder
 import android.widget.Scroller
 import kotlin.math.atan2
 import kotlin.math.sqrt
@@ -35,17 +37,17 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
     var selectMode = false
     private var lastTouchState = NO_FINGER_DOWN
 
-    private var renderer: RendererDisplayPdbFile? = null
+    private lateinit var renderer: RendererDisplayPdbFile
 
     private var scroller: Scroller? = null
     private var gestureDetector: GestureDetector? = null
     private var mContext: Context? = null
 
     // Offsets for touch events
-    private var previousX: Float = 0.toFloat()
-    private var previousY: Float = 0.toFloat()
-    private var density: Float = 0.toFloat()
-    private var initialSpacing: Float = 0.toFloat()
+    private var previousX  = 0f
+    private var previousY = 0f
+    private var density = 0f
+    private var initialSpacing = 0f
 
     private var oldX = 0f
     private var oldY = 0f
@@ -75,8 +77,6 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
         scrollAnimator.addUpdateListener {
             // tickScrollAnimation();
         }
-
-
         // Create a gesture detector to handle onTouch messages
         gestureDetector = GestureDetector(contextIn, GestureListener())
 
@@ -84,6 +84,12 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
         // you can't scroll for a bit, pause, then scroll some more (the pause is interpreted
         // as a long press, apparently)
         gestureDetector!!.setIsLongpressEnabled(false)
+    }
+
+    override fun surfaceCreated(holder: SurfaceHolder) {
+        super.surfaceCreated(holder)
+        renderMode = RENDERMODE_WHEN_DIRTY
+
     }
 
     // with h/t to :
@@ -110,9 +116,11 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
         if (m == null) {
             return true
         }
-        if (hack) renderMode = RENDERMODE_CONTINUOUSLY
+        renderMode = RENDERMODE_CONTINUOUSLY
 
-
+        if (m.actionMasked == ACTION_UP) {
+            renderMode = RENDERMODE_WHEN_DIRTY
+        }
         //Number of touches
         val pointerCount = m.pointerCount
         when {
@@ -130,8 +138,8 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                     x2 = m.getX(1)
                     y2 = m.getY(1)
 
-                    renderer!!.touchX = m.x
-                    renderer!!.touchY = m.y
+                    renderer.touchX = m.x
+                    renderer.touchY = m.y
 
                     oldX = (x1 + x2) / 2.0f
                     oldY = (y1 + y2) / 2.0f
@@ -146,16 +154,16 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                         x2 = m.getX(1)
                         y2 = m.getY(1)
 
-                        renderer!!.touchX = m.x
-                        renderer!!.touchY = m.y
+                        renderer.touchX = m.x
+                        renderer.touchY = m.y
 
                         deltax = (x1 + x2) / 2.0f
                         deltax -= oldX
                         deltay = (y1 + y2) / 2.0f
                         deltay -= oldY
 
-                        renderer!!.deltaTranslateX = renderer!!.deltaTranslateX + deltax / (density * 300f)
-                        renderer!!.deltaTranslateY = renderer!!.deltaTranslateY - deltay / (density * 300f)
+                        renderer.deltaTranslateX = renderer.deltaTranslateX + deltax / (density * MOVE_SCALE_FACTOR)
+                        renderer.deltaTranslateY = renderer.deltaTranslateY - deltay / (density * MOVE_SCALE_FACTOR)
 
                         oldX = (x1 + x2) / 2.0f
                         oldY = (y1 + y2) / 2.0f
@@ -171,68 +179,62 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
 
                             // TODO: adjust this exponent.
                             //   for now, hack into buckets
-                            if (renderer!!.scaleCurrentF < 0.1f) {
-                                renderer!!.scaleCurrentF = renderer!!.scaleCurrentF + -deltaSpacing / 1000f
-                            } else if (renderer!!.scaleCurrentF < 0.1f) {
-                                renderer!!.scaleCurrentF = renderer!!.scaleCurrentF + -deltaSpacing / 500f
-                            } else if (renderer!!.scaleCurrentF < 0.5f) {
-                                renderer!!.scaleCurrentF = renderer!!.scaleCurrentF + -deltaSpacing / 200f
-                            } else if (renderer!!.scaleCurrentF < 1f) {
-                                renderer!!.scaleCurrentF = renderer!!.scaleCurrentF + -deltaSpacing / 50f
-                            } else if (renderer!!.scaleCurrentF < 2f) {
-                                renderer!!.scaleCurrentF = renderer!!.scaleCurrentF + -deltaSpacing / 10f
-                            } else if (renderer!!.scaleCurrentF < 5f) {
-                                renderer!!.scaleCurrentF = renderer!!.scaleCurrentF + -deltaSpacing / 10f
-                            } else if (renderer!!.scaleCurrentF > 5f) {
+                            if (renderer.scaleCurrentF < 0.1f) {
+                                renderer.scaleCurrentF = renderer.scaleCurrentF + -deltaSpacing / 1000f
+                            } else if (renderer.scaleCurrentF < 0.1f) {
+                                renderer.scaleCurrentF = renderer.scaleCurrentF + -deltaSpacing / 500f
+                            } else if (renderer.scaleCurrentF < 0.5f) {
+                                renderer.scaleCurrentF = renderer.scaleCurrentF + -deltaSpacing / 200f
+                            } else if (renderer.scaleCurrentF < 1f) {
+                                renderer.scaleCurrentF = renderer.scaleCurrentF + -deltaSpacing / 50f
+                            } else if (renderer.scaleCurrentF < 2f) {
+                                renderer.scaleCurrentF = renderer.scaleCurrentF + -deltaSpacing / 10f
+                            } else if (renderer.scaleCurrentF < 5f) {
+                                renderer.scaleCurrentF = renderer.scaleCurrentF + -deltaSpacing / 10f
+                            } else if (renderer.scaleCurrentF > 5f) {
                                 if (deltaSpacing > 0) {
-                                    renderer!!.scaleCurrentF = renderer!!.scaleCurrentF + -deltaSpacing / 10f
+                                    renderer.scaleCurrentF = renderer.scaleCurrentF + -deltaSpacing / 10f
                                 }
                             }
-                            //                        Log.w("Move", "Spacing is " + mRenderer.mScaleCurrentF + " spacing = " + deltaSpacing);
-
-
                         }
                     }
                     MotionEvent.ACTION_POINTER_DOWN -> {
-                        // Log.w("touch POINTER DOWN", "");
-
                         x1 = m.getX(0)
                         y1 = m.getY(0)
                         x2 = m.getX(1)
                         y2 = m.getY(1)
 
-                        renderer!!.touchX = m.x
-                        renderer!!.touchY = m.y
+                        renderer.touchX = m.x
+                        renderer.touchY = m.y
 
                         oldX = (x1 + x2) / 2.0f
                         oldY = (y1 + y2) / 2.0f
                         initialSpacing = spacing(m)
                     }
-                    MotionEvent.ACTION_POINTER_UP -> if (hack) renderMode = RENDERMODE_WHEN_DIRTY
-                }// Log.w("Down", "touch DOWN, initialSpacing is " + initialSpacing);
+                    MotionEvent.ACTION_POINTER_UP -> renderMode = RENDERMODE_WHEN_DIRTY
+                }
                 lastTouchState = TWO_FINGERS_DOWN
                 return true
             }
             pointerCount == 1 -> {
                 /*
-             * handle single finger swipe - rotate each item
-             */
+                 * rotate
+                 */
                 val x = m.x
                 val y = m.y
 
-                renderer!!.touchX = m.x
-                renderer!!.touchY = m.y
+                renderer.touchX = m.x
+                renderer.touchY = m.y
 
                 if (m.action == MotionEvent.ACTION_MOVE) {
                     if (lastTouchState != ONE_FINGER_DOWN) {  // handle anything to one finger interaction
                         lastTouchState = ONE_FINGER_DOWN
-                    } else if (renderer != null) {
-                        val deltaX = (x - previousX) / density / 2f
-                        val deltaY = (y - previousY) / density / 2f
+                    } else {
+                        val deltaX = (x - previousX) / density * ROTATION_SCALE_FACTOR
+                        val deltaY = (y - previousY) / density * ROTATION_SCALE_FACTOR
 
-                        renderer!!.deltaX = renderer!!.deltaX + deltaX
-                        renderer!!.deltaY = renderer!!.deltaY + deltaY
-                        // Log.w("touch", ": mDX = " + mRenderer.mDeltaX + " mDY = " + mRenderer.mDeltaY);
+                        renderer.deltaX = renderer.deltaX + deltaX
+                        renderer.deltaY = renderer.deltaY + deltaY
                     }
                 }
                 previousX = x
@@ -240,7 +242,7 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
 
                 return true
             }
-            hack -> renderMode = RENDERMODE_WHEN_DIRTY
+
         }
 
         return super.onTouchEvent(m)
@@ -273,12 +275,12 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
         val radians = atan2(deltaY, deltaX)
         return Math.toDegrees(radians).toFloat()
     }
-
-    // Hides superclass method.
-    fun setRenderer(rendererIn: RendererDisplayPdbFile, densityIn: Float) {
-        renderer = rendererIn
-        density = densityIn
+    
+    fun setRenderer(rendererIn: RendererDisplayPdbFile, densityIn: Int) {
         super.setRenderer(rendererIn)
+        renderer = rendererIn
+        density = densityIn.toFloat()
+        
     }
 
     /**
@@ -353,6 +355,7 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
         private const val TWO_FINGERS_DOWN = 2
         private const val MORE_FINGERS = 3
 
-        private const val hack = true   // play with Rendermode
+        private const val ROTATION_SCALE_FACTOR = 100f
+        private const val MOVE_SCALE_FACTOR = 5f
     }
 }

@@ -16,6 +16,7 @@
 
 package com.bammellab.standalone
 
+import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Menu
@@ -58,10 +59,12 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
         // Request an OpenGL ES 2.0 compatible context.
         glSurfaceView.setEGLContextClientVersion(2)
 
+
         val config = resources.configuration
         renderer = RendererDisplayPdbFile(this, glSurfaceView)
-        glSurfaceView.setRenderer(renderer, config.densityDpi.toFloat())
+        glSurfaceView.setRenderer(renderer, config.densityDpi)
         renderer.setUpdateListener(this)
+
 
         // This freezes the updates, now adjusted in GLSurfaceView
         // glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -92,10 +95,12 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
     // wire in the names and display names
     private val pdbFileNames2 = listOf(
 
+            "1bna",
+
             "1aew_firstloop",
             "1f6g",
 
-            "1bna",
+
             "1aew",
 
             "1AGU_simple",

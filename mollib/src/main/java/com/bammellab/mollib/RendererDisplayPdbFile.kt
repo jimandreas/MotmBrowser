@@ -29,6 +29,7 @@ import android.opengl.GLES20
 import android.opengl.GLES30.glReadPixels
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
+import android.os.SystemClock
 import com.bammellab.mollib.common.math.MotmVector3
 import com.bammellab.mollib.objects.BufferManager
 import com.bammellab.mollib.objects.CubeHacked
@@ -76,13 +77,12 @@ class RendererDisplayPdbFile(
         updateListener = listener
     }
 
-    fun setPdbLoadedFlag() {
-        pdbLoaded = true
-        GLES20.glFinish()
+    fun overrideInitialScale(newScale: Float) {
+        initialScale = newScale
+        scaleCurrentF = newScale
     }
 
     private val xYZ = XYZ()
-
 
     var touchX = 300f
     var touchY = 300f
@@ -92,27 +92,26 @@ class RendererDisplayPdbFile(
 
     private var displayHydrosFlag = false
 
-
     private var pdbFileName: String = "nofile"
 
     // update to add touch control - these are set by the SurfaceView class
     // These still work without volatile, but refreshes are not guaranteed to happen.
     @Volatile
-    var deltaX: Float = 0.toFloat()
+    var deltaX = 0f
 
     @Volatile
-    var deltaY: Float = 0.toFloat()
+    var deltaY = 0f
 
     @Volatile
-    var deltaTranslateX: Float = 0.toFloat()
+    var deltaTranslateX = 0f
 
     @Volatile
-    var deltaTranslateY: Float = 0.toFloat()
+    var deltaTranslateY = 0f
 
-    // public volatile float mScaleCurrentF = 1.0f;
-    // use scale to zoom in initially
+    var initialScale = INITIAL_SCALE
+
     @Volatile
-    var scaleCurrentF = INITIAL_SCALE
+    var scaleCurrentF = initialScale
 
     @Volatile
     var scalePrevious = 0f
@@ -155,24 +154,12 @@ class RendererDisplayPdbFile(
     private var mVMatrixHandle: Int = 0
 
     /**
-     * This will be used to pass in the light position.
-     */
-    private var lightPosHandle: Int = 0
-
-    /**
-     * This will be used to pass in model position information.
+     * various handles to shader parameters
      */
     private var positionHandle: Int = 0
-
-    /**
-     * This will be used to pass in model color information.
-     */
     private var colorHandle: Int = 0
-
-    /**
-     * This will be used to pass in model normal information.
-     */
     private var normalHandle: Int = 0
+    private var lightPosHandle: Int = 0
 
     /**
      * Used to hold a light centered on the origin in model space. We need a 4th coordinate so we can get translations to work when
@@ -210,9 +197,6 @@ class RendererDisplayPdbFile(
      */
     private var pointProgramHandle: Int = 0
 
-    /**
-     * A temporary matrix.
-     */
     private val temporaryMatrix = FloatArray(16)
 
     /**
@@ -230,7 +214,6 @@ class RendererDisplayPdbFile(
     private var mCube: CubeHacked? = null
     private var mPointer: Pointer? = null
     private var molecule: Molecule? = null
-
     private var reportedTimeFlag = false
 
     fun setMolecule(moleculeIn: Molecule) {
@@ -242,7 +225,6 @@ class RendererDisplayPdbFile(
 
     fun tossMoleculeToGC() {
         molecule = null
-        Timber.v("mol is null")
         listenerIsUpdated = true
     }
 
@@ -320,17 +302,10 @@ class RendererDisplayPdbFile(
         mCube = CubeHacked()
         mPointer = Pointer()
 
-
         // Initialize the modifier matrices
         Matrix.setIdentityM(accumulatedRotation, 0)
         Matrix.setIdentityM(accumulatedTranslation, 0)
         Matrix.setIdentityM(accumulatedScaling, 0)
-
-        /*
-         * let the UI thread know that all GL objects are created
-         */
-//        val message = Message.obtain(handler, Molecule.UI_MESSAGE_GL_READY)
-//        handler.dispatchMessage(message)
 
         // was the old "tunnel" graphic showing the selection area
         //   now deprecated
@@ -342,6 +317,7 @@ class RendererDisplayPdbFile(
     }
 
     override fun onSurfaceChanged(glUnused: GL10?, width: Int, height: Int) {
+        Timber.e("Scale is $scaleCurrentF $this")
         // Set the OpenGL viewport to the same size as the surface.
         GLES20.glViewport(0, 0, width, height)
         mWidth = width
@@ -368,6 +344,7 @@ class RendererDisplayPdbFile(
 
     override fun onDrawFrame(glUnused: GL10) {
 
+        val startTime = SystemClock.uptimeMillis().toFloat()
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
 
         if (molecule == null) {
@@ -421,7 +398,6 @@ class RendererDisplayPdbFile(
             Matrix.setIdentityM(modelMatrix, 0)
             Matrix.translateM(modelMatrix, 0, 0.0f, 0.0f, -2.5f)
             Matrix.scaleM(modelMatrix, 0, scaleF, scaleF, scaleF)
-            val foo = modelMatrix
             doMatrixSetup()
             BufferManager.render(positionHandle, colorHandle, normalHandle, wireFrameRenderingFlag)
             // DEBUG:  box in scene center
@@ -443,10 +419,15 @@ class RendererDisplayPdbFile(
             select()
         }
 
+        val endTime = SystemClock.uptimeMillis().toFloat()
+        val elapsedTime = (endTime - startTime) / 1000
+        val prettyPrint = String.format("%6.2f", elapsedTime)
+        Timber.v("T $prettyPrint")
+
         if (!reportedTimeFlag) {
             reportedTimeFlag = true
 //            val endTime = SystemClock.uptimeMillis().toFloat()
-//            val elapsedTime = (endTime - molecule!!.startOfParseTime) / 1000
+//            val elapsedTime = (endTime - startTime) / 1000
 //            val prettyPrint = String.format("%6.2f", elapsedTime)
 //            val activityManager = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
 //            val memInfo = ActivityManager.MemoryInfo()
@@ -531,7 +512,7 @@ class RendererDisplayPdbFile(
         /*
          * reset view manipulation
          */
-        scaleCurrentF = INITIAL_SCALE // zoom
+        scaleCurrentF = initialScale // zoom
 
         // Position the eye in front of the origin.
         val eyeX = 0.0f
@@ -1017,7 +998,8 @@ class RendererDisplayPdbFile(
 
 //        private val selectedAtomsList = ArrayList<AtomInfo>()
 
-        private const val INITIAL_SCALE = 0.5f
+        //private const val INITIAL_SCALE = 0.5f // small molecule for photos
+        private const val INITIAL_SCALE = 0.2f
         private var saveScale = 0f
 
         private var mHeight: Int = 0
