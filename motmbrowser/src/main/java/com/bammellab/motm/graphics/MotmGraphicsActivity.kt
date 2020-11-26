@@ -112,7 +112,8 @@ class MotmGraphicsActivity : AppCompatActivity() {
                 this,
                 glSurfaceView,
                 renderer,
-                pdbList!!.toList(),
+                currentPdbIndex,
+                pdbFileNames = pdbList!!.toList(),
                 loadPdbFrom = FROM_RCSB_OR_CACHE)
 
         /*

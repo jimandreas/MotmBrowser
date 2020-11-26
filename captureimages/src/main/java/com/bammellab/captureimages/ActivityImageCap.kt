@@ -64,7 +64,8 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
                 this,
                 glSurfaceView,
                 renderer,
-                MotmPdbNames.pdbNames,
+                nextNameIndex = 0,
+                pdbFileNames = MotmPdbNames.pdbNames,
                 loadPdbFrom = FROM_SDCARD)
 
         processPdbs.startProcessing(captureImages = true)

@@ -20,8 +20,9 @@
         <SwitchPreferenceCompat
             app:defaultValue="true"
             app:key="@string/settings_one_touch_open_key"
-            app:title="@string/settings_one_touch_open" />
-            app:description="@string/settings_one_touch_open_description" />
+            app:title="@string/settings_one_touch_open"
+            android:summaryOff="@string/settings_one_touch_open_summary_off"
+            android:summaryOn="@string/settings_one_touch_open_summary_on" />
 
     </PreferenceCategory>
 

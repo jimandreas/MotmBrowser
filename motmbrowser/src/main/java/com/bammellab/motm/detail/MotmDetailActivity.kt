@@ -40,13 +40,13 @@ import com.bammellab.motm.data.URLs.RCSB_PDB_INFO_PREFIX
 import com.bammellab.motm.data.URLs.RCSB_PDB_INFO_SUFFIX
 import com.bammellab.motm.graphics.MotmGraphicsActivity
 import com.bammellab.motm.pdb.PdbFetcherCoroutine
+import com.bammellab.motm.util.PrefsUtil
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import timber.log.Timber
 
-class MotmDetailActivity : AppCompatActivity()
-/* implements View.OnTouchListener */ {
+class MotmDetailActivity : AppCompatActivity() {
 
     private lateinit var motmDescription: TextView
     private lateinit var pdbDate: TextView
@@ -127,9 +127,6 @@ class MotmDetailActivity : AppCompatActivity()
         loadBackdrop()
 
         motmDetailCard.setOnClickListener {
-//            val snackbar = Snackbar.make(view, "MotM website", Snackbar.LENGTH_LONG)
-//
-//            snackbar.setAction("View website") {
                 val intent = Intent(Intent.ACTION_VIEW)
 
                 intent.data = Uri.parse(
@@ -139,8 +136,6 @@ class MotmDetailActivity : AppCompatActivity()
                 )
                 startActivity(intent)
             }
-//            snackbar.show()
-//        }
     }
 
 
@@ -211,24 +206,41 @@ class MotmDetailActivity : AppCompatActivity()
 
             pdbLink.tag = pdbId
             im.tag = pdbId
+            view.tag = pdbId
 
             /*
              * respond to a click on the RCSB PDB imageview button
              *    Vector to the PDB info entry on the RCSB website
+             * A pref setting determines if the action should be confirmed
              */
             pdbLink.setOnClickListener { v ->
-                val snackbar = Snackbar.make(v, "RCSB PDB info", Snackbar.LENGTH_LONG)
-
-                val pdbOfInterest = v.tag as String
-
-                snackbar.setAction("View website") {
-                    val intent = Intent(Intent.ACTION_VIEW)
-
-                    intent.data = Uri.parse(
+                if (PrefsUtil.touchToOpenPdb()) {
+                    val pdbOfInterest = v.tag as String
+                    val intentRCSB = Intent(Intent.ACTION_VIEW)
+                    intentRCSB.data = Uri.parse(
                             RCSB_PDB_INFO_PREFIX
                                     + pdbOfInterest + RCSB_PDB_INFO_SUFFIX
                     )
-                    startActivity(intent)
+
+                    try {
+                        Timber.i("start activity intent: $intentRCSB, $intentRCSB.data")
+                        startActivity(intentRCSB)
+                    } catch (e: Exception) {
+                        Timber.e(e, "exception on startActivity")
+                    }
+                    return@setOnClickListener
+                }
+
+                val snackbar = Snackbar.make(v, "RCSB PDB info", Snackbar.LENGTH_LONG)
+                val pdbOfInterest = v.tag as String
+                snackbar.setAction("View website") {
+                    val intentRCSB = Intent(Intent.ACTION_VIEW)
+
+                    intentRCSB.data = Uri.parse(
+                            RCSB_PDB_INFO_PREFIX
+                                    + pdbOfInterest + RCSB_PDB_INFO_SUFFIX
+                    )
+                    startActivity(intentRCSB)
                 }
                 snackbar.show()
             }
@@ -237,41 +249,57 @@ class MotmDetailActivity : AppCompatActivity()
              * respond to a click on the molecule (PDB)
              *    experiment with master / detail
              */
-            im.setOnClickListener(View.OnClickListener { v ->
-                val snackbar = Snackbar.make(v, R.string.snackbar_go_to_3d, Snackbar.LENGTH_LONG)
-
-                val pdbOfInterest = v.tag as String
-                if (pdbOfInterest.isEmpty()) {
-                    return@OnClickListener
-                }
-                @Suppress("RedundantSamConstructor")
-                snackbar.setAction(R.string.snackbar_go_to_3d_start, View.OnClickListener {
-                    /*
-                     * get the index of our chosen PDB to pass along to the viewer
-                     */
-                    var i = 0
-                    while (i < pdbsStringArray.size) {
-                        if (pdbsStringArray[i] == pdbOfInterest) {
-                            break
-                        }
-                        i++
-                    }
-                    if (i < pdbsStringArray.size) {
-                        val intent = Intent(
-                                this@MotmDetailActivity, MotmGraphicsActivity::class.java)
-                        intent.putExtra(
-                                MotmGraphicsActivity.PDB_NAME_LIST, pdbsStringArray)
-                        intent.putExtra(
-                                MotmGraphicsActivity.PDB_NAME_LIST_INDEX, i)
-                        startActivity(intent)
-                    }
-                })
-                snackbar.show()
-            })
+            im.setOnClickListener(View.OnClickListener { v -> start3dViewer(v, pdbsStringArray )})
+            view.setOnClickListener(View.OnClickListener { v -> start3dViewer(v, pdbsStringArray )})
             // load the text field via retrofit
             val fetcher = PdbFetcherCoroutine(pdbId, pdbCardText)
             fetcher.pdbFetcherCoroutine()
         }
+    }
+    private fun start3dViewer(v: View, pdbsStringArray: Array<String>) {
+        val snackbar = Snackbar.make(v, R.string.snackbar_go_to_3d, Snackbar.LENGTH_LONG)
+
+        val pdbOfInterest = v.tag as String
+        if (pdbOfInterest.isEmpty()) {
+            return
+        }
+        if (PrefsUtil.touchToOpenPdb()) {
+            val i = pdbsStringArray.indexOf(pdbOfInterest)
+            if (i >= 0) {
+                val intent = Intent(
+                        this@MotmDetailActivity, MotmGraphicsActivity::class.java)
+                intent.putExtra(
+                        MotmGraphicsActivity.PDB_NAME_LIST, pdbsStringArray)
+                intent.putExtra(
+                        MotmGraphicsActivity.PDB_NAME_LIST_INDEX, i)
+                startActivity(intent)
+            }
+            return
+        }
+        @Suppress("RedundantSamConstructor")
+        snackbar.setAction(R.string.snackbar_go_to_3d_start, View.OnClickListener {
+            /*
+             * get the index of our chosen PDB to pass along to the viewer
+             */
+            var i = 0
+            while (i < pdbsStringArray.size) {
+                if (pdbsStringArray[i] == pdbOfInterest) {
+                    break
+                }
+                i++
+            }
+            if (i < pdbsStringArray.size) {
+                val intent = Intent(
+                        this@MotmDetailActivity, MotmGraphicsActivity::class.java)
+                intent.putExtra(
+                        MotmGraphicsActivity.PDB_NAME_LIST, pdbsStringArray)
+                intent.putExtra(
+                        MotmGraphicsActivity.PDB_NAME_LIST_INDEX, i)
+                startActivity(intent)
+            }
+        })
+        snackbar.show()
+
     }
 
     // this brings the UI back to where it left off when the detail was selected

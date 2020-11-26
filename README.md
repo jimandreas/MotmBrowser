@@ -5,15 +5,13 @@ supports browsing of the excellent Molecule of the Month feature:
 
 http://pdb101.rcsb.org/motm/motm-about
 
-Status:  <b> Converted to Kotlin. </b>
-
 Screenshots:
 ------------
 
 <img src="docs/screenshots/startup_screencap.PNG" width = 200>
 <img src="docs/screenshots/1bna_screencap.PNG" width = 200>
 
-## Molecule of the Month RCSB feature
+## A feature from the Research Collaboratory for Structural Bioinformatics (RCSB)
 
 The MotmBrowser references the awesome work by the RCSB team.
 
@@ -47,14 +45,17 @@ Image credits:<br>
     [http://en.wikipedia.org/wiki/List_of_interstellar_and_circumstellar_molecules]<br>
 The H+ 3 cation is one of the most abundant ions in the universe. It was first detected in 1993.[71][72]
 
-SOURCES
-=======
+### Source credits
 
-<b><i>The User Interface is leveraged from the following:</i></b><br>
+<b><i>The Motmbrowser user interface is leveraged from the following:</i></b><br>
 
 Original CheeseSquare repo: [http://github.com/chrisbanes/cheesesquare]
 
-Wikipedia search function:
+Wikipedia search functionality: [https://github.com/wikimedia/apps-android-wikipedia]
+
+OpenGL tutorials: [https://github.com/jimandreas/AndroidOpenGLESLessons]
+
+
 
 <b> License:</b> See LICENSE file in repo (Apache2.0)
 

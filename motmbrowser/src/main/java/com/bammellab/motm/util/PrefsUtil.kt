@@ -11,10 +11,13 @@
  *  limitations under the License
  */
 
+@file:Suppress("UnnecessaryVariable")
+
 package com.bammellab.motm.util
 
 import android.content.Context
 import androidx.preference.PreferenceManager
+import com.bammellab.motm.R
 import java.util.*
 
 object PrefsUtil {
@@ -31,5 +34,11 @@ object PrefsUtil {
         prefs.edit().putStringSet(key, value).apply()
     }
 
+    fun touchToOpenPdb(): Boolean {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(prefsContext)
+        val key = prefsContext?.resources?.getString(R.string.settings_one_touch_open_key)
+        val currentSetting = prefs.getBoolean(key, true)
+        return currentSetting
+    }
     const val PREVIOUS_SEARCHES_KEY = "psk"
 }

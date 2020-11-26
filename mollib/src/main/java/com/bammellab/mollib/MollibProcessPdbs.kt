@@ -43,12 +43,13 @@ class MollibProcessPdbs(
         private val activity: AppCompatActivity,
         private val glSurfaceView: GLSurfaceViewDisplayPdbFile,
         private val renderer: RendererDisplayPdbFile,
+        private var nextNameIndex: Int = -1,
         private val pdbFileNames: List<String>,
         private val loadPdbFrom: LoadFromSource
 ) : SurfaceCreated, PdbCallback {
     private val managePdbFile = ManagePdbFile(activity)
     private var managerViewmode: ManagerViewmode? = null
-    private var nextNameIndex = -1
+    // private var nextNameIndex = -1
     private var captureImagesFlag = false
     private lateinit var pdbDownload: PdbDownload
     private lateinit var mol : Molecule
@@ -59,6 +60,9 @@ class MollibProcessPdbs(
             checkFilesLaunch()
         }
         renderer.setSurfaceCreatedListener(this)
+        if (nextNameIndex >= 0) {
+            nextNameIndex--
+        }
     }
 
     fun startProcessing(captureImages: Boolean = false) {

@@ -37,7 +37,8 @@ object URLs {
     const val RCSB_MOTM_IMAGE_PREFIX = "https://cdn.rcsb.org/pdb101/motm/images/tn/"
 
     const val RCSB_PDB_INFO_PREFIX = "https://www.rcsb.org/pdb/explore.do?structureId="
-    const val RCSB_PDB_INFO_SUFFIX = "#structureID"
+    //const val RCSB_PDB_INFO_SUFFIX = "#structureID"
+    const val RCSB_PDB_INFO_SUFFIX = "#ProductPrimaryActions"
 
     const val RCSB_PDB_DOWNLOAD = "https://files.rcsb.org/download/"
 

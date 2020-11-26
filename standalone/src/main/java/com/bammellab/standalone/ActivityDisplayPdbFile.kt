@@ -16,9 +16,7 @@
 
 package com.bammellab.standalone
 
-import android.opengl.GLSurfaceView
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -73,7 +71,8 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
                 this,
                 glSurfaceView,
                 renderer,
-                pdbFileNames2,
+                nextNameIndex = 0,
+                pdbFileNames = pdbFileNames2,
                 loadPdbFrom = FROM_ASSETS)
 
         processPdbs.startProcessing()
