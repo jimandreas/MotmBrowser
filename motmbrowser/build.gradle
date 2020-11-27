@@ -46,9 +46,11 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            shrinkResources false
+            shrinkResources true
             proguardFiles(
-                    file('src/main/proguard-rules.pro')
+                getDefaultProguardFile('proguard-android-optimize.txt'),
+                'proguard-rules.pro',
+                'src/main/proguard-motmbrowser.pro'
             )
             signingConfig signingConfigs.release
         }

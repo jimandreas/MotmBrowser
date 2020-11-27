@@ -45,7 +45,7 @@ class RenderNucleic(private val molecule: Molecule) {
     private val p3 = FloatArray(3)
 
     private fun getColor(crd: ChainRenderingDescriptor): FloatArray {
-        val anAtom = crd.nucleicCornerAtom
+        val anAtom = crd.nucleicCornerAtom ?: return white_color
         return when (anAtom.residueName) {
             "DC" -> C_color
             "DT" -> T_color
@@ -103,15 +103,22 @@ class RenderNucleic(private val molecule: Molecule) {
 
         val theColor = getColor(crd)
         // not all nucleic residues specify their ladder element (5CCW)
+        // other challenges - 1FKA (corners atoms not specified)
+
+        if (crd.nucleicCornerAtom == null
+                || crd.nucleicGuideAtom == null
+                || crd.nucleicPlanarAtom == null) {
+            return
+        }
 
         vertexData = BufferManager.getFloatArray(36 * STRIDE_IN_FLOATS)
         mOffset = BufferManager.floatArrayIndex
 
-        corner1.setAll(MotmVector3(crd.nucleicCornerAtom.atomPosition))
+        corner1.setAll(MotmVector3(crd.nucleicCornerAtom!!.atomPosition))
 
         // set P to vector defining side of rectangle
         //    vector is corner to guide atom
-        pvec.setAll(MotmVector3(crd.nucleicGuideAtom.atomPosition))
+        pvec.setAll(MotmVector3(crd.nucleicGuideAtom!!.atomPosition))
         pvec.subtract(corner1)
         pvec.normalize()
 
@@ -123,7 +130,7 @@ class RenderNucleic(private val molecule: Molecule) {
 
         // set R to vector across the rectangle
         //    vector is corner atom to planar atom
-        rvec.setAll(MotmVector3(crd.nucleicPlanarAtom.atomPosition))
+        rvec.setAll(MotmVector3(crd.nucleicPlanarAtom!!.atomPosition))
         rvec.subtract(corner1)
         rvec.normalize()
 

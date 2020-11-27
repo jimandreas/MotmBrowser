@@ -15,11 +15,13 @@
 
 package com.bammellab.motm.pdb
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.TextView
+import androidx.annotation.Keep
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
 import okhttp3.*
 import okio.IOException
 
@@ -41,15 +43,16 @@ class PdbFetcherCoroutine(
     }
 
 
+    @Keep // Prevents R8 from eating this class
     data class PDBdata(
             val pdbx_descriptor: String = "",
             val title: String = ""
     )
 
+    @Keep // Prevents R8 from eating this class
     data class PDBstruct(
             val struct: PDBdata
     )
-
 
     private val client = OkHttpClient()
 
@@ -64,17 +67,25 @@ class PdbFetcherCoroutine(
                     e.printStackTrace()
                 }
 
+                @SuppressLint("LogNotTimber")
                 override fun onResponse(call: Call, response: Response) {
                     response.use {
-                        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                        try {
+                            if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-                        val body = response.body?.string()
-                        //println(body)
-                        val gson = GsonBuilder().create()
-                        val thingie = gson.fromJson(body!!, PDBstruct::class.java)
+                            val body = response.body?.string()
+                            //println(body)
+                            val gson = GsonBuilder().create()
+                            val result = gson.fromJson(body!!, PDBstruct::class.java)
 
-                        if (thingie != null) {
-                            setTextCoroutine(thingie.struct.title)
+                            if (result == null) {
+                                setTextCoroutine("Failed Description Download.  Please report.")
+                            } else {
+                                setTextCoroutine(result.struct.title)
+                            }
+
+                        } catch (e: Exception) {
+                            Log.e("getPdbInfo", "DOWNLOAD INFO ERROR", e)
                         }
                     }
                 }
