@@ -17,16 +17,7 @@ buildscript {
         'compileSdk': 30,
         'minSdk'    : 21,
         'targetSdk' : 30,
-
-        'version'   : [
-            'major': 2,
-            'minor': 0,
-            'patch': 1,
-            'build': 201,
-        ],
     ]
-    ext.buildConfig.version['name'] = "${buildConfig.version.major}.${buildConfig.version.minor}.${buildConfig.version.patch}"
-    ext.buildConfig.version['code'] = buildConfig.version.major * 1000000 + buildConfig.version.minor * 10000 + buildConfig.version.patch * 100 + buildConfig.version.build
 
     // this section is for dependencies that fly in flocks
     ext.versions = [

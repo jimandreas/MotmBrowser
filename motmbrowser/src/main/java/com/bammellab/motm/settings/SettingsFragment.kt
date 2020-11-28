@@ -25,6 +25,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.bammellab.motm.BuildConfig
 import com.bammellab.motm.R
 import com.bammellab.motm.util.Defs.TEN_Q_GOOD_BUDDY
+import com.bammellab.motm.util.PrefsUtil
 import timber.log.Timber
 
 class SettingsFragment : PreferenceFragmentCompat(),
@@ -86,36 +87,12 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
         val themeKey = savedResources!!.getString(R.string.prefs_theme_key)
         if (key == themeKey) {
-            bashTheTheme(sp, savedResources)
+            PrefsUtil.updateTheme(sp, savedResources)
         }
     }
 
     companion object {
-        /**
-         * Pull the string associated with the theme key and then
-         * set up the appropriate theme.   This is done vie the MainActivity
-         * and also in response to theme preference changes.
-         */
-        fun bashTheTheme(sp: SharedPreferences?, r: Resources?) {
-            try {
-                val themeKey = r!!.getString(R.string.prefs_theme_key)
-                val entryValues = r.getStringArray(R.array.theme_array_entry_values)
-                val setTo = sp!!.getString(themeKey, /* DEF value */ entryValues[0])
-                when (setTo) {
-                    entryValues[0] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    entryValues[1] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    else -> {
-                        if (TEN_Q_GOOD_BUDDY) {
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                        } else {
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                Timber.e(e, "Something bad happened in bashTheTheme")
-            }
-        }
+
     }
 }
 

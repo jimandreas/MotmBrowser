@@ -24,7 +24,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.bammellab.motm.browse.BrowseFragmentCache
-import com.bammellab.motm.settings.SettingsFragment.Companion.bashTheTheme
+import com.bammellab.motm.util.PrefsUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import timber.log.Timber
 
@@ -40,12 +40,8 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Listen for preference changes
-        val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        prefs.registerOnSharedPreferenceChangeListener(this)
-        bashTheTheme(prefs, resources)
-
         setContentView(R.layout.activity_main)
+        PrefsUtil.init()
 
         navView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
@@ -88,6 +84,8 @@ class MainActivity :
     override fun onDestroy() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        fragmentCache?.deleteAll()
+        fragmentCache = null
         super.onDestroy()
     }
 
@@ -98,6 +96,7 @@ class MainActivity :
     fun getFragmentCacheHandle(): BrowseFragmentCache {
         if (fragmentCache == null) {
             fragmentCache = BrowseFragmentCache()
+            fragmentCache!!.createFragments()
         }
 
         return fragmentCache!!

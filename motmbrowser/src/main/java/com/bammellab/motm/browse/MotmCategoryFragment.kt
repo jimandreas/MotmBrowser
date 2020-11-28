@@ -43,31 +43,15 @@ import timber.log.Timber
 class MotmCategoryFragment : Fragment() {
 
     private var motmList: Array<String>? = null
+    var currentCategory: Array<String>? = null
 
-    var currentCategory: MotmSection = MotmSection.FRAG_SECTION_LIFE
-
-    fun fragmentCategory(category : MotmSection) {
+    fun fragmentCategory(category : Array<String>) {
         currentCategory = category
-
-        motmList = when (currentCategory) {
-            MotmSection.FRAG_SECTION_HEALTH -> MotmByCategory.MotmCategory1
-            MotmSection.FRAG_SECTION_LIFE -> MotmByCategory.MotmCategory2
-            MotmSection.FRAG_SECTION_BIOTEC -> MotmByCategory.MotmCategory3
-            MotmSection.FRAG_SECTION_STRUCTURES -> MotmByCategory.MotmCategory4
-        }
+        motmList = category
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        // unpack the saved state
-        if (savedInstanceState != null) {
-            val ser = savedInstanceState.getSerializable(WHICH_CATEGORY)
-            if (ser is MotmSection) {
-                currentCategory = ser
-            }
-        }
-
-        val recyclerView = inflater.inflate(
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+       val recyclerView = inflater.inflate(
                 R.layout.fragment_recyclerview, container, false) as RecyclerView
 
         recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
@@ -75,22 +59,13 @@ class MotmCategoryFragment : Fragment() {
         if (motmList != null) {
             val adapter = SimpleStringRecyclerViewAdapter(requireActivity(), motmList!!)
             recyclerView.adapter = adapter
+        } else {
+            Timber.e("CATEGORY FRAG: list is null!!")
+            val adapter = SimpleStringRecyclerViewAdapter(requireActivity(), MotmByCategory.MotmCategoryHealth)
+            recyclerView.adapter = adapter
         }
-
         return recyclerView
     }
-
-    /*
-     * Salt away the fragment category
-     * @param outState  it is actually @FragSection int mCategory
-     * h/t https://stackoverflow.com/a/11882392/3853712
-     */
-    override fun onSaveInstanceState(outState: Bundle) {
-//        outState.putInt(WHICH_CATEGORY, mCategory)
-        outState.putSerializable(WHICH_CATEGORY, currentCategory)
-        super.onSaveInstanceState(outState)
-    }
-
 
     inner class SimpleStringRecyclerViewAdapter(context: Context, private val motmList: Array<String>)
         : RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolderMotm>() {
@@ -265,13 +240,6 @@ class MotmCategoryFragment : Fragment() {
         private const val VIEW_TYPE_MOTM = 1
         const val WHICH_CATEGORY = "category"
     }
-}
-
-enum class MotmSection {
-    FRAG_SECTION_HEALTH,
-    FRAG_SECTION_LIFE,
-    FRAG_SECTION_BIOTEC,
-    FRAG_SECTION_STRUCTURES
 }
 
 

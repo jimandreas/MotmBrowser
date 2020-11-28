@@ -11,17 +11,73 @@
  *  limitations under the License
  */
 
-@file:Suppress("UnnecessaryVariable")
+@file:Suppress("UnnecessaryVariable", "MoveVariableDeclarationIntoWhen", "MemberVisibilityCanBePrivate")
 
 package com.bammellab.motm.util
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.Resources
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
 import com.bammellab.motm.R
+import kotlinx.coroutines.*
+import timber.log.Timber
 import java.util.*
 
 object PrefsUtil {
-    var prefsContext : Context? = null
+    var prefsContext: Context? = null
+    private val scope = MainScope()
+
+    fun init() = scope.launch {
+        initPreferences()
+    }
+
+    private suspend fun initPreferences() {
+        if (prefsContext != null) {
+            withContext(Dispatchers.IO) {
+                // Listen for preference changes
+                val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(prefsContext)
+                updateTheme(prefs, prefsContext!!.resources)
+            }
+        }
+    }
+
+    private var setTo: String = ""
+    private var entryValues : Array<String> = arrayOf("")
+
+    // https://medium.com/androiddevelopers/coroutines-on-android-part-i-getting-the-background-3e0e54d20bb
+    fun updateTheme(sp: SharedPreferences?, r: Resources?) = runBlocking {
+        try {
+            whatIsIt(sp, r) // query on background IO thread
+            when (setTo) {
+
+                entryValues[0] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                entryValues[1] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                else -> {
+                    if (Defs.TEN_Q_GOOD_BUDDY) {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "updateTheme exception")
+        }
+    }
+
+    /**
+     * query the preferences for the theme setting
+     *    Do this on an IO thread to avoid StrictMode flagging
+     */
+    suspend fun whatIsIt(sp: SharedPreferences?, r: Resources?) =
+            withContext(Dispatchers.IO) {
+                val themeKey = r?.getString(R.string.prefs_theme_key)
+                entryValues = r?.getStringArray(R.array.theme_array_entry_values) as Array<String>
+
+                setTo = sp?.getString(themeKey, entryValues[0])!!
+            }
 
     fun getStringSet(key: String, defaultValue: Set<String>): Set<String>? {
         val prefs = PreferenceManager.getDefaultSharedPreferences(prefsContext)
@@ -40,5 +96,6 @@ object PrefsUtil {
         val currentSetting = prefs.getBoolean(key, true)
         return currentSetting
     }
+
     const val PREVIOUS_SEARCHES_KEY = "psk"
 }

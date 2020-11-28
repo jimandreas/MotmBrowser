@@ -18,6 +18,7 @@ package com.bammellab.motm
 
 import android.app.Application
 import android.content.Context
+import android.os.StrictMode
 import com.bammellab.motm.util.PrefsUtil
 import okhttp3.OkHttpClient
 import timber.log.Timber
@@ -33,5 +34,32 @@ class MotmApplication : Application() {
         Timber.plant(Timber.DebugTree())
 
         PrefsUtil.prefsContext = context
+
+
+        /*
+         * this is added as suggested here:
+         * https://stackoverflow.com/a/57772287
+         * to try to track down strict mode Google Play reporting.
+         */
+//        try {
+//            if (BuildConfig.BUILD_TYPE.contentEquals("debug")) {
+//                StrictMode.setThreadPolicy(
+//                    StrictMode.ThreadPolicy.Builder()
+//                        .detectAll()
+//                        .penaltyLog()
+//                        .build()
+//                )
+//                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+//                    StrictMode.setVmPolicy(
+//                        StrictMode.VmPolicy.Builder()
+//                            .detectNonSdkApiUsage()
+//                            .penaltyLog()
+//                            .build()
+//                    )
+//                }
+//            }
+//        } catch (e: Exception) {
+//            Timber.e(e,"Fail on StrictMode setup")
+//        }
     }
 }

@@ -17,6 +17,10 @@ package com.bammellab.motm.browse
 
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.bammellab.motm.data.MotmByCategory.MotmCategoryBiotech
+import com.bammellab.motm.data.MotmByCategory.MotmCategoryHealth
+import com.bammellab.motm.data.MotmByCategory.MotmCategoryLife
+import com.bammellab.motm.data.MotmByCategory.MotmCategoryStructures
 import com.bammellab.motm.databinding.FragmentBrowseBinding
 import timber.log.Timber
 
@@ -28,15 +32,15 @@ class BrowseFragmentCache {
 
     val fragList = mutableListOf<FragmentEntry>()
 
-    init {
+    fun createFragments() {
         Timber.e("creating Fragments")
-        var f = FragmentEntry(createFragment(MotmSection.FRAG_SECTION_HEALTH), "Health and Disease")
+        var f = FragmentEntry(createFragment(MotmCategoryHealth), "Health and Disease")
         fragList.add(f)
-        f = FragmentEntry(createFragment(MotmSection.FRAG_SECTION_LIFE), "Life")
+        f = FragmentEntry(createFragment(MotmCategoryLife), "Life")
         fragList.add(f)
-        f = FragmentEntry(createFragment(MotmSection.FRAG_SECTION_BIOTEC), "Biotech/Nanotech")
+        f = FragmentEntry(createFragment(MotmCategoryBiotech), "Biotech/Nanotech")
         fragList.add(f)
-        f = FragmentEntry(createFragment(MotmSection.FRAG_SECTION_STRUCTURES), "Structures")
+        f = FragmentEntry(createFragment(MotmCategoryStructures), "Structures")
         fragList.add(f)
         // all Motm entries - no headers - just a list ordered by the increasing pub date
         f = FragmentEntry(MotmListFragment(), "All")
@@ -48,7 +52,7 @@ class BrowseFragmentCache {
         return fragmentEntry!!.frag
     }
 
-    private fun createFragment(section: MotmSection): Fragment {
+    private fun createFragment(section: Array<String>): Fragment {
         val fragment = MotmCategoryFragment()
         fragment.fragmentCategory(section)
         return fragment
@@ -59,5 +63,8 @@ class BrowseFragmentCache {
 
     fun showAll() {
         fragList.map { it.frag.view?.visibility = View.VISIBLE }
+    }
+    fun deleteAll() {
+        fragList.clear()
     }
 }

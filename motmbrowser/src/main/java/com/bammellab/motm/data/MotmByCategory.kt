@@ -22,7 +22,7 @@ package com.bammellab.motm.data
 
 object MotmByCategory {
 
-    val MotmCategory1 = arrayOf(
+    val MotmCategoryHealth = arrayOf(
 
             "Section Health and Disease",
             "You and Your Health",
@@ -263,7 +263,7 @@ object MotmByCategory {
 
     )
 
-    val MotmCategory2 = arrayOf(
+    val MotmCategoryLife = arrayOf(
 
             "Section Molecules of Life",
             "Protein Synthesis",
@@ -601,7 +601,7 @@ object MotmByCategory {
             "15"
     )
 
-    val MotmCategory3 = arrayOf(
+    val MotmCategoryBiotech = arrayOf(
 
             "Section Biotech and Nanotech",
 
@@ -655,7 +655,7 @@ object MotmByCategory {
             "179"
     )
 
-    val MotmCategory4 = arrayOf(
+    val MotmCategoryStructures = arrayOf(
 
             "Section Structures and Structure Determination",
 
