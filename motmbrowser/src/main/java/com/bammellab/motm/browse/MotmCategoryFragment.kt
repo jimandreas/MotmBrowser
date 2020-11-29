@@ -201,7 +201,7 @@ class MotmCategoryFragment : Fragment() {
 
 
             } else {
-                Timber.i("not numeric: %s", motm)
+                //Timber.i("not numeric: %s", motm)
                 val spannedString = Html.fromHtml("<strong><big>"
                         + motmList[position]
                         + "</big></strong><br><i>"

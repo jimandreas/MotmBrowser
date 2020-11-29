@@ -51,8 +51,6 @@ class BrowseFragment : androidx.fragment.app.Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-
-
         binding = FragmentBrowseBinding.inflate(inflater)
         browseViewModel = ViewModelProvider(this).get(BrowseViewModel::class.java)
         binding.viewModel = browseViewModel
@@ -70,7 +68,10 @@ class BrowseFragment : androidx.fragment.app.Fragment() {
             ORIENTATION_PORTRAIT -> bammelImageView.visibility = VISIBLE
             ORIENTATION_UNDEFINED -> bammelImageView.visibility = VISIBLE
         }
-
+        // this fix for re-creating the fragments after rotation is CRITICAL:
+        // https://stackoverflow.com/a/63936638/3853712
+        viewPager.isSaveEnabled = false
+        // END OF FIX
         viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
                 return fragmentFlavor(position)
@@ -79,13 +80,8 @@ class BrowseFragment : androidx.fragment.app.Fragment() {
             override fun getItemCount(): Int {
                 return 5
             }
-            // https://stackoverflow.com/a/50710937
-            /*BUT: The getPageWidth() method is not supported for use with ViewPager2.
-            override fun getPageWidth(position: Int): Float {
-                val hasTwoPanes = context.resources.getBoolean(com.bammellab.motm.R.bool.has_two_panes)
-                return if (hasTwoPanes) 0.5f else 1.0f
-            }*/
         }
+
 
         TabLayoutMediator(tabs, viewPager) { tab, position ->
             if (position >= 0 && position < motmTabLabels.size) {

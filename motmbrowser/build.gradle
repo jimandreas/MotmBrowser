@@ -131,13 +131,14 @@ dependencies {
 
     implementation deps.android.material
     implementation deps.android.x.appcompat
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation deps.android.x.constraintLayout
     implementation deps.android.x.coreKtx
     implementation deps.android.x.cardview
     implementation deps.android.x.lifecycle
     implementation deps.android.x.navigationfrag
     implementation deps.android.x.navigationui
     implementation deps.android.x.preference
+    implementation deps.android.x.viewpager
 
     implementation deps.okhttp.client
     implementation deps.retrofit.client
@@ -145,12 +146,12 @@ dependencies {
 
     implementation deps.pdbparser
     implementation deps.timber
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation deps.picasso
     implementation deps.guava
     implementation deps.glide
     kapt deps.glide
 
     testImplementation deps.annotations
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
-    testImplementation 'com.google.truth:truth:1.1'
+    testImplementation deps.junit
+    testImplementation deps.truth
 }

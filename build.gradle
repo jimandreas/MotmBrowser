@@ -60,7 +60,7 @@ buildscript {
             'material': "com.google.android.material:material:1.2.1",
 
             'x'       : [
-                'constraintLayout': 'androidx.constraintlayout:constraintlayout:2.0.2',
+                'constraintLayout': 'androidx.constraintlayout:constraintlayout:2.0.4',
                 'coreKtx'         : 'androidx.core:core-ktx:1.3.2',
                 'annotations'     : 'androidx.annotation:annotation:1.0.0',
                 'appcompat'       : "androidx.appcompat:appcompat:1.2.0",
@@ -70,6 +70,8 @@ buildscript {
                 'navigationfrag'  : 'androidx.navigation:navigation-fragment-ktx:2.3.1',
                 'navigationui'    : 'androidx.navigation:navigation-ui-ktx:2.3.1',
                 'recyclerview'    : 'androidx.recyclerview:recyclerview:1.1.0',
+                // https://developer.android.com/jetpack/androidx/releases/viewpager2
+                'viewpager'       : 'androidx.viewpager2:viewpager2:1.1.0-alpha01',
             ],
             'test'    : [
                 'runner'      : 'androidx.test:runner:1.1.0',
@@ -117,10 +119,10 @@ buildscript {
 
         'glide'          : 'com.github.bumptech.glide:glide:4.11.0',
         'glideannotation': 'com.github.bumptech.glide:glide:4.11.0',
-        'picasso'        : 'com.squareup.picasso:picasso:2.5.2',
+        'picasso'        : 'com.squareup.picasso:picasso:2.71828',
 
-        junit            : 'org.junit.jupiter:junit-jupiter:5.6.0',
-        truth            : 'com.google.truth:truth:1.0.1',
+        junit            : 'org.junit.jupiter:junit-jupiter:5.7.0',
+        truth            : 'com.google.truth:truth:1.1',
         annotations      : 'org.jetbrains:annotations:16.0.1',
     ]
 
