@@ -22,6 +22,14 @@ package com.bammellab.motm.data
 
 object MotmByCategory {
 
+    val motmTabLabels = listOf(
+            "Health and Disease",
+            "Life",
+            "Biotech/Nanotech",
+            "Structures",
+            "All"
+    )
+
     val MotmCategoryHealth = arrayOf(
 
             "Section Health and Disease",

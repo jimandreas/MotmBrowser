@@ -11,11 +11,10 @@
  *  limitations under the License
  */
 
-@file:Suppress("UnnecessaryVariable", "IfThenToSafeAccess")
+@file:Suppress("UnnecessaryVariable", "SwitchIntDef")
 
 package com.bammellab.motm.browse
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration.*
 import android.os.Bundle
@@ -26,59 +25,42 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
-import com.bammellab.motm.MainActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import com.bammellab.motm.data.MotmByCategory
+import com.bammellab.motm.data.MotmByCategory.motmTabLabels
 import com.bammellab.motm.databinding.FragmentBrowseBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.MODE_SCROLLABLE
-import java.util.*
+import com.google.android.material.tabs.TabLayoutMediator
 
 
 class BrowseFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var browseViewModel: BrowseViewModel
     private lateinit var binding: FragmentBrowseBinding
-    private lateinit var bcontext: Context
+    private lateinit var contextb: Context
     private lateinit var tabs : TabLayout
-    private lateinit var bfc : BrowseFragmentCache
-    private lateinit var adapter: Adapter
     private lateinit var bammelImageView : ImageView
 
-    @SuppressLint("SwitchIntDef")
+    private lateinit var viewPager: ViewPager2
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
 
-        bfc = (activity as MainActivity).getFragmentCacheHandle()
-        if (bfc.binding != null) {
-            binding = bfc.binding!!
-        } else {
-            binding = FragmentBrowseBinding.inflate(inflater)
-            bfc.binding = binding
 
-            browseViewModel =
-                    ViewModelProvider(this).get(BrowseViewModel::class.java)
-            binding.viewModel = browseViewModel
-            binding.lifecycleOwner = this
-            bcontext = binding.root.context
-
-            adapter = Adapter(binding.root.context, this.parentFragmentManager)
-
-            adapter.addFragment(bfc.getFragByTag("Health and Disease"), "Health and Disease")
-            adapter.addFragment(bfc.getFragByTag("Life"), "Life")
-            adapter.addFragment(bfc.getFragByTag("Biotech/Nanotech"), "Biotech/Nanotech")
-            adapter.addFragment(bfc.getFragByTag("Structures"), "Structures")
-            // all Motm entries - no headers - just a list ordered by the increasing pub date
-            adapter.addFragment(bfc.getFragByTag("All"), "All")
-
-            binding.viewpager.adapter = adapter
-        }
+        binding = FragmentBrowseBinding.inflate(inflater)
+        browseViewModel = ViewModelProvider(this).get(BrowseViewModel::class.java)
+        binding.viewModel = browseViewModel
+        binding.lifecycleOwner = this
+        contextb = binding.root.context
+        viewPager = binding.viewpager
 
         tabs = binding.tabs
-        tabs.setupWithViewPager(binding.viewpager)
         tabs.tabMode = MODE_SCROLLABLE
         bammelImageView = binding.imageviewBammellab
 
@@ -89,37 +71,51 @@ class BrowseFragment : androidx.fragment.app.Fragment() {
             ORIENTATION_UNDEFINED -> bammelImageView.visibility = VISIBLE
         }
 
+        viewPager.adapter = object : FragmentStateAdapter(this) {
+            override fun createFragment(position: Int): Fragment {
+                return fragmentFlavor(position)
+            }
+
+            override fun getItemCount(): Int {
+                return 5
+            }
+            // https://stackoverflow.com/a/50710937
+            /*BUT: The getPageWidth() method is not supported for use with ViewPager2.
+            override fun getPageWidth(position: Int): Float {
+                val hasTwoPanes = context.resources.getBoolean(com.bammellab.motm.R.bool.has_two_panes)
+                return if (hasTwoPanes) 0.5f else 1.0f
+            }*/
+        }
+
+        TabLayoutMediator(tabs, viewPager) { tab, position ->
+            if (position >= 0 && position < motmTabLabels.size) {
+                tab.text = motmTabLabels[position]
+            } else {
+                tab.text = ""
+            }
+        }.attach()
+       /* TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = Card.DECK[position].toString()
+        }.attach()*/
+
         return binding.root
     }
 
-    internal class Adapter(private val context: Context, fm: FragmentManager) :
-            androidx.fragment.app.FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-        private val fragmentList = ArrayList<Fragment>()
-        private val titleList = ArrayList<String>()
 
-        fun addFragment(fragment: Fragment, title: String) {
-            fragmentList.add(fragment)
-            titleList.add(title)
+    fun fragmentFlavor(position: Int): Fragment {
+        val f = when (position) {
+            0 -> wireUpFragment(MotmByCategory.MotmCategoryHealth)
+            1 -> wireUpFragment(MotmByCategory.MotmCategoryLife)
+            2 -> wireUpFragment(MotmByCategory.MotmCategoryBiotech)
+            3 -> wireUpFragment(MotmByCategory.MotmCategoryStructures)
+            else -> MotmListFragment()
         }
-
-        override fun getItem(position: Int): Fragment {
-            return fragmentList[position]
-        }
-
-        override fun getCount(): Int {
-            return fragmentList.size
-        }
-
-        override fun getPageTitle(position: Int): CharSequence {
-            return titleList[position]
-        }
-
-        // https://stackoverflow.com/a/50710937
-        override fun getPageWidth(position: Int): Float {
-            val hasTwoPanes = context.resources.getBoolean(com.bammellab.motm.R.bool.has_two_panes)
-            return if (hasTwoPanes) 0.5f else 1.0f
-        }
+        return f
     }
 
-
+    private fun wireUpFragment(section: Array<String>): Fragment {
+        val fragment = MotmCategoryFragment()
+        fragment.fragmentCategory(section)
+        return fragment
+    }
 }
