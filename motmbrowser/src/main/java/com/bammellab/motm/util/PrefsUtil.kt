@@ -21,39 +21,68 @@ import android.content.res.Resources
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
 import com.bammellab.motm.R
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
 
 object PrefsUtil {
     var prefsContext: Context? = null
-    private val scope = MainScope()
 
-    fun init() = scope.launch {
+    private var prefsThemeCurrentThemeSetting: String = ""
+
+    private val scope = MainScope()
+    private var prefs : SharedPreferences? = null
+    private var themeEntryValues: Array<String> = arrayOf("")
+
+    fun managePrefsInBackground() = scope.launch {
         initPreferences()
     }
 
-    private suspend fun initPreferences() {
-        if (prefsContext != null) {
-            withContext(Dispatchers.IO) {
-                // Listen for preference changes
-                val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(prefsContext)
-                updateTheme(prefs, prefsContext!!.resources)
+    /*
+     * Do the following on an IO coroutine:
+     *  - Register the preference change listener
+     *  - Pull current values for the preferences
+     *  - Set up the theme
+     */
+    suspend fun initPreferences() {
+        if (prefsContext == null) return
+        withContext(Dispatchers.IO) {
+            prefs = PreferenceManager.getDefaultSharedPreferences(prefsContext)
+
+            updateTheme(prefs, prefsContext!!.resources)
+
+            val themeKey = prefsContext?.getString(R.string.prefs_theme_key)
+            prefs!!.registerOnSharedPreferenceChangeListener { _, key ->
+                when (key) {
+                    themeKey -> {
+                        prefsThemeCurrentThemeSetting = prefs?.getString(themeKey, themeEntryValues[0])!!
+                        setThemeOnUI()
+                    }
+                }
             }
         }
     }
 
-    private var setTo: String = ""
-    private var entryValues : Array<String> = arrayOf("")
-
-    // https://medium.com/androiddevelopers/coroutines-on-android-part-i-getting-the-background-3e0e54d20bb
-    fun updateTheme(sp: SharedPreferences?, r: Resources?) = runBlocking {
+    fun updateTheme(sp: SharedPreferences?, r: Resources?) {
         try {
-            whatIsIt(sp, r) // query on background IO thread
-            when (setTo) {
+            val themeKey = r?.getString(R.string.prefs_theme_key)
+            themeEntryValues = r?.getStringArray(R.array.theme_array_entry_values) as Array<String>
+            prefsThemeCurrentThemeSetting = sp?.getString(themeKey, themeEntryValues[0])!!
+            setThemeOnUI()
 
-                entryValues[0] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                entryValues[1] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        } catch (e: Exception) {
+            Timber.e(e, "updateTheme exception")
+        }
+    }
+
+    fun setThemeOnUI() = scope.launch {
+        launch(Dispatchers.Main.immediate) {
+            when (prefsThemeCurrentThemeSetting) {
+                themeEntryValues[0] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                themeEntryValues[1] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 else -> {
                     if (Defs.TEN_Q_GOOD_BUDDY) {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
@@ -62,22 +91,9 @@ object PrefsUtil {
                     }
                 }
             }
-        } catch (e: Exception) {
-            Timber.e(e, "updateTheme exception")
         }
     }
 
-    /**
-     * query the preferences for the theme setting
-     *    Do this on an IO thread to avoid StrictMode flagging
-     */
-    suspend fun whatIsIt(sp: SharedPreferences?, r: Resources?) =
-            withContext(Dispatchers.IO) {
-                val themeKey = r?.getString(R.string.prefs_theme_key)
-                entryValues = r?.getStringArray(R.array.theme_array_entry_values) as Array<String>
-
-                setTo = sp?.getString(themeKey, entryValues[0])!!
-            }
 
     fun getStringSet(key: String, defaultValue: Set<String>): Set<String>? {
         val prefs = PreferenceManager.getDefaultSharedPreferences(prefsContext)
