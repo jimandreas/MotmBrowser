@@ -30,8 +30,15 @@ import java.util.*
 
 object PrefsUtil {
     var prefsContext: Context? = null
+    var prefsPreviousSearchesSet = mutableSetOf("")
+    var prefsThemeCurrentThemeSetting: String = ""
+    var prefsTouchToOpenSetting: Boolean = true
 
-    private var prefsThemeCurrentThemeSetting: String = ""
+    /*
+    val previousSet = PrefsUtil.getStringSet(
+                PrefsUtil.PREVIOUS_SEARCHES_KEY,
+                emptySet())
+     */
 
     private val scope = MainScope()
     private var prefs : SharedPreferences? = null
@@ -54,6 +61,11 @@ object PrefsUtil {
 
             updateTheme(prefs, prefsContext!!.resources)
 
+            // pull previous search set
+            prefsPreviousSearchesSet = prefs?.getStringSet(PREVIOUS_SEARCHES_KEY, emptySet())!!.toMutableSet()
+            // pull touch to open status
+            prefsTouchToOpenSetting = prefs?.getBoolean(TOUCH_TO_OPEN_KEY, true)!!
+
             val themeKey = prefsContext?.getString(R.string.prefs_theme_key)
             prefs!!.registerOnSharedPreferenceChangeListener { _, key ->
                 when (key) {
@@ -68,13 +80,20 @@ object PrefsUtil {
 
     fun updateTheme(sp: SharedPreferences?, r: Resources?) {
         try {
-            val themeKey = r?.getString(R.string.prefs_theme_key)
             themeEntryValues = r?.getStringArray(R.array.theme_array_entry_values) as Array<String>
-            prefsThemeCurrentThemeSetting = sp?.getString(themeKey, themeEntryValues[0])!!
+            prefsThemeCurrentThemeSetting = sp?.getString(THEME_KEY, themeEntryValues[0])!!
             setThemeOnUI()
 
         } catch (e: Exception) {
             Timber.e(e, "updateTheme exception")
+        }
+    }
+
+    fun updateTouchToOpen(sp: SharedPreferences?, r: Resources?) {
+        try {
+            prefsTouchToOpenSetting = sp?.getBoolean(TOUCH_TO_OPEN_KEY, true)!!
+        } catch (e: Exception) {
+            Timber.e(e, "updateTouchToOpen exception")
         }
     }
 
@@ -94,24 +113,26 @@ object PrefsUtil {
         }
     }
 
-
     fun getStringSet(key: String, defaultValue: Set<String>): Set<String>? {
         val prefs = PreferenceManager.getDefaultSharedPreferences(prefsContext)
         val set = prefs.getStringSet(key, defaultValue)
         return if (set == null) null else Collections.unmodifiableSet(set)
     }
 
-    fun setStringSet(key: String?, value: Set<String?>?) {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(prefsContext)
-        prefs.edit().putStringSet(key, value).apply()
+    fun setPreviousSearchesList(prev: Set<String>) {
+        prefsPreviousSearchesSet = prev.toMutableSet()
+        setPreviousSearchesPref(prev)
     }
 
-    fun touchToOpenPdb(): Boolean {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(prefsContext)
-        val key = prefsContext?.resources?.getString(R.string.settings_one_touch_open_key)
-        val currentSetting = prefs.getBoolean(key, true)
-        return currentSetting
+    fun setPreviousSearchesPref(value: Set<String?>) = scope.launch {
+        launch(Dispatchers.IO) {
+            prefs?.edit()?.putStringSet(PREVIOUS_SEARCHES_KEY, value)?.apply()
+        }
     }
 
+    // Where applicable - keys must mach strings.xml values
+    const val THEME_KEY = "themekey"
+    const val TOUCH_TO_OPEN_KEY = "touchtoopen"
+    // independent - has no equivalent in the root_preferences.xml
     const val PREVIOUS_SEARCHES_KEY = "psk"
 }

@@ -310,8 +310,8 @@ class SearchAdapter(
             newSet = oldSet.toMutableSet()
             newSet.add(str)
         }
-        PrefsUtil.setStringSet(
-            PrefsUtil.PREVIOUS_SEARCHES_KEY,
+        PrefsUtil.setPreviousSearchesList(
+
             newSet
         )
     }

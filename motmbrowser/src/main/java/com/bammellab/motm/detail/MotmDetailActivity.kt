@@ -214,7 +214,7 @@ class MotmDetailActivity : AppCompatActivity() {
              * A pref setting determines if the action should be confirmed
              */
             pdbLink.setOnClickListener { v ->
-                if (PrefsUtil.touchToOpenPdb()) {
+                if (PrefsUtil.prefsTouchToOpenSetting) {
                     val pdbOfInterest = v.tag as String
                     val intentRCSB = Intent(Intent.ACTION_VIEW)
                     intentRCSB.data = Uri.parse(
@@ -263,7 +263,7 @@ class MotmDetailActivity : AppCompatActivity() {
         if (pdbOfInterest.isEmpty()) {
             return
         }
-        if (PrefsUtil.touchToOpenPdb()) {
+        if (PrefsUtil.prefsTouchToOpenSetting) {
             val i = pdbsStringArray.indexOf(pdbOfInterest)
             if (i >= 0) {
                 val intent = Intent(

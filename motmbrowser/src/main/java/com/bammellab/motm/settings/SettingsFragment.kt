@@ -85,9 +85,9 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     override fun onSharedPreferenceChanged(sp: SharedPreferences?, key: String?) {
 
-        val themeKey = savedResources!!.getString(R.string.prefs_theme_key)
-        if (key == themeKey) {
-            PrefsUtil.updateTheme(sp, savedResources)
+        when (key) {
+            PrefsUtil.THEME_KEY -> PrefsUtil.updateTheme(sp, savedResources)
+            PrefsUtil.TOUCH_TO_OPEN_KEY -> PrefsUtil.updateTouchToOpen(sp, savedResources)
         }
     }
 

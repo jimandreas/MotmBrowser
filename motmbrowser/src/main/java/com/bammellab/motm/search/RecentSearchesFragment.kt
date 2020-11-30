@@ -42,15 +42,7 @@ class RecentSearchesFragment : Fragment() {
         recentSearchesList = root.findViewById(R.id.recent_searches_list)
         recentSearchesDeleteButton = root.findViewById(R.id.recent_searches_delete_button)
 
-        val previousSet = PrefsUtil.getStringSet(
-                PrefsUtil.PREVIOUS_SEARCHES_KEY,
-                emptySet())
-        if (previousSet != null && previousSet.isNotEmpty()) {
-            previousSearchesList = previousSet.toMutableList()
-        } else {
-            previousSearchesList = arrayListOf()
-            previousSearchesList.clear()
-        }
+        previousSearchesList = PrefsUtil.prefsPreviousSearchesSet.toMutableList()
 
         val newAdapter = ArrayAdapter(
                 requireContext(), R.layout.fragment_search_item_textview, previousSearchesList)
@@ -61,10 +53,11 @@ class RecentSearchesFragment : Fragment() {
 //            wiredList = searchList!!.toMutableList()
 //        })
 
+        // clear the list
         recentSearchesDeleteButton.setOnClickListener { _ ->
             previousSearchesList.clear()
             newAdapter.clear()
-            PrefsUtil.setStringSet(PrefsUtil.PREVIOUS_SEARCHES_KEY, emptySet())
+            PrefsUtil.setPreviousSearchesList( emptySet())
             newAdapter.notifyDataSetChanged()
         }
 
