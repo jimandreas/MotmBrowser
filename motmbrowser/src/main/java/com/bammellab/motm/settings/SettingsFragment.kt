@@ -35,15 +35,19 @@ class SettingsFragment : PreferenceFragmentCompat(),
     private var savedResources: Resources? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        savedResources = resources
-        setPreferencesFromResource(R.xml.root_preferences, rootKey)
-        val context = preferenceScreen.context
+        try {
+            savedResources = resources
+            setPreferencesFromResource(R.xml.root_preferences, rootKey)
+            val context = preferenceScreen.context
 
-        themePreferenceHandler()
+            themePreferenceHandler()
 
-        val versionPreference : Preference? = findPreference("app_version")
-        val currentVersionString = BuildConfig.VERSION_NAME
-        versionPreference!!.summary = currentVersionString
+            val versionPreference : Preference? = findPreference("app_version")
+            val currentVersionString = BuildConfig.VERSION_NAME
+            versionPreference!!.summary = currentVersionString
+        } catch (e: Exception) {
+            Timber.e("Unexpected Exception")
+        }
     }
 
     /**

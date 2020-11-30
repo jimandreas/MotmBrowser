@@ -41,6 +41,9 @@ class MotmApplication : Application() {
          * https://stackoverflow.com/a/57772287
          * to try to track down strict mode Google Play reporting.
          */
+
+        // Testing reveals too many exceptions  - don't try to deal with all of them.
+
 //        try {
 //            if (BuildConfig.BUILD_TYPE.contentEquals("debug")) {
 //                StrictMode.setThreadPolicy(
