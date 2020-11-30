@@ -16,7 +16,7 @@
 package com.bammellab.motm.data
 
 import com.bammellab.motm.data.Corpus.motmDateByKey
-import com.bammellab.motm.data.Corpus.motmImageList
+import com.bammellab.motm.data.Corpus.motmThumbnailImageList
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -51,8 +51,8 @@ class CorpusTest {
     @DisplayName("check the contents of the motmImageList")
     fun motmImageListGet() {
 
-        for (iter in motmImageList.withIndex()) {
-            val listSize = motmImageList.size
+        for (iter in motmThumbnailImageList.withIndex()) {
+            val listSize = motmThumbnailImageList.size
             val entry = iter.value
             val num = entry.substringBefore('-')
             when (iter.index+1) {
@@ -65,7 +65,7 @@ class CorpusTest {
                     try {
                         Integer.parseInt(num)
                     } catch (e: NumberFormatException) {
-                        fail("bad value $num for integer at index ${motmImageList.size - iter.index}")
+                        fail("bad value $num for integer at index ${motmThumbnailImageList.size - iter.index}")
                     }
 
                     assertEquals(num.toInt(), iter.index+1)

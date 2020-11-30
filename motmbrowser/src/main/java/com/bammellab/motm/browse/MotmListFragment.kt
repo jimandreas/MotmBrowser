@@ -67,15 +67,40 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
         private val typedValue = TypedValue()
         private val background: Int
 
-        class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
+        class ViewHolder(val v: View, viewType: Int) : RecyclerView.ViewHolder(v) {
             var boundString: String? = null
-            val imageView: ImageView = mView.findViewById(R.id.avatar)
-            val textView: TextView = mView.findViewById(R.id.motmtext1)
-            val textView2: TextView = mView.findViewById(R.id.motmtext2)
+            lateinit var imageView: ImageView
+            lateinit var textView: TextView
+            lateinit var textView2: TextView
+            lateinit var textViewHeader: TextView
+
+
+            init {
+                when (viewType) {
+                    VIEW_TYPE_MOTM -> {
+                        imageView = v.findViewById(R.id.avatar)
+                        textView = v.findViewById(R.id.motmtext1)
+                        textView2 = v.findViewById(R.id.motmtext2)
+                    }
+                    VIEW_TYPE_HEADER -> {
+                        textViewHeader = v.findViewById(R.id.motmheader)
+                    }
+                }
+            }
 
             override fun toString(): String {
                 return super.toString() + " '" + textView.text
             }
+        }
+
+        // Add a header for position 0
+        override fun getItemViewType(position: Int): Int {
+            val entry = motmList[position]
+
+            return if (position == 0)
+                VIEW_TYPE_HEADER
+            else
+                VIEW_TYPE_MOTM
         }
 
         fun getValueAt(position: Int): String {
@@ -88,18 +113,23 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.list_item_motm, parent, false)
+
+            var layoutId = R.layout.list_item_motm
+            if (viewType == VIEW_TYPE_HEADER) {
+                layoutId = R.layout.list_item_header
+            }
+
+            val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
             view.setBackgroundResource(background)
-            return ViewHolder(view)
+            return ViewHolder(view, viewType)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 //            holder.boundString = motmList[position]
-            val invertPosition = invertPosition(position)
+            val invertPosition = invertPosition(position-1)
             holder.boundString = (invertPosition + 1).toString() // motm tables are one based, position starts at zero
 
-            holder.mView.setOnClickListener { v ->
+            holder.v.setOnClickListener { v ->
                 val context = v.context
                 // val str = holder.boundString
 
@@ -111,31 +141,47 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
                 context.startActivity(intent)
             }
 
-            @Suppress("DEPRECATION")
-            val spannedString = Html.fromHtml("<strong><big>"
-                    + motmTitleGet(invertPosition + 1)
-                    + "</big></strong><br><i>"
+            if (position == 0) {
+                val spannedString = Html.fromHtml("<strong><big>"
+                        + "Molecule of the Month<br>Nov 2020 - Jan 2000"
+                        + "</big></strong><br><i>"
+                )
+
+                holder.textViewHeader.text = spannedString
+            }
+
+            if (position > 0) {
+                @Suppress("DEPRECATION")
+                val spannedString = Html.fromHtml("<strong><big>"
+                        + motmTitleGet(invertPosition + 1)
+                        + "</big></strong><br><i>"
 //                    + Corpus.motmDateByKey[position + 1]
-                    + Corpus.motmDateByKey(invertPosition + 1)
-                    + "</i><br>"
+                        + Corpus.motmDateByKey(invertPosition + 1)
+                        + "</i><br>"
 //                    + Corpus.motmDescByKey[position + 1])
-                    + motmTagLinesGet(invertPosition))
+                        + motmTagLinesGet(invertPosition))
 
-            holder.textView.text = spannedString
-            holder.textView2.visibility = View.GONE
+                holder.textView.text = spannedString
+                holder.textView2.visibility = View.GONE
 
-            val imageString = Corpus.motmImageListGet(invertPosition + 1)
+                val imageString = Corpus.motmImageListGet(invertPosition)
 
-            //val url = PDB_MOTM_THUMB_WEB_PREFIX + image
-            val url = "$PDB_MOTM_THUMB_WEB_PREFIX$imageString?raw=true"
-            Glide.with(holder.imageView.context)
-                    .load(url)
-                    .fitCenter()
-                    .into(holder.imageView)
+                //val url = PDB_MOTM_THUMB_WEB_PREFIX + image
+                val url = "$PDB_MOTM_THUMB_WEB_PREFIX$imageString?raw=true"
+                Glide.with(holder.imageView.context)
+                        .load(url)
+                        .fitCenter()
+                        .into(holder.imageView)
+            }
         }
 
         override fun getItemCount(): Int {
             return motmList.size
         }
     }
+    companion object {
+        private const val VIEW_TYPE_HEADER = 0
+        private const val VIEW_TYPE_MOTM = 1
+    }
+
 }

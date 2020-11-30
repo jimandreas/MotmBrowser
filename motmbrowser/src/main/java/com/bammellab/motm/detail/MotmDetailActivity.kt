@@ -147,7 +147,7 @@ class MotmDetailActivity : AppCompatActivity() {
 //        val url = RCSB_MOTM_IMAGE_PREFIX + image
 
         val motmPngUrl = PDB_MOTM_PNG_WEB_PREFIX
-        pngURL = MotmImageDownload.getFirstTiffImageURL(motmNumber)
+        pngURL = MotmImageDownload.motmTiffImageName(motmNumber)
         pngURL = "$motmPngUrl$pngURL.png?raw=true"
         if (pngURL == "") {
             val image = Corpus.motmImageListGet(motmNumber)

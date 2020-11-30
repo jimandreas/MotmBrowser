@@ -29,11 +29,12 @@ object Corpus {
      */
 
     fun motmImageListGet(index: Int): String {
-        if (index > motmImageList.size-1 || index < 1) return "INVALIDINDEX"
-        return (motmImageList[index])
+        if (index > motmThumbnailImageList.size-1 || index < 1) return "INVALIDINDEX"
+        return (motmThumbnailImageList[index])
     }
 
-    val motmImageList = listOf(
+
+    val motmThumbnailImageList = listOf(
 
             "1-Myoglobin-geis-0218-myoglobin-tn.png",
             "2-1cd3_mature-tn.png",

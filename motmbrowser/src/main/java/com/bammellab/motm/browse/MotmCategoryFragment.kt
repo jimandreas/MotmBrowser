@@ -112,10 +112,6 @@ class MotmCategoryFragment : Fragment() {
         }*/
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMotm {
-            //            View view = LayoutInflater.from(parent.getContext())
-            //                    .inflate(R.layout.list_item_motm, parent, false);
-            //            view.setBackgroundResource(mBackground);
-            //            return new ViewHolder(view);
 
             if (parent is RecyclerView) {
                 var layoutId = -1

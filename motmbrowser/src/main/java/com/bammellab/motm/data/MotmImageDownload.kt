@@ -20,7 +20,7 @@ object MotmImageDownload {
      * Just return the first TIF following the number for now.
      * TODO: cycle through the TIF files in the detail dialog...
      */
-    fun getFirstTiffImageURL(motmNumber: Int): String {
+    fun motmTiffImageName(motmNumber: Int): String {
         val match = imageList.indexOfFirst { e ->
             e == motmNumber.toString()
         }
@@ -36,6 +36,8 @@ object MotmImageDownload {
 
     private val imageList = listOf(
 
+            "251",
+            "251-Adenylyl_Cyclase-6r3q",
             "250",
             "250-Capsaicin_Receptor_TRPV1-5is0_composite",
             "250-Capsaicin_Receptor_TRPV1-6dmw",

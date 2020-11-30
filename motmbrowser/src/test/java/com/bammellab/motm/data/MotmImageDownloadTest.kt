@@ -35,19 +35,19 @@ internal class MotmImageDownloadTest {
     fun testGetFirstTiffImageURL() {
 
         // test not present / error condition
-        var match = MotmImageDownload.getFirstTiffImageURL(-1)
+        var match = MotmImageDownload.motmTiffImageName(-1)
         assertEquals("", match)
 
         // test end condition
-        match = MotmImageDownload.getFirstTiffImageURL(0)
+        match = MotmImageDownload.motmTiffImageName(0)
         assertEquals("", match)
 
         // first entry
-        match = MotmImageDownload.getFirstTiffImageURL(250)
+        match = MotmImageDownload.motmTiffImageName(250)
         assertNotEquals("", match)
 
         // last entry
-        match = MotmImageDownload.getFirstTiffImageURL(1)
+        match = MotmImageDownload.motmTiffImageName(1)
         assertNotEquals("", match)
         assertEquals("1-Myoglobin-geis-myoglobin",
                 match)
