@@ -29,9 +29,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginEnd="0dp"
+            android:layout_marginTop="60dp"
 
-            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginStart="0dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
