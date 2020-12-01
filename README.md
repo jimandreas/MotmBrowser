@@ -11,7 +11,7 @@ Screenshots:
 <img src="docs/screenshots/startup_screencap.PNG" width = 200>
 <img src="docs/screenshots/1bna_screencap.PNG" width = 200>
 
-## A feature from the Research Collaboratory for Structural Bioinformatics (RCSB)
+
 
 The MotmBrowser references the awesome work by the RCSB team.
 
@@ -39,10 +39,12 @@ with attribution, and without the right to manipulate or change its content.
 To request permission, please contact info@rcsb.org.**
 ```
 
+Note: RCSB = Research Collaboratory for Structural Bioinformatics
+
 Image credits:<br>
 
 * [Launch icon] :  <br>
-    [http://en.wikipedia.org/wiki/List_of_interstellar_and_circumstellar_molecules]<br>
+    [https://en.wikipedia.org/wiki/List_of_interstellar_and_circumstellar_molecules#/media/File:Trihydrogen-cation-3D-vdW.png]<br>
 The H+ 3 cation is one of the most abundant ions in the universe. It was first detected in 1993.[71][72]
 
 ### Source credits
@@ -55,9 +57,8 @@ Wikipedia search functionality: [https://github.com/wikimedia/apps-android-wikip
 
 OpenGL tutorials: [https://github.com/jimandreas/AndroidOpenGLESLessons]
 
-
-
-<b> License:</b> See LICENSE file in repo (Apache2.0)
+<b> License:</b> See the [LICENSE] file in the repository (Apache2.0)
 
 [Launch icon]:http://commons.wikimedia.org/wiki/File:Trihydrogen-cation-3D-vdW.png
+[LICENSE]:LICENSE
 

@@ -4,7 +4,7 @@
 
 Navigate on the target Android device to the path:
 
-`Internal Shared Storage/Android/data/com.bammellab.captureimages`
+`Internal shared storage\Android\data\com.bammellab.captureimages\cache`
 
 Create the directories if not present:
 
