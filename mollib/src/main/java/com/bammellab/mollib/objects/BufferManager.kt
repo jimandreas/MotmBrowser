@@ -142,17 +142,13 @@ object BufferManager {
      * private class to track the allocated GL vertex buffers
      */
     private class GLArrayEntry {
-        val glBuf: IntArray = IntArray(1)
-        var numVertices: Int = 0
-        var bufferAllocated: Boolean = false
-        var bufferInUse: Boolean = false
+        val glBuf = IntArray(1)
+        var numVertices = 0
+        var bufferAllocated = false
+        var nativeBufferAllocated = false
+        var bufferInUse = false
 
         var nativeFloatBuffer: FloatBuffer? = null
-
-        init {
-            bufferAllocated = false
-            bufferInUse = false
-        }
 
         fun clearBufferInUse() {
             this.bufferInUse = false
@@ -182,12 +178,17 @@ object BufferManager {
             try {
                 arrayEntry = GLArrayEntry()
                 // TODO: wrap the FloatBuffer
-                arrayEntry.bufferAllocated = true
+
                 arrayEntry.bufferInUse = true
-                arrayEntry.nativeFloatBuffer = ByteBuffer
-                        .allocateDirect(FLOAT_BUFFER_SIZE * BYTES_PER_FLOAT)
-                        .order(ByteOrder.nativeOrder())
-                        .asFloatBuffer()
+                if (!arrayEntry.nativeBufferAllocated) {
+                    arrayEntry.nativeFloatBuffer = ByteBuffer
+                            .allocateDirect(FLOAT_BUFFER_SIZE * BYTES_PER_FLOAT)
+                            .order(ByteOrder.nativeOrder())
+                            .asFloatBuffer()
+                    arrayEntry.nativeBufferAllocated = true
+                }
+
+                bufferList.add(arrayEntry)
             } catch (e: Exception) {
                 e.printStackTrace()
                 Timber.e("EXCEPTION FAILED to allocate buffer, at index: %d, buffer not created", i)
@@ -201,10 +202,14 @@ object BufferManager {
             }
 
         }
-        bufferList.add(arrayEntry)
+
         arrayEntry.bufferInUse = true
         arrayEntry.nativeFloatBuffer!!.put(floatArray).position(0)
-        GLES20.glGenBuffers(1, arrayEntry.glBuf, 0)
+
+        if (!arrayEntry.bufferAllocated) {
+            arrayEntry.bufferAllocated = true
+            GLES20.glGenBuffers(1, arrayEntry.glBuf, 0)
+        }
         arrayEntry.numVertices = currentIndex / STRIDE_IN_FLOATS
         val numbytes = currentIndex * BYTES_PER_FLOAT
 
@@ -234,7 +239,8 @@ object BufferManager {
                     normalAttributeCache,
                     doWireframeRenderingCache)
             // now reset the buffers
-            resetBuffersForNextUsage()
+            bufferList[0].bufferInUse = false
+            //Timber.v("bufferlist size: ${bufferList.size}")
         }
     }
 
