@@ -60,7 +60,7 @@
             android:name="com.bammellab.motm.about.AboutActivity"
             android:label="@string/title_activity_about"
             android:parentActivityName="com.bammellab.motm.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
 
     </application>
 

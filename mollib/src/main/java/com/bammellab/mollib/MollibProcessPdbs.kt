@@ -178,6 +178,15 @@ class MollibProcessPdbs(
             val internalSDcard = activity.externalCacheDir
             try {
                 val pdbName = pdbFileNames[nextNameIndex]
+                val testPath = File(internalSDcard, "Thumbs")
+                if (!testPath.exists()) {
+                    testPath.mkdir()
+                    if (!testPath.exists()) {
+                        Timber.e("********************************************")
+                        Timber.e("ERRROOOOR: cannot make ${testPath.name}")
+                        Timber.e("********************************************")
+                    }
+                }
                 val myFile = File(internalSDcard, "Thumbs/$pdbName.png")
                 val fileOutputStream = FileOutputStream(myFile)
                 val bm = renderer.readGlBufferToBitmap(350, 580, 400, 400)
@@ -185,6 +194,7 @@ class MollibProcessPdbs(
                     bm.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
                     fileOutputStream.flush()
                     fileOutputStream.close()
+                    Timber.e("write OK: ${myFile}")
                 }
 
             } catch (e: FileNotFoundException) {
@@ -192,7 +202,7 @@ class MollibProcessPdbs(
             } catch (e: IOException) {
                 Timber.e("IOException")
             }
-            Timber.e("writeCurrentImage: DONE WRITING")
+
         }
     }
 
