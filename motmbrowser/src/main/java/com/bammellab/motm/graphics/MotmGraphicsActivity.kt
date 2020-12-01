@@ -130,6 +130,10 @@ class MotmGraphicsActivity : AppCompatActivity() {
             processPdbs.loadPrevPdbFile()
         }
 
+        buttonChangeViewmode.setOnClickListener {
+            processPdbs.nextViewMode()
+        }
+
 
         buttonSelect.setOnClickListener { toggleSelect() }
 

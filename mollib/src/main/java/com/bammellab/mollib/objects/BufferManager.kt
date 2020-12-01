@@ -27,6 +27,7 @@ package com.bammellab.mollib.objects
 
 import android.annotation.SuppressLint
 import android.opengl.GLES20
+import android.os.SystemClock
 import timber.log.Timber
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -55,8 +56,14 @@ import java.util.*
  * and List interface:
  * https://docs.oracle.com/javase/tutorial/collections/interfaces/list.html
  */
+
+interface ViewModeCallback {
+    fun slowRender()
+}
+
 object BufferManager {
 
+    private var viewModeCallback: ViewModeCallback? = null
     private var floatArray: FloatArray = FloatArray(150000)
     private var bufferList: ArrayList<GLArrayEntry> = ArrayList()
     private val vertexDataFloatBuffer: FloatBuffer? = null
@@ -67,6 +74,15 @@ object BufferManager {
     private var outOfMemoryFlag = false
 
     private lateinit var this_instance: BufferManager
+
+    /**
+     * this is called by the ManagerViewMode module with a non-null
+     * callback pointer when the molecule is large.   This sets the mode
+     * for slow rendering
+     */
+    fun initViewModeCallback(cb: ViewModeCallback?) {
+        viewModeCallback = cb
+    }
 
     var floatArrayIndex: Int
         get() = currentIndex
@@ -207,10 +223,58 @@ object BufferManager {
         }
 
         // dumpVertexList();
+
+        // if the callback is set, then we are in slow render mode
+        //   Call the render function for each buffer load
+        if (viewModeCallback != null) {
+            bufferLoadingComplete = true
+            doTheActualRender(
+                    positionAttributeCache,
+                    colorAttributeCache,
+                    normalAttributeCache,
+                    doWireframeRenderingCache)
+            // now reset the buffers
+            resetBuffersForNextUsage()
+        }
     }
 
+    private var positionAttributeCache = 0
+    private var colorAttributeCache = 0
+    private var normalAttributeCache = 0
+    private var doWireframeRenderingCache = false
 
     fun render(
+            positionAttribute: Int,
+            colorAttribute: Int,
+            normalAttribute: Int,
+            doWireframeRendering: Boolean) {
+
+        if (viewModeCallback != null) {
+
+            val startTime = SystemClock.uptimeMillis().toFloat()
+
+            positionAttributeCache = positionAttribute
+            colorAttributeCache = colorAttribute
+            normalAttributeCache = normalAttribute
+            doWireframeRenderingCache = doWireframeRendering
+            viewModeCallback!!.slowRender()
+
+            // render the last buffer
+            doTheActualRender(positionAttribute, colorAttribute, normalAttribute, doWireframeRendering)
+
+            val endTime = SystemClock.uptimeMillis().toFloat()
+            val elapsedTime = (endTime - startTime) / 1000
+            val prettyPrint = String.format("%6.2f", elapsedTime)
+            Timber.e("slowRender $prettyPrint")
+
+        } else {
+            doTheActualRender(positionAttribute, colorAttribute, normalAttribute, doWireframeRendering)
+        }
+
+
+    }
+
+    private fun doTheActualRender(
             positionAttribute: Int,
             colorAttribute: Int,
             normalAttribute: Int,
@@ -222,15 +286,15 @@ object BufferManager {
             return
         }
 
-        if (!alreadyReportedUsage) {
-
-            val bufferEfficiency = bufferUsedCount / (bufferList.size * FLOAT_BUFFER_SIZE).toFloat()
-            @SuppressLint("DefaultLocale") val prettyPrint = String.format("%6.2f", bufferEfficiency)
-
-            Timber.i("Buffer used: %d floats, %d triangles, buffer percent used: %s",
-                    bufferUsedCount, bufferUsedCount / STRIDE_IN_FLOATS / 3, prettyPrint)
-            alreadyReportedUsage = true
-        }
+//        if (!alreadyReportedUsage) {
+//
+//            val bufferEfficiency = bufferUsedCount / (bufferList.size * FLOAT_BUFFER_SIZE).toFloat()
+//            @SuppressLint("DefaultLocale") val prettyPrint = String.format("%6.2f", bufferEfficiency)
+//
+//            // Timber.i("Buffer used: %d floats, %d triangles, buffer percent used: %s",
+//            //         bufferUsedCount, bufferUsedCount / STRIDE_IN_FLOATS / 3, prettyPrint)
+//            alreadyReportedUsage = true
+//        }
 
         GLES20.glEnable(GLES20.GL_CULL_FACE)
 
@@ -292,5 +356,6 @@ object BufferManager {
     private const val STRIDE_IN_FLOATS =
             POSITION_DATA_SIZE_IN_ELEMENTS + NORMAL_DATA_SIZE_IN_ELEMENTS + COLOR_DATA_SIZE_IN_ELEMENTS
     private const val STRIDE_IN_BYTES = STRIDE_IN_FLOATS * BYTES_PER_FLOAT
+
 
 }

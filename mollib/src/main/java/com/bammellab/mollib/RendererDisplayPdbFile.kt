@@ -317,7 +317,7 @@ class RendererDisplayPdbFile(
     }
 
     override fun onSurfaceChanged(glUnused: GL10?, width: Int, height: Int) {
-        Timber.e("Scale is $scaleCurrentF $this")
+        // Timber.e("Scale is $scaleCurrentF $this")
         // Set the OpenGL viewport to the same size as the surface.
         GLES20.glViewport(0, 0, width, height)
         mWidth = width
@@ -422,7 +422,7 @@ class RendererDisplayPdbFile(
         val endTime = SystemClock.uptimeMillis().toFloat()
         val elapsedTime = (endTime - startTime) / 1000
         val prettyPrint = String.format("%6.2f", elapsedTime)
-        Timber.v("T $prettyPrint")
+//        Timber.v("T $prettyPrint")
 
         if (!reportedTimeFlag) {
             reportedTimeFlag = true

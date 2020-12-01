@@ -20,14 +20,17 @@ package com.bammellab.mollib.objects
 
 import android.app.Activity
 import android.app.ActivityManager
+import android.view.View
 import com.kotmol.pdbParser.AtomInformationTable
 import com.kotmol.pdbParser.Molecule
 import com.kotmol.pdbParser.PdbAtom
 import timber.log.Timber
+import java.io.InputStream
 
 class ManagerViewmode(private val activity: Activity,
                       private val mol: Molecule
-) {
+) : ViewModeCallback {
+
 
     private val atomSphere: AtomSphere = AtomSphere(activity, mol)
     private val atomToAtomBond: SegmentAtomToAtomBond = SegmentAtomToAtomBond(mol)
@@ -50,24 +53,46 @@ class ManagerViewmode(private val activity: Activity,
             currentMode = VIEW_INITIAL + 1
         }
 
+        setupViewMode()
+    }
+
+    private fun setupViewMode() {
+        BufferManager.resetBuffersForNextUsage()
+
+        val atomCount = mol.atomNumberList.size
+        Timber.d("atomCount = $atomCount")
+        if (atomCount > 25000) {
+            Timber.e("EMERGENCY atomcount - go into immediate mode rendering!!")
+            BufferManager.initViewModeCallback(this)
+        } else {
+            BufferManager.initViewModeCallback(null)
+        }
+
         doViewMode()
     }
 
+    /**
+     * called by the BufferManager when it is put into slowRenderMode
+     *    This way the rendering is controlled here but the BufferManager
+     *    renders each buffer immediately.
+     */
+    override fun slowRender() {
+        doViewMode()
+    }
 
     private fun doViewMode() {
-
-        BufferManager.resetBuffersForNextUsage()
 
         /*
          * let's see how much memory there is to play with
          */
-        val activityManager2 = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
-        val info2 = ActivityManager.MemoryInfo()
-        activityManager2.getMemoryInfo(info2)
-        val initialAvailMem = info2.threshold
+//        val activityManager2 = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
+//        val info2 = ActivityManager.MemoryInfo()
+//        activityManager2.getMemoryInfo(info2)
+//        val initialAvailMem = info2.threshold
+
         try {
             run bailout@{
-                Timber.i("doViewMode: THRESHOLD mbyte = %d", initialAvailMem / 1024 / 1024)
+                //Timber.i("doViewMode: THRESHOLD mbyte = %d", initialAvailMem / 1024 / 1024)
 
                 when (currentMode) {
                     VIEW_RIBBONS -> {
@@ -164,8 +189,6 @@ class ManagerViewmode(private val activity: Activity,
     // float end_time = SystemClock.uptimeMillis();
     // float elapsed_time = (end_time - start_time) / 1000;
     // String pretty_print = String.format("%6.2f", elapsed_time);
-
-
 
 
     /*
@@ -480,7 +503,7 @@ class ManagerViewmode(private val activity: Activity,
 
         initialAvailMem /= 2  // seems like we only get 1/2 to play with
 
-        if (ribbons + bonds + sphere > initialAvailMem) {
+        /*if (ribbons + bonds + sphere > initialAvailMem) {
             geometrySlices /= 2
 
             if (dmode and D_RIBBONS != 0) {
@@ -504,7 +527,7 @@ class ManagerViewmode(private val activity: Activity,
 
                 return false
             }
-        }
+        } */
         return true  // rendering will fit, hopefully
     }
 
@@ -543,10 +566,12 @@ class ManagerViewmode(private val activity: Activity,
          */
         private const val VIEW_INITIAL = 0
         private const val VIEW_RIBBONS = 1
-        private const val VIEW_RIBBONS_DEV_ALL = 2
+//        private const val VIEW_RIBBONS_DEV_ALL = 2
+        private const val VIEW_RIBBONS_DEV_ALL = 5
         private const val VIEW_BALL_AND_STICK = 3
         private const val VIEW_STICK = 4
-        private const val VIEW_SPHERE = 5
+//        private const val VIEW_SPHERE = 5
+        private const val VIEW_SPHERE = 2
 
         private const val VIEW_TOTAL_MODES = 5
 
@@ -578,4 +603,6 @@ class ManagerViewmode(private val activity: Activity,
         private const val STRIDE_IN_FLOATS = POSITION_DATA_SIZE_IN_ELEMENTS + NORMAL_DATA_SIZE_IN_ELEMENTS + COLOR_DATA_SIZE_IN_ELEMENTS
         private const val STRIDE_IN_BYTES = STRIDE_IN_FLOATS * BYTES_PER_FLOAT
     }
+
+
 }
