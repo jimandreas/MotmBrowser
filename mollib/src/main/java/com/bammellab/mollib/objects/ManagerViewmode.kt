@@ -56,6 +56,11 @@ class ManagerViewmode(private val activity: Activity,
         setupViewMode()
     }
 
+    fun doViewMode(doMode: Int) {
+        currentMode = doMode
+        setupViewMode()
+    }
+
     private fun setupViewMode() {
         BufferManager.resetBuffersForNextUsage()
 
@@ -564,14 +569,14 @@ class ManagerViewmode(private val activity: Activity,
         /*
          * The Modes
          */
-        private const val VIEW_INITIAL = 0
-        private const val VIEW_RIBBONS = 1
-//        private const val VIEW_RIBBONS_DEV_ALL = 2
-        private const val VIEW_RIBBONS_DEV_ALL = 5
-        private const val VIEW_BALL_AND_STICK = 3
-        private const val VIEW_STICK = 4
-//        private const val VIEW_SPHERE = 5
-        private const val VIEW_SPHERE = 2
+        const val VIEW_INITIAL = 0
+        const val VIEW_RIBBONS = 1
+//        const val VIEW_RIBBONS_DEV_ALL = 2
+        const val VIEW_RIBBONS_DEV_ALL = 5
+        const val VIEW_BALL_AND_STICK = 3
+        const val VIEW_STICK = 4
+//        const val VIEW_SPHERE = 5
+        const val VIEW_SPHERE = 2
 
         private const val VIEW_TOTAL_MODES = 5
 

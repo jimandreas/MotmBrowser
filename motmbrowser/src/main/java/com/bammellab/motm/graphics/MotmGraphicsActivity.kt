@@ -21,6 +21,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
 import android.widget.Button
+import android.widget.PopupMenu
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
@@ -29,6 +30,7 @@ import com.bammellab.mollib.MollibProcessPdbs
 import com.bammellab.mollib.RendererDisplayPdbFile
 import com.bammellab.mollib.Utility.checkForOpengl
 import com.bammellab.mollib.Utility.failDialog
+import com.bammellab.mollib.objects.ManagerViewmode
 import com.bammellab.motm.R
 import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
@@ -131,7 +133,8 @@ class MotmGraphicsActivity : AppCompatActivity() {
         }
 
         buttonChangeViewmode.setOnClickListener {
-            processPdbs.nextViewMode()
+            showPopup(it)
+            //processPdbs.nextViewMode()
         }
 
 
@@ -143,6 +146,24 @@ class MotmGraphicsActivity : AppCompatActivity() {
 //            gLSurfaceView.queueEvent { mRenderer.nextViewMode() }
 //        }
 
+    }
+
+    private fun showPopup(v: View) {
+        val popup = PopupMenu(this, v)
+        popup.inflate(R.menu.menu_viewmode)
+        popup.setOnMenuItemClickListener {
+            val doMode = when (it.itemId) {
+                R.id.action_ribbons -> ManagerViewmode.VIEW_RIBBONS
+                R.id.action_spacefill -> ManagerViewmode.VIEW_SPHERE
+                R.id.action_ball_and_stick -> ManagerViewmode.VIEW_BALL_AND_STICK
+                R.id.action_stick -> ManagerViewmode.VIEW_STICK
+                R.id.action_ribbons_and_balls -> ManagerViewmode.VIEW_RIBBONS_DEV_ALL
+                else -> ManagerViewmode.VIEW_RIBBONS
+            }
+            processPdbs.pickViewMode(doMode)
+            true
+        }
+        popup.show()
     }
 
     override fun onResume() {

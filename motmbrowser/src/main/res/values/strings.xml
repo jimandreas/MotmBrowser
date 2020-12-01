@@ -48,6 +48,13 @@
     <string name="action_shading">Shading</string>
     <string name="action_hydrogens">Hydros</string>
 
+    <!-- graphics view mode menu stuff -->
+    <string name="action_ribbons">Ribbons</string>
+    <string name="action_spacefill">Spacefill</string>
+    <string name="action_ball_and_stick">Ball and Stick</string>
+    <string name="action_stick">Stick</string>
+    <string name="action_ribbons_and_balls">Ribbons and Balls</string>
+
     <!-- menu items and toolbar -->
 
     <string name="drawer_settings">Settings</string>

@@ -169,6 +169,14 @@ class MollibProcessPdbs(
         }
     }
 
+    fun pickViewMode(doMode: Int) {
+        if (managerViewmode != null) {
+            glSurfaceView.queueEvent {
+                managerViewmode!!.doViewMode(doMode)
+                glSurfaceView.requestRender()
+            }
+        }
+    }
 
     fun writeCurrentImage() {
         if (nextNameIndex < 0 || nextNameIndex > pdbFileNames.size - 1) {
