@@ -1,43 +1,42 @@
 /*
- * Copyright (C) 2016-2018 James Andreas
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
+ *  Copyright 2020 Bammellab / James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
  */
 
-@file:Suppress("unused", "MemberVisibilityCanBePrivate", "CanBeVal")
+@file:Suppress(
+        "unused",
+        "MemberVisibilityCanBePrivate",
+        "CanBeVal",
+        "UNUSED_PARAMETER",
+        "CanBeParameter")
 
 package com.bammellab.mollib.objects
 
 import android.app.Activity
-import android.app.ActivityManager
-import android.view.View
 import com.kotmol.pdbParser.AtomInformationTable
 import com.kotmol.pdbParser.Molecule
 import com.kotmol.pdbParser.PdbAtom
 import timber.log.Timber
-import java.io.InputStream
 
 class ManagerViewmode(private val activity: Activity,
                       private val mol: Molecule
 ) : ViewModeCallback {
 
 
-    private val atomSphere: AtomSphere = AtomSphere(activity, mol)
-    private val atomToAtomBond: SegmentAtomToAtomBond = SegmentAtomToAtomBond(mol)
-    private val renderModal: RenderModal = RenderModal(mol)
-    private val renderNucleic: RenderNucleic = RenderNucleic(mol)
-    private var currentMode: Int = 0
-    private var drawMode: Int = 0
+    private val atomSphere = AtomSphere(activity, mol)
+    private val atomToAtomBond = SegmentAtomToAtomBond(mol)
+    private val renderRibbon = RenderRibbon(mol)
+    private val renderNucleic = RenderNucleic(mol)
+    private var currentMode = 0
+    private var drawMode = 0
 
     var displayHydrosFlag = false
     var geometrySlices = 10
@@ -103,7 +102,7 @@ class ManagerViewmode(private val activity: Activity,
                     VIEW_RIBBONS -> {
                         drawMode = D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_RIBBONS
                         calcMemoryUsage(drawMode)
-                        renderModal.renderModal()
+                        renderRibbon.renderModal()
                         renderNucleic.renderNucleic()
                         drawNucleicBonds()
                         drawHetatmBonds()
@@ -121,7 +120,7 @@ class ManagerViewmode(private val activity: Activity,
                         if (!calcMemoryUsage(drawMode)) {
                             drawMode = D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_RIBBONS
                             currentMode = VIEW_RIBBONS
-                            renderModal.renderModal()
+                            renderRibbon.renderModal()
                             renderNucleic.renderNucleic()
                             drawNucleicBonds()
                             drawHetatmBonds()
@@ -133,7 +132,7 @@ class ManagerViewmode(private val activity: Activity,
                         }
                         drawPipeModel()
                         drawSpheres()
-                        renderModal.renderModal()
+                        renderRibbon.renderModal()
                         renderNucleic.renderNucleic()
                     }
 
@@ -483,7 +482,7 @@ class ManagerViewmode(private val activity: Activity,
         /*
          * calculate usage with normal slices
          */
-        geometrySlices = INITIAL_SLICES
+       /* geometrySlices = INITIAL_SLICES
         var sphereGeometrySlices = INITIAL_SLICES / 2
         var ribbons: Long = 0
         var sphere: Long = 0
@@ -508,7 +507,7 @@ class ManagerViewmode(private val activity: Activity,
 
         initialAvailMem /= 2  // seems like we only get 1/2 to play with
 
-        /*if (ribbons + bonds + sphere > initialAvailMem) {
+        if (ribbons + bonds + sphere > initialAvailMem) {
             geometrySlices /= 2
 
             if (dmode and D_RIBBONS != 0) {
