@@ -674,7 +674,7 @@ class RenderModal(private val molecule: Molecule) {
             oxygen = currentChainEntry.guideAtom
 
             if (carbon == null) {
-                Timber.e("RenderHelix: carbon is null continuing")
+                Timber.e("RenderHelix: carbon null, where $whereInSpline start $start end $end")
                 continue
             }
             if (oxygen == null) {
@@ -710,10 +710,12 @@ class RenderModal(private val molecule: Molecule) {
 
                 if (nextCarbon == null) {
                     Timber.e("RenderHelix: nextCarbon is null continuing")
+                    whereInSpline++
                     continue
                 }
                 if (nextOxygen == null) {
                     Timber.e("RenderHelix: nextOxygen is null continuing")
+                    whereInSpline++
                     continue
                 }
 

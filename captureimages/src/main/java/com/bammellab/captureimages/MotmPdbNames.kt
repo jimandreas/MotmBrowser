@@ -15,10 +15,54 @@ package com.bammellab.captureimages
 
 object MotmPdbNames {
 
+    val pdbNames = listOf(
+            "3cmx",
+            "1fka",
+            "1r9f",
+            "2z75",
+
+            "4dpv",
+            "4qqw",
+            "4ts2",
+            "6c63",
+            "6d6v"
+
+            )
+    val pdbNames2 = listOf(
+            "2c37",
+            // "2tbv",  // next carbon problems
+            // "3fcs",  // next carbon problems
+            // "3j3q",  // no PDB file only CIF
+            // "3j3y", // no PDB file only CIF
+            // "3jc8", // no PDB file only CIF
+            // "3jc9", // no PDB file only CIF
+            // "4tvx", // ditto
+            // "4V60",
+            // "4v6t",
+            // "4v8q",
+            "4xxb",
+            "5gar",
+            "5mnj",
+            "5vox",
+            "5voy",
+            "5xnl", // 99K atoms!
+            "5zji",
+            // "6by7", // no PDB file only CIF
+            "6crz",
+            "6kac",
+            // "6kad", // no PDB file only CIF
+            // "6nwa",
+            "6o81",
+            "6o9z",
+
+            "1xi4"  // this one is trouble
+
+            )
+
     /*
      * PDBs with num of Atoms > 50K removed
      */
-    val pdbNames = listOf(
+    val pdbNamesOLD = listOf(
 
             "143d",
             "148l",

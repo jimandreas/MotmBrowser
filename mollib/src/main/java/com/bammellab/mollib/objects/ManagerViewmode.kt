@@ -66,7 +66,7 @@ class ManagerViewmode(private val activity: Activity,
 
         val atomCount = mol.atomNumberList.size
         Timber.d("atomCount = $atomCount")
-        if (atomCount > 25000) {
+        if (atomCount > 20000) {
             Timber.e("EMERGENCY atomcount - go into immediate mode rendering!!")
             BufferManager.initViewModeCallback(this)
         } else {

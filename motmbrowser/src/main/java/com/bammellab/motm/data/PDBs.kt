@@ -430,7 +430,7 @@ object PDBs {
         pdbsByMonth.put(85, "2bpt")
         pdbsByMonth.put(86, "1st0")
         pdbsByMonth.put(86, "2a1s")
-        pdbsByMonth.put(86, "2c37")
+       //  pdbsByMonth.put(86, "2c37")  // has MASSIVE "next carbon" issues
         pdbsByMonth.put(86, "2nn6")
         pdbsByMonth.put(87, "1a1t")
         pdbsByMonth.put(87, "1joc")
@@ -577,7 +577,7 @@ object PDBs {
         pdbsByMonth.put(114, "2qw7")
         pdbsByMonth.put(114, "3bn4")
         pdbsByMonth.put(114, "3dkt")
-        pdbsByMonth.put(114, "4V60")
+        // pdbsByMonth.put(114, "4v60") // only CIF
         pdbsByMonth.put(115, "1fkn")
         pdbsByMonth.put(115, "1m4h")
         pdbsByMonth.put(115, "1py1")
@@ -830,8 +830,8 @@ object PDBs {
         pdbsByMonth.put(157, "3iyq")
         pdbsByMonth.put(157, "3iyr")
         pdbsByMonth.put(157, "3iz4")
-        pdbsByMonth.put(157, "4v6t")
-        pdbsByMonth.put(157, "4v8q")
+        // pdbsByMonth.put(157, "4v6t") // only CIF
+        // pdbsByMonth.put(157, "4v8q") // only CIF
         pdbsByMonth.put(158, "1e9y")
         pdbsByMonth.put(158, "3ux4")
         pdbsByMonth.put(159, "1yhu")
@@ -1121,7 +1121,7 @@ object PDBs {
         pdbsByMonth.put(210, "5swd")
         pdbsByMonth.put(210, "5swe")
         pdbsByMonth.put(211, "2hil")
-        // pdbsByMonth.put(211, "3jc8") // no PDB file too big Atom Count: 107640!!
+        // pdbsByMonth.put(211, "3jc8") // no PDB file only CIF too big Atom Count: 107640!!
         // pdbsByMonth.put(211, "3jc9") // ditto
         pdbsByMonth.put(212, "3csh")
         pdbsByMonth.put(212, "3gss")
@@ -1299,7 +1299,7 @@ object PDBs {
         pdbsByMonth.put(241, "5j7v")
         pdbsByMonth.put(241, "2or1")
         pdbsByMonth.put(241, "6mam")
-        pdbsByMonth.put(241, "6by7")
+        // pdbsByMonth.put(241, "6by7") // CIF only
         pdbsByMonth.put(241, "6cfz")
         pdbsByMonth.put(241, "3j2u")
         pdbsByMonth.put(241, "1plq")
@@ -1317,9 +1317,9 @@ object PDBs {
         pdbsByMonth.put(243, "6p6w")
       //  pdbsByMonth.put(244, "5xnl") // 99K atoms
       //  pdbsByMonth.put(244, "6kac") // 78K
-        pdbsByMonth.put(244, "6kad")
+      //   pdbsByMonth.put(244, "6kad") // CIF only
         pdbsByMonth.put(244, "5zji")
-        pdbsByMonth.put(244, "6nwa")
+      //   pdbsByMonth.put(244, "6nwa") // CIF only
         pdbsByMonth.put(244, "5xnl")
         // pdbsByMonth.put(245, "3jb9") // 86K atoms
         pdbsByMonth.put(245, "6n7p")

@@ -183,14 +183,17 @@ class MotmGraphicsActivity : AppCompatActivity() {
 
     private fun toggleShader() {
         glSurfaceView.queueEvent { renderer.toggleShader() }
+        glSurfaceView.requestRender()
     }
 
     private fun toggleHydrogenDisplayMode() {
         glSurfaceView.queueEvent { renderer.toggleHydrogenDisplayMode() }
+        glSurfaceView.requestRender()
     }
 
     private fun toggleWireframe() {
         glSurfaceView.queueEvent { renderer.toggleWireframeFlag() }
+        glSurfaceView.requestRender()
     }
 
     private fun toggleSelect() {
