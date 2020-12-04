@@ -1,17 +1,14 @@
 /*
- * Copyright (C) 2016-2018 James Andreas
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
+ *  Copyright 2020 Bammellab / James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
  */
 
 @file:Suppress(
@@ -86,7 +83,7 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
         val p1p2 = MotmVector3()
         p1p2.setAll(positionEnd)
         p1p2.subtract(positionStart)
-        val P = MotmVector3(Math.random(), Math.random(), Math.random())
+        val P = MotmVector3(Math.random().toFloat(), Math.random().toFloat(), Math.random().toFloat())
         val R = MotmVector3(p1p2)
         R.cross(P)
         val S = MotmVector3(R)
@@ -94,12 +91,12 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
         R.normalize()
         S.normalize()
 
-        var x1: Double
-        var y1: Double
-        var z1: Double
-        var x2: Double
-        var y2: Double
-        var z2: Double
+        var x1: Float
+        var y1: Float
+        var z1: Float
+        var x2: Float
+        var y2: Float
+        var z2: Float
 
         // val angleStep = 2.0f * Math.PI.toFloat() / numSlices
 
@@ -125,13 +122,13 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
 
             // TODO: fix number of slices and generate sin/cos lookup table
 
-            val angleInRadians1 = i.toDouble() / numSlices.toDouble() * (Math.PI * 2f)
+            val angleInRadians1 = i.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
             val angleInRadians2 = (i + 1).toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
             val s1 = radius * MathUtil.sin(angleInRadians1)
-            val s2 = radius * MathUtil.sin(angleInRadians2.toDouble())
+            val s2 = radius * MathUtil.sin(angleInRadians2)
             val c1 = radius * MathUtil.cos(angleInRadians1)
-            val c2 = radius * MathUtil.cos(angleInRadians2.toDouble())
+            val c2 = radius * MathUtil.cos(angleInRadians2)
 
             /*
              * no mid point

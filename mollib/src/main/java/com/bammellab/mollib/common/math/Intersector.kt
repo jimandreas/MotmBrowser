@@ -55,7 +55,7 @@ object Intersector {
              */
     fun intersectRaySphere(
             rayStartIn: MotmVector3, rayEndIn: MotmVector3,
-            sphereCenterIn: MotmVector3, sphereRadius: Double,
+            sphereCenterIn: MotmVector3, sphereRadius: Float,
             hitPointIn: MotmVector3): Boolean {
         var rayStart = rayStartIn
         var rayEnd = rayEndIn
@@ -92,16 +92,16 @@ object Intersector {
 
 
         // Starting with this section, the code was referenced from libGDX.
-        val distSqrt = sqrt(result)
-        val q: Double
+        val distSqrt = sqrt(result).toFloat()
+        val q: Float
 
-        q = if (b < 0)
+        q = if (b < 0f)
             (-b - distSqrt) / 2.0f
         else
             (-b + distSqrt) / 2.0f
 
 
-        var t0 = q / 1
+        var t0 = q / 1f
         var t1 = c / q
 
         // If t0 is larger than t1, swap them around.

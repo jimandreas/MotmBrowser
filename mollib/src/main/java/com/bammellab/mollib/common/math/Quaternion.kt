@@ -2,7 +2,7 @@
  * Copyright 2013 Dennis Ippel
  * Copyright 2018 Jim Andreas kotlin conversion
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * Licensed under the Apache License, Version 2.0f (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
@@ -33,10 +33,10 @@ import kotlin.math.*
 class Quaternion {
 
     //The Quaternion components
-    var w: Double = 0.toDouble()
-    var x: Double = 0.toDouble()
-    var y: Double = 0.toDouble()
-    var z: Double = 0.toDouble()
+    var w: Float = 0.toFloat()
+    var x: Float = 0.toFloat()
+    var y: Float = 0.toFloat()
+    var z: Float = 0.toFloat()
 
     //Scratch members
     private val tmpVec1 = MotmVector3()
@@ -55,8 +55,8 @@ class Quaternion {
      */
     private val xAxis: MotmVector3
         get() {
-            val fTy = 2.0 * y
-            val fTz = 2.0 * z
+            val fTy = 2.0f * y
+            val fTz = 2.0f * z
             val fTwy = fTy * w
             val fTwz = fTz * w
             val fTxy = fTy * x
@@ -64,7 +64,7 @@ class Quaternion {
             val fTyy = fTy * y
             val fTzz = fTz * z
 
-            return MotmVector3(1 - (fTyy + fTzz), fTxy + fTwz, fTxz - fTwy)
+            return MotmVector3(1f - (fTyy + fTzz), fTxy + fTwz, fTxz - fTwy)
         }
 
     /**
@@ -74,9 +74,9 @@ class Quaternion {
      */
     private val yAxis: MotmVector3
         get() {
-            val fTx = 2.0 * x
-            val fTy = 2.0 * y
-            val fTz = 2.0 * z
+            val fTx = 2.0f * x
+            val fTy = 2.0f * y
+            val fTz = 2.0f * z
             val fTwx = fTx * w
             val fTwz = fTz * w
             val fTxx = fTx * x
@@ -94,9 +94,9 @@ class Quaternion {
      */
     private val zAxis: MotmVector3
         get() {
-            val fTx = 2.0 * x
-            val fTy = 2.0 * y
-            val fTz = 2.0 * z
+            val fTx = 2.0f * x
+            val fTy = 2.0f * y
+            val fTz = 2.0f * z
             val fTwx = fTx * w
             val fTwy = fTy * w
             val fTxx = fTx * x
@@ -127,11 +127,11 @@ class Quaternion {
      * @see [
      * https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/math/Quaternion.java](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/math/Quaternion.java)
      */
-    val roll: Double
+    val roll: Float
         get() {
             normalize()
             val pole = gimbalPole
-            return if (pole == 0) atan2(2.0 * (w * z + y * x), 1.0 - 2.0 * (x * x + z * z)) else pole.toDouble() * 2.0 * atan2(y, w)
+            return if (pole == 0) atan2(2.0f * (w * z + y * x), 1.0f - 2.0f * (x * x + z * z)) else pole.toFloat() * 2.0f * atan2(y, w)
         }
 
     /**
@@ -141,11 +141,15 @@ class Quaternion {
      * @see [
      * https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/math/Quaternion.java](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/math/Quaternion.java)
      */
-    val pitch: Double
+    val pitch: Float
         get() {
             normalize()
             val pole = gimbalPole
-            return if (pole == 0) asin(MathUtil.clamp(2.0 * (w * x - z * y), -1.0, 1.0)) else pole.toDouble() * MathUtil.PI * 0.5
+            return if (pole == 0) {
+                asin(MathUtil.clamp(2.0f * (w * x - z * y), -1.0f, 1.0f))
+            } else {
+                pole.toFloat() * MathUtil.PI * 0.5f
+            }
         }
 
     /**
@@ -155,10 +159,10 @@ class Quaternion {
      * @see [
      * https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/math/Quaternion.java](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/math/Quaternion.java)
      */
-    val yaw: Double
+    val yaw: Float
         get() {
             normalize()
-            return if (gimbalPole == 0) atan2(2.0 * (y * w + x * z), 1.0 - 2.0 * (y * y + x * x)) else 0.0
+            return if (gimbalPole == 0) atan2(2.0f * (y * w + x * z), 1.0f - 2.0f * (y * y + x * x)) else 0.0f
         }
 
     //--------------------------------------------------
@@ -180,7 +184,7 @@ class Quaternion {
      * @param y double The y component.
      * @param z double The z component.
      */
-    constructor(w: Double, x: Double, y: Double, z: Double) {
+    constructor(w: Float, x: Float, y: Float, z: Float) {
         setAll(w, x, y, z)
     }
 
@@ -201,7 +205,7 @@ class Quaternion {
      * @param axis [MotmVector3] The axis of rotation.
      * @param angle double The angle of rotation in degrees.
      */
-    constructor(axis: MotmVector3, angle: Double) {
+    constructor(axis: MotmVector3, angle: Float) {
         fromAngleAxis(axis, angle)
     }
 
@@ -219,7 +223,7 @@ class Quaternion {
      * @param z double The z component.
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
-    fun setAll(w: Double, x: Double, y: Double, z: Double): Quaternion {
+    fun setAll(w: Float, x: Float, y: Float, z: Float): Quaternion {
         this.w = w
         this.x = x
         this.y = y
@@ -245,7 +249,7 @@ class Quaternion {
      * @param angle double The rotation angle in degrees.
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
-    fun fromAngleAxis(axis: MotmVector3.Axis, angle: Double): Quaternion {
+    fun fromAngleAxis(axis: MotmVector3.Axis, angle: Float): Quaternion {
         fromAngleAxis(MotmVector3.getAxisVector(axis), angle)
         return this
     }
@@ -257,10 +261,10 @@ class Quaternion {
      * @param angle double The rotation angle in degrees.
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
-    fun fromAngleAxis(axis: MotmVector3, angle: Double): Quaternion {
+    fun fromAngleAxis(axis: MotmVector3, angle: Float): Quaternion {
         if (!axis.isUnit) axis.normalize()
-        val radian = Math.toRadians(angle) //MathUtil.degreesToRadians(angle);
-        val halfAngle = radian * .5
+        val radian = Math.toRadians(angle.toDouble()).toFloat() //MathUtil.degreesToRadians(angle);
+        val halfAngle = radian * .5f
         val halfAngleSin = sin(halfAngle)
         w = cos(halfAngle)
         x = halfAngleSin * axis.x
@@ -278,16 +282,16 @@ class Quaternion {
      * @param angle double The rotation angle in degrees.
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
-    fun fromAngleAxis(x: Double, y: Double, z: Double, angle: Double): Quaternion {
+    fun fromAngleAxis(x: Float, y: Float, z: Float, angle: Float): Quaternion {
         var d = MotmVector3.length(x, y, z)
-        if (d == 0.0) {
+        if (d == 0.0f) {
             return identity()
         }
         d = 1.0f / d
-        val radians = Math.toRadians(angle)
+        val radians = Math.toRadians(angle.toDouble()).toFloat()
         val theAngle = if (radians < 0) MathUtil.TWO_PI - -radians % MathUtil.TWO_PI else radians % MathUtil.TWO_PI
-        val theSin = sin(theAngle * 0.5)
-        val theCos = cos(theAngle * 0.5)
+        val theSin = sin(theAngle * 0.5).toFloat()
+        val theCos = cos(theAngle * 0.5).toFloat()
         return this.setAll(theCos, d * x * theSin, d * y * theSin, d * z * theSin)
     }
 
@@ -327,42 +331,42 @@ class Quaternion {
      * @param zz double The z axis z coordniate.
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
-    private fun fromAxes(xx: Double, xy: Double, xz: Double, yx: Double, yy: Double, yz: Double,
-                         zx: Double, zy: Double, zz: Double): Quaternion {
+    private fun fromAxes(xx: Float, xy: Float, xz: Float, yx: Float, yy: Float, yz: Float,
+                         zx: Float, zy: Float, zz: Float): Quaternion {
         // The trace is the sum of the diagonal elements; see
         // http://mathworld.wolfram.com/MatrixTrace.html
         val t = xx + yy + zz
 
         //Protect the division by s by ensuring that s >= 1
-        val x: Double
-        val y: Double
-        val z: Double
-        val w: Double
+        val x: Float
+        val y: Float
+        val z: Float
+        val w: Float
         if (t >= 0) {
             var s = sqrt(t + 1) // |s| >= 1
-            w = 0.5 * s // |w| >= 0.5
-            s = 0.5 / s //<- This division cannot be bad
+            w = 0.5f * s // |w| >= 0.5f 
+            s = 0.5f / s //<- This division cannot be bad
             x = (zy - yz) * s
             y = (xz - zx) * s
             z = (yx - xy) * s
         } else if (xx > yy && xx > zz) {
-            var s = sqrt(1.0 + xx - yy - zz) // |s| >= 1
-            x = s * 0.5 // |x| >= 0.5
-            s = 0.5 / s
+            var s = sqrt(1.0f + xx - yy - zz) // |s| >= 1
+            x = s * 0.5f // |x| >= 0.5f 
+            s = 0.5f / s
             y = (yx + xy) * s
             z = (xz + zx) * s
             w = (zy - yz) * s
         } else if (yy > zz) {
-            var s = sqrt(1.0 + yy - xx - zz) // |s| >= 1
-            y = s * 0.5 // |y| >= 0.5
-            s = 0.5 / s
+            var s = sqrt(1.0f + yy - xx - zz) // |s| >= 1
+            y = s * 0.5f // |y| >= 0.5f 
+            s = 0.5f / s
             x = (yx + xy) * s
             z = (zy + yz) * s
             w = (xz - zx) * s
         } else {
-            var s = sqrt(1.0 + zz - xx - yy) // |s| >= 1
-            z = s * 0.5 // |z| >= 0.5
-            s = 0.5 / s
+            var s = sqrt(1.0f + zz - xx - yy) // |s| >= 1
+            z = s * 0.5f // |z| >= 0.5f 
+            s = 0.5f / s
             x = (xz + zx) * s
             y = (zy + yz) * s
             w = (yx - xy) * s
@@ -377,7 +381,7 @@ class Quaternion {
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
     fun fromMatrix(matrix: Matrix4): Quaternion {
-        val value = DoubleArray(16)
+        val value = FloatArray(16)
         matrix.toArray(value)
         fromAxes(value[Matrix4.M00], value[Matrix4.M01], value[Matrix4.M02],
                 value[Matrix4.M10], value[Matrix4.M11], value[Matrix4.M12],
@@ -393,20 +397,20 @@ class Quaternion {
      * @param roll double The roll angle in degrees.
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun fromEuler(yaw: Double, pitch: Double, roll: Double): Quaternion {
+    fun fromEuler(yaw: Float, pitch: Float, roll: Float): Quaternion {
         var yawI = yaw
         var pitchI = pitch
         var rollI = roll
-        yawI = Math.toRadians(yawI)
-        pitchI = Math.toRadians(pitchI)
-        rollI = Math.toRadians(rollI)
-        val num9 = rollI * 0.5
+        yawI = Math.toRadians(yawI.toDouble()).toFloat()
+        pitchI = Math.toRadians(pitchI.toDouble()).toFloat()
+        rollI = Math.toRadians(rollI.toDouble()).toFloat()
+        val num9 = rollI * 0.5f 
         val num6 = sin(num9)
         val num5 = cos(num9)
-        val num8 = pitchI * 0.5
+        val num8 = pitchI * 0.5f 
         val num4 = sin(num8)
         val num3 = cos(num8)
-        val num7 = yawI * 0.5
+        val num7 = yawI * 0.5f 
         val num2 = sin(num7)
         val num = cos(num7)
         val f1 = num * num4
@@ -428,18 +432,18 @@ class Quaternion {
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
     @Deprecated("")
-    fun fromRotationMatrix(rotMatrix: DoubleArray): Quaternion {
+    fun fromRotationMatrix(rotMatrix: FloatArray): Quaternion {
         // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
         // article "Quaternion Calculus and Fast Animation".
 
         val fTrace = rotMatrix[0] + rotMatrix[5] + rotMatrix[10]
-        var fRoot: Double
+        var fRoot: Float
 
-        if (fTrace > 0.0) {
+        if (fTrace > 0.0f) {
             // |w| > 1/2, may as well choose w > 1/2
-            fRoot = sqrt(fTrace + 1.0) // 2w
-            w = 0.5 * fRoot
-            fRoot = 0.5 / fRoot // 1/(4w)
+            fRoot = sqrt(fTrace + 1.0f) // 2w
+            w = 0.5f * fRoot
+            fRoot = 0.5f / fRoot // 1/(4w)
             x = (rotMatrix[9] - rotMatrix[6]) * fRoot
             y = (rotMatrix[2] - rotMatrix[8]) * fRoot
             z = (rotMatrix[4] - rotMatrix[1]) * fRoot
@@ -455,9 +459,9 @@ class Quaternion {
             val k = theNext[j]
 
             fRoot = sqrt(rotMatrix[i * 4 + i] - rotMatrix[j * 4 + j] - rotMatrix[k * 4 + k] + 1.0f)
-            val apkQuat = doubleArrayOf(x, y, z)
-            apkQuat[i] = 0.5 * fRoot
-            fRoot = 0.5 / fRoot
+            val apkQuat = floatArrayOf(x, y, z)
+            apkQuat[i] = 0.5f * fRoot
+            fRoot = 0.5f / fRoot
             w = (rotMatrix[k * 4 + j] - rotMatrix[j * 4 + k]) * fRoot
             apkQuat[j] = (rotMatrix[j * 4 + i] + rotMatrix[i * 4 + j]) * fRoot
             apkQuat[k] = (rotMatrix[k * 4 + i] + rotMatrix[i * 4 + k]) * fRoot
@@ -478,8 +482,8 @@ class Quaternion {
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
     fun fromRotationBetween(v1: MotmVector3, v2: MotmVector3): Quaternion {
-        val dot = MathUtil.clamp(v1.dot(v2), -1.0, 1.0)
-        val dotError = 1.0 - abs(dot)
+        val dot = MathUtil.clamp(v1.dot(v2), -1.0f, 1.0f)
+        val dotError = 1.0f - abs(dot)
         //        if (dotError <= 1e-6) {
         //            // The look and up vectors are parallel/anti-parallel
         //            if (dot < 0) {
@@ -497,7 +501,7 @@ class Quaternion {
         //            }
         //        }
 
-        val angle = Math.toDegrees(acos(dot))
+        val angle = Math.toDegrees(acos(dot.toDouble())).toFloat()
         return fromAngleAxis(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z,
                 v1.x * v2.y - v1.y * v2.x, angle)
     }
@@ -515,8 +519,8 @@ class Quaternion {
      * @param z2 double The target vector's z component.
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
-    fun fromRotationBetween(x1: Double, y1: Double, z1: Double, x2: Double,
-                            y2: Double, z2: Double): Quaternion {
+    fun fromRotationBetween(x1: Float, y1: Float, z1: Float, x2: Float,
+                            y2: Float, z2: Float): Quaternion {
         tmpVec1.setAll(x1, y1, z1).normalize()
         tmpVec2.setAll(x2, y2, z2).normalize()
         return fromRotationBetween(tmpVec1, tmpVec2)
@@ -557,7 +561,7 @@ class Quaternion {
      * @param scalar double The value to multiply by.
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
-    fun multiply(scalar: Double): Quaternion {
+    fun multiply(scalar: Float): Quaternion {
         w *= scalar
         x *= scalar
         y *= scalar
@@ -598,8 +602,8 @@ class Quaternion {
         tmpVec3.setAll(x, y, z)
         tmpVec1.crossAndSet(tmpVec3, vector)
         tmpVec2.crossAndSet(tmpVec3, tmpVec1)
-        tmpVec1.multiply(2.0 * w)
-        tmpVec2.multiply(2.0)
+        tmpVec1.multiply(2.0f * w)
+        tmpVec2.multiply(2.0f)
 
         tmpVec1.add(tmpVec2)
         tmpVec1.add(vector)
@@ -626,10 +630,10 @@ class Quaternion {
      *
      * @return double The scaling factor used to normalize this [Quaternion].
      */
-    fun normalize(): Double {
+    fun normalize(): Float {
         val len = length2()
-        if (len != 0.0 && abs(len - 1.0) > NORMALIZATION_TOLERANCE) {
-            val factor = 1.0 / sqrt(len)
+        if (len != 0.0f && abs(len - 1.0f) > NORMALIZATION_TOLERANCE) {
+            val factor = 1.0f / sqrt(len)
             multiply(factor)
         }
         return len
@@ -655,7 +659,7 @@ class Quaternion {
     fun inverse(): Quaternion {
         val norm = length2()
         if (norm > 0) {
-            val invNorm = 1.0 / norm
+            val invNorm = 1.0f / norm
             setAll(w * invNorm, -x * invNorm, -y * invNorm, -z * invNorm)
         }
         return this
@@ -669,7 +673,7 @@ class Quaternion {
     fun invertAndCreate(): Quaternion? {
         val norm = length2()
         return if (norm > 0) {
-            val invNorm = 1.0 / norm
+            val invNorm = 1.0f / norm
             Quaternion(w * invNorm, -x * invNorm, -y * invNorm, -z * invNorm)
         } else {
             null
@@ -683,9 +687,9 @@ class Quaternion {
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
     fun computeW(): Quaternion {
-        val t = 1.0 - x * x - y * y - z * z
-        w = if (t < 0.0) {
-            0.0
+        val t = 1.0f - x * x - y * y - z * z
+        w = if (t < 0.0f) {
+            0.0f
         } else {
             -sqrt(t)
         }
@@ -711,7 +715,7 @@ class Quaternion {
      *
      * @return double The Euclidean length.
      */
-    fun length(): Double {
+    fun length(): Float {
         return sqrt(length2())
     }
 
@@ -720,7 +724,7 @@ class Quaternion {
      *
      * @return double The square of the Euclidean length.
      */
-    private fun length2(): Double {
+    private fun length2(): Float {
         return w * w + x * x + y * y + z * z
     }
 
@@ -729,7 +733,7 @@ class Quaternion {
      *
      * @return double The dot product.
      */
-    fun dot(other: Quaternion): Double {
+    fun dot(other: Quaternion): Float {
         return w * other.w + x * other.x + y * other.y + z * other.z
     }
 
@@ -739,10 +743,10 @@ class Quaternion {
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
     private fun identity(): Quaternion {
-        w = 1.0
-        x = 0.0
-        y = 0.0
-        z = 0.0
+        w = 1.0f
+        x = 0.0f
+        y = 0.0f
+        z = 0.0f
         return this
     }
 
@@ -793,7 +797,7 @@ class Quaternion {
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
     fun log(): Quaternion {
-        if (abs(w) < 1.0) {
+        if (abs(w) < 1.0f) {
             val angle = acos(w)
             val sin = sin(angle)
             if (abs(sin) >= F_EPSILON) {
@@ -803,7 +807,7 @@ class Quaternion {
                 z *= fCoeff
             }
         }
-        w = 0.0
+        w = 0.0f
         return this
     }
 
@@ -814,8 +818,8 @@ class Quaternion {
      */
     fun logAndCreate(): Quaternion {
         val result = Quaternion()
-        result.w = 0.0
-        if (abs(w) < 1.0) {
+        result.w = 0.0f
+        if (abs(w) < 1.0f) {
             val angle = acos(w)
             val sin = sin(angle)
             if (abs(sin) >= F_EPSILON) {
@@ -840,7 +844,7 @@ class Quaternion {
      * @param t double The interpolation value. [0-1] Where 0 represents this and 1 represents end.
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
-    fun slerp(end: Quaternion, t: Double): Quaternion {
+    fun slerp(end: Quaternion, t: Float): Quaternion {
         val dot = dot(end)
         val absDot = if (dot < 0) -dot else dot
 
@@ -877,7 +881,7 @@ class Quaternion {
      * @param t double The interpolation value. [0-1] Where 0 represents q1 and 1 represents q2.
      * @return A reference to this [Quaternion] to facilitate chaining.
      */
-    fun slerp(q1: Quaternion, q2: Quaternion, t: Double): Quaternion {
+    fun slerp(q1: Quaternion, q2: Quaternion, t: Float): Quaternion {
         if (q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w) {
             setAll(q1)
             return this
@@ -927,7 +931,7 @@ class Quaternion {
      * Sets the provided [Matrix4] to represent this [Quaternion].
      */
     fun toRotationMatrix(matrix: Matrix4) {
-        toRotationMatrix(matrix.doubleValues)
+        toRotationMatrix(matrix.floatArray)
     }
 
     /**
@@ -935,7 +939,7 @@ class Quaternion {
      *
      * @param matrix double[] representing a 4x4 rotation matrix in column major order.
      */
-    fun toRotationMatrix(matrix: DoubleArray) {
+    fun toRotationMatrix(matrix: FloatArray) {
         val x2 = x * x
         val y2 = y * y
         val z2 = z * z
@@ -946,25 +950,25 @@ class Quaternion {
         val wy = w * y
         val wz = w * z
 
-        matrix[Matrix4.M00] = 1.0 - 2.0 * (y2 + z2)
-        matrix[Matrix4.M10] = 2.0 * (xy - wz)
-        matrix[Matrix4.M20] = 2.0 * (xz + wy)
-        matrix[Matrix4.M30] = 0.0
+        matrix[Matrix4.M00] = 1.0f - 2.0f * (y2 + z2)
+        matrix[Matrix4.M10] = 2.0f * (xy - wz)
+        matrix[Matrix4.M20] = 2.0f * (xz + wy)
+        matrix[Matrix4.M30] = 0.0f
 
-        matrix[Matrix4.M01] = 2.0 * (xy + wz)
-        matrix[Matrix4.M11] = 1.0 - 2.0 * (x2 + z2)
-        matrix[Matrix4.M21] = 2.0 * (yz - wx)
-        matrix[Matrix4.M31] = 0.0
+        matrix[Matrix4.M01] = 2.0f * (xy + wz)
+        matrix[Matrix4.M11] = 1.0f - 2.0f * (x2 + z2)
+        matrix[Matrix4.M21] = 2.0f * (yz - wx)
+        matrix[Matrix4.M31] = 0.0f
 
-        matrix[Matrix4.M02] = 2.0 * (xz - wy)
-        matrix[Matrix4.M12] = 2.0 * (yz + wx)
-        matrix[Matrix4.M22] = 1.0 - 2.0 * (x2 + y2)
-        matrix[Matrix4.M32] = 0.0
+        matrix[Matrix4.M02] = 2.0f * (xz - wy)
+        matrix[Matrix4.M12] = 2.0f * (yz + wx)
+        matrix[Matrix4.M22] = 1.0f - 2.0f * (x2 + y2)
+        matrix[Matrix4.M32] = 0.0f
 
-        matrix[Matrix4.M03] = 0.0
-        matrix[Matrix4.M13] = 0.0
-        matrix[Matrix4.M23] = 0.0
-        matrix[Matrix4.M33] = 1.0
+        matrix[Matrix4.M03] = 0.0f
+        matrix[Matrix4.M13] = 0.0f
+        matrix[Matrix4.M23] = 0.0f
+        matrix[Matrix4.M33] = 1.0f
     }
 
     /**
@@ -1030,9 +1034,9 @@ class Quaternion {
      * @param tolerance double The tolerance for equality.
      * @return boolean True if the two [Quaternion]s equate within the specified tolerance.
      */
-    fun equals(other: Quaternion, tolerance: Double): Boolean {
+    fun equals(other: Quaternion, tolerance: Float): Boolean {
         val fCos = dot(other)
-        if (fCos > 1.0 && fCos - 1.0 < tolerance) return true
+        if (fCos > 1.0f && fCos - 1.0f < tolerance) return true
         val angle = acos(fCos)
         return abs(angle) <= tolerance || MathUtil.realEqual(angle, MathUtil.PI, tolerance)
     }
@@ -1043,9 +1047,9 @@ class Quaternion {
      * @param other [Quaternion] The other [Quaternion].
      * @returns double with the angle between the two [Quaternion]s.
      */
-    fun angleBetween(other: Quaternion): Double {
+    fun angleBetween(other: Quaternion): Float {
         var fCos = dot(other)
-        fCos = max(-1.0, min(1.0, fCos))
+        fCos = max(-1.0f, min(1.0f, fCos))
         val angle = acos(fCos)
         return if (angle > MathUtil.PI / 2) {
             abs(MathUtil.PI - angle)
@@ -1087,8 +1091,8 @@ class Quaternion {
         //Tolerances
         const val F_EPSILON = .001
         const val NORMALIZATION_TOLERANCE = 0.00001
-        private val sTmp1 = Quaternion(0.0, 0.0, 0.0, 0.0)
-        private val sTmp2 = Quaternion(0.0, 0.0, 0.0, 0.0)
+        private val sTmp1 = Quaternion(0.0f, 0.0f, 0.0f, 0.0f)
+        private val sTmp2 = Quaternion(0.0f, 0.0f, 0.0f, 0.0f)
 
         /**
          * Creates a new [Quaternion] and sets its components to the rotation between the given
@@ -1110,7 +1114,7 @@ class Quaternion {
          * @return A new identity [Quaternion].
          */
         val identity: Quaternion
-            get() = Quaternion(1.0, 0.0, 0.0, 0.0)
+            get() = Quaternion(1.0f, 0.0f, 0.0f, 0.0f)
 
         /**
          * Performs spherical linear interpolation between the provided [Quaternion]s and
@@ -1121,7 +1125,7 @@ class Quaternion {
          * @param t double The interpolation value. [0-1] Where 0 represents q1 and 1 represents q2.
          * @return A reference to this [Quaternion] to facilitate chaining.
          */
-        fun slerpAndCreate(q1: Quaternion, q2: Quaternion, t: Double): Quaternion {
+        fun slerpAndCreate(q1: Quaternion, q2: Quaternion, t: Float): Quaternion {
             val q = Quaternion()
             q.slerp(q1, q2, t)
             return q
@@ -1137,7 +1141,7 @@ class Quaternion {
          * @param shortestPath boolean indicating if the shortest path should be used.
          * @return [Quaternion] The interpolated [Quaternion].
          */
-        private fun lerp(rkP: Quaternion, rkQ: Quaternion, t: Double, shortestPath: Boolean): Quaternion {
+        private fun lerp(rkP: Quaternion, rkQ: Quaternion, t: Float, shortestPath: Boolean): Quaternion {
             sTmp1.setAll(rkP)
             sTmp2.setAll(rkQ)
             val fCos = sTmp1.dot(sTmp2)
@@ -1164,7 +1168,7 @@ class Quaternion {
          * @param shortestPath boolean indicating if the shortest path should be used.
          * @return [Quaternion] The normalized interpolated [Quaternion].
          */
-        fun nlerp(rkP: Quaternion, rkQ: Quaternion, t: Double, shortestPath: Boolean): Quaternion {
+        fun nlerp(rkP: Quaternion, rkQ: Quaternion, t: Float, shortestPath: Boolean): Quaternion {
             val result = lerp(rkP, rkQ, t, shortestPath)
             result.normalize()
             return result

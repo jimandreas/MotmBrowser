@@ -292,9 +292,9 @@ class RenderRibbon(private val molecule: Molecule) {
         val p2 = FloatArray(3)
         val p3 = FloatArray(3)
         var n: FloatArray
-        var x1: Double
-        var y1: Double
-        var z1: Double
+        var x1: Float
+        var y1: Float
+        var z1: Float
 
         val numSlices = ribbonSlices
         val v1 = cache1
@@ -373,15 +373,15 @@ class RenderRibbon(private val molecule: Molecule) {
             delta.setAll(MotmVector3(nextGuideAtom.atomPosition))
             delta.subtract(MotmVector3(nextEndAtom.atomPosition))
 
-            var weight = (where_in_spline - currentChainEntry.curveIndex).toDouble()
+            var weight = (where_in_spline - currentChainEntry.curveIndex).toFloat()
             weight /= CSF
 
             // guide_curve.calculatePoint(upper_curve, (where_in_spline+the_min_index) / (float) scaling);
 
-            path.calculatePoint(positionPrevious, ((where_in_spline - 1) / scaling.toFloat()).toDouble())
-            path.calculatePoint(positionStart, (where_in_spline / scaling.toFloat()).toDouble())
-            path.calculatePoint(positionEnd, ((where_in_spline + 1) / scaling.toFloat()).toDouble())
-            path.calculatePoint(positionBeyond, ((where_in_spline + 2) / scaling.toFloat()).toDouble())
+            path.calculatePoint(positionPrevious, ((where_in_spline - 1) / scaling.toFloat()))
+            path.calculatePoint(positionStart, (where_in_spline / scaling.toFloat()))
+            path.calculatePoint(positionEnd, ((where_in_spline + 1) / scaling.toFloat()))
+            path.calculatePoint(positionBeyond, ((where_in_spline + 2) / scaling.toFloat()))
 
             P1.setAll(positionStart)
             P1.subtract(positionPrevious)
@@ -397,7 +397,7 @@ class RenderRibbon(private val molecule: Molecule) {
             R2.subtract(MotmVector3(endAtom.atomPosition))
 
             if (R2.dot(prev1) < 0) {
-                R2.multiply(-1.0)
+                R2.multiply(-1.0f)
             }
             temp.setAll(R2)
             temp.subtract(delta)
@@ -415,7 +415,7 @@ class RenderRibbon(private val molecule: Molecule) {
                 temp.add(prev2)
                 temp.add(prev3)
                 temp.add(R2)
-                temp.divide(4.0)
+                temp.divide(4.0f)
                 R2.setAll(temp)
                 prev3.setAll(prev2)
                 prev2.setAll(prev1)
@@ -430,14 +430,14 @@ class RenderRibbon(private val molecule: Molecule) {
             R1.normalize()
             R2.normalize()
 
-            R1.divide(5.0)
-            R2.divide(5.0)
+            R1.divide(5.0f)
+            R2.divide(5.0f)
 
             if (where_in_spline == start) {
                 // calculate and cache
                 for (i in 0..numSlices) {
 
-                    val angleInRadians1 = i.toDouble() / numSlices.toDouble() * (Math.PI * 2f)
+                    val angleInRadians1 = i.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
                     val s1 = radius * MathUtil.sin(angleInRadians1)
                     val c1 = radius * MathUtil.cos(angleInRadians1)
@@ -455,7 +455,7 @@ class RenderRibbon(private val molecule: Molecule) {
             // calculate and cache
             for (i in 0..numSlices) {
 
-                val angleInRadians1 = i.toDouble() / numSlices.toDouble() * (Math.PI * 2f)
+                val angleInRadians1 = i.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
                 val s1 = radius * MathUtil.sin(angleInRadians1)
 
@@ -600,9 +600,9 @@ class RenderRibbon(private val molecule: Molecule) {
         val p2 = FloatArray(3)
         val p3 = FloatArray(3)
         var n: FloatArray
-        var x1: Double
-        var y1: Double
-        var z1: Double
+        var x1: Float
+        var y1: Float
+        var z1: Float
 
         val numSlices = ribbonSlices
         val v1 = cache1
@@ -731,15 +731,15 @@ class RenderRibbon(private val molecule: Molecule) {
             delta.setAll(MotmVector3(nextOxygen.atomPosition))
             delta.subtract(MotmVector3(nextCarbon.atomPosition))
 
-            var weight = (whereInSpline - currentChainEntry.curveIndex).toDouble()
+            var weight = (whereInSpline - currentChainEntry.curveIndex).toFloat()
             weight /= CSF
 
             // guide_curve.calculatePoint(upper_curve, (where_in_spline+the_min_index) / (float) scaling);
 
-            path.calculatePoint(positionPrevious, ((whereInSpline - 1) / scaling.toFloat()).toDouble())
-            path.calculatePoint(positionStart, (whereInSpline / scaling.toFloat()).toDouble())
-            path.calculatePoint(positionEnd, ((whereInSpline + 1) / scaling.toFloat()).toDouble())
-            path.calculatePoint(positionBeyond, ((whereInSpline + 2) / scaling.toFloat()).toDouble())
+            path.calculatePoint(positionPrevious, ((whereInSpline - 1) / scaling.toFloat()))
+            path.calculatePoint(positionStart, (whereInSpline / scaling.toFloat()))
+            path.calculatePoint(positionEnd, ((whereInSpline + 1) / scaling.toFloat()))
+            path.calculatePoint(positionBeyond, ((whereInSpline + 2) / scaling.toFloat()))
             //                p1p2.setAll(position_end);
             //                p1p2.subtract(position_previous);
             P1.setAll(positionStart)
@@ -762,7 +762,7 @@ class RenderRibbon(private val molecule: Molecule) {
             R2.subtract(MotmVector3(carbon.atomPosition))
 
             if (R2.dot(prev1) < 0) {
-                R2.multiply(-1.0)
+                R2.multiply(-1.0f)
             }
             temp.setAll(R2)
             temp.subtract(delta)
@@ -778,7 +778,7 @@ class RenderRibbon(private val molecule: Molecule) {
                 temp.add(prev2)
                 temp.add(prev3)
                 temp.add(R2)
-                temp.divide(4.0)
+                temp.divide(4.0f)
                 R2.setAll(temp)
                 prev3.setAll(prev2)
                 prev2.setAll(prev1)
@@ -802,27 +802,27 @@ class RenderRibbon(private val molecule: Molecule) {
                 if (arrowCountdown == 11) {
                     whereInSpline-- // repeat this location
                     arrowCountdown--
-                    S1.divide(5.0)
-                    S2.divide(5.0)
+                    S1.divide(5.0f)
+                    S2.divide(5.0f)
                 } else {
                     radius = 1.5f * arrowCountdown.toFloat() / 10.0f + 0.1f
                     if (arrowCountdown > 0) arrowCountdown--
                     if (arrowCountdown < 3) {
-                        S2.divide((2 * arrowCountdown + 1).toDouble())
+                        S2.divide((2f * arrowCountdown + 1))
                     } else {
-                        S2.divide(5.0)
+                        S2.divide(5.0f)
                     }
                 }
             } else {
-                S1.divide(5.0)
-                S2.divide(5.0)
+                S1.divide(5.0f)
+                S2.divide(5.0f)
             }
 
             if (whereInSpline == start) {
                 // calculate and cache
                 for (i in 0..numSlices) {
 
-                    val angleInRadians1 = i.toDouble() / numSlices.toDouble() * (Math.PI * 2f)
+                    val angleInRadians1 = i.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
                     val s1 = radius * MathUtil.sin(angleInRadians1)
                     val c1 = radius * MathUtil.cos(angleInRadians1)
@@ -843,7 +843,7 @@ class RenderRibbon(private val molecule: Molecule) {
             // calculate and cache
             for (i in 0..numSlices) {
 
-                val angleInRadians1 = i.toDouble() / numSlices.toDouble() * (Math.PI * 2f)
+                val angleInRadians1 = i.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
                 val s1 = radius * MathUtil.sin(angleInRadians1)
 
@@ -1063,9 +1063,9 @@ class RenderRibbon(private val molecule: Molecule) {
         val p2 = FloatArray(3)
         val p3 = FloatArray(3)
         var n: FloatArray
-        var x1: Double
-        var y1: Double
-        var z1: Double
+        var x1: Float
+        var y1: Float
+        var z1: Float
         var v1: FloatArray
 
         //        double x2, y2, z2;
@@ -1077,8 +1077,8 @@ class RenderRibbon(private val molecule: Molecule) {
         val P = MotmVector3()
         val R = MotmVector3()
         val S = MotmVector3()
-        // MotmVector3 randomPoint = new MotmVector3(Math.random(), Math.random(), Math.random());
-        val randomPoint = MotmVector3(0.0, 999.0, 0.0)
+        // MotmVector3 randomPoint = new MotmVector3(Math.random().toFloat(), Math.random().toFloat(), Math.random());
+        val randomPoint = MotmVector3(0.0f, 999.0f, 0.0f)
         val saveR = MotmVector3()
         val oldR = MotmVector3()
 
@@ -1098,9 +1098,9 @@ class RenderRibbon(private val molecule: Molecule) {
         val end = end_index * scaling / descriptor_count
         for (where_in_spline in start until end) {
 
-            path.calculatePoint(positionStart, (where_in_spline / scaling.toFloat()).toDouble())
-            path.calculatePoint(positionEnd, ((where_in_spline + 1) / scaling.toFloat()).toDouble())
-            path.calculatePoint(positionBeyond, ((where_in_spline + 2) / scaling.toFloat()).toDouble())
+            path.calculatePoint(positionStart, (where_in_spline / scaling.toFloat()))
+            path.calculatePoint(positionEnd, ((where_in_spline + 1) / scaling.toFloat()))
+            path.calculatePoint(positionBeyond, ((where_in_spline + 2) / scaling.toFloat()))
             /*
 
                  */
@@ -1127,7 +1127,7 @@ class RenderRibbon(private val molecule: Molecule) {
                 // calculate and cache
                 for (slice in 0..numSlices) {
 
-                    val angleInRadians1 = slice.toDouble() / numSlices.toDouble() * (Math.PI * 2f)
+                    val angleInRadians1 = slice.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
                     val s1 = radius * MathUtil.sin(angleInRadians1)
 
@@ -1193,7 +1193,7 @@ class RenderRibbon(private val molecule: Molecule) {
             // calculate and cache
             for (slice in 0..numSlices) {
 
-                val angleInRadians1 = slice.toDouble() / numSlices.toDouble() * (Math.PI * 2f)
+                val angleInRadians1 = slice.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
                 val s1 = radius * MathUtil.sin(angleInRadians1)
 
@@ -1349,18 +1349,18 @@ class RenderRibbon(private val molecule: Molecule) {
 
     private fun matchVertexCache(cache: FloatArray, cache_size: Int, v2: FloatArray, target_vector: MotmVector3): FloatArray {
         var i = 0
-        var maxMatch = -1.0
-        var dotResult: Double
+        var maxMatch = -1.0f
+        var dotResult: Float
         var bestMatch = 0
 
         val testV1 = MotmVector3()
-        val testV2 = MotmVector3(v2[0].toDouble(), v2[1].toDouble(), v2[2].toDouble())
+        val testV2 = MotmVector3(v2[0].toFloat(), v2[1].toFloat(), v2[2])
         val result = MotmVector3()
         target_vector.normalize()
 
         while (i < cache_size) {
             testV1.setAll(
-                    cache[i * 3].toDouble(), cache[i * 3 + 1].toDouble(), cache[i * 3 + 2].toDouble())
+                    cache[i * 3].toFloat(), cache[i * 3 + 1].toFloat(), cache[i * 3 + 2])
             result.setAll(testV2)
             result.subtract(testV1)
             result.normalize()
@@ -1405,13 +1405,13 @@ class RenderRibbon(private val molecule: Molecule) {
 
     // TODO: delete this obsolete section
     // 1st try - now obsolete
-    private fun rotateVertexCache(cache: FloatArray, cache_size: Int, how_much: Double): FloatArray {
+    private fun rotateVertexCache(cache: FloatArray, cache_size: Int, how_much: Float): FloatArray {
 
         // how_much is the dot product between the old normal and the new normal -
         // rotate the cache so they match
 
         var angle = acos(how_much)
-        angle = angle / (Math.PI * 2.0) * 360.0
+        angle = angle / (Math.PI.toFloat() * 2.0f) * 360.0f
         val offsetInDegrees = 360 - angle.toInt()
         val offsetInCache = cache_size * offsetInDegrees / 360
 

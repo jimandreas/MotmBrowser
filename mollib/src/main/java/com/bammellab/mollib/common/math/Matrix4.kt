@@ -39,13 +39,13 @@ class Matrix4 {
      * @return double array containing the backing array. The returned array is owned
      * by this [Matrix4] and is subject to change as the implementation sees fit.
      */
-    val doubleValues = DoubleArray(16) //The matrix values
+    val floatArray = FloatArray(16) //The matrix values
 
     //The following scratch variables are intentionally left as members
     //and not static to ensure that this class can be utilized by multiple threads
     //in a safe manner without the overhead of synchronization. This is a tradeoff of
     //speed for memory and it is considered a small enough memory increase to be acceptable.
-    private val tmp = DoubleArray(16) //A scratch matrix
+    private val tmp = FloatArray(16) //A scratch matrix
     private val mFloat = FloatArray(16) //A float copy of the values, used for sending to GL.
     private val mQuat = Quaternion() //A scratch quaternion.
     private val vec1 = MotmVector3() //A scratch MotmVector3
@@ -75,9 +75,9 @@ class Matrix4 {
      */
     val scaling: MotmVector3
         get() {
-            val x = sqrt(doubleValues[M00] * doubleValues[M00] + doubleValues[M01] * doubleValues[M01] + doubleValues[M02] * doubleValues[M02])
-            val y = sqrt(doubleValues[M10] * doubleValues[M10] + doubleValues[M11] * doubleValues[M11] + doubleValues[M12] * doubleValues[M12])
-            val z = sqrt(doubleValues[M20] * doubleValues[M20] + doubleValues[M21] * doubleValues[M21] + doubleValues[M22] * doubleValues[M22])
+            val x = sqrt(floatArray[M00] * floatArray[M00] + floatArray[M01] * floatArray[M01] + floatArray[M02] * floatArray[M02])
+            val y = sqrt(floatArray[M10] * floatArray[M10] + floatArray[M11] * floatArray[M11] + floatArray[M12] * floatArray[M12])
+            val z = sqrt(floatArray[M20] * floatArray[M20] + floatArray[M21] * floatArray[M21] + floatArray[M22] * floatArray[M22])
             return MotmVector3(x, y, z)
         }
 
@@ -94,7 +94,7 @@ class Matrix4 {
      */
     val floatValues: FloatArray
         get() {
-            ArrayUtils.convertDoublesToFloats(doubleValues, mFloat)
+            ArrayUtils.convertDoublesToFloats(floatArray, mFloat)
             return mFloat
         }
 
@@ -125,7 +125,7 @@ class Matrix4 {
      * @param matrix double array containing the values for the matrix in column major order.
      * The array is not modified or referenced after this constructor completes.
      */
-    constructor(matrix: DoubleArray) {
+    constructor(matrix: FloatArray) {
         setAll(matrix)
     }
 
@@ -133,10 +133,10 @@ class Matrix4 {
      * Constructs a new [Matrix4] based on the provided float array. The array length
      * must be greater than or equal to 16 and the array will be copied from the 0 index.
      *
-     * @param matrix float array containing the values for the matrix in column major order.
+     *  matrix float array containing the values for the matrix in column major order.
      * The array is not modified or referenced after this constructor completes.
      */
-    constructor(matrix: FloatArray) : this(ArrayUtils.convertFloatsToDoubles(matrix))
+    //constructor(matrix: FloatArray) : this(ArrayUtils.convertFloatsToDoubles(matrix))
 
     /**
      * Constructs a [Matrix4] based on the rotation represented by the provided [Quaternion].
@@ -159,7 +159,7 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     private fun setAll(matrix: Matrix4): Matrix4 {
-        matrix.toArray(doubleValues)
+        matrix.toArray(floatArray)
         return this
     }
 
@@ -172,30 +172,30 @@ class Matrix4 {
      * The array is not modified or referenced after this constructor completes.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    private fun setAll(matrix: DoubleArray): Matrix4 {
-        System.arraycopy(matrix, 0, doubleValues, 0, 16)
+    private fun setAll(matrix: FloatArray): Matrix4 {
+        System.arraycopy(matrix, 0, floatArray, 0, 16)
         return this
     }
 
-    fun setAll(matrix: FloatArray): Matrix4 {
-        doubleValues[0] = matrix[0].toDouble()
-        doubleValues[1] = matrix[1].toDouble()
-        doubleValues[2] = matrix[2].toDouble()
-        doubleValues[3] = matrix[3].toDouble()
-        doubleValues[4] = matrix[4].toDouble()
-        doubleValues[5] = matrix[5].toDouble()
-        doubleValues[6] = matrix[6].toDouble()
-        doubleValues[7] = matrix[7].toDouble()
-        doubleValues[8] = matrix[8].toDouble()
-        doubleValues[9] = matrix[9].toDouble()
-        doubleValues[10] = matrix[10].toDouble()
-        doubleValues[11] = matrix[11].toDouble()
-        doubleValues[12] = matrix[12].toDouble()
-        doubleValues[13] = matrix[13].toDouble()
-        doubleValues[14] = matrix[14].toDouble()
-        doubleValues[15] = matrix[15].toDouble()
+    /*fun setAll(matrix: FloatArray): Matrix4 {
+        floatArray[0] = matrix[0].toFloat()
+        floatArray[1] = matrix[1].toFloat()
+        floatArray[2] = matrix[2].toFloat()
+        floatArray[3] = matrix[3].toFloat()
+        floatArray[4] = matrix[4].toFloat()
+        floatArray[5] = matrix[5].toFloat()
+        floatArray[6] = matrix[6].toFloat()
+        floatArray[7] = matrix[7].toFloat()
+        floatArray[8] = matrix[8].toFloat()
+        floatArray[9] = matrix[9].toFloat()
+        floatArray[10] = matrix[10].toFloat()
+        floatArray[11] = matrix[11].toFloat()
+        floatArray[12] = matrix[12].toFloat()
+        floatArray[13] = matrix[13].toFloat()
+        floatArray[14] = matrix[14].toFloat()
+        floatArray[15] = matrix[15].toFloat()
         return this
-    }
+    }*/
 
     /**
      * Sets the elements of this [Matrix4] based on the rotation represented by
@@ -205,7 +205,7 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     private fun setAll(quat: Quaternion): Matrix4 {
-        quat.toRotationMatrix(doubleValues)
+        quat.toRotationMatrix(floatArray)
         return this
     }
 
@@ -219,7 +219,7 @@ class Matrix4 {
      * @param z double The z component of the quaternion.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setAll(w: Double, x: Double, y: Double, z: Double): Matrix4 {
+    fun setAll(w: Float, x: Float, y: Float, z: Float): Matrix4 {
         return setAll(mQuat.setAll(w, x, y, z))
     }
 
@@ -235,22 +235,22 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     private fun setAll(xAxis: MotmVector3, yAxis: MotmVector3, zAxis: MotmVector3, pos: MotmVector3): Matrix4 {
-        doubleValues[M00] = xAxis.x
-        doubleValues[M01] = yAxis.x
-        doubleValues[M02] = zAxis.x
-        doubleValues[M03] = pos.x
-        doubleValues[M10] = xAxis.y
-        doubleValues[M11] = yAxis.y
-        doubleValues[M12] = zAxis.y
-        doubleValues[M13] = pos.y
-        doubleValues[M20] = xAxis.z
-        doubleValues[M21] = yAxis.z
-        doubleValues[M22] = zAxis.z
-        doubleValues[M23] = pos.z
-        doubleValues[M30] = 0.0
-        doubleValues[M31] = 0.0
-        doubleValues[M32] = 0.0
-        doubleValues[M33] = 1.0
+        floatArray[M00] = xAxis.x
+        floatArray[M01] = yAxis.x
+        floatArray[M02] = zAxis.x
+        floatArray[M03] = pos.x
+        floatArray[M10] = xAxis.y
+        floatArray[M11] = yAxis.y
+        floatArray[M12] = zAxis.y
+        floatArray[M13] = pos.y
+        floatArray[M20] = xAxis.z
+        floatArray[M21] = yAxis.z
+        floatArray[M22] = zAxis.z
+        floatArray[M23] = pos.z
+        floatArray[M30] = 0.0f
+        floatArray[M31] = 0.0f
+        floatArray[M32] = 0.0f
+        floatArray[M33] = 1.0f
         return this
     }
 
@@ -276,28 +276,28 @@ class Matrix4 {
         val wz = rotation.w * rotation.z
 
         // Column 0
-        doubleValues[M00] = scale.x * (1.0 - 2.0 * (y2 + z2))
-        doubleValues[M10] = 2.0 * scale.y * (xy - wz)
-        doubleValues[M20] = 2.0 * scale.z * (xz + wy)
-        doubleValues[M30] = 0.0
+        floatArray[M00] = scale.x * (1.0f - 2.0f * (y2 + z2))
+        floatArray[M10] = 2.0f * scale.y * (xy - wz)
+        floatArray[M20] = 2.0f * scale.z * (xz + wy)
+        floatArray[M30] = 0.0f
 
         // Column 1
-        doubleValues[M01] = 2.0 * scale.x * (xy + wz)
-        doubleValues[M11] = scale.y * (1.0 - 2.0 * (x2 + z2))
-        doubleValues[M21] = 2.0 * scale.z * (yz - wx)
-        doubleValues[M31] = 0.0
+        floatArray[M01] = 2.0f * scale.x * (xy + wz)
+        floatArray[M11] = scale.y * (1.0f - 2.0f * (x2 + z2))
+        floatArray[M21] = 2.0f * scale.z * (yz - wx)
+        floatArray[M31] = 0.0f
 
         // Column 2
-        doubleValues[M02] = 2.0 * scale.x * (xz - wy)
-        doubleValues[M12] = 2.0 * scale.y * (yz + wx)
-        doubleValues[M22] = scale.z * (1.0 - 2.0 * (x2 + y2))
-        doubleValues[M32] = 0.0
+        floatArray[M02] = 2.0f * scale.x * (xz - wy)
+        floatArray[M12] = 2.0f * scale.y * (yz + wx)
+        floatArray[M22] = scale.z * (1.0f - 2.0f * (x2 + y2))
+        floatArray[M32] = 0.0f
 
         // Column 3
-        doubleValues[M03] = position.x
-        doubleValues[M13] = position.y
-        doubleValues[M23] = position.z
-        doubleValues[M33] = 1.0
+        floatArray[M03] = position.x
+        floatArray[M13] = position.y
+        floatArray[M23] = position.z
+        floatArray[M33] = 1.0f
         return this
     }
 
@@ -307,22 +307,22 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     private fun identity(): Matrix4 {
-        doubleValues[M00] = 1.0
-        doubleValues[M10] = 0.0
-        doubleValues[M20] = 0.0
-        doubleValues[M30] = 0.0
-        doubleValues[M01] = 0.0
-        doubleValues[M11] = 1.0
-        doubleValues[M21] = 0.0
-        doubleValues[M31] = 0.0
-        doubleValues[M02] = 0.0
-        doubleValues[M12] = 0.0
-        doubleValues[M22] = 1.0
-        doubleValues[M32] = 0.0
-        doubleValues[M03] = 0.0
-        doubleValues[M13] = 0.0
-        doubleValues[M23] = 0.0
-        doubleValues[M33] = 1.0
+        floatArray[M00] = 1.0f
+        floatArray[M10] = 0.0f
+        floatArray[M20] = 0.0f
+        floatArray[M30] = 0.0f
+        floatArray[M01] = 0.0f
+        floatArray[M11] = 1.0f
+        floatArray[M21] = 0.0f
+        floatArray[M31] = 0.0f
+        floatArray[M02] = 0.0f
+        floatArray[M12] = 0.0f
+        floatArray[M22] = 1.0f
+        floatArray[M32] = 0.0f
+        floatArray[M03] = 0.0f
+        floatArray[M13] = 0.0f
+        floatArray[M23] = 0.0f
+        floatArray[M33] = 1.0f
         return this
     }
 
@@ -333,7 +333,7 @@ class Matrix4 {
      */
     fun zero(): Matrix4 {
         for (i in 0..15) {
-            doubleValues[i] = 0.0
+            floatArray[i] = 0.0f
         }
         return this
     }
@@ -343,35 +343,35 @@ class Matrix4 {
      *
      * @return double The determinant.
      */
-    fun determinant(): Double {
-        return doubleValues[M30] * doubleValues[M21] * doubleValues[M12] * doubleValues[M03] -
-                doubleValues[M20] * doubleValues[M31] * doubleValues[M12] * doubleValues[M03] -
-                doubleValues[M30] * doubleValues[M11] * doubleValues[M22] * doubleValues[M03] +
-                doubleValues[M10] * doubleValues[M31] * doubleValues[M22] * doubleValues[M03] +
+    fun determinant(): Float {
+        return floatArray[M30] * floatArray[M21] * floatArray[M12] * floatArray[M03] -
+                floatArray[M20] * floatArray[M31] * floatArray[M12] * floatArray[M03] -
+                floatArray[M30] * floatArray[M11] * floatArray[M22] * floatArray[M03] +
+                floatArray[M10] * floatArray[M31] * floatArray[M22] * floatArray[M03] +
 
-                doubleValues[M20] * doubleValues[M11] * doubleValues[M32] * doubleValues[M03] -
-                doubleValues[M10] * doubleValues[M21] * doubleValues[M32] * doubleValues[M03] -
-                doubleValues[M30] * doubleValues[M21] * doubleValues[M02] * doubleValues[M13] +
-                doubleValues[M20] * doubleValues[M31] * doubleValues[M02] * doubleValues[M13] +
+                floatArray[M20] * floatArray[M11] * floatArray[M32] * floatArray[M03] -
+                floatArray[M10] * floatArray[M21] * floatArray[M32] * floatArray[M03] -
+                floatArray[M30] * floatArray[M21] * floatArray[M02] * floatArray[M13] +
+                floatArray[M20] * floatArray[M31] * floatArray[M02] * floatArray[M13] +
 
-                doubleValues[M30] * doubleValues[M01] * doubleValues[M22] * doubleValues[M13] -
-                doubleValues[M00] * doubleValues[M31] * doubleValues[M22] * doubleValues[M13] -
-                doubleValues[M20] * doubleValues[M01] * doubleValues[M32] * doubleValues[M13] +
-                doubleValues[M00] * doubleValues[M21] * doubleValues[M32] * doubleValues[M13] +
+                floatArray[M30] * floatArray[M01] * floatArray[M22] * floatArray[M13] -
+                floatArray[M00] * floatArray[M31] * floatArray[M22] * floatArray[M13] -
+                floatArray[M20] * floatArray[M01] * floatArray[M32] * floatArray[M13] +
+                floatArray[M00] * floatArray[M21] * floatArray[M32] * floatArray[M13] +
 
-                doubleValues[M30] * doubleValues[M11] * doubleValues[M02] * doubleValues[M23] -
-                doubleValues[M10] * doubleValues[M31] * doubleValues[M02] * doubleValues[M23] -
-                doubleValues[M30] * doubleValues[M01] * doubleValues[M12] * doubleValues[M23] +
-                doubleValues[M00] * doubleValues[M31] * doubleValues[M12] * doubleValues[M23] +
+                floatArray[M30] * floatArray[M11] * floatArray[M02] * floatArray[M23] -
+                floatArray[M10] * floatArray[M31] * floatArray[M02] * floatArray[M23] -
+                floatArray[M30] * floatArray[M01] * floatArray[M12] * floatArray[M23] +
+                floatArray[M00] * floatArray[M31] * floatArray[M12] * floatArray[M23] +
 
-                doubleValues[M10] * doubleValues[M01] * doubleValues[M32] * doubleValues[M23] -
-                doubleValues[M00] * doubleValues[M11] * doubleValues[M32] * doubleValues[M23] -
-                doubleValues[M20] * doubleValues[M11] * doubleValues[M02] * doubleValues[M33] +
-                doubleValues[M10] * doubleValues[M21] * doubleValues[M02] * doubleValues[M33] +
+                floatArray[M10] * floatArray[M01] * floatArray[M32] * floatArray[M23] -
+                floatArray[M00] * floatArray[M11] * floatArray[M32] * floatArray[M23] -
+                floatArray[M20] * floatArray[M11] * floatArray[M02] * floatArray[M33] +
+                floatArray[M10] * floatArray[M21] * floatArray[M02] * floatArray[M33] +
 
-                doubleValues[M20] * doubleValues[M01] * doubleValues[M12] * doubleValues[M33] -
-                doubleValues[M00] * doubleValues[M21] * doubleValues[M12] * doubleValues[M33] -
-                doubleValues[M10] * doubleValues[M01] * doubleValues[M22] * doubleValues[M33] + doubleValues[M00] * doubleValues[M11] * doubleValues[M22] * doubleValues[M33]
+                floatArray[M20] * floatArray[M01] * floatArray[M12] * floatArray[M33] -
+                floatArray[M00] * floatArray[M21] * floatArray[M12] * floatArray[M33] -
+                floatArray[M10] * floatArray[M01] * floatArray[M22] * floatArray[M33] + floatArray[M00] * floatArray[M11] * floatArray[M22] * floatArray[M33]
     }
 
 
@@ -382,8 +382,8 @@ class Matrix4 {
      */
     @Suppress("UNUSED_VARIABLE")
     fun inverse(): Matrix4 {
-        val success = MatrixDoublePrecision.invertM(tmp, 0, doubleValues, 0)
-        System.arraycopy(tmp, 0, doubleValues, 0, 16)
+        val success = MatrixDoublePrecision.invertM(tmp, 0, floatArray, 0)
+        System.arraycopy(tmp, 0, floatArray, 0, 16)
         return this
     }
 
@@ -395,8 +395,8 @@ class Matrix4 {
      */
     @Suppress("MemberVisibilityCanBePrivate")
     fun transpose(): Matrix4 {
-        MatrixDoublePrecision.transposeM(tmp, 0, doubleValues, 0)
-        System.arraycopy(tmp, 0, doubleValues, 0, 16)
+        MatrixDoublePrecision.transposeM(tmp, 0, floatArray, 0)
+        System.arraycopy(tmp, 0, floatArray, 0, 16)
         return this
     }
 
@@ -408,22 +408,22 @@ class Matrix4 {
      */
     fun add(matrix: Matrix4): Matrix4 {
         matrix.toArray(tmp)
-        doubleValues[0] += tmp[0]
-        doubleValues[1] += tmp[1]
-        doubleValues[2] += tmp[2]
-        doubleValues[3] += tmp[3]
-        doubleValues[4] += tmp[4]
-        doubleValues[5] += tmp[5]
-        doubleValues[6] += tmp[6]
-        doubleValues[7] += tmp[7]
-        doubleValues[8] += tmp[8]
-        doubleValues[9] += tmp[9]
-        doubleValues[10] += tmp[10]
-        doubleValues[11] += tmp[11]
-        doubleValues[12] += tmp[12]
-        doubleValues[13] += tmp[13]
-        doubleValues[14] += tmp[14]
-        doubleValues[15] += tmp[15]
+        floatArray[0] += tmp[0]
+        floatArray[1] += tmp[1]
+        floatArray[2] += tmp[2]
+        floatArray[3] += tmp[3]
+        floatArray[4] += tmp[4]
+        floatArray[5] += tmp[5]
+        floatArray[6] += tmp[6]
+        floatArray[7] += tmp[7]
+        floatArray[8] += tmp[8]
+        floatArray[9] += tmp[9]
+        floatArray[10] += tmp[10]
+        floatArray[11] += tmp[11]
+        floatArray[12] += tmp[12]
+        floatArray[13] += tmp[13]
+        floatArray[14] += tmp[14]
+        floatArray[15] += tmp[15]
         return this
     }
 
@@ -435,22 +435,22 @@ class Matrix4 {
      */
     fun subtract(matrix: Matrix4): Matrix4 {
         matrix.toArray(tmp)
-        doubleValues[0] -= tmp[0]
-        doubleValues[1] -= tmp[1]
-        doubleValues[2] -= tmp[2]
-        doubleValues[3] -= tmp[3]
-        doubleValues[4] -= tmp[4]
-        doubleValues[5] -= tmp[5]
-        doubleValues[6] -= tmp[6]
-        doubleValues[7] -= tmp[7]
-        doubleValues[8] -= tmp[8]
-        doubleValues[9] -= tmp[9]
-        doubleValues[10] -= tmp[10]
-        doubleValues[11] -= tmp[11]
-        doubleValues[12] -= tmp[12]
-        doubleValues[13] -= tmp[13]
-        doubleValues[14] -= tmp[14]
-        doubleValues[15] -= tmp[15]
+        floatArray[0] -= tmp[0]
+        floatArray[1] -= tmp[1]
+        floatArray[2] -= tmp[2]
+        floatArray[3] -= tmp[3]
+        floatArray[4] -= tmp[4]
+        floatArray[5] -= tmp[5]
+        floatArray[6] -= tmp[6]
+        floatArray[7] -= tmp[7]
+        floatArray[8] -= tmp[8]
+        floatArray[9] -= tmp[9]
+        floatArray[10] -= tmp[10]
+        floatArray[11] -= tmp[11]
+        floatArray[12] -= tmp[12]
+        floatArray[13] -= tmp[13]
+        floatArray[14] -= tmp[14]
+        floatArray[15] -= tmp[15]
         return this
     }
 
@@ -464,8 +464,8 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     private fun multiply(matrix: Matrix4): Matrix4 {
-        System.arraycopy(doubleValues, 0, tmp, 0, 16)
-        MatrixDoublePrecision.multiplyMM(doubleValues, 0, tmp, 0, matrix.doubleValues, 0)
+        System.arraycopy(floatArray, 0, tmp, 0, 16)
+        MatrixDoublePrecision.multiplyMM(floatArray, 0, tmp, 0, matrix.floatArray, 0)
         return this
     }
 
@@ -479,8 +479,8 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     fun leftMultiply(matrix: Matrix4): Matrix4 {
-        System.arraycopy(doubleValues, 0, tmp, 0, 16)
-        MatrixDoublePrecision.multiplyMM(doubleValues, 0, matrix.doubleValues, 0, tmp, 0)
+        System.arraycopy(floatArray, 0, tmp, 0, 16)
+        MatrixDoublePrecision.multiplyMM(floatArray, 0, matrix.floatArray, 0, tmp, 0)
         return this
     }
 
@@ -490,8 +490,8 @@ class Matrix4 {
      * @param value double The multiplication factor.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun multiply(value: Double): Matrix4 {
-        for (i in doubleValues.indices) doubleValues[i] *= value
+    fun multiply(value: Float): Matrix4 {
+        for (i in floatArray.indices) floatArray[i] *= value
         return this
     }
 
@@ -502,9 +502,9 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     fun translate(vec: MotmVector3): Matrix4 {
-        doubleValues[M03] += vec.x
-        doubleValues[M13] += vec.y
-        doubleValues[M23] += vec.z
+        floatArray[M03] += vec.x
+        floatArray[M13] += vec.y
+        floatArray[M23] += vec.z
         return this
     }
 
@@ -516,10 +516,10 @@ class Matrix4 {
      * @param z double The z component of the translation.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun translate(x: Double, y: Double, z: Double): Matrix4 {
-        doubleValues[M03] += x
-        doubleValues[M13] += y
-        doubleValues[M23] += z
+    fun translate(x: Float, y: Float, z: Float): Matrix4 {
+        floatArray[M03] += x
+        floatArray[M13] += y
+        floatArray[M23] += z
         return this
     }
 
@@ -551,8 +551,8 @@ class Matrix4 {
      * @param z double The z component of the scaling.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun scale(x: Double, y: Double, z: Double): Matrix4 {
-        MatrixDoublePrecision.scaleM(doubleValues, 0, x, y, z)
+    fun scale(x: Float, y: Float, z: Float): Matrix4 {
+        MatrixDoublePrecision.scaleM(floatArray, 0, x, y, z)
         return this
     }
 
@@ -562,7 +562,7 @@ class Matrix4 {
      * @param s double The scaling factor.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun scale(s: Double): Matrix4 {
+    fun scale(s: Float): Matrix4 {
         return scale(s, s, s)
     }
 
@@ -589,8 +589,8 @@ class Matrix4 {
      * @param angle double The angle of rotation in degrees.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun rotate(axis: MotmVector3, angle: Double): Matrix4 {
-        return if (angle == 0.0) this else rotate(mQuat.fromAngleAxis(axis, angle))
+    fun rotate(axis: MotmVector3, angle: Float): Matrix4 {
+        return if (angle == 0.0f) this else rotate(mQuat.fromAngleAxis(axis, angle))
     }
 
     /**
@@ -601,8 +601,8 @@ class Matrix4 {
      * @param angle double The angle of rotation in degrees.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun rotate(axis: MotmVector3.Axis, angle: Double): Matrix4 {
-        return if (angle == 0.0) this else rotate(mQuat.fromAngleAxis(axis, angle))
+    fun rotate(axis: MotmVector3.Axis, angle: Float): Matrix4 {
+        return if (angle == 0.0f) this else rotate(mQuat.fromAngleAxis(axis, angle))
     }
 
     /**
@@ -615,8 +615,8 @@ class Matrix4 {
      * @param angle double The angle of rotation in degrees.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun rotate(x: Double, y: Double, z: Double, angle: Double): Matrix4 {
-        return if (angle == 0.0) this else rotate(mQuat.fromAngleAxis(x, y, z, angle))
+    fun rotate(x: Float, y: Float, z: Float, angle: Float): Matrix4 {
+        return if (angle == 0.0f) this else rotate(mQuat.fromAngleAxis(x, y, z, angle))
     }
 
     /**
@@ -638,9 +638,9 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     fun setTranslation(vec: MotmVector3): Matrix4 {
-        doubleValues[M03] = vec.x
-        doubleValues[M13] = vec.y
-        doubleValues[M23] = vec.z
+        floatArray[M03] = vec.x
+        floatArray[M13] = vec.y
+        floatArray[M23] = vec.z
         return this
     }
 
@@ -650,8 +650,8 @@ class Matrix4 {
      * @param zoom double The zoom value. 1 = no zoom.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setCoordinateZoom(zoom: Double): Matrix4 {
-        doubleValues[M33] = zoom
+    fun setCoordinateZoom(zoom: Float): Matrix4 {
+        floatArray[M33] = zoom
         return this
     }
 
@@ -661,9 +661,9 @@ class Matrix4 {
      * @param vec [MotmVector3] The vector to rotate.
      */
     fun rotateVector(vec: MotmVector3) {
-        val x = vec.x * doubleValues[M00] + vec.y * doubleValues[M01] + vec.z * doubleValues[M02]
-        val y = vec.x * doubleValues[M10] + vec.y * doubleValues[M11] + vec.z * doubleValues[M12]
-        val z = vec.x * doubleValues[M20] + vec.y * doubleValues[M21] + vec.z * doubleValues[M22]
+        val x = vec.x * floatArray[M00] + vec.y * floatArray[M01] + vec.z * floatArray[M02]
+        val y = vec.x * floatArray[M10] + vec.y * floatArray[M11] + vec.z * floatArray[M12]
+        val z = vec.x * floatArray[M20] + vec.y * floatArray[M21] + vec.z * floatArray[M22]
         vec.setAll(x, y, z)
     }
 
@@ -675,10 +675,10 @@ class Matrix4 {
      * @return [MotmVector3] The resulting vector.
      */
     fun projectVector(vec: MotmVector3): MotmVector3 {
-        val inv = 1.0 / (doubleValues[M03] * vec.x + doubleValues[M13] * vec.y + doubleValues[M23] * vec.z + doubleValues[M33])
-        val x = (doubleValues[M00] * vec.x + doubleValues[M01] * vec.y + doubleValues[M02] * vec.z + doubleValues[M03]) * inv
-        val y = (doubleValues[M10] * vec.x + doubleValues[M11] * vec.y + doubleValues[M12] * vec.z + doubleValues[M13]) * inv
-        val z = (doubleValues[M20] * vec.x + doubleValues[M21] * vec.y + doubleValues[M22] * vec.z + doubleValues[M23]) * inv
+        val inv = 1.0f / (floatArray[M03] * vec.x + floatArray[M13] * vec.y + floatArray[M23] * vec.z + floatArray[M33])
+        val x = (floatArray[M00] * vec.x + floatArray[M01] * vec.y + floatArray[M02] * vec.z + floatArray[M03]) * inv
+        val y = (floatArray[M10] * vec.x + floatArray[M11] * vec.y + floatArray[M12] * vec.z + floatArray[M13]) * inv
+        val z = (floatArray[M20] * vec.x + floatArray[M21] * vec.y + floatArray[M22] * vec.z + floatArray[M23]) * inv
         return vec.setAll(x, y, z)
     }
 
@@ -691,10 +691,10 @@ class Matrix4 {
      */
     fun projectAndCreateVector(vec: MotmVector3): MotmVector3 {
         val r = MotmVector3()
-        val inv = 1.0 / (doubleValues[M03] * vec.x + doubleValues[M13] * vec.y + doubleValues[M23] * vec.z + doubleValues[M33])
-        r.x = (doubleValues[M00] * vec.x + doubleValues[M01] * vec.y + doubleValues[M02] * vec.z + doubleValues[M03]) * inv
-        r.y = (doubleValues[M10] * vec.x + doubleValues[M11] * vec.y + doubleValues[M12] * vec.z + doubleValues[M13]) * inv
-        r.z = (doubleValues[M20] * vec.x + doubleValues[M21] * vec.y + doubleValues[M22] * vec.z + doubleValues[M23]) * inv
+        val inv = 1.0f / (floatArray[M03] * vec.x + floatArray[M13] * vec.y + floatArray[M23] * vec.z + floatArray[M33])
+        r.x = (floatArray[M00] * vec.x + floatArray[M01] * vec.y + floatArray[M02] * vec.z + floatArray[M03]) * inv
+        r.y = (floatArray[M10] * vec.x + floatArray[M11] * vec.y + floatArray[M12] * vec.z + floatArray[M13]) * inv
+        r.z = (floatArray[M20] * vec.x + floatArray[M21] * vec.y + floatArray[M22] * vec.z + floatArray[M23]) * inv
         return r
     }
 
@@ -706,10 +706,10 @@ class Matrix4 {
      * @param z double The z component of the translation.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setTranslation(x: Double, y: Double, z: Double): Matrix4 {
-        doubleValues[M03] = x
-        doubleValues[M13] = y
-        doubleValues[M23] = z
+    fun setTranslation(x: Float, y: Float, z: Float): Matrix4 {
+        floatArray[M03] = x
+        floatArray[M13] = y
+        floatArray[M23] = z
         return this
     }
 
@@ -721,9 +721,9 @@ class Matrix4 {
      * @param t `double` The interpolation ratio. The result is weighted to this value on the [Matrix4].
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun lerp(matrix: Matrix4, t: Double): Matrix4 {
+    fun lerp(matrix: Matrix4, t: Float): Matrix4 {
         matrix.toArray(tmp)
-        for (i in 0..15) doubleValues[i] = doubleValues[i] * (1.0 - t) + t * tmp[i]
+        for (i in 0..15) floatArray[i] = floatArray[i] * (1.0f - t) + t * tmp[i]
         return this
     }
 
@@ -738,9 +738,9 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     fun setToNormalMatrix(): Matrix4 {
-        doubleValues[M03] = 0.0
-        doubleValues[M13] = 0.0
-        doubleValues[M23] = 0.0
+        floatArray[M03] = 0.0f
+        floatArray[M13] = 0.0f
+        floatArray[M23] = 0.0f
         return inverse().transpose()
     }
 
@@ -753,9 +753,9 @@ class Matrix4 {
      * @param aspect double The aspect ratio. Defined as width/height.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToPerspective(near: Double, far: Double, fov: Double, aspect: Double): Matrix4 {
+    fun setToPerspective(near: Float, far: Float, fov: Float, aspect: Float): Matrix4 {
         identity()
-        MatrixDoublePrecision.perspectiveM(doubleValues, 0, fov, aspect, near, far)
+        MatrixDoublePrecision.perspectiveM(floatArray, 0, fov, aspect, near, far)
         return this
     }
 
@@ -769,8 +769,8 @@ class Matrix4 {
      * @param height double The height.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToOrthographic2D(x: Double, y: Double, width: Double, height: Double): Matrix4 {
-        return setToOrthographic(x, x + width, y, y + height, 0.0, 1.0)
+    fun setToOrthographic2D(x: Float, y: Float, width: Float, height: Float): Matrix4 {
+        return setToOrthographic(x, x + width, y, y + height, 0.0f, 1.0f)
     }
 
     /**
@@ -785,7 +785,7 @@ class Matrix4 {
      * @param far double The far plane.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToOrthographic2D(x: Double, y: Double, width: Double, height: Double, near: Double, far: Double): Matrix4 {
+    fun setToOrthographic2D(x: Float, y: Float, width: Float, height: Float, near: Float, far: Float): Matrix4 {
         return setToOrthographic(x, x + width, y, y + height, near, far)
     }
 
@@ -799,8 +799,8 @@ class Matrix4 {
      * @param far double The far plane.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    private fun setToOrthographic(left: Double, right: Double, bottom: Double, top: Double, near: Double, far: Double): Matrix4 {
-        MatrixDoublePrecision.orthoM(doubleValues, 0, left, right, bottom, top, near, far)
+    private fun setToOrthographic(left: Float, right: Float, bottom: Float, top: Float, near: Float, far: Float): Matrix4 {
+        MatrixDoublePrecision.orthoM(floatArray, 0, left, right, bottom, top, near, far)
         return this
     }
 
@@ -812,9 +812,9 @@ class Matrix4 {
      */
     fun setToTranslation(vec: MotmVector3): Matrix4 {
         identity()
-        doubleValues[M03] = vec.x
-        doubleValues[M13] = vec.y
-        doubleValues[M23] = vec.z
+        floatArray[M03] = vec.x
+        floatArray[M13] = vec.y
+        floatArray[M23] = vec.z
         return this
     }
 
@@ -826,11 +826,11 @@ class Matrix4 {
      * @param z double The z component of the translation.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToTranslation(x: Double, y: Double, z: Double): Matrix4 {
+    fun setToTranslation(x: Float, y: Float, z: Float): Matrix4 {
         identity()
-        doubleValues[M03] = x
-        doubleValues[M13] = y
-        doubleValues[M23] = z
+        floatArray[M03] = x
+        floatArray[M13] = y
+        floatArray[M23] = z
         return this
     }
 
@@ -842,9 +842,9 @@ class Matrix4 {
      */
     fun setToScale(vec: MotmVector3): Matrix4 {
         identity()
-        doubleValues[M00] = vec.x
-        doubleValues[M11] = vec.y
-        doubleValues[M22] = vec.z
+        floatArray[M00] = vec.x
+        floatArray[M11] = vec.y
+        floatArray[M22] = vec.z
         return this
     }
 
@@ -856,11 +856,11 @@ class Matrix4 {
      * @param z double The z component of the translation.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToScale(x: Double, y: Double, z: Double): Matrix4 {
+    fun setToScale(x: Float, y: Float, z: Float): Matrix4 {
         identity()
-        doubleValues[M00] = x
-        doubleValues[M11] = y
-        doubleValues[M22] = z
+        floatArray[M00] = x
+        floatArray[M11] = y
+        floatArray[M22] = z
         return this
     }
 
@@ -873,12 +873,12 @@ class Matrix4 {
      */
     fun setToTranslationAndScaling(translation: MotmVector3, scaling: MotmVector3): Matrix4 {
         identity()
-        doubleValues[M03] = translation.x
-        doubleValues[M13] = translation.y
-        doubleValues[M23] = translation.z
-        doubleValues[M00] = scaling.x
-        doubleValues[M11] = scaling.y
-        doubleValues[M22] = scaling.z
+        floatArray[M03] = translation.x
+        floatArray[M13] = translation.y
+        floatArray[M23] = translation.z
+        floatArray[M00] = scaling.x
+        floatArray[M11] = scaling.y
+        floatArray[M22] = scaling.z
         return this
     }
 
@@ -893,14 +893,14 @@ class Matrix4 {
      * @param sz double The z component of the scaling.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToTranslationAndScaling(tx: Double, ty: Double, tz: Double, sx: Double, sy: Double, sz: Double): Matrix4 {
+    fun setToTranslationAndScaling(tx: Float, ty: Float, tz: Float, sx: Float, sy: Float, sz: Float): Matrix4 {
         identity()
-        doubleValues[M03] = tx
-        doubleValues[M13] = ty
-        doubleValues[M23] = tz
-        doubleValues[M00] = sx
-        doubleValues[M11] = sy
-        doubleValues[M22] = sz
+        floatArray[M03] = tx
+        floatArray[M13] = ty
+        floatArray[M23] = tz
+        floatArray[M00] = sx
+        floatArray[M11] = sy
+        floatArray[M22] = sz
         return this
     }
 
@@ -911,8 +911,8 @@ class Matrix4 {
      * @param angle double The rotation angle in degrees.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToRotation(axis: MotmVector3, angle: Double): Matrix4 {
-        return if (angle == 0.0) identity() else setAll(mQuat.fromAngleAxis(axis, angle))
+    fun setToRotation(axis: MotmVector3, angle: Float): Matrix4 {
+        return if (angle == 0.0f) identity() else setAll(mQuat.fromAngleAxis(axis, angle))
     }
 
     /**
@@ -922,8 +922,8 @@ class Matrix4 {
      * @param angle double The rotation angle in degrees.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToRotation(axis: MotmVector3.Axis, angle: Double): Matrix4 {
-        return if (angle == 0.0) identity() else setAll(mQuat.fromAngleAxis(axis, angle))
+    fun setToRotation(axis: MotmVector3.Axis, angle: Float): Matrix4 {
+        return if (angle == 0.0f) identity() else setAll(mQuat.fromAngleAxis(axis, angle))
     }
 
     /**
@@ -935,8 +935,8 @@ class Matrix4 {
      * @param angle double The rotation angle.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToRotation(x: Double, y: Double, z: Double, angle: Double): Matrix4 {
-        return if (angle == 0.0) identity() else setAll(mQuat.fromAngleAxis(x, y, z, angle))
+    fun setToRotation(x: Float, y: Float, z: Float, angle: Float): Matrix4 {
+        return if (angle == 0.0f) identity() else setAll(mQuat.fromAngleAxis(x, y, z, angle))
     }
 
     /**
@@ -962,7 +962,7 @@ class Matrix4 {
      * @param z2 double The z component of the target vector.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToRotation(x1: Double, y1: Double, z1: Double, x2: Double, y2: Double, z2: Double): Matrix4 {
+    fun setToRotation(x1: Float, y1: Float, z1: Float, x2: Float, y2: Float, z2: Float): Matrix4 {
         return setAll(mQuat.fromRotationBetween(x1, y1, z1, x2, y2, z2))
     }
 
@@ -974,7 +974,7 @@ class Matrix4 {
      * @param roll double The roll angle in degrees.
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
-    fun setToRotation(yaw: Double, pitch: Double, roll: Double): Matrix4 {
+    fun setToRotation(yaw: Float, pitch: Float, roll: Float): Matrix4 {
         return setAll(mQuat.fromEuler(yaw, pitch, roll))
     }
 
@@ -992,15 +992,15 @@ class Matrix4 {
         vec1.cross(up).normalize()
         vec2.setAll(vec1).cross(vec3).normalize()
         identity()
-        doubleValues[M00] = vec1.x
-        doubleValues[M01] = vec1.y
-        doubleValues[M02] = vec1.z
-        doubleValues[M10] = vec2.x
-        doubleValues[M11] = vec2.y
-        doubleValues[M12] = vec2.z
-        doubleValues[M20] = vec3.x
-        doubleValues[M21] = vec3.y
-        doubleValues[M22] = vec3.z
+        floatArray[M00] = vec1.x
+        floatArray[M01] = vec1.y
+        floatArray[M02] = vec1.z
+        floatArray[M10] = vec2.x
+        floatArray[M11] = vec2.y
+        floatArray[M12] = vec2.z
+        floatArray[M20] = vec3.x
+        floatArray[M21] = vec3.y
+        floatArray[M22] = vec3.z
         return this
     }
 
@@ -1013,7 +1013,7 @@ class Matrix4 {
      * @return A reference to this [Matrix4] to facilitate chaining.
      */
     fun setToLookAt(position: MotmVector3, target: MotmVector3, up: MotmVector3): Matrix4 {
-        MatrixDoublePrecision.setLookAtM(doubleValues, 0, position.x, position.y, position.z,
+        MatrixDoublePrecision.setLookAtM(floatArray, 0, position.x, position.y, position.z,
                 target.x, target.y, target.z, up.x, up.y, up.z)
         return this
     }
@@ -1035,7 +1035,7 @@ class Matrix4 {
     }
 
     private fun getTranslation(vec: MotmVector3): MotmVector3 {
-        return vec.setAll(doubleValues[M03], doubleValues[M13], doubleValues[M23])
+        return vec.setAll(floatArray[M03], floatArray[M13], floatArray[M23])
     }
 
     /**
@@ -1046,9 +1046,9 @@ class Matrix4 {
      * @return [MotmVector3] representing the scaling.
      */
     fun getScaling(vec: MotmVector3): MotmVector3 {
-        val x = sqrt(doubleValues[M00] * doubleValues[M00] + doubleValues[M01] * doubleValues[M01] + doubleValues[M02] * doubleValues[M02])
-        val y = sqrt(doubleValues[M10] * doubleValues[M10] + doubleValues[M11] * doubleValues[M11] + doubleValues[M12] * doubleValues[M12])
-        val z = sqrt(doubleValues[M20] * doubleValues[M20] + doubleValues[M21] * doubleValues[M21] + doubleValues[M22] * doubleValues[M22])
+        val x = sqrt(floatArray[M00] * floatArray[M00] + floatArray[M01] * floatArray[M01] + floatArray[M02] * floatArray[M02])
+        val y = sqrt(floatArray[M10] * floatArray[M10] + floatArray[M11] * floatArray[M11] + floatArray[M12] * floatArray[M12])
+        val z = sqrt(floatArray[M20] * floatArray[M20] + floatArray[M21] * floatArray[M21] + floatArray[M22] * floatArray[M22])
         return vec.setAll(x, y, z)
     }
 
@@ -1067,27 +1067,27 @@ class Matrix4 {
      * @param doubleArray double array to store the copy in. Must be at least 16 elements long.
      * Entries will be placed starting at the 0 index.
      */
-    fun toArray(doubleArray: DoubleArray) {
-        System.arraycopy(doubleValues, 0, doubleArray, 0, 16)
+    fun toArray(doubleArray: FloatArray) {
+        System.arraycopy(floatArray, 0, doubleArray, 0, 16)
     }
 
     fun toFloatArray(floatArray: FloatArray) {
-        floatArray[0] = doubleValues[0].toFloat()
-        floatArray[1] = doubleValues[1].toFloat()
-        floatArray[2] = doubleValues[2].toFloat()
-        floatArray[3] = doubleValues[3].toFloat()
-        floatArray[4] = doubleValues[4].toFloat()
-        floatArray[5] = doubleValues[5].toFloat()
-        floatArray[6] = doubleValues[6].toFloat()
-        floatArray[7] = doubleValues[7].toFloat()
-        floatArray[8] = doubleValues[8].toFloat()
-        floatArray[9] = doubleValues[9].toFloat()
-        floatArray[10] = doubleValues[10].toFloat()
-        floatArray[11] = doubleValues[11].toFloat()
-        floatArray[12] = doubleValues[12].toFloat()
-        floatArray[13] = doubleValues[13].toFloat()
-        floatArray[14] = doubleValues[14].toFloat()
-        floatArray[15] = doubleValues[15].toFloat()
+        floatArray[0] = this.floatArray[0]
+        floatArray[1] = this.floatArray[1]
+        floatArray[2] = this.floatArray[2]
+        floatArray[3] = this.floatArray[3]
+        floatArray[4] = this.floatArray[4]
+        floatArray[5] = this.floatArray[5]
+        floatArray[6] = this.floatArray[6]
+        floatArray[7] = this.floatArray[7]
+        floatArray[8] = this.floatArray[8]
+        floatArray[9] = this.floatArray[9]
+        floatArray[10] = this.floatArray[10]
+        floatArray[11] = this.floatArray[11]
+        floatArray[12] = this.floatArray[12]
+        floatArray[13] = this.floatArray[13]
+        floatArray[14] = this.floatArray[14]
+        floatArray[15] = this.floatArray[15]
     }
 
     /*
@@ -1123,10 +1123,10 @@ class Matrix4 {
 	 * @see java.lang.Object#toString()
 	 */
     override fun toString(): String {
-        return ("[" + doubleValues[M00] + "|" + doubleValues[M01] + "|" + doubleValues[M02] + "|" + doubleValues[M03] + "]\n["
-                + doubleValues[M10] + "|" + doubleValues[M11] + "|" + doubleValues[M12] + "|" + doubleValues[M13] + "]\n["
-                + doubleValues[M20] + "|" + doubleValues[M21] + "|" + doubleValues[M22] + "|" + doubleValues[M23] + "]\n["
-                + doubleValues[M30] + "|" + doubleValues[M31] + "|" + doubleValues[M32] + "|" + doubleValues[M33] + "]\n")
+        return ("[" + floatArray[M00] + "|" + floatArray[M01] + "|" + floatArray[M02] + "|" + floatArray[M03] + "]\n["
+                + floatArray[M10] + "|" + floatArray[M11] + "|" + floatArray[M12] + "|" + floatArray[M13] + "]\n["
+                + floatArray[M20] + "|" + floatArray[M21] + "|" + floatArray[M22] + "|" + floatArray[M23] + "]\n["
+                + floatArray[M30] + "|" + floatArray[M31] + "|" + floatArray[M32] + "|" + floatArray[M33] + "]\n")
     }
 
     companion object {
@@ -1170,7 +1170,7 @@ class Matrix4 {
          * @param angle double The rotation angle in degrees.
          * @return [Matrix4] The new matrix.
          */
-        fun createRotationMatrix(axis: MotmVector3, angle: Double): Matrix4 {
+        fun createRotationMatrix(axis: MotmVector3, angle: Float): Matrix4 {
             return Matrix4().setToRotation(axis, angle)
         }
 
@@ -1181,7 +1181,7 @@ class Matrix4 {
          * @param angle double The rotation angle in degrees.
          * @return [Matrix4] The new matrix.
          */
-        fun createRotationMatrix(axis: MotmVector3.Axis, angle: Double): Matrix4 {
+        fun createRotationMatrix(axis: MotmVector3.Axis, angle: Float): Matrix4 {
             return Matrix4().setToRotation(axis, angle)
         }
 
@@ -1194,7 +1194,7 @@ class Matrix4 {
          * @param angle double The rotation angle in degrees.
          * @return [Matrix4] The new matrix.
          */
-        fun createRotationMatrix(x: Double, y: Double, z: Double, angle: Double): Matrix4 {
+        fun createRotationMatrix(x: Float, y: Float, z: Float, angle: Float): Matrix4 {
             return Matrix4().setToRotation(x, y, z, angle)
         }
 
@@ -1206,7 +1206,7 @@ class Matrix4 {
          * @param roll double The roll Euler angle.
          * @return [Matrix4] The new matrix.
          */
-        fun createRotationMatrix(yaw: Double, pitch: Double, roll: Double): Matrix4 {
+        fun createRotationMatrix(yaw: Float, pitch: Float, roll: Float): Matrix4 {
             return Matrix4().setToRotation(yaw, pitch, roll)
         }
 
@@ -1228,7 +1228,7 @@ class Matrix4 {
          * @param z double The z component of the translation.
          * @return A new [Matrix4] representing the translation only.
          */
-        fun createTranslationMatrix(x: Double, y: Double, z: Double): Matrix4 {
+        fun createTranslationMatrix(x: Float, y: Float, z: Float): Matrix4 {
             return Matrix4().translate(x, y, z)
         }
 
@@ -1250,7 +1250,7 @@ class Matrix4 {
          * @param z double The z component of the scaling.
          * @return A new [Matrix4] representing the scaling only.
          */
-        fun createScaleMatrix(x: Double, y: Double, z: Double): Matrix4 {
+        fun createScaleMatrix(x: Float, y: Float, z: Float): Matrix4 {
             return Matrix4().setToScale(x, y, z)
         }
     }

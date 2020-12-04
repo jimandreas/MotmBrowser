@@ -1,17 +1,14 @@
 /*
- * Copyright (C) 2016-2018 James Andreas
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
+ *  Copyright 2020 Bammellab / James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
  */
 
 @file:Suppress("unused")
@@ -125,7 +122,7 @@ class RenderNucleic(private val molecule: Molecule) {
         // fix corner2 along P - and set its length,
         //   based at corner1
         corner2.setAll(pvec)
-        corner2.multiply(scaler.toDouble())
+        corner2.multiply(scaler.toFloat())
         corner2.add(corner1)
 
         // set R to vector across the rectangle
@@ -143,7 +140,7 @@ class RenderNucleic(private val molecule: Molecule) {
         corner3.setAll(svec)
         corner3.cross(pvec)
         // corner3.multiply((double) scaler * 0.75);
-        corner3.multiply(2.0)
+        corner3.multiply(2.0f)
 
         // corner3 is still a vector based at the origin.
         //  borrow it for a minute to figure out corner4
@@ -159,7 +156,7 @@ class RenderNucleic(private val molecule: Molecule) {
          *  TOP
          */
 
-        svec.multiply(0.25)
+        svec.multiply(0.25f)
 
         corner1t.setAll(corner1)
         corner2t.setAll(corner2)

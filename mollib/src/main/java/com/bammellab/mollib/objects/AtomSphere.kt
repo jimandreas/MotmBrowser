@@ -1,17 +1,14 @@
 /*
- * Copyright (C) 2016-2018 James Andreas
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
+ *  Copyright 2020 Bammellab / James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
  */
 
 @file:Suppress("unused", "always_false", "UNUSED_VARIABLE")
@@ -87,40 +84,40 @@ class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
         while (i < numSlices) {
             j = 0
             while (j < numSlices) {
-                vx1 = (radiusIn.toDouble()
-                        * MathUtil.sin((angleStep / 2.0f * i.toFloat()).toDouble())
-                        * MathUtil.sin((angleStep * j.toFloat()).toDouble())).toFloat()
-                vy1 = (radiusIn * MathUtil.cos((angleStep / 2.0f * i.toFloat()).toDouble())).toFloat()
-                vz1 = (radiusIn.toDouble()
-                        * MathUtil.sin((angleStep / 2.0f * i.toFloat()).toDouble())
-                        * MathUtil.cos((angleStep * j.toFloat()).toDouble())).toFloat()
+                vx1 = (radiusIn.toFloat()
+                        * MathUtil.sin((angleStep / 2.0f * i.toFloat()))
+                        * MathUtil.sin((angleStep * j.toFloat()))).toFloat()
+                vy1 = (radiusIn * MathUtil.cos((angleStep / 2.0f * i.toFloat()))).toFloat()
+                vz1 = (radiusIn.toFloat()
+                        * MathUtil.sin((angleStep / 2.0f * i.toFloat()))
+                        * MathUtil.cos((angleStep * j.toFloat()))).toFloat()
 
                 // down one latitude
-                vx2 = (radiusIn.toDouble()
-                        * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()).toDouble())
-                        * MathUtil.sin((angleStep * j.toFloat()).toDouble())).toFloat()
-                vy2 = (radiusIn * MathUtil.cos((angleStep / 2.0f * (i + 1).toFloat()).toDouble())).toFloat()
-                vz2 = (radiusIn.toDouble()
-                        * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()).toDouble())
-                        * MathUtil.cos((angleStep * j.toFloat()).toDouble())).toFloat()
+                vx2 = (radiusIn.toFloat()
+                        * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()))
+                        * MathUtil.sin((angleStep * j.toFloat()))).toFloat()
+                vy2 = (radiusIn * MathUtil.cos((angleStep / 2.0f * (i + 1).toFloat()))).toFloat()
+                vz2 = (radiusIn.toFloat()
+                        * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()))
+                        * MathUtil.cos((angleStep * j.toFloat()))).toFloat()
 
                 // down one longitude and over one latitude
-                vx3 = (radiusIn.toDouble()
-                        * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()).toDouble())
-                        * MathUtil.sin((angleStep * (j + 1).toFloat()).toDouble())).toFloat()
-                vy3 = (radiusIn * MathUtil.cos((angleStep / 2.0f * (i + 1).toFloat()).toDouble())).toFloat()
-                vz3 = (radiusIn.toDouble()
-                        * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()).toDouble())
-                        * MathUtil.cos((angleStep * (j + 1).toFloat()).toDouble())).toFloat()
+                vx3 = (radiusIn.toFloat()
+                        * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()))
+                        * MathUtil.sin((angleStep * (j + 1).toFloat()))).toFloat()
+                vy3 = (radiusIn * MathUtil.cos((angleStep / 2.0f * (i + 1).toFloat()))).toFloat()
+                vz3 = (radiusIn.toFloat()
+                        * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()))
+                        * MathUtil.cos((angleStep * (j + 1).toFloat()))).toFloat()
 
                 // over one longitude at same latitude
-                vx4 = (radiusIn.toDouble()
-                        * MathUtil.sin((angleStep / 2.0f * i.toFloat()).toDouble())
-                        * MathUtil.sin((angleStep * (j + 1).toFloat()).toDouble())).toFloat()
-                vy4 = (radiusIn * MathUtil.cos((angleStep / 2.0f * i.toFloat()).toDouble())).toFloat()
-                vz4 = (radiusIn.toDouble()
-                        * MathUtil.sin((angleStep / 2.0f * i.toFloat()).toDouble())
-                        * MathUtil.cos((angleStep * (j + 1).toFloat()).toDouble())).toFloat()
+                vx4 = (radiusIn.toFloat()
+                        * MathUtil.sin((angleStep / 2.0f * i.toFloat()))
+                        * MathUtil.sin((angleStep * (j + 1).toFloat()))).toFloat()
+                vy4 = (radiusIn * MathUtil.cos((angleStep / 2.0f * i.toFloat()))).toFloat()
+                vz4 = (radiusIn.toFloat()
+                        * MathUtil.sin((angleStep / 2.0f * i.toFloat()))
+                        * MathUtil.cos((angleStep * (j + 1).toFloat()))).toFloat()
 
 
                 // first top point
