@@ -17,7 +17,7 @@ package com.bammellab.captureimages
 
 object MotmPdbNames {
 
-    val pdbNames = listOf(
+    val pdbNamesProblems = listOf(
             "3cmx",
             "1fka",
             "1r9f",
@@ -64,7 +64,7 @@ object MotmPdbNames {
     /*
      * PDBs with num of Atoms > 50K removed
      */
-    val pdbNamesOLD = listOf(
+    val pdbNames = listOf(
 
             "143d",
             "148l",
