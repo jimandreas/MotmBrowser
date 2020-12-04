@@ -11,7 +11,7 @@
  *  limitations under the License
  */
 
-@file:Suppress("LiftReturnOrAssignment")
+@file:Suppress("LiftReturnOrAssignment", "unused")
 
 package com.bammellab.motm.util
 

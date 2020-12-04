@@ -11,7 +11,7 @@
  *  limitations under the License
  */
 
-@file:Suppress("MemberVisibilityCanBePrivate")
+@file:Suppress("MemberVisibilityCanBePrivate", "unused")
 
 package com.bammellab.motm.browse
 

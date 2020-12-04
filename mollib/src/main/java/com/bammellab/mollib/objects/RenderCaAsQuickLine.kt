@@ -32,7 +32,7 @@ import com.kotmol.pdbParser.PdbAtom
 class RenderCaAsQuickLine(private val mol: Molecule) {
 
     private lateinit var vertexData: FloatArray
-    var arrayOffset = 0
+    private var arrayOffset = 0
     val n = floatArrayOf(50.0f, 50.0f, 50.0f) // wired in random value for now
 
     fun renderQuickLine() {
@@ -84,9 +84,9 @@ class RenderCaAsQuickLine(private val mol: Molecule) {
     private fun putPoint(p1: MotmVector3, color: FloatArray ) {
 
 
-        vertexData[arrayOffset++] = p1.x.toFloat()
-        vertexData[arrayOffset++] = p1.y.toFloat()
-        vertexData[arrayOffset++] = p1.z.toFloat()
+        vertexData[arrayOffset++] = p1.x
+        vertexData[arrayOffset++] = p1.y
+        vertexData[arrayOffset++] = p1.z
         vertexData[arrayOffset++] = n[0]
         vertexData[arrayOffset++] = n[1]
         vertexData[arrayOffset++] = n[2]

@@ -125,9 +125,9 @@ class MotmVector3 {
      */
     @Throws(IllegalArgumentException::class, NumberFormatException::class)
     constructor(values: Array<String>) : this(
-            java.lang.Float.parseFloat(values[0]).toFloat(),
-            java.lang.Float.parseFloat(values[1]).toFloat(),
-            java.lang.Float.parseFloat(values[2]).toFloat()
+            java.lang.Float.parseFloat(values[0]),
+            java.lang.Float.parseFloat(values[1]),
+            java.lang.Float.parseFloat(values[2])
     )
 
     /*

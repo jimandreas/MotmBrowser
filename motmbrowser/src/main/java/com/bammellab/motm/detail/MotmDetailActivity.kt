@@ -249,8 +249,8 @@ class MotmDetailActivity : AppCompatActivity() {
              * respond to a click on the molecule (PDB)
              *    experiment with master / detail
              */
-            im.setOnClickListener(View.OnClickListener { v -> start3dViewer(v, pdbsStringArray )})
-            view.setOnClickListener(View.OnClickListener { v -> start3dViewer(v, pdbsStringArray )})
+            im.setOnClickListener { v -> start3dViewer(v, pdbsStringArray) }
+            view.setOnClickListener { v -> start3dViewer(v, pdbsStringArray) }
             // load the text field via retrofit
             val fetcher = PdbFetcherCoroutine(pdbId, pdbCardText)
             fetcher.pdbFetcherCoroutine()

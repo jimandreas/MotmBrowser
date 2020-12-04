@@ -11,6 +11,8 @@
  *  limitations under the License
  */
 
+@file:Suppress("unused")
+
 package com.bammellab.captureimages
 
 object MotmPdbNames {

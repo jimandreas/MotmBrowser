@@ -18,7 +18,6 @@ package com.bammellab.motm.settings
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -95,9 +94,6 @@ class SettingsFragment : PreferenceFragmentCompat(),
         }
     }
 
-    companion object {
-
-    }
 }
 
 

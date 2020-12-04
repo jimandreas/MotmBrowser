@@ -445,9 +445,9 @@ class RenderRibbon(private val molecule: Molecule) {
                     y1 = R1.y * c1 + S1.y * s1
                     z1 = R1.z * c1 + S1.z * s1
 
-                    v1[i * 3] = (x1 + positionStart.x).toFloat()
-                    v1[i * 3 + 1] = (y1 + positionStart.y).toFloat()
-                    v1[i * 3 + 2] = (z1 + positionStart.z).toFloat()
+                    v1[i * 3] = (x1 + positionStart.x)
+                    v1[i * 3 + 1] = (y1 + positionStart.y)
+                    v1[i * 3 + 2] = (z1 + positionStart.z)
                 }
             }
 
@@ -466,9 +466,9 @@ class RenderRibbon(private val molecule: Molecule) {
                 y1 = R2.y * c1 + S2.y * s1
                 z1 = R2.z * c1 + S2.z * s1
 
-                v2[i * 3] = (x1 + positionEnd.x).toFloat()
-                v2[i * 3 + 1] = (y1 + positionEnd.y).toFloat()
-                v2[i * 3 + 2] = (z1 + positionEnd.z).toFloat()
+                v2[i * 3] = (x1 + positionEnd.x)
+                v2[i * 3 + 1] = (y1 + positionEnd.y)
+                v2[i * 3 + 2] = (z1 + positionEnd.z)
             }
 
 
@@ -830,9 +830,9 @@ class RenderRibbon(private val molecule: Molecule) {
                     y1 = R1.y * c1 + S1.y * s1
                     z1 = R1.z * c1 + S1.z * s1
 
-                    v1[i * 3] = (x1 + positionStart.x).toFloat()
-                    v1[i * 3 + 1] = (y1 + positionStart.y).toFloat()
-                    v1[i * 3 + 2] = (z1 + positionStart.z).toFloat()
+                    v1[i * 3] = (x1 + positionStart.x)
+                    v1[i * 3 + 1] = (y1 + positionStart.y)
+                    v1[i * 3 + 2] = (z1 + positionStart.z)
                 }
                 // render a "connection tube" to bridge between possible
                 // previous section of cartoon
@@ -854,9 +854,9 @@ class RenderRibbon(private val molecule: Molecule) {
                 y1 = R2.y * c1 + S2.y * s1
                 z1 = R2.z * c1 + S2.z * s1
 
-                v2[i * 3] = (x1 + positionEnd.x).toFloat()
-                v2[i * 3 + 1] = (y1 + positionEnd.y).toFloat()
-                v2[i * 3 + 2] = (z1 + positionEnd.z).toFloat()
+                v2[i * 3] = (x1 + positionEnd.x)
+                v2[i * 3 + 1] = (y1 + positionEnd.y)
+                v2[i * 3 + 2] = (z1 + positionEnd.z)
             }
 
 
@@ -1138,9 +1138,9 @@ class RenderRibbon(private val molecule: Molecule) {
                     y1 = R.y * c1 + S.y * s1
                     z1 = R.z * c1 + S.z * s1
 
-                    v1[slice * 3] = (x1 + positionStart.x).toFloat()
-                    v1[slice * 3 + 1] = (y1 + positionStart.y).toFloat()
-                    v1[slice * 3 + 2] = (z1 + positionStart.z).toFloat()
+                    v1[slice * 3] = (x1 + positionStart.x)
+                    v1[slice * 3 + 1] = (y1 + positionStart.y)
+                    v1[slice * 3 + 2] = (z1 + positionStart.z)
                 }
 
                 // render a "connection tube" to bridge between possible
@@ -1204,9 +1204,9 @@ class RenderRibbon(private val molecule: Molecule) {
                 y1 = R.y * c1 + S.y * s1
                 z1 = R.z * c1 + S.z * s1
 
-                endVertexCache[slice * 3] = (x1 + positionEnd.x).toFloat()
-                endVertexCache[slice * 3 + 1] = (y1 + positionEnd.y).toFloat()
-                endVertexCache[slice * 3 + 2] = (z1 + positionEnd.z).toFloat()
+                endVertexCache[slice * 3] = (x1 + positionEnd.x)
+                endVertexCache[slice * 3 + 1] = (y1 + positionEnd.y)
+                endVertexCache[slice * 3 + 2] = (z1 + positionEnd.z)
             }
 
             vertexData = BufferManager.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
@@ -1307,9 +1307,9 @@ class RenderRibbon(private val molecule: Molecule) {
          */
         val normalBrightnessFactor = molecule.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR
 
-        n[0] *= -normalBrightnessFactor.toFloat()
-        n[1] *= -normalBrightnessFactor.toFloat()
-        n[2] *= -normalBrightnessFactor.toFloat()
+        n[0] *= -normalBrightnessFactor
+        n[1] *= -normalBrightnessFactor
+        n[2] *= -normalBrightnessFactor
 
         vertexData[arrayOffset++] = p1[0]
         vertexData[arrayOffset++] = p1[1]
@@ -1354,13 +1354,13 @@ class RenderRibbon(private val molecule: Molecule) {
         var bestMatch = 0
 
         val testV1 = MotmVector3()
-        val testV2 = MotmVector3(v2[0].toFloat(), v2[1].toFloat(), v2[2])
+        val testV2 = MotmVector3(v2[0], v2[1], v2[2])
         val result = MotmVector3()
         target_vector.normalize()
 
         while (i < cache_size) {
             testV1.setAll(
-                    cache[i * 3].toFloat(), cache[i * 3 + 1].toFloat(), cache[i * 3 + 2])
+                    cache[i * 3], cache[i * 3 + 1], cache[i * 3 + 2])
             result.setAll(testV2)
             result.subtract(testV1)
             result.normalize()

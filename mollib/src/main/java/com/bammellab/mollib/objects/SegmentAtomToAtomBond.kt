@@ -37,7 +37,7 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
         /*
          * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
          */
-        normal_brightness_factor = (molecule.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR).toFloat()
+        normal_brightness_factor = (molecule.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR)
 
         var i = 0
         val startColor: FloatArray
@@ -146,16 +146,16 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             y1 = rvec.y * c1 + svec.y * s1
             z1 = rvec.z * c1 + svec.z * s1
 
-            p1[0] = (x1 + positionMid.x).toFloat()
-            p1[1] = (y1 + positionMid.y).toFloat()
-            p1[2] = (z1 + positionMid.z).toFloat()
+            p1[0] = (x1 + positionMid.x)
+            p1[1] = (y1 + positionMid.y)
+            p1[2] = (z1 + positionMid.z)
 
 
             // first bottom point
 
-            p2[0] = (x1 + positionStart.x).toFloat()
-            p2[1] = (y1 + positionStart.y).toFloat()
-            p2[2] = (z1 + positionStart.z).toFloat()
+            p2[0] = (x1 + positionStart.x)
+            p2[1] = (y1 + positionStart.y)
+            p2[2] = (z1 + positionStart.z)
 
 
             // SECOND BOTTOM point
@@ -163,9 +163,9 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             y2 = rvec.y * c2 + svec.y * s2
             z2 = rvec.z * c2 + svec.z * s2
 
-            p3[0] = (x2 + positionStart.x).toFloat()
-            p3[1] = (y2 + positionStart.y).toFloat()
-            p3[2] = (z2 + positionStart.z).toFloat()
+            p3[0] = (x2 + positionStart.x)
+            p3[1] = (y2 + positionStart.y)
+            p3[2] = (z2 + positionStart.z)
             // OK that is one triangle.
 
             n = XYZ.getNormal(p1, p2, p3)
@@ -175,16 +175,16 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
 
             // first top point
 
-            p1[0] = (x1 + positionMid.x).toFloat()
-            p1[1] = (y1 + positionMid.y).toFloat()
-            p1[2] = (z1 + positionMid.z).toFloat()
+            p1[0] = (x1 + positionMid.x)
+            p1[1] = (y1 + positionMid.y)
+            p1[2] = (z1 + positionMid.z)
 
 
             // SECOND BOTTOM point
 
-            p2[0] = (x2 + positionStart.x).toFloat()
-            p2[1] = (y2 + positionStart.y).toFloat()
-            p2[2] = (z2 + positionStart.z).toFloat()
+            p2[0] = (x2 + positionStart.x)
+            p2[1] = (y2 + positionStart.y)
+            p2[2] = (z2 + positionStart.z)
 
 
             // SECOND top point
@@ -193,9 +193,9 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             y2 = rvec.y * c2 + svec.y * s2
             z2 = rvec.z * c2 + svec.z * s2
 
-            p3[0] = (x2 + positionMid.x).toFloat()
-            p3[1] = (y2 + positionMid.y).toFloat()
-            p3[2] = (z2 + positionMid.z).toFloat()
+            p3[0] = (x2 + positionMid.x)
+            p3[1] = (y2 + positionMid.y)
+            p3[2] = (z2 + positionMid.z)
 
 
 
@@ -212,16 +212,16 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             y1 = rvec.y * c1 + svec.y * s1
             z1 = rvec.z * c1 + svec.z * s1
 
-            p1[0] = (x1 + positionEnd.x).toFloat()
-            p1[1] = (y1 + positionEnd.y).toFloat()
-            p1[2] = (z1 + positionEnd.z).toFloat()
+            p1[0] = (x1 + positionEnd.x)
+            p1[1] = (y1 + positionEnd.y)
+            p1[2] = (z1 + positionEnd.z)
 
 
             // first bottom point
 
-            p2[0] = (x1 + positionMid.x).toFloat()
-            p2[1] = (y1 + positionMid.y).toFloat()
-            p2[2] = (z1 + positionMid.z).toFloat()
+            p2[0] = (x1 + positionMid.x)
+            p2[1] = (y1 + positionMid.y)
+            p2[2] = (z1 + positionMid.z)
 
 
             // SECOND BOTTOM point
@@ -229,9 +229,9 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             y2 = rvec.y * c2 + svec.y * s2
             z2 = rvec.z * c2 + svec.z * s2
 
-            p3[0] = (x2 + positionMid.x).toFloat()
-            p3[1] = (y2 + positionMid.y).toFloat()
-            p3[2] = (z2 + positionMid.z).toFloat()
+            p3[0] = (x2 + positionMid.x)
+            p3[1] = (y2 + positionMid.y)
+            p3[2] = (z2 + positionMid.z)
             // OK that is one triangle.
 
             n = XYZ.getNormal(p1, p2, p3)
@@ -241,16 +241,16 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
 
             // first top point
 
-            p1[0] = (x1 + positionEnd.x).toFloat()
-            p1[1] = (y1 + positionEnd.y).toFloat()
-            p1[2] = (z1 + positionEnd.z).toFloat()
+            p1[0] = (x1 + positionEnd.x)
+            p1[1] = (y1 + positionEnd.y)
+            p1[2] = (z1 + positionEnd.z)
 
 
             // SECOND BOTTOM point
 
-            p2[0] = (x2 + positionMid.x).toFloat()
-            p2[1] = (y2 + positionMid.y).toFloat()
-            p2[2] = (z2 + positionMid.z).toFloat()
+            p2[0] = (x2 + positionMid.x)
+            p2[1] = (y2 + positionMid.y)
+            p2[2] = (z2 + positionMid.z)
 
             // SECOND top point
 
@@ -258,9 +258,9 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             y2 = rvec.y * c2 + svec.y * s2
             z2 = rvec.z * c2 + svec.z * s2
 
-            p3[0] = (x2 + positionEnd.x).toFloat()
-            p3[1] = (y2 + positionEnd.y).toFloat()
-            p3[2] = (z2 + positionEnd.z).toFloat()
+            p3[0] = (x2 + positionEnd.x)
+            p3[1] = (y2 + positionEnd.y)
+            p3[2] = (z2 + positionEnd.z)
 
 
 

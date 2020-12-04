@@ -11,7 +11,9 @@
  *  limitations under the License
  */
 
-package Util
+@file:Suppress("unused")
+
+package util
 
 import android.os.Build
 

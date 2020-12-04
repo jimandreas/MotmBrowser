@@ -18,7 +18,6 @@ package com.bammellab.motm
 
 import android.app.Application
 import android.content.Context
-import android.os.StrictMode
 import com.bammellab.motm.util.PrefsUtil
 import okhttp3.OkHttpClient
 import timber.log.Timber

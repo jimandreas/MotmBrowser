@@ -35,7 +35,7 @@ object ArrayUtils {
     fun convertDoublesToFloats(input: FloatArray?, output: FloatArray?): FloatArray? {
         if (input == null || output == null) return output
         for (i in input.indices) {
-            output[i] = input[i].toFloat()
+            output[i] = input[i]
         }
         return output
     }
@@ -50,7 +50,7 @@ object ArrayUtils {
         if (input == null) return null
         val output = FloatArray(input.size)
         for (i in input.indices) {
-            output[i] = input[i].toFloat()
+            output[i] = input[i]
         }
         return output
     }
@@ -65,7 +65,7 @@ object ArrayUtils {
     fun convertFloatsToDoubles(input: FloatArray?, output: FloatArray?): FloatArray? {
         if (input == null || output == null) return output
         for (i in input.indices) {
-            output[i] = input[i].toFloat()
+            output[i] = input[i]
         }
         return output
     }
@@ -79,7 +79,7 @@ object ArrayUtils {
     fun convertFloatsToDoubles(input: FloatArray): FloatArray {
         val output = FloatArray(input.size)
         for (i in input.indices) {
-            output[i] = input[i].toFloat()
+            output[i] = input[i]
         }
         return output
     }
@@ -153,7 +153,7 @@ object ArrayUtils {
         return result
     }
 
-    /**
+    /*
      * Creates a double array from the provided [DoubleBuffer].
      *
      * @param buffer [DoubleBuffer] the data source.

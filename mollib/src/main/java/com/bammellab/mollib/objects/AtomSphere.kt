@@ -55,7 +55,7 @@ class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
         /*
          * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
          */
-        normal_brightness_factor = (mMol.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR).toFloat()
+        normal_brightness_factor = (mMol.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR)
 
         val location = atom.atomPosition
 
@@ -84,46 +84,46 @@ class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
         while (i < numSlices) {
             j = 0
             while (j < numSlices) {
-                vx1 = (radiusIn.toFloat()
+                vx1 = (radiusIn
                         * MathUtil.sin((angleStep / 2.0f * i.toFloat()))
-                        * MathUtil.sin((angleStep * j.toFloat()))).toFloat()
-                vy1 = (radiusIn * MathUtil.cos((angleStep / 2.0f * i.toFloat()))).toFloat()
-                vz1 = (radiusIn.toFloat()
+                        * MathUtil.sin((angleStep * j.toFloat())))
+                vy1 = (radiusIn * MathUtil.cos((angleStep / 2.0f * i.toFloat())))
+                vz1 = (radiusIn
                         * MathUtil.sin((angleStep / 2.0f * i.toFloat()))
-                        * MathUtil.cos((angleStep * j.toFloat()))).toFloat()
+                        * MathUtil.cos((angleStep * j.toFloat())))
 
                 // down one latitude
-                vx2 = (radiusIn.toFloat()
+                vx2 = (radiusIn
                         * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()))
-                        * MathUtil.sin((angleStep * j.toFloat()))).toFloat()
-                vy2 = (radiusIn * MathUtil.cos((angleStep / 2.0f * (i + 1).toFloat()))).toFloat()
-                vz2 = (radiusIn.toFloat()
+                        * MathUtil.sin((angleStep * j.toFloat())))
+                vy2 = (radiusIn * MathUtil.cos((angleStep / 2.0f * (i + 1).toFloat())))
+                vz2 = (radiusIn
                         * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()))
-                        * MathUtil.cos((angleStep * j.toFloat()))).toFloat()
+                        * MathUtil.cos((angleStep * j.toFloat())))
 
                 // down one longitude and over one latitude
-                vx3 = (radiusIn.toFloat()
+                vx3 = (radiusIn
                         * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()))
-                        * MathUtil.sin((angleStep * (j + 1).toFloat()))).toFloat()
-                vy3 = (radiusIn * MathUtil.cos((angleStep / 2.0f * (i + 1).toFloat()))).toFloat()
-                vz3 = (radiusIn.toFloat()
+                        * MathUtil.sin((angleStep * (j + 1).toFloat())))
+                vy3 = (radiusIn * MathUtil.cos((angleStep / 2.0f * (i + 1).toFloat())))
+                vz3 = (radiusIn
                         * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()))
-                        * MathUtil.cos((angleStep * (j + 1).toFloat()))).toFloat()
+                        * MathUtil.cos((angleStep * (j + 1).toFloat())))
 
                 // over one longitude at same latitude
-                vx4 = (radiusIn.toFloat()
+                vx4 = (radiusIn
                         * MathUtil.sin((angleStep / 2.0f * i.toFloat()))
-                        * MathUtil.sin((angleStep * (j + 1).toFloat()))).toFloat()
-                vy4 = (radiusIn * MathUtil.cos((angleStep / 2.0f * i.toFloat()))).toFloat()
-                vz4 = (radiusIn.toFloat()
+                        * MathUtil.sin((angleStep * (j + 1).toFloat())))
+                vy4 = (radiusIn * MathUtil.cos((angleStep / 2.0f * i.toFloat())))
+                vz4 = (radiusIn
                         * MathUtil.sin((angleStep / 2.0f * i.toFloat()))
-                        * MathUtil.cos((angleStep * (j + 1).toFloat()))).toFloat()
+                        * MathUtil.cos((angleStep * (j + 1).toFloat())))
 
 
                 // first top point
-                vertexData[offset++] = vx1 + location.x.toFloat()
-                vertexData[offset++] = vy1 + location.y.toFloat()
-                vertexData[offset++] = vz1 + location.z.toFloat()
+                vertexData[offset++] = vx1 + location.x
+                vertexData[offset++] = vy1 + location.y
+                vertexData[offset++] = vz1 + location.z
 
                 vertexData[offset++] = vx1 / radiusIn * normal_brightness_factor
                 vertexData[offset++] = vy1 / radiusIn * normal_brightness_factor
@@ -135,9 +135,9 @@ class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
                 vertexData[offset++] = colorIn[3]
 
                 // second (bottom)
-                vertexData[offset++] = vx2 + location.x.toFloat()
-                vertexData[offset++] = vy2 + location.y.toFloat()
-                vertexData[offset++] = vz2 + location.z.toFloat()
+                vertexData[offset++] = vx2 + location.x
+                vertexData[offset++] = vy2 + location.y
+                vertexData[offset++] = vz2 + location.z
 
                 vertexData[offset++] = vx2 / radiusIn * normal_brightness_factor
                 vertexData[offset++] = vy2 / radiusIn * normal_brightness_factor
@@ -149,9 +149,9 @@ class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
                 vertexData[offset++] = colorIn[3]
 
                 // third (bottom and over)
-                vertexData[offset++] = vx3 + location.x.toFloat()
-                vertexData[offset++] = vy3 + location.y.toFloat()
-                vertexData[offset++] = vz3 + location.z.toFloat()
+                vertexData[offset++] = vx3 + location.x
+                vertexData[offset++] = vy3 + location.y
+                vertexData[offset++] = vz3 + location.z
 
                 vertexData[offset++] = vx3 / radiusIn * normal_brightness_factor
                 vertexData[offset++] = vy3 / radiusIn * normal_brightness_factor
@@ -165,9 +165,9 @@ class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
                 // second triangle
 
                 // first top point
-                vertexData[offset++] = vx1 + location.x.toFloat()
-                vertexData[offset++] = vy1 + location.y.toFloat()
-                vertexData[offset++] = vz1 + location.z.toFloat()
+                vertexData[offset++] = vx1 + location.x
+                vertexData[offset++] = vy1 + location.y
+                vertexData[offset++] = vz1 + location.z
 
                 vertexData[offset++] = vx1 / radiusIn * normal_brightness_factor
                 vertexData[offset++] = vy1 / radiusIn * normal_brightness_factor
@@ -179,9 +179,9 @@ class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
                 vertexData[offset++] = colorIn[3]
 
                 // second (bottom and over this time)
-                vertexData[offset++] = vx3 + location.x.toFloat()
-                vertexData[offset++] = vy3 + location.y.toFloat()
-                vertexData[offset++] = vz3 + location.z.toFloat()
+                vertexData[offset++] = vx3 + location.x
+                vertexData[offset++] = vy3 + location.y
+                vertexData[offset++] = vz3 + location.z
 
                 vertexData[offset++] = vx3 / radiusIn * normal_brightness_factor
                 vertexData[offset++] = vy3 / radiusIn * normal_brightness_factor
@@ -193,9 +193,9 @@ class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
                 vertexData[offset++] = colorIn[3]
 
                 // third (over)
-                vertexData[offset++] = vx4 + location.x.toFloat()
-                vertexData[offset++] = vy4 + location.y.toFloat()
-                vertexData[offset++] = vz4 + location.z.toFloat()
+                vertexData[offset++] = vx4 + location.x
+                vertexData[offset++] = vy4 + location.y
+                vertexData[offset++] = vz4 + location.z
 
                 vertexData[offset++] = vx4 / radiusIn * normal_brightness_factor
                 vertexData[offset++] = vy4 / radiusIn * normal_brightness_factor
