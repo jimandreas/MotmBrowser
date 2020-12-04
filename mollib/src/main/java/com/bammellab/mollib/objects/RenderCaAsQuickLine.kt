@@ -54,7 +54,7 @@ class RenderCaAsQuickLine(private val mol: Molecule) {
 
             j = 0
 
-            vertexData = BufferManager.getFloatArray(chainDescriptorList.size * STRIDE_IN_FLOATS)
+            vertexData = BufferManager.getFloatArray((chainDescriptorList.size-1) * 2 * STRIDE_IN_FLOATS)
             arrayOffset = BufferManager.floatArrayIndex
 
             while (j < chainDescriptorList.size) {
@@ -65,8 +65,12 @@ class RenderCaAsQuickLine(private val mol: Molecule) {
                 if (mainChainAtom != null) {
                     vnew = MotmVector3(mainChainAtom.atomPosition)
 
-
                     putPoint(vnew, greenColor)
+                    // Lines in OpenGL are pairs of points.  Repeat the point
+                    // if not at an end to set the first coordinate of the next line
+                    if (j != 0 && j != chainDescriptorList.size - 1) {
+                        putPoint(vnew, greenColor)
+                    }
                 }
 
                 j++
