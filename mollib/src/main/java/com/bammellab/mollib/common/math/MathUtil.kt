@@ -46,13 +46,13 @@ object MathUtil {
         return (radians * PRECISION_DIV_2PI).toInt() and PRECISION_S
     }
 
-    fun sin(radians: Float): Float {
-        return sinTable[radToIndex(radians)]
-    }
-
-    fun cos(radians: Float): Float {
-        return sinTable[radToIndex(HALF_PI - radians)]
-    }
+//    fun sin(radians: Float): Float {
+//        return sinTable[radToIndex(radians)]
+//    }
+//
+//    fun cos(radians: Float): Float {
+//        return sinTable[radToIndex(HALF_PI - radians)]
+//    }
 
     fun tan(radians: Float): Float {
         return tanTable[radToIndex(radians)]

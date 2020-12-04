@@ -15,6 +15,7 @@
 
 package com.bammellab.mollib.objects
 
+import com.bammellab.mollib.common.math.FastSinCos
 import com.bammellab.mollib.common.math.MathUtil
 import com.bammellab.mollib.common.math.MathUtil.PIFLOAT
 import com.bammellab.mollib.common.math.MotmVector3
@@ -131,10 +132,10 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             val angleInRadians2 = ((i + 1).toFloat() / numSlices.toFloat()
                     * PIFLOAT * 2.0f)
 
-            val s1 = radius * MathUtil.sin(angleInRadians1)
-            val s2 = radius * MathUtil.sin(angleInRadians2)
-            val c1 = radius * MathUtil.cos(angleInRadians1)
-            val c2 = radius * MathUtil.cos(angleInRadians2)
+            val s1 = radius * FastSinCos.sin(angleInRadians1)
+            val s2 = radius * FastSinCos.sin(angleInRadians2)
+            val c1 = radius * FastSinCos.cos(angleInRadians1)
+            val c2 = radius * FastSinCos.cos(angleInRadians2)
 
             /*
              * first the START to MID portion of the bond

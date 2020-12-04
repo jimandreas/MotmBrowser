@@ -24,6 +24,7 @@
 package com.bammellab.mollib.objects
 
 import android.opengl.GLES20
+import com.bammellab.mollib.common.math.FastSinCos
 import com.bammellab.mollib.common.math.MathUtil
 import com.bammellab.mollib.common.math.MotmVector3
 import com.bammellab.mollib.objects.GlobalObject.BRIGHTNESS_FACTOR
@@ -125,10 +126,10 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
             val angleInRadians1 = i.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
             val angleInRadians2 = (i + 1).toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
-            val s1 = radius * MathUtil.sin(angleInRadians1)
-            val s2 = radius * MathUtil.sin(angleInRadians2)
-            val c1 = radius * MathUtil.cos(angleInRadians1)
-            val c2 = radius * MathUtil.cos(angleInRadians2)
+            val s1 = radius * FastSinCos.sin(angleInRadians1)
+            val s2 = radius * FastSinCos.sin(angleInRadians2)
+            val c1 = radius * FastSinCos.cos(angleInRadians1)
+            val c2 = radius * FastSinCos.cos(angleInRadians2)
 
             /*
              * no mid point

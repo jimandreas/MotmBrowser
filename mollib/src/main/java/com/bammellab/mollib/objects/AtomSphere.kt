@@ -16,6 +16,7 @@
 package com.bammellab.mollib.objects
 
 import android.app.Activity
+import com.bammellab.mollib.common.math.FastSinCos
 import com.bammellab.mollib.common.math.MathUtil
 import com.bammellab.mollib.objects.GlobalObject.BRIGHTNESS_FACTOR
 import com.kotmol.pdbParser.Molecule
@@ -85,39 +86,39 @@ class AtomSphere(private val activity: Activity, private val mMol: Molecule) {
             j = 0
             while (j < numSlices) {
                 vx1 = (radiusIn
-                        * MathUtil.sin((angleStep / 2.0f * i.toFloat()))
-                        * MathUtil.sin((angleStep * j.toFloat())))
-                vy1 = (radiusIn * MathUtil.cos((angleStep / 2.0f * i.toFloat())))
+                        * FastSinCos.sin((angleStep / 2.0f * i.toFloat()))
+                        * FastSinCos.sin((angleStep * j.toFloat())))
+                vy1 = (radiusIn * FastSinCos.cos((angleStep / 2.0f * i.toFloat())))
                 vz1 = (radiusIn
-                        * MathUtil.sin((angleStep / 2.0f * i.toFloat()))
-                        * MathUtil.cos((angleStep * j.toFloat())))
+                        * FastSinCos.sin((angleStep / 2.0f * i.toFloat()))
+                        * FastSinCos.cos((angleStep * j.toFloat())))
 
                 // down one latitude
                 vx2 = (radiusIn
-                        * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()))
-                        * MathUtil.sin((angleStep * j.toFloat())))
-                vy2 = (radiusIn * MathUtil.cos((angleStep / 2.0f * (i + 1).toFloat())))
+                        * FastSinCos.sin((angleStep / 2.0f * (i + 1).toFloat()))
+                        * FastSinCos.sin((angleStep * j.toFloat())))
+                vy2 = (radiusIn * FastSinCos.cos((angleStep / 2.0f * (i + 1).toFloat())))
                 vz2 = (radiusIn
-                        * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()))
-                        * MathUtil.cos((angleStep * j.toFloat())))
+                        * FastSinCos.sin((angleStep / 2.0f * (i + 1).toFloat()))
+                        * FastSinCos.cos((angleStep * j.toFloat())))
 
                 // down one longitude and over one latitude
                 vx3 = (radiusIn
-                        * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()))
-                        * MathUtil.sin((angleStep * (j + 1).toFloat())))
-                vy3 = (radiusIn * MathUtil.cos((angleStep / 2.0f * (i + 1).toFloat())))
+                        * FastSinCos.sin((angleStep / 2.0f * (i + 1).toFloat()))
+                        * FastSinCos.sin((angleStep * (j + 1).toFloat())))
+                vy3 = (radiusIn * FastSinCos.cos((angleStep / 2.0f * (i + 1).toFloat())))
                 vz3 = (radiusIn
-                        * MathUtil.sin((angleStep / 2.0f * (i + 1).toFloat()))
-                        * MathUtil.cos((angleStep * (j + 1).toFloat())))
+                        * FastSinCos.sin((angleStep / 2.0f * (i + 1).toFloat()))
+                        * FastSinCos.cos((angleStep * (j + 1).toFloat())))
 
                 // over one longitude at same latitude
                 vx4 = (radiusIn
-                        * MathUtil.sin((angleStep / 2.0f * i.toFloat()))
-                        * MathUtil.sin((angleStep * (j + 1).toFloat())))
-                vy4 = (radiusIn * MathUtil.cos((angleStep / 2.0f * i.toFloat())))
+                        * FastSinCos.sin((angleStep / 2.0f * i.toFloat()))
+                        * FastSinCos.sin((angleStep * (j + 1).toFloat())))
+                vy4 = (radiusIn * FastSinCos.cos((angleStep / 2.0f * i.toFloat())))
                 vz4 = (radiusIn
-                        * MathUtil.sin((angleStep / 2.0f * i.toFloat()))
-                        * MathUtil.cos((angleStep * (j + 1).toFloat())))
+                        * FastSinCos.sin((angleStep / 2.0f * i.toFloat()))
+                        * FastSinCos.cos((angleStep * (j + 1).toFloat())))
 
 
                 // first top point

@@ -23,6 +23,7 @@ package com.bammellab.mollib.objects
 
 import android.annotation.SuppressLint
 import com.bammellab.mollib.common.math.CatmullRomCurve
+import com.bammellab.mollib.common.math.FastSinCos
 import com.bammellab.mollib.common.math.MathUtil
 import com.bammellab.mollib.common.math.MotmVector3
 import com.bammellab.mollib.objects.GlobalObject.BRIGHTNESS_FACTOR
@@ -439,8 +440,8 @@ class RenderRibbon(private val molecule: Molecule) {
 
                     val angleInRadians1 = i.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
-                    val s1 = radius * MathUtil.sin(angleInRadians1)
-                    val c1 = radius * MathUtil.cos(angleInRadians1)
+                    val s1 = radius * FastSinCos.sin(angleInRadians1)
+                    val c1 = radius * FastSinCos.cos(angleInRadians1)
                     x1 = R1.x * c1 + S1.x * s1
                     y1 = R1.y * c1 + S1.y * s1
                     z1 = R1.z * c1 + S1.z * s1
@@ -457,9 +458,9 @@ class RenderRibbon(private val molecule: Molecule) {
 
                 val angleInRadians1 = i.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
-                val s1 = radius * MathUtil.sin(angleInRadians1)
+                val s1 = radius * FastSinCos.sin(angleInRadians1)
 
-                val c1 = radius * MathUtil.cos(angleInRadians1)
+                val c1 = radius * FastSinCos.cos(angleInRadians1)
 
 
                 x1 = R2.x * c1 + S2.x * s1
@@ -824,8 +825,8 @@ class RenderRibbon(private val molecule: Molecule) {
 
                     val angleInRadians1 = i.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
-                    val s1 = radius * MathUtil.sin(angleInRadians1)
-                    val c1 = radius * MathUtil.cos(angleInRadians1)
+                    val s1 = radius * FastSinCos.sin(angleInRadians1)
+                    val c1 = radius * FastSinCos.cos(angleInRadians1)
                     x1 = R1.x * c1 + S1.x * s1
                     y1 = R1.y * c1 + S1.y * s1
                     z1 = R1.z * c1 + S1.z * s1
@@ -845,9 +846,9 @@ class RenderRibbon(private val molecule: Molecule) {
 
                 val angleInRadians1 = i.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
-                val s1 = radius * MathUtil.sin(angleInRadians1)
+                val s1 = radius * FastSinCos.sin(angleInRadians1)
 
-                val c1 = radius * MathUtil.cos(angleInRadians1)
+                val c1 = radius * FastSinCos.cos(angleInRadians1)
 
 
                 x1 = R2.x * c1 + S2.x * s1
@@ -1129,9 +1130,9 @@ class RenderRibbon(private val molecule: Molecule) {
 
                     val angleInRadians1 = slice.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
-                    val s1 = radius * MathUtil.sin(angleInRadians1)
+                    val s1 = radius * FastSinCos.sin(angleInRadians1)
 
-                    val c1 = radius * MathUtil.cos(angleInRadians1)
+                    val c1 = radius * FastSinCos.cos(angleInRadians1)
 
 
                     x1 = R.x * c1 + S.x * s1
@@ -1195,9 +1196,9 @@ class RenderRibbon(private val molecule: Molecule) {
 
                 val angleInRadians1 = slice.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
-                val s1 = radius * MathUtil.sin(angleInRadians1)
+                val s1 = radius * FastSinCos.sin(angleInRadians1)
 
-                val c1 = radius * MathUtil.cos(angleInRadians1)
+                val c1 = radius * FastSinCos.cos(angleInRadians1)
 
 
                 x1 = R.x * c1 + S.x * s1
