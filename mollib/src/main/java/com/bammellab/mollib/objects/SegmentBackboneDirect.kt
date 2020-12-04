@@ -1,17 +1,14 @@
 /*
- * Copyright (C) 2016-2018 James Andreas
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
+ *  Copyright 2020 Bammellab / James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
  */
 
 @file:Suppress(
@@ -27,6 +24,7 @@
 package com.bammellab.mollib.objects
 
 import android.opengl.GLES20
+import com.bammellab.mollib.common.math.FastSinCos
 import com.bammellab.mollib.common.math.MathUtil
 import com.bammellab.mollib.common.math.MotmVector3
 import com.bammellab.mollib.objects.GlobalObject.BRIGHTNESS_FACTOR
@@ -65,7 +63,7 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
         /*
          * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
          */
-        normal_brightness_factor = (mMol.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR).toFloat()
+        normal_brightness_factor = (mMol.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR)
 
         var i = 0
 //        val j: Int
@@ -86,7 +84,7 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
         val p1p2 = MotmVector3()
         p1p2.setAll(positionEnd)
         p1p2.subtract(positionStart)
-        val P = MotmVector3(Math.random(), Math.random(), Math.random())
+        val P = MotmVector3(Math.random().toFloat(), Math.random().toFloat(), Math.random().toFloat())
         val R = MotmVector3(p1p2)
         R.cross(P)
         val S = MotmVector3(R)
@@ -94,12 +92,12 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
         R.normalize()
         S.normalize()
 
-        var x1: Double
-        var y1: Double
-        var z1: Double
-        var x2: Double
-        var y2: Double
-        var z2: Double
+        var x1: Float
+        var y1: Float
+        var z1: Float
+        var x2: Float
+        var y2: Float
+        var z2: Float
 
         // val angleStep = 2.0f * Math.PI.toFloat() / numSlices
 
@@ -125,13 +123,13 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
 
             // TODO: fix number of slices and generate sin/cos lookup table
 
-            val angleInRadians1 = i.toDouble() / numSlices.toDouble() * (Math.PI * 2f)
+            val angleInRadians1 = i.toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
             val angleInRadians2 = (i + 1).toFloat() / numSlices.toFloat() * (Math.PI.toFloat() * 2f)
 
-            val s1 = radius * MathUtil.sin(angleInRadians1)
-            val s2 = radius * MathUtil.sin(angleInRadians2.toDouble())
-            val c1 = radius * MathUtil.cos(angleInRadians1)
-            val c2 = radius * MathUtil.cos(angleInRadians2.toDouble())
+            val s1 = radius * FastSinCos.sin(angleInRadians1)
+            val s2 = radius * FastSinCos.sin(angleInRadians2)
+            val c1 = radius * FastSinCos.cos(angleInRadians1)
+            val c2 = radius * FastSinCos.cos(angleInRadians2)
 
             /*
              * no mid point
@@ -143,16 +141,16 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
             y1 = R.y * c1 + S.y * s1
             z1 = R.z * c1 + S.z * s1
 
-            p1[0] = (x1 + positionEnd.x).toFloat()
-            p1[1] = (y1 + positionEnd.y).toFloat()
-            p1[2] = (z1 + positionEnd.z).toFloat()
+            p1[0] = (x1 + positionEnd.x)
+            p1[1] = (y1 + positionEnd.y)
+            p1[2] = (z1 + positionEnd.z)
 
 
             // first bottom point
 
-            p2[0] = (x1 + positionStart.x).toFloat()
-            p2[1] = (y1 + positionStart.y).toFloat()
-            p2[2] = (z1 + positionStart.z).toFloat()
+            p2[0] = (x1 + positionStart.x)
+            p2[1] = (y1 + positionStart.y)
+            p2[2] = (z1 + positionStart.z)
 
 
             // SECOND BOTTOM point
@@ -160,9 +158,9 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
             y2 = R.y * c2 + S.y * s2
             z2 = R.z * c2 + S.z * s2
 
-            p3[0] = (x2 + positionStart.x).toFloat()
-            p3[1] = (y2 + positionStart.y).toFloat()
-            p3[2] = (z2 + positionStart.z).toFloat()
+            p3[0] = (x2 + positionStart.x)
+            p3[1] = (y2 + positionStart.y)
+            p3[2] = (z2 + positionStart.z)
             // OK that is one triangle.
 
             n = XYZ.getNormal(p1, p2, p3)
@@ -172,16 +170,16 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
 
             // first top point
 
-            p1[0] = (x1 + positionEnd.x).toFloat()
-            p1[1] = (y1 + positionEnd.y).toFloat()
-            p1[2] = (z1 + positionEnd.z).toFloat()
+            p1[0] = (x1 + positionEnd.x)
+            p1[1] = (y1 + positionEnd.y)
+            p1[2] = (z1 + positionEnd.z)
 
 
             // SECOND BOTTOM point
 
-            p2[0] = (x2 + positionStart.x).toFloat()
-            p2[1] = (y2 + positionStart.y).toFloat()
-            p2[2] = (z2 + positionStart.z).toFloat()
+            p2[0] = (x2 + positionStart.x)
+            p2[1] = (y2 + positionStart.y)
+            p2[2] = (z2 + positionStart.z)
 
 
             // SECOND top point
@@ -190,9 +188,9 @@ class SegmentBackboneDirect(private val mMol: Molecule) {
             y2 = R.y * c2 + S.y * s2
             z2 = R.z * c2 + S.z * s2
 
-            p3[0] = (x2 + positionEnd.x).toFloat()
-            p3[1] = (y2 + positionEnd.y).toFloat()
-            p3[2] = (z2 + positionEnd.z).toFloat()
+            p3[0] = (x2 + positionEnd.x)
+            p3[1] = (y2 + positionEnd.y)
+            p3[2] = (z2 + positionEnd.z)
 
 
 

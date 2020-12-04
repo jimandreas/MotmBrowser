@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused")
+@file:Suppress("unused", "SameParameterValue")
 
 package com.bammellab.mollib.common.math
 
@@ -52,7 +52,7 @@ import kotlin.math.tan
 object MatrixDoublePrecision {
 
     /** Temporary memory for operations that need temporary matrix data.  */
-    private val sTemp = DoubleArray(32)
+    private val sTemp = FloatArray(32)
 
     /**
      * Multiply two 4x4 matrices together and store the result in a third 4x4
@@ -77,8 +77,8 @@ object MatrixDoublePrecision {
      * resultOffset + 16 > result.length or lhsOffset + 16 > lhs.length or
      * rhsOffset + 16 > rhs.length.
      */
-    fun multiplyMM(result: DoubleArray, resultOffset: Int,
-                   lhs: DoubleArray, lhsOffset: Int, rhs: DoubleArray, rhsOffset: Int) {
+    fun multiplyMM(result: FloatArray, resultOffset: Int,
+                   lhs: FloatArray, lhsOffset: Int, rhs: FloatArray, rhsOffset: Int) {
 
         var message: String? = null//Column
 
@@ -91,10 +91,10 @@ object MatrixDoublePrecision {
             throw IllegalArgumentException(message)
         }
 
-        var sum: Double
+        var sum: Float
         for (i in 0..3) { //Row
             for (j in 0..3) { //Column
-                sum = 0.0
+                sum = 0.0f
                 for (k in 0..3) {
                     sum += lhs[i + 4 * k + lhsOffset] * rhs[4 * j + k + rhsOffset]
                 }
@@ -125,8 +125,8 @@ object MatrixDoublePrecision {
      * or lhsMatOffset + 16 > lhsMat.length or
      * rhsVecOffset + 4 > rhsVec.length.
      */
-    fun multiplyMV(resultVec: DoubleArray, resultVecOffset: Int,
-                   lhsMat: DoubleArray, lhsMatOffset: Int, rhsVec: DoubleArray, rhsVecOffset: Int) {
+    fun multiplyMV(resultVec: FloatArray, resultVecOffset: Int,
+                   lhsMat: FloatArray, lhsMatOffset: Int, rhsVec: FloatArray, rhsVecOffset: Int) {
 
         var message: String? = null
 
@@ -140,7 +140,7 @@ object MatrixDoublePrecision {
         }
 
         for (i in 0..3) { //Row
-            var sum = 0.0
+            var sum = 0.0f
             for (k in 0..3) {
                 sum += lhsMat[i + 4 * k + lhsMatOffset] * rhsVec[k + rhsVecOffset]
             }
@@ -157,7 +157,7 @@ object MatrixDoublePrecision {
      * @param m the input array
      * @param mOffset an offset into m where the matrix is stored.
      */
-    fun transposeM(mTrans: DoubleArray, transOffset: Int, m: DoubleArray,
+    fun transposeM(mTrans: FloatArray, transOffset: Int, m: FloatArray,
                    mOffset: Int) {
         for (i in 0..3) {
             val base = i * 4 + mOffset
@@ -178,7 +178,7 @@ object MatrixDoublePrecision {
      * @param mOffset an offset into m where the matrix is stored.
      * @return true if the matrix could be inverted, false if it could not.
      */
-    fun invertM(mInv: DoubleArray, invOffset: Int, m: DoubleArray,
+    fun invertM(mInv: FloatArray, invOffset: Int, m: FloatArray,
                 mOffset: Int): Boolean {
         // Invert a 4 x 4 matrix using Cramer's Rule
 
@@ -254,7 +254,7 @@ object MatrixDoublePrecision {
         // calculate determinant
         val det = src0 * dst0 + src1 * dst1 + src2 * dst2 + src3 * dst3
 
-        if (det == 0.0) {
+        if (det == 0.0f) {
             return false
         }
 
@@ -287,9 +287,9 @@ object MatrixDoublePrecision {
      * Computes an orthographic projection matrix.
      *
      */
-    fun orthoM(m: DoubleArray, mOffset: Int,
-               left: Double, right: Double, bottom: Double, top: Double,
-               near: Double, far: Double) {
+    fun orthoM(m: FloatArray, mOffset: Int,
+               left: Float, right: Float, bottom: Float, top: Float,
+               near: Float, far: Float) {
         if (left == right) {
             throw IllegalArgumentException("left == right")
         }
@@ -315,16 +315,16 @@ object MatrixDoublePrecision {
         m[mOffset + 12] = tx
         m[mOffset + 13] = ty
         m[mOffset + 14] = tz
-        m[mOffset + 15] = 1.0
-        m[mOffset + 1] = 0.0
-        m[mOffset + 2] = 0.0
-        m[mOffset + 3] = 0.0
-        m[mOffset + 4] = 0.0
-        m[mOffset + 6] = 0.0
-        m[mOffset + 7] = 0.0
-        m[mOffset + 8] = 0.0
-        m[mOffset + 9] = 0.0
-        m[mOffset + 11] = 0.0
+        m[mOffset + 15] = 1.0f
+        m[mOffset + 1] = 0.0f
+        m[mOffset + 2] = 0.0f
+        m[mOffset + 3] = 0.0f
+        m[mOffset + 4] = 0.0f
+        m[mOffset + 6] = 0.0f
+        m[mOffset + 7] = 0.0f
+        m[mOffset + 8] = 0.0f
+        m[mOffset + 9] = 0.0f
+        m[mOffset + 11] = 0.0f
     }
 
 
@@ -334,9 +334,9 @@ object MatrixDoublePrecision {
      * @param offset the offset into double array m where the perspective
      * matrix data is written
      */
-    fun frustumM(m: DoubleArray, offset: Int,
-                 left: Double, right: Double, bottom: Double, top: Double,
-                 near: Double, far: Double) {
+    fun frustumM(m: FloatArray, offset: Int,
+                 left: Float, right: Float, bottom: Float, top: Float,
+                 near: Float, far: Float) {
         if (left == right) {
             throw IllegalArgumentException("left == right")
         }
@@ -346,37 +346,37 @@ object MatrixDoublePrecision {
         if (near == far) {
             throw IllegalArgumentException("near == far")
         }
-        if (near <= 0.0) {
+        if (near <= 0.0f) {
             throw IllegalArgumentException("near <= 0.0")
         }
-        if (far <= 0.0) {
+        if (far <= 0.0f) {
             throw IllegalArgumentException("far <= 0.0")
         }
-        val theWidth = 1.0 / (right - left)
-        val theHeight = 1.0 / (top - bottom)
-        val theDepth = 1.0 / (near - far)
-        val x = 2.0 * (near * theWidth)
-        val y = 2.0 * (near * theHeight)
+        val theWidth = 1.0f / (right - left)
+        val theHeight = 1.0f / (top - bottom)
+        val theDepth = 1.0f / (near - far)
+        val x = 2.0f * (near * theWidth)
+        val y = 2.0f * (near * theHeight)
         val a = (right + left) * theWidth
         val b = (top + bottom) * theHeight
         val c = (far + near) * theDepth
-        val d = 2.0 * (far * near * theDepth)
+        val d = 2.0f * (far * near * theDepth)
         m[offset + 0] = x
         m[offset + 5] = y
         m[offset + 8] = a
         m[offset + 9] = b
         m[offset + 10] = c
         m[offset + 14] = d
-        m[offset + 11] = -1.0
-        m[offset + 1] = 0.0
-        m[offset + 2] = 0.0
-        m[offset + 3] = 0.0
-        m[offset + 4] = 0.0
-        m[offset + 6] = 0.0
-        m[offset + 7] = 0.0
-        m[offset + 12] = 0.0
-        m[offset + 13] = 0.0
-        m[offset + 15] = 0.0
+        m[offset + 11] = -1.0f
+        m[offset + 1] = 0.0f
+        m[offset + 2] = 0.0f
+        m[offset + 3] = 0.0f
+        m[offset + 4] = 0.0f
+        m[offset + 6] = 0.0f
+        m[offset + 7] = 0.0f
+        m[offset + 12] = 0.0f
+        m[offset + 13] = 0.0f
+        m[offset + 15] = 0.0f
     }
 
     /*
@@ -390,30 +390,30 @@ object MatrixDoublePrecision {
      * @param zNear
      * @param zFar
      */
-    fun perspectiveM(m: DoubleArray, offset: Int,
-                     fovy: Double, aspect: Double, zNear: Double, zFar: Double) {
-        val f = 1.0 / tan(fovy * (Math.PI / 360.0))
-        val rangeReciprocal = 1.0 / (zNear - zFar)
+    fun perspectiveM(m: FloatArray, offset: Int,
+                     fovy: Float, aspect: Float, zNear: Float, zFar: Float) {
+        val eff = 1.0f / tan(fovy * (Math.PI / 360.0f).toFloat())
+        val rangeReciprocal = 1.0f / (zNear - zFar)
 
-        m[offset + 0] = f / aspect
-        m[offset + 1] = 0.0
-        m[offset + 2] = 0.0
-        m[offset + 3] = 0.0
+        m[offset + 0] = eff / aspect
+        m[offset + 1] = 0.0f
+        m[offset + 2] = 0.0f
+        m[offset + 3] = 0.0f
 
-        m[offset + 4] = 0.0
-        m[offset + 5] = f
-        m[offset + 6] = 0.0
-        m[offset + 7] = 0.0
+        m[offset + 4] = 0.0f
+        m[offset + 5] = eff
+        m[offset + 6] = 0.0f
+        m[offset + 7] = 0.0f
 
-        m[offset + 8] = 0.0
-        m[offset + 9] = 0.0
+        m[offset + 8] = 0.0f
+        m[offset + 9] = 0.0f
         m[offset + 10] = (zFar + zNear) * rangeReciprocal
-        m[offset + 11] = -1.0
+        m[offset + 11] = -1.0f
 
-        m[offset + 12] = 0.0
-        m[offset + 13] = 0.0
-        m[offset + 14] = 2.0 * zFar * zNear * rangeReciprocal
-        m[offset + 15] = 0.0
+        m[offset + 12] = 0.0f
+        m[offset + 13] = 0.0f
+        m[offset + 14] = 2.0f * zFar * zNear * rangeReciprocal
+        m[offset + 15] = 0.0f
     }
 
     /**
@@ -424,7 +424,7 @@ object MatrixDoublePrecision {
      * @param z z coordinate of a vector
      * @return the length of a vector
      */
-    fun length(x: Double, y: Double, z: Double): Double {
+    fun length(x: Float, y: Float, z: Float): Float {
         return sqrt(x * x + y * y + z * z)
     }
 
@@ -433,13 +433,13 @@ object MatrixDoublePrecision {
      * @param sm returns the result
      * @param smOffset index into sm where the result matrix starts
      */
-    fun setIdentityM(sm: DoubleArray, smOffset: Int) {
+    fun setIdentityM(sm: FloatArray, smOffset: Int) {
         for (i in 0..15) {
-            sm[smOffset + i] = 0.0
+            sm[smOffset + i] = 0.0f
         }
         var i = 0
         while (i < 16) {
-            sm[smOffset + i] = 1.0
+            sm[smOffset + i] = 1.0f
             i += 5
         }
     }
@@ -454,9 +454,9 @@ object MatrixDoublePrecision {
      * @param y scale factor y
      * @param z scale factor z
      */
-    fun scaleM(sm: DoubleArray, smOffset: Int,
-               m: DoubleArray, mOffset: Int,
-               x: Double, y: Double, z: Double) {
+    fun scaleM(sm: FloatArray, smOffset: Int,
+               m: FloatArray, mOffset: Int,
+               x: Float, y: Float, z: Float) {
         for (i in 0..3) {
             val smi = smOffset + i
             val mi = mOffset + i
@@ -475,8 +475,8 @@ object MatrixDoublePrecision {
      * @param y scale factor y
      * @param z scale factor z
      */
-    fun scaleM(m: DoubleArray, mOffset: Int,
-               x: Double, y: Double, z: Double) {
+    fun scaleM(m: FloatArray, mOffset: Int,
+               x: Float, y: Float, z: Float) {
         for (i in 0..3) {
             val mi = mOffset + i
             m[mi] *= x
@@ -495,9 +495,9 @@ object MatrixDoublePrecision {
      * @param y translation factor y
      * @param z translation factor z
      */
-    fun translateM(tm: DoubleArray, tmOffset: Int,
-                   m: DoubleArray, mOffset: Int,
-                   x: Double, y: Double, z: Double) {
+    fun translateM(tm: FloatArray, tmOffset: Int,
+                   m: FloatArray, mOffset: Int,
+                   x: Float, y: Float, z: Float) {
         for (i in 0..11) {
             tm[tmOffset + i] = m[mOffset + i]
         }
@@ -518,8 +518,8 @@ object MatrixDoublePrecision {
      * @param z translation factor z
      */
     private fun translateM(
-            m: DoubleArray, mOffset: Int,
-            x: Double, y: Double, z: Double) {
+            m: FloatArray, mOffset: Int,
+            x: Float, y: Float, z: Float) {
         for (i in 0..3) {
             val mi = mOffset + i
             m[12 + mi] += m[mi] * x + m[4 + mi] * y + m[8 + mi] * z
@@ -537,9 +537,9 @@ object MatrixDoublePrecision {
      * @param y scale factor y
      * @param z scale factor z
      */
-    fun rotateM(rm: DoubleArray, rmOffset: Int,
-                m: DoubleArray, mOffset: Int,
-                a: Double, x: Double, y: Double, z: Double) {
+    fun rotateM(rm: FloatArray, rmOffset: Int,
+                m: FloatArray, mOffset: Int,
+                a: Float, x: Float, y: Float, z: Float) {
         synchronized(sTemp) {
             setRotateM(sTemp, 0, a, x, y, z)
             multiplyMM(rm, rmOffset, m, mOffset, sTemp, 0)
@@ -556,8 +556,8 @@ object MatrixDoublePrecision {
      * @param y scale factor y
      * @param z scale factor z
      */
-    fun rotateM(m: DoubleArray, mOffset: Int,
-                a: Double, x: Double, y: Double, z: Double) {
+    fun rotateM(m: FloatArray, mOffset: Int,
+                a: Float, x: Float, y: Float, z: Float) {
         synchronized(sTemp) {
             setRotateM(sTemp, 0, a, x, y, z)
             multiplyMM(sTemp, 16, m, mOffset, sTemp, 0)
@@ -574,55 +574,55 @@ object MatrixDoublePrecision {
      * @param yIn scale factor y
      * @param zIn scale factor z
      */
-    private fun setRotateM(rm: DoubleArray, rmOffset: Int,
-                           aIn: Double, xIn: Double, yIn: Double, zIn: Double) {
+    private fun setRotateM(rm: FloatArray, rmOffset: Int,
+                           aIn: Float, xIn: Float, yIn: Float, zIn: Float) {
         var a = aIn
         var x = xIn
         var y = yIn
         var z = zIn
-        rm[rmOffset + 3] = 0.0
-        rm[rmOffset + 7] = 0.0
-        rm[rmOffset + 11] = 0.0
-        rm[rmOffset + 12] = 0.0
-        rm[rmOffset + 13] = 0.0
-        rm[rmOffset + 14] = 0.0
-        rm[rmOffset + 15] = 1.0
-        a *= Math.PI / 180.0f
+        rm[rmOffset + 3] = 0.0f
+        rm[rmOffset + 7] = 0.0f
+        rm[rmOffset + 11] = 0.0f
+        rm[rmOffset + 12] = 0.0f
+        rm[rmOffset + 13] = 0.0f
+        rm[rmOffset + 14] = 0.0f
+        rm[rmOffset + 15] = 1.0f
+        a *= Math.PI.toFloat() / 180.0f
         val s = sin(a)
         val c = cos(a)
-        if (1.0 == x && 0.0 == y && 0.0 == z) {
+        if (1.0f == x && 0.0f == y && 0.0f == z) {
             rm[rmOffset + 5] = c
             rm[rmOffset + 10] = c
             rm[rmOffset + 6] = s
             rm[rmOffset + 9] = -s
-            rm[rmOffset + 1] = 0.0
-            rm[rmOffset + 2] = 0.0
-            rm[rmOffset + 4] = 0.0
-            rm[rmOffset + 8] = 0.0
-            rm[rmOffset + 0] = 1.0
-        } else if (0.0 == x && 1.0 == y && 0.0 == z) {
+            rm[rmOffset + 1] = 0.0f
+            rm[rmOffset + 2] = 0.0f
+            rm[rmOffset + 4] = 0.0f
+            rm[rmOffset + 8] = 0.0f
+            rm[rmOffset + 0] = 1.0f
+        } else if (0.0f == x && 1.0f == y && 0.0f == z) {
             rm[rmOffset + 0] = c
             rm[rmOffset + 10] = c
             rm[rmOffset + 8] = s
             rm[rmOffset + 2] = -s
-            rm[rmOffset + 1] = 0.0
-            rm[rmOffset + 4] = 0.0
-            rm[rmOffset + 6] = 0.0
-            rm[rmOffset + 9] = 0.0
-            rm[rmOffset + 5] = 1.0
-        } else if (0.0 == x && 0.0 == y && 1.0 == z) {
+            rm[rmOffset + 1] = 0.0f
+            rm[rmOffset + 4] = 0.0f
+            rm[rmOffset + 6] = 0.0f
+            rm[rmOffset + 9] = 0.0f
+            rm[rmOffset + 5] = 1.0f
+        } else if (0.0f == x && 0.0f == y && 1.0f == z) {
             rm[rmOffset + 0] = c
             rm[rmOffset + 5] = c
             rm[rmOffset + 1] = s
             rm[rmOffset + 4] = -s
-            rm[rmOffset + 2] = 0.0
-            rm[rmOffset + 6] = 0.0
-            rm[rmOffset + 8] = 0.0
-            rm[rmOffset + 9] = 0.0
-            rm[rmOffset + 10] = 1.0
+            rm[rmOffset + 2] = 0.0f
+            rm[rmOffset + 6] = 0.0f
+            rm[rmOffset + 8] = 0.0f
+            rm[rmOffset + 9] = 0.0f
+            rm[rmOffset + 10] = 1.0f
         } else {
             val len = length(x, y, z)
-            if (1.0 != len) {
+            if (1.0f != len) {
                 val recipLen = 1.0f / len
                 x *= recipLen
                 y *= recipLen
@@ -655,14 +655,14 @@ object MatrixDoublePrecision {
      * @param yIn angle of rotation, in degrees
      * @param zIn angle of rotation, in degrees
      */
-    fun setRotateEulerM(rm: DoubleArray, rmOffset: Int,
-                        xIn: Double, yIn: Double, zIn: Double) {
+    fun setRotateEulerM(rm: FloatArray, rmOffset: Int,
+                        xIn: Float, yIn: Float, zIn: Float) {
         var x = xIn
         var y = yIn
         var z = zIn
-        x *= Math.PI / 180.0f
-        y *= Math.PI / 180.0f
-        z *= Math.PI / 180.0f
+        x *= Math.PI.toFloat() / 180.0f
+        y *= Math.PI.toFloat() / 180.0f
+        z *= Math.PI.toFloat() / 180.0f
         val cx = cos(x)
         val sx = sin(x)
         val cy = cos(y)
@@ -675,22 +675,22 @@ object MatrixDoublePrecision {
         rm[rmOffset + 0] = cy * cz
         rm[rmOffset + 1] = -cy * sz
         rm[rmOffset + 2] = sy
-        rm[rmOffset + 3] = 0.0
+        rm[rmOffset + 3] = 0.0f
 
         rm[rmOffset + 4] = cxsy * cz + cx * sz
         rm[rmOffset + 5] = -cxsy * sz + cx * cz
         rm[rmOffset + 6] = -sx * cy
-        rm[rmOffset + 7] = 0.0
+        rm[rmOffset + 7] = 0.0f
 
         rm[rmOffset + 8] = -sxsy * cz + sx * sz
         rm[rmOffset + 9] = sxsy * sz + sx * cz
         rm[rmOffset + 10] = cx * cy
-        rm[rmOffset + 11] = 0.0
+        rm[rmOffset + 11] = 0.0f
 
-        rm[rmOffset + 12] = 0.0
-        rm[rmOffset + 13] = 0.0
-        rm[rmOffset + 14] = 0.0
-        rm[rmOffset + 15] = 1.0
+        rm[rmOffset + 12] = 0.0f
+        rm[rmOffset + 13] = 0.0f
+        rm[rmOffset + 14] = 0.0f
+        rm[rmOffset + 15] = 1.0f
     }
 
     /**
@@ -709,10 +709,10 @@ object MatrixDoublePrecision {
      * @param upY up vector Y
      * @param upZ up vector Z
      */
-    fun setLookAtM(rm: DoubleArray, rmOffset: Int,
-                   eyeX: Double, eyeY: Double, eyeZ: Double,
-                   centerX: Double, centerY: Double, centerZ: Double, upX: Double, upY: Double,
-                   upZ: Double) {
+    fun setLookAtM(rm: FloatArray, rmOffset: Int,
+                   eyeX: Float, eyeY: Float, eyeZ: Float,
+                   centerX: Float, centerY: Float, centerZ: Float, upX: Float, upY: Float,
+                   upZ: Float) {
 
         // See the OpenGL GLUT documentation for gluLookAt for a description
         // of the algorithm. We implement it in a straightforward way:
@@ -746,22 +746,22 @@ object MatrixDoublePrecision {
         rm[rmOffset + 0] = sx
         rm[rmOffset + 1] = ux
         rm[rmOffset + 2] = -fx
-        rm[rmOffset + 3] = 0.0
+        rm[rmOffset + 3] = 0.0f
 
         rm[rmOffset + 4] = sy
         rm[rmOffset + 5] = uy
         rm[rmOffset + 6] = -fy
-        rm[rmOffset + 7] = 0.0
+        rm[rmOffset + 7] = 0.0f
 
         rm[rmOffset + 8] = sz
         rm[rmOffset + 9] = uz
         rm[rmOffset + 10] = -fz
-        rm[rmOffset + 11] = 0.0
+        rm[rmOffset + 11] = 0.0f
 
-        rm[rmOffset + 12] = 0.0
-        rm[rmOffset + 13] = 0.0
-        rm[rmOffset + 14] = 0.0
-        rm[rmOffset + 15] = 1.0
+        rm[rmOffset + 12] = 0.0f
+        rm[rmOffset + 13] = 0.0f
+        rm[rmOffset + 14] = 0.0f
+        rm[rmOffset + 15] = 1.0f
 
         translateM(rm, rmOffset, -eyeX, -eyeY, -eyeZ)
     }

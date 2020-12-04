@@ -32,7 +32,7 @@ import com.kotmol.pdbParser.PdbAtom
 class RenderCaAsQuickLine(private val mol: Molecule) {
 
     private lateinit var vertexData: FloatArray
-    var arrayOffset = 0
+    private var arrayOffset = 0
     val n = floatArrayOf(50.0f, 50.0f, 50.0f) // wired in random value for now
 
     fun renderQuickLine() {
@@ -54,7 +54,7 @@ class RenderCaAsQuickLine(private val mol: Molecule) {
 
             j = 0
 
-            vertexData = BufferManager.getFloatArray(chainDescriptorList.size * STRIDE_IN_FLOATS)
+            vertexData = BufferManager.getFloatArray((chainDescriptorList.size-1) * 2 * STRIDE_IN_FLOATS)
             arrayOffset = BufferManager.floatArrayIndex
 
             while (j < chainDescriptorList.size) {
@@ -65,8 +65,12 @@ class RenderCaAsQuickLine(private val mol: Molecule) {
                 if (mainChainAtom != null) {
                     vnew = MotmVector3(mainChainAtom.atomPosition)
 
-
                     putPoint(vnew, greenColor)
+                    // Lines in OpenGL are pairs of points.  Repeat the point
+                    // if not at an end to set the first coordinate of the next line
+                    if (j != 0 && j != chainDescriptorList.size - 1) {
+                        putPoint(vnew, greenColor)
+                    }
                 }
 
                 j++
@@ -80,9 +84,9 @@ class RenderCaAsQuickLine(private val mol: Molecule) {
     private fun putPoint(p1: MotmVector3, color: FloatArray ) {
 
 
-        vertexData[arrayOffset++] = p1.x.toFloat()
-        vertexData[arrayOffset++] = p1.y.toFloat()
-        vertexData[arrayOffset++] = p1.z.toFloat()
+        vertexData[arrayOffset++] = p1.x
+        vertexData[arrayOffset++] = p1.y
+        vertexData[arrayOffset++] = p1.z
         vertexData[arrayOffset++] = n[0]
         vertexData[arrayOffset++] = n[1]
         vertexData[arrayOffset++] = n[2]

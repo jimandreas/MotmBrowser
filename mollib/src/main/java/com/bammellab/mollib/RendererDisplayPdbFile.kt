@@ -288,7 +288,7 @@ class RendererDisplayPdbFile(
                 + "void main()                    \n"
                 + "{                              \n"
                 + "   gl_FragColor = vec4(1.0,    \n"
-                + "   1.0, 1.0, 1.0);             \n"
+                + "   1.0, 1.0, 1.0f);             \n"
                 + "}                              \n")
 
         val pointVertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, pointVertexShader)
@@ -738,15 +738,15 @@ class RendererDisplayPdbFile(
 //                projectionMatrix, 0, mViewport, 0, mFloatVector2, 0);*/
 //
 //        screenVector1.setAll(
-//                (floatVector1[0] / floatVector1[3]).toDouble(),
-//                (floatVector1[1] / floatVector1[3]).toDouble(),
-//                (floatVector1[2] / floatVector1[3]).toDouble()
+//                (floatVector1[0] / floatVector1[3]).toFloat(),
+//                (floatVector1[1] / floatVector1[3]).toFloat(),
+//                (floatVector1[2] / floatVector1[3]).toFloat()
 //        )
 //
 //        screenVector2.setAll(
-//                (floatVector2[0] / floatVector2[3]).toDouble(),
-//                (floatVector2[1] / floatVector2[3]).toDouble(),
-//                (floatVector2[2] / floatVector2[3]).toDouble()
+//                (floatVector2[0] / floatVector2[3]).toFloat(),
+//                (floatVector2[1] / floatVector2[3]).toFloat(),
+//                (floatVector2[2] / floatVector2[3]).toFloat()
 //        )
 //
 //        // now draw the targeted location in screen coords
@@ -817,9 +817,9 @@ class RendererDisplayPdbFile(
 //            if (floatVector1[3] == 0f) floatVector1[3] = 1.0f
 //
 //            testAtomVector.setAll(
-//                    (floatVector1[0] / floatVector1[3]).toDouble(),
-//                    (floatVector1[1] / floatVector1[3]).toDouble(),
-//                    (floatVector1[2] / floatVector1[3]).toDouble()
+//                    (floatVector1[0] / floatVector1[3]).toFloat(),
+//                    (floatVector1[1] / floatVector1[3]).toFloat(),
+//                    (floatVector1[2] / floatVector1[3]).toFloat()
 //            )
 //
 //            /*  old way of doing the intersection:  */
@@ -921,7 +921,7 @@ class RendererDisplayPdbFile(
     }
 
     /**
-     *  cube at 0,0,0
+     *  cube at 0,0.0f
      */
     private fun debugCube() {
         val debugCubeScale = 0.05f

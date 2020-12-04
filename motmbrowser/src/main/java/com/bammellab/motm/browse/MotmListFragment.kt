@@ -37,7 +37,7 @@ import timber.log.Timber
 import java.util.*
 
 class MotmListFragment : androidx.fragment.app.Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val rv = inflater.inflate(
                 R.layout.fragment_recyclerview, container, false) as RecyclerView
         setupRecyclerView(rv)

@@ -32,10 +32,10 @@ object ArrayUtils {
      * @param output float[] array to store the result in.
      * @return float[] a reference to output. Returned for convenience.
      */
-    fun convertDoublesToFloats(input: DoubleArray?, output: FloatArray?): FloatArray? {
+    fun convertDoublesToFloats(input: FloatArray?, output: FloatArray?): FloatArray? {
         if (input == null || output == null) return output
         for (i in input.indices) {
-            output[i] = input[i].toFloat()
+            output[i] = input[i]
         }
         return output
     }
@@ -46,11 +46,11 @@ object ArrayUtils {
      * @param input double[] array to be converted.
      * @return float[] array with the result. Will be null if input was null.
      */
-    fun convertDoublesToFloats(input: DoubleArray?): FloatArray? {
+    fun convertDoublesToFloats(input: FloatArray?): FloatArray? {
         if (input == null) return null
         val output = FloatArray(input.size)
         for (i in input.indices) {
-            output[i] = input[i].toFloat()
+            output[i] = input[i]
         }
         return output
     }
@@ -62,10 +62,10 @@ object ArrayUtils {
      * @param output double[] array to store the result in.
      * @return float[] a reference to output. Returned for convenience.
      */
-    fun convertFloatsToDoubles(input: FloatArray?, output: DoubleArray?): DoubleArray? {
+    fun convertFloatsToDoubles(input: FloatArray?, output: FloatArray?): FloatArray? {
         if (input == null || output == null) return output
         for (i in input.indices) {
-            output[i] = input[i].toDouble()
+            output[i] = input[i]
         }
         return output
     }
@@ -76,10 +76,10 @@ object ArrayUtils {
      * @param input double[] array to be converted.
      * @return float[] array with the result. Will be null if input was null.
      */
-    fun convertFloatsToDoubles(input: FloatArray): DoubleArray {
-        val output = DoubleArray(input.size)
+    fun convertFloatsToDoubles(input: FloatArray): FloatArray {
+        val output = FloatArray(input.size)
         for (i in input.indices) {
-            output[i] = input[i].toDouble()
+            output[i] = input[i]
         }
         return output
     }
@@ -92,7 +92,7 @@ object ArrayUtils {
      *
      * @see {stackoverflow.com/questions/80476/how-to-concatenate-two-arrays-in-java}
      */
-    fun concatAllDouble(vararg arrays: DoubleArray): DoubleArray {
+    fun concatAllDouble(vararg arrays: FloatArray): FloatArray {
         var totalLength = 0
         val subArrayCount = arrays.size
         for (array in arrays) {
@@ -153,23 +153,23 @@ object ArrayUtils {
         return result
     }
 
-    /**
+    /*
      * Creates a double array from the provided [DoubleBuffer].
      *
      * @param buffer [DoubleBuffer] the data source.
      * @return double array containing the data of the buffer.
      */
-    fun getDoubleArrayFromBuffer(buffer: DoubleBuffer): DoubleArray {
-        val array: DoubleArray
+   /* fun getDoubleArrayFromBuffer(buffer: FloatBuffer): FloatArray {
+        val array: FloatArray
         if (buffer.hasArray()) {
             array = buffer.array()
         } else {
             buffer.rewind()
-            array = DoubleArray(buffer.capacity())
+            array = FloatArray(buffer.capacity())
             buffer.get(array)
         }
         return array
-    }
+    }*/
 
     /**
      * Creates a float array from the provided [FloatBuffer].

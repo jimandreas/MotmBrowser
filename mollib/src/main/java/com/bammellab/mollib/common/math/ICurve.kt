@@ -38,7 +38,7 @@ class ICurve {
 
         val currentTangent: MotmVector3
 
-        fun calculatePoint(result: MotmVector3, t: Double)
+        fun calculatePoint(result: MotmVector3, t: Float)
 
         fun setCalculateTangents(calculateTangents: Boolean)
     }

@@ -36,9 +36,9 @@ import kotlin.math.*
  */
 class MotmVector3 {
     //The vector components
-    var x: Double = 0.toDouble()
-    var y: Double = 0.toDouble()
-    var z: Double = 0.toDouble()
+    var x: Float = 0f
+    var y: Float = 0f
+    var z: Float = 0f
 
     //Scratch vector. We use lazy loading here.
     private var temp: MotmVector3? = null
@@ -50,7 +50,7 @@ class MotmVector3 {
      * @return boolean True if this [MotmVector3] is of unit length.
      */
     val isUnit: Boolean
-        get() = isUnit(1e-8)
+        get() = isUnit(1e-8f)
 
     /*
      * Checks if this [MotmVector3] is a zero vector.
@@ -58,7 +58,7 @@ class MotmVector3 {
      * @return boolean True if all 3 components are equal to zero.
      */
     val isZero: Boolean
-        get() = x == 0.0 && y == 0.0 && z == 0.0
+        get() = x == 0.0f && y == 0.0f && z == 0.0f
 
     /*
      * Enumeration for the 3 component axes.
@@ -76,9 +76,9 @@ class MotmVector3 {
      */
     constructor() {
         //They are technically zero, but we wont rely on the uninitialized state here.
-        x = 0.0
-        y = 0.0
-        z = 0.0
+        x = 0.0f
+        y = 0.0f
+        z = 0.0f
     }
 
     /*
@@ -86,7 +86,7 @@ class MotmVector3 {
      *
      * @param from double which all components will be initialized to.
      */
-    constructor(from: Double) {
+    constructor(from: Float) {
         x = from
         y = from
         z = from
@@ -125,9 +125,9 @@ class MotmVector3 {
      */
     @Throws(IllegalArgumentException::class, NumberFormatException::class)
     constructor(values: Array<String>) : this(
-            java.lang.Float.parseFloat(values[0]).toDouble(),
-            java.lang.Float.parseFloat(values[1]).toDouble(),
-            java.lang.Float.parseFloat(values[2]).toDouble()
+            java.lang.Float.parseFloat(values[0]),
+            java.lang.Float.parseFloat(values[1]),
+            java.lang.Float.parseFloat(values[2])
     )
 
     /*
@@ -138,7 +138,7 @@ class MotmVector3 {
      * @throws {@link IllegalArgumentException} if there are fewer than 3 values in the array.
      */
     @Throws(IllegalArgumentException::class)
-    constructor(values: DoubleArray) {
+    constructor(values: FloatArray) {
         if (values.size < 3) throw IllegalArgumentException("MotmVector3 must be initialized with an array length of at least 3.")
         x = values[0]
         y = values[1]
@@ -152,7 +152,7 @@ class MotmVector3 {
      * @param y double The y component.
      * @param z double The z component.
      */
-    constructor(x: Double, y: Double, z: Double) {
+    constructor(x: Float, y: Float, z: Float) {
         this.x = x
         this.y = y
         this.z = z
@@ -172,7 +172,7 @@ class MotmVector3 {
      *
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun setAll(x: Double, y: Double, z: Double): MotmVector3 {
+    fun setAll(x: Float, y: Float, z: Float): MotmVector3 {
         this.x = x
         this.y = y
         this.z = z
@@ -229,7 +229,7 @@ class MotmVector3 {
      *
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun add(x: Double, y: Double, z: Double): MotmVector3 {
+    fun add(x: Float, y: Float, z: Float): MotmVector3 {
         this.x += x
         this.y += y
         this.z += z
@@ -243,7 +243,7 @@ class MotmVector3 {
      *
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun add(value: Double): MotmVector3 {
+    fun add(value: Float): MotmVector3 {
         x += value
         y += value
         z += value
@@ -288,7 +288,7 @@ class MotmVector3 {
      *
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun subtract(x: Double, y: Double, z: Double): MotmVector3 {
+    fun subtract(x: Float, y: Float, z: Float): MotmVector3 {
         this.x -= x
         this.y -= y
         this.z -= z
@@ -302,7 +302,7 @@ class MotmVector3 {
      *
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun subtract(value: Double): MotmVector3 {
+    fun subtract(value: Float): MotmVector3 {
         x -= value
         y -= value
         z -= value
@@ -331,7 +331,7 @@ class MotmVector3 {
      *
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun multiply(value: Double): MotmVector3 {
+    fun multiply(value: Float): MotmVector3 {
         x *= value
         y *= value
         z *= value
@@ -376,7 +376,7 @@ class MotmVector3 {
      *
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun divide(value: Double): MotmVector3 {
+    fun divide(value: Float): MotmVector3 {
         x /= value
         y /= value
         z /= value
@@ -421,7 +421,7 @@ class MotmVector3 {
      *
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun scaleAndSet(a: MotmVector3, b: Double): MotmVector3 {
+    fun scaleAndSet(a: MotmVector3, b: Float): MotmVector3 {
         x = a.x * b
         y = a.y * b
         z = a.z * b
@@ -435,7 +435,7 @@ class MotmVector3 {
      *
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun rotateX(angle: Double): MotmVector3 {
+    fun rotateX(angle: Float): MotmVector3 {
         val cosRY = cos(angle)
         val sinRY = sin(angle)
         if (temp == null) temp = MotmVector3()
@@ -452,7 +452,7 @@ class MotmVector3 {
      *
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun rotateY(angle: Double): MotmVector3 {
+    fun rotateY(angle: Float): MotmVector3 {
         val cosRY = cos(angle)
         val sinRY = sin(angle)
         if (temp == null) temp = MotmVector3()
@@ -469,7 +469,7 @@ class MotmVector3 {
      *
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun rotateZ(angle: Double): MotmVector3 {
+    fun rotateZ(angle: Float): MotmVector3 {
         val cosRY = cos(angle)
         val sinRY = sin(angle)
         if (temp == null) temp = MotmVector3()
@@ -484,9 +484,9 @@ class MotmVector3 {
      *
      * @return double The initial magnitude.
      */
-    fun normalize(): Double {
+    fun normalize(): Float {
         val mag = sqrt(x * x + y * y + z * z)
-        if (mag != 0.0 && mag != 1.0) {
+        if (mag != 0.0f && mag != 1.0f) {
             val mod = 1 / mag
             x *= mod
             y *= mod
@@ -521,7 +521,7 @@ class MotmVector3 {
      *
      * @return double The Euclidean length.
      */
-    fun length(): Double {
+    fun length(): Float {
         return length(this)
     }
 
@@ -530,7 +530,7 @@ class MotmVector3 {
      *
      * @return double The squared Euclidean length.
      */
-    fun length2(): Double {
+    fun length2(): Float {
         return x * x + y * y + z * z
     }
 
@@ -541,7 +541,7 @@ class MotmVector3 {
      *
      * @return double The Euclidean distance.
      */
-    fun distanceTo(other: MotmVector3): Double {
+    fun distanceTo(other: MotmVector3): Float {
         val a = x - other.x
         val b = y - other.y
         val c = z - other.z
@@ -557,7 +557,7 @@ class MotmVector3 {
      *
      * @return double The Euclidean distance.
      */
-    fun distanceTo(x: Double, y: Double, z: Double): Double {
+    fun distanceTo(x: Float, y: Float, z: Float): Float {
         val a = this.x - x
         val b = this.y - y
         val c = this.z - z
@@ -571,7 +571,7 @@ class MotmVector3 {
      *
      * @return double The squared Euclidean distance.
      */
-    fun distanceTo2(other: MotmVector3): Double {
+    fun distanceTo2(other: MotmVector3): Float {
         val a = x - other.x
         val b = y - other.y
         val c = z - other.z
@@ -587,7 +587,7 @@ class MotmVector3 {
      *
      * @return double The squared Euclidean distance.
      */
-    fun distanceTo2(x: Double, y: Double, z: Double): Double {
+    fun distanceTo2(x: Float, y: Float, z: Float): Float {
         val a = this.x - x
         val b = this.y - y
         val c = this.z - z
@@ -627,10 +627,10 @@ class MotmVector3 {
      *
      * @return `double` The calculated angle, in degrees.
      */
-    fun angle(v: MotmVector3): Double {
+    fun angle(v: MotmVector3): Float {
         var dot = dot(v)
         dot /= length() * v.length()
-        return Math.toDegrees(acos(dot))
+        return Math.toDegrees(acos(dot.toDouble())).toFloat()
     }
 
     /*
@@ -640,7 +640,7 @@ class MotmVector3 {
      *
      * @return double The dot product.
      */
-    fun dot(v: MotmVector3): Double {
+    fun dot(v: MotmVector3): Float {
         return x * v.x + y * v.y + z * v.z
     }
 
@@ -653,7 +653,7 @@ class MotmVector3 {
      *
      * @return double The dot product.
      */
-    fun dot(x: Double, y: Double, z: Double): Double {
+    fun dot(x: Float, y: Float, z: Float): Float {
         return this.x * x + this.y * y + this.z * z
     }
 
@@ -684,7 +684,7 @@ class MotmVector3 {
      *
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun cross(x: Double, y: Double, z: Double): MotmVector3 {
+    fun cross(x: Float, y: Float, z: Float): MotmVector3 {
         if (temp == null) temp = MotmVector3()
         temp!!.setAll(this)
         this.x = y * temp!!.z - z * temp!!.y
@@ -729,7 +729,7 @@ class MotmVector3 {
     //        if (d >= 1.0f) {
     //            q.identity();
     //        }
-    //        if (d < 0.000001 - 1.0) {
+    //        if (d < 0.000001 - 1.0f) {
     //            // Generate an axis
     //            MotmVector3 axis = MotmVector3.crossAndCreate(MotmVector3.getAxisVector(Axis.X), this);
     //            if (axis.length() == 0) // pick another if colinear
@@ -761,8 +761,8 @@ class MotmVector3 {
      *
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun lerp(to: MotmVector3, amount: Double): MotmVector3 {
-        return multiply(1.0 - amount).add(to.x * amount, to.y * amount, to.z * amount)
+    fun lerp(to: MotmVector3, amount: Float): MotmVector3 {
+        return multiply(1.0f - amount).add(to.x * amount, to.y * amount, to.z * amount)
     }
 
     /*
@@ -776,7 +776,7 @@ class MotmVector3 {
      *
      * @return A reference to this [MotmVector3] to facilitate chaining.
      */
-    fun lerpAndSet(from: MotmVector3, to: MotmVector3, amount: Double): MotmVector3 {
+    fun lerpAndSet(from: MotmVector3, to: MotmVector3, amount: Float): MotmVector3 {
         x = from.x + (to.x - from.x) * amount
         y = from.y + (to.y - from.y) * amount
         z = from.z + (to.z - from.z) * amount
@@ -805,7 +805,7 @@ class MotmVector3 {
      *
      * @return boolean True if this [MotmVector3] is of unit length.
      */
-    private fun isUnit(margin: Double): Boolean {
+    private fun isUnit(margin: Float): Boolean {
         return abs(length2() - 1) < margin * margin
     }
 
@@ -816,7 +816,7 @@ class MotmVector3 {
      *
      * @return boolean True if this [MotmVector3]'s length is smaller than the margin specified.
      */
-    fun isZero(margin: Double): Boolean {
+    fun isZero(margin: Float): Boolean {
         return length2() < margin * margin
     }
 
@@ -841,7 +841,7 @@ class MotmVector3 {
      *
      * @return boolean True if this [MotmVector3]'s components match with the components of the input.
      */
-    fun equals(obj: MotmVector3, error: Double): Boolean {
+    fun equals(obj: MotmVector3, error: Float): Boolean {
         return abs(obj.x - x) <= error && abs(obj.y - y) <= error && abs(obj.z - z) <= error
     }
 
@@ -855,7 +855,7 @@ class MotmVector3 {
      * @return The passed array with the xyz values inserted
      */
     @JvmOverloads
-    fun toArray(array: DoubleArray? = DoubleArray(3)): DoubleArray? {
+    fun toArray(array: FloatArray? = FloatArray(3)): FloatArray? {
         if (array != null && array.size >= 3) {
             array[0] = x
             array[1] = y
@@ -888,42 +888,42 @@ class MotmVector3 {
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
-        val X = MotmVector3(1.0, 0.0, 0.0)
+        val X = MotmVector3(1.0f, 0.0f, 0.0f)
 
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
-        val Y = MotmVector3(0.0, 1.0, 0.0)
+        val Y = MotmVector3(0.0f, 1.0f, 0.0f)
 
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
-        val Z = MotmVector3(0.0, 0.0, 1.0)
+        val Z = MotmVector3(0.0f, 0.0f, 1.0f)
 
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
-        val NEG_X = MotmVector3(-1.0, 0.0, 0.0)
+        val NEG_X = MotmVector3(-1.0f, 0.0f, 0.0f)
 
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
-        val NEG_Y = MotmVector3(0.0, -1.0, 0.0)
+        val NEG_Y = MotmVector3(0.0f, -1.0f, 0.0f)
 
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
-        val NEG_Z = MotmVector3(0.0, 0.0, -1.0)
+        val NEG_Z = MotmVector3(0.0f, 0.0f, -1.0f)
 
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
-        val ZERO = MotmVector3(0.0, 0.0, 0.0)
+        val ZERO = MotmVector3(0.0f, 0.0f, 0.0f)
 
         /*
          * DO NOT EVER MODIFY THE VALUES OF THIS VECTOR
          */
-        val ONE = MotmVector3(1.0, 1.0, 1.0)
+        val ONE = MotmVector3(1.0f, 1.0f, 1.0f)
 
         /*
          * Adds two input [MotmVector3] objects and creates a new one to hold the result.
@@ -969,7 +969,7 @@ class MotmVector3 {
          *
          * @return [MotmVector3] The resulting [MotmVector3].
          */
-        fun multiplyAndCreate(a: MotmVector3, value: Double): MotmVector3 {
+        fun multiplyAndCreate(a: MotmVector3, value: Float): MotmVector3 {
             return MotmVector3(a.x * value, a.y * value, a.z * value)
         }
 
@@ -981,7 +981,7 @@ class MotmVector3 {
          *
          * @return [MotmVector3] The resulting [MotmVector3].
          */
-        fun scaleAndCreate(a: MotmVector3, b: Double): MotmVector3 {
+        fun scaleAndCreate(a: MotmVector3, b: Float): MotmVector3 {
             return MotmVector3(a.x * b, a.y * b, a.z * b)
         }
 
@@ -1025,7 +1025,7 @@ class MotmVector3 {
          *
          * @return double The Euclidean length.
          */
-        fun length(x: Double, y: Double, z: Double): Double {
+        fun length(x: Float, y: Float, z: Float): Float {
             return sqrt(length2(x, y, z))
         }
 
@@ -1036,7 +1036,7 @@ class MotmVector3 {
          *
          * @return double The Euclidean length.
          */
-        fun length(v: MotmVector3): Double {
+        fun length(v: MotmVector3): Float {
             return length(v.x, v.y, v.z)
         }
 
@@ -1047,7 +1047,7 @@ class MotmVector3 {
          *
          * @return double The squared Euclidean length.
          */
-        fun length2(v: MotmVector3): Double {
+        fun length2(v: MotmVector3): Float {
             return length2(v.x, v.y, v.z)
         }
 
@@ -1060,7 +1060,7 @@ class MotmVector3 {
          *
          * @return double The squared Euclidean length.
          */
-        private fun length2(x: Double, y: Double, z: Double): Double {
+        private fun length2(x: Float, y: Float, z: Float): Float {
             return x * x + y * y + z * z
         }
 
@@ -1072,7 +1072,7 @@ class MotmVector3 {
          *
          * @return double The Euclidean distance.
          */
-        fun distanceTo(v1: MotmVector3, v2: MotmVector3): Double {
+        fun distanceTo(v1: MotmVector3, v2: MotmVector3): Float {
             val a = v1.x - v2.x
             val b = v1.y - v2.y
             val c = v1.z - v2.z
@@ -1084,7 +1084,7 @@ class MotmVector3 {
          *
          * @return double The Euclidean distance.
          */
-        fun distanceTo(x1: Double, y1: Double, z1: Double, x2: Double, y2: Double, z2: Double): Double {
+        fun distanceTo(x1: Float, y1: Float, z1: Float, x2: Float, y2: Float, z2: Float): Float {
             val a = x1 - x2
             val b = y1 - y2
             val c = z1 - z2
@@ -1099,7 +1099,7 @@ class MotmVector3 {
          *
          * @return double The squared Euclidean distance.
          */
-        fun distanceTo2(v1: MotmVector3, v2: MotmVector3): Double {
+        fun distanceTo2(v1: MotmVector3, v2: MotmVector3): Float {
             val a = v1.x - v2.x
             val b = v1.y - v2.y
             val c = v1.z - v2.z
@@ -1111,7 +1111,7 @@ class MotmVector3 {
          *
          * @return double The squared Euclidean distance.
          */
-        fun distanceTo2(x1: Double, y1: Double, z1: Double, x2: Double, y2: Double, z2: Double): Double {
+        fun distanceTo2(x1: Float, y1: Float, z1: Float, x2: Float, y2: Float, z2: Float): Float {
             val a = x1 - x2
             val b = y1 - y2
             val c = z1 - z2
@@ -1141,7 +1141,7 @@ class MotmVector3 {
          *
          * @return double The dot product.
          */
-        fun dot(v1: MotmVector3, v2: MotmVector3): Double {
+        fun dot(v1: MotmVector3, v2: MotmVector3): Float {
             return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
         }
 
@@ -1157,8 +1157,8 @@ class MotmVector3 {
          *
          * @return double The dot product.
          */
-        fun dot(x1: Double, y1: Double, z1: Double,
-                x2: Double, y2: Double, z2: Double): Double {
+        fun dot(x1: Float, y1: Float, z1: Float,
+                x2: Float, y2: Float, z2: Float): Float {
             return x1 * x2 + y1 * y2 + z1 * z2
         }
 
@@ -1185,7 +1185,7 @@ class MotmVector3 {
          *
          * @return [MotmVector3] The interpolated value.
          */
-        fun lerpAndCreate(from: MotmVector3, to: MotmVector3, amount: Double): MotmVector3 {
+        fun lerpAndCreate(from: MotmVector3, to: MotmVector3, amount: Float): MotmVector3 {
             val out = MotmVector3()
             out.x = from.x + (to.x - from.x) * amount
             out.y = from.y + (to.y - from.y) * amount

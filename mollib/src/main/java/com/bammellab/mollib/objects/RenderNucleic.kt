@@ -1,17 +1,14 @@
 /*
- * Copyright (C) 2016-2018 James Andreas
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
+ *  Copyright 2020 Bammellab / James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
  */
 
 @file:Suppress("unused")
@@ -66,7 +63,7 @@ class RenderNucleic(private val molecule: Molecule) {
         /*
          * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
          */
-        normal_brightness_factor = (molecule.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR).toFloat()
+        normal_brightness_factor = (molecule.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR)
 
         var pdbBackboneList: List<*>
         var chainEntry: ChainRenderingDescriptor
@@ -125,7 +122,7 @@ class RenderNucleic(private val molecule: Molecule) {
         // fix corner2 along P - and set its length,
         //   based at corner1
         corner2.setAll(pvec)
-        corner2.multiply(scaler.toDouble())
+        corner2.multiply(scaler.toFloat())
         corner2.add(corner1)
 
         // set R to vector across the rectangle
@@ -143,7 +140,7 @@ class RenderNucleic(private val molecule: Molecule) {
         corner3.setAll(svec)
         corner3.cross(pvec)
         // corner3.multiply((double) scaler * 0.75);
-        corner3.multiply(2.0)
+        corner3.multiply(2.0f)
 
         // corner3 is still a vector based at the origin.
         //  borrow it for a minute to figure out corner4
@@ -159,7 +156,7 @@ class RenderNucleic(private val molecule: Molecule) {
          *  TOP
          */
 
-        svec.multiply(0.25)
+        svec.multiply(0.25f)
 
         corner1t.setAll(corner1)
         corner2t.setAll(corner2)
@@ -173,33 +170,33 @@ class RenderNucleic(private val molecule: Molecule) {
         // OK we should have all 4 corners now
         //  do the triangles
 
-        p1[0] = corner1t.x.toFloat()
-        p1[1] = corner1t.y.toFloat()
-        p1[2] = corner1t.z.toFloat()
+        p1[0] = corner1t.x
+        p1[1] = corner1t.y
+        p1[2] = corner1t.z
 
-        p2[0] = corner3t.x.toFloat()
-        p2[1] = corner3t.y.toFloat()
-        p2[2] = corner3t.z.toFloat()
+        p2[0] = corner3t.x
+        p2[1] = corner3t.y
+        p2[2] = corner3t.z
 
-        p3[0] = corner2t.x.toFloat()
-        p3[1] = corner2t.y.toFloat()
-        p3[2] = corner2t.z.toFloat()
+        p3[0] = corner2t.x
+        p3[1] = corner2t.y
+        p3[2] = corner2t.z
         // OK that is one triangle.
 
         n = XYZ.getNormal(p3, p2, p1)
         putTri(p1, p2, p3, n, theColor)
 
-        p1[0] = corner3t.x.toFloat()
-        p1[1] = corner3t.y.toFloat()
-        p1[2] = corner3t.z.toFloat()
+        p1[0] = corner3t.x
+        p1[1] = corner3t.y
+        p1[2] = corner3t.z
 
-        p2[0] = corner4t.x.toFloat()
-        p2[1] = corner4t.y.toFloat()
-        p2[2] = corner4t.z.toFloat()
+        p2[0] = corner4t.x
+        p2[1] = corner4t.y
+        p2[2] = corner4t.z
 
-        p3[0] = corner2t.x.toFloat()
-        p3[1] = corner2t.y.toFloat()
-        p3[2] = corner2t.z.toFloat()
+        p3[0] = corner2t.x
+        p3[1] = corner2t.y
+        p3[2] = corner2t.z
         // OK that is one triangle.
 
         n = XYZ.getNormal(p3, p2, p1)
@@ -221,33 +218,33 @@ class RenderNucleic(private val molecule: Molecule) {
         // OK we should have all 4 corners now
         //  do the triangles
 
-        p1[0] = corner1b.x.toFloat()
-        p1[1] = corner1b.y.toFloat()
-        p1[2] = corner1b.z.toFloat()
+        p1[0] = corner1b.x
+        p1[1] = corner1b.y
+        p1[2] = corner1b.z
 
-        p2[0] = corner2b.x.toFloat()
-        p2[1] = corner2b.y.toFloat()
-        p2[2] = corner2b.z.toFloat()
+        p2[0] = corner2b.x
+        p2[1] = corner2b.y
+        p2[2] = corner2b.z
 
-        p3[0] = corner3b.x.toFloat()
-        p3[1] = corner3b.y.toFloat()
-        p3[2] = corner3b.z.toFloat()
+        p3[0] = corner3b.x
+        p3[1] = corner3b.y
+        p3[2] = corner3b.z
         // OK that is one triangle.
 
         n = XYZ.getNormal(p3, p2, p1)
         putTri(p1, p2, p3, n, theColor)
 
-        p1[0] = corner3b.x.toFloat()
-        p1[1] = corner3b.y.toFloat()
-        p1[2] = corner3b.z.toFloat()
+        p1[0] = corner3b.x
+        p1[1] = corner3b.y
+        p1[2] = corner3b.z
 
-        p2[0] = corner2b.x.toFloat()
-        p2[1] = corner2b.y.toFloat()
-        p2[2] = corner2b.z.toFloat()
+        p2[0] = corner2b.x
+        p2[1] = corner2b.y
+        p2[2] = corner2b.z
 
-        p3[0] = corner4b.x.toFloat()
-        p3[1] = corner4b.y.toFloat()
-        p3[2] = corner4b.z.toFloat()
+        p3[0] = corner4b.x
+        p3[1] = corner4b.y
+        p3[2] = corner4b.z
         // OK that is one triangle.
 
         n = XYZ.getNormal(p3, p2, p1)
@@ -259,32 +256,32 @@ class RenderNucleic(private val molecule: Molecule) {
         /* **************************
          * END number 1
          */
-        p1[0] = corner1t.x.toFloat()
-        p1[1] = corner1t.y.toFloat()
-        p1[2] = corner1t.z.toFloat()
+        p1[0] = corner1t.x
+        p1[1] = corner1t.y
+        p1[2] = corner1t.z
 
-        p2[0] = corner1b.x.toFloat()
-        p2[1] = corner1b.y.toFloat()
-        p2[2] = corner1b.z.toFloat()
+        p2[0] = corner1b.x
+        p2[1] = corner1b.y
+        p2[2] = corner1b.z
 
-        p3[0] = corner3b.x.toFloat()
-        p3[1] = corner3b.y.toFloat()
-        p3[2] = corner3b.z.toFloat()
+        p3[0] = corner3b.x
+        p3[1] = corner3b.y
+        p3[2] = corner3b.z
 
         n = XYZ.getNormal(p3, p2, p1)
         putTri(p1, p2, p3, n, theColor)
 
-        p1[0] = corner1t.x.toFloat()
-        p1[1] = corner1t.y.toFloat()
-        p1[2] = corner1t.z.toFloat()
+        p1[0] = corner1t.x
+        p1[1] = corner1t.y
+        p1[2] = corner1t.z
 
-        p2[0] = corner3b.x.toFloat()
-        p2[1] = corner3b.y.toFloat()
-        p2[2] = corner3b.z.toFloat()
+        p2[0] = corner3b.x
+        p2[1] = corner3b.y
+        p2[2] = corner3b.z
 
-        p3[0] = corner3t.x.toFloat()
-        p3[1] = corner3t.y.toFloat()
-        p3[2] = corner3t.z.toFloat()
+        p3[0] = corner3t.x
+        p3[1] = corner3t.y
+        p3[2] = corner3t.z
 
         n = XYZ.getNormal(p3, p2, p1)
         putTri(p1, p2, p3, n, theColor)
@@ -293,32 +290,32 @@ class RenderNucleic(private val molecule: Molecule) {
         /* **************************
          * END number 2
          */
-        p1[0] = corner3t.x.toFloat()
-        p1[1] = corner3t.y.toFloat()
-        p1[2] = corner3t.z.toFloat()
+        p1[0] = corner3t.x
+        p1[1] = corner3t.y
+        p1[2] = corner3t.z
 
-        p2[0] = corner3b.x.toFloat()
-        p2[1] = corner3b.y.toFloat()
-        p2[2] = corner3b.z.toFloat()
+        p2[0] = corner3b.x
+        p2[1] = corner3b.y
+        p2[2] = corner3b.z
 
-        p3[0] = corner4b.x.toFloat()
-        p3[1] = corner4b.y.toFloat()
-        p3[2] = corner4b.z.toFloat()
+        p3[0] = corner4b.x
+        p3[1] = corner4b.y
+        p3[2] = corner4b.z
 
         n = XYZ.getNormal(p3, p2, p1)
         putTri(p1, p2, p3, n, theColor)
 
-        p1[0] = corner3t.x.toFloat()
-        p1[1] = corner3t.y.toFloat()
-        p1[2] = corner3t.z.toFloat()
+        p1[0] = corner3t.x
+        p1[1] = corner3t.y
+        p1[2] = corner3t.z
 
-        p2[0] = corner4b.x.toFloat()
-        p2[1] = corner4b.y.toFloat()
-        p2[2] = corner4b.z.toFloat()
+        p2[0] = corner4b.x
+        p2[1] = corner4b.y
+        p2[2] = corner4b.z
 
-        p3[0] = corner4t.x.toFloat()
-        p3[1] = corner4t.y.toFloat()
-        p3[2] = corner4t.z.toFloat()
+        p3[0] = corner4t.x
+        p3[1] = corner4t.y
+        p3[2] = corner4t.z
 
         n = XYZ.getNormal(p3, p2, p1)
         putTri(p1, p2, p3, n, theColor)
@@ -326,32 +323,32 @@ class RenderNucleic(private val molecule: Molecule) {
         /* **************************
          * END number 3
          */
-        p1[0] = corner4t.x.toFloat()
-        p1[1] = corner4t.y.toFloat()
-        p1[2] = corner4t.z.toFloat()
+        p1[0] = corner4t.x
+        p1[1] = corner4t.y
+        p1[2] = corner4t.z
 
-        p2[0] = corner4b.x.toFloat()
-        p2[1] = corner4b.y.toFloat()
-        p2[2] = corner4b.z.toFloat()
+        p2[0] = corner4b.x
+        p2[1] = corner4b.y
+        p2[2] = corner4b.z
 
-        p3[0] = corner2b.x.toFloat()
-        p3[1] = corner2b.y.toFloat()
-        p3[2] = corner2b.z.toFloat()
+        p3[0] = corner2b.x
+        p3[1] = corner2b.y
+        p3[2] = corner2b.z
 
         n = XYZ.getNormal(p3, p2, p1)
         putTri(p1, p2, p3, n, theColor)
 
-        p1[0] = corner4t.x.toFloat()
-        p1[1] = corner4t.y.toFloat()
-        p1[2] = corner4t.z.toFloat()
+        p1[0] = corner4t.x
+        p1[1] = corner4t.y
+        p1[2] = corner4t.z
 
-        p2[0] = corner2b.x.toFloat()
-        p2[1] = corner2b.y.toFloat()
-        p2[2] = corner2b.z.toFloat()
+        p2[0] = corner2b.x
+        p2[1] = corner2b.y
+        p2[2] = corner2b.z
 
-        p3[0] = corner2t.x.toFloat()
-        p3[1] = corner2t.y.toFloat()
-        p3[2] = corner2t.z.toFloat()
+        p3[0] = corner2t.x
+        p3[1] = corner2t.y
+        p3[2] = corner2t.z
 
         n = XYZ.getNormal(p3, p2, p1)
         putTri(p1, p2, p3, n, theColor)
@@ -359,32 +356,32 @@ class RenderNucleic(private val molecule: Molecule) {
         /* **************************
          * END number 4
          */
-        p1[0] = corner2t.x.toFloat()
-        p1[1] = corner2t.y.toFloat()
-        p1[2] = corner2t.z.toFloat()
+        p1[0] = corner2t.x
+        p1[1] = corner2t.y
+        p1[2] = corner2t.z
 
-        p2[0] = corner2b.x.toFloat()
-        p2[1] = corner2b.y.toFloat()
-        p2[2] = corner2b.z.toFloat()
+        p2[0] = corner2b.x
+        p2[1] = corner2b.y
+        p2[2] = corner2b.z
 
-        p3[0] = corner1b.x.toFloat()
-        p3[1] = corner1b.y.toFloat()
-        p3[2] = corner1b.z.toFloat()
+        p3[0] = corner1b.x
+        p3[1] = corner1b.y
+        p3[2] = corner1b.z
 
         n = XYZ.getNormal(p3, p2, p1)
         putTri(p1, p2, p3, n, theColor)
 
-        p1[0] = corner2t.x.toFloat()
-        p1[1] = corner2t.y.toFloat()
-        p1[2] = corner2t.z.toFloat()
+        p1[0] = corner2t.x
+        p1[1] = corner2t.y
+        p1[2] = corner2t.z
 
-        p2[0] = corner1b.x.toFloat()
-        p2[1] = corner1b.y.toFloat()
-        p2[2] = corner1b.z.toFloat()
+        p2[0] = corner1b.x
+        p2[1] = corner1b.y
+        p2[2] = corner1b.z
 
-        p3[0] = corner1t.x.toFloat()
-        p3[1] = corner1t.y.toFloat()
-        p3[2] = corner1t.z.toFloat()
+        p3[0] = corner1t.x
+        p3[1] = corner1t.y
+        p3[2] = corner1t.z
 
         n = XYZ.getNormal(p3, p2, p1)
         putTri(p1, p2, p3, n, theColor)

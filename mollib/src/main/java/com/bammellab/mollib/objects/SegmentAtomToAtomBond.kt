@@ -1,24 +1,23 @@
 /*
- * Copyright (C) 2016-2018 James Andreas
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
+ *  Copyright 2020 Bammellab / James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
  */
 
 @file:Suppress("unused")
 
 package com.bammellab.mollib.objects
 
+import com.bammellab.mollib.common.math.FastSinCos
 import com.bammellab.mollib.common.math.MathUtil
+import com.bammellab.mollib.common.math.MathUtil.PIFLOAT
 import com.bammellab.mollib.common.math.MotmVector3
 import com.bammellab.mollib.objects.GlobalObject.BRIGHTNESS_FACTOR
 import com.kotmol.pdbParser.AtomInformationTable
@@ -39,7 +38,7 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
         /*
          * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
          */
-        normal_brightness_factor = (molecule.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR).toFloat()
+        normal_brightness_factor = (molecule.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR)
 
         var i = 0
         val startColor: FloatArray
@@ -49,9 +48,9 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
         val positionEnd = MotmVector3(atom2.atomPosition)
         val positionMid = MotmVector3()
 
-        positionMid.x = (positionEnd.x + positionStart.x) / 2.0
-        positionMid.y = (positionEnd.y + positionStart.y) / 2.0
-        positionMid.z = (positionEnd.z + positionStart.z) / 2.0
+        positionMid.x = (positionEnd.x + positionStart.x) / 2.0f
+        positionMid.y = (positionEnd.y + positionStart.y) / 2.0f
+        positionMid.z = (positionEnd.z + positionStart.z) / 2.0f
 
         var elementSymbol: String = atom1.elementSymbol
         var ai = AtomInformationTable.atomSymboltoAtomNumNameColor[elementSymbol]
@@ -76,7 +75,7 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
         //        MotmVector3 p1p2 = new MotmVector3();
         //        p1p2.setAll(position_end);
         //        p1p2.subtract(position_start);
-        //        MotmVector3 P = new MotmVector3(Math.random(), Math.random(), Math.random());
+        //        MotmVector3 P = new MotmVector3(Math.random().toFloat(), Math.random().toFloat(), Math.random());
         //        MotmVector3 R = new MotmVector3(p1p2);
         //        R.cross(P);
         //        MotmVector3 S = new MotmVector3(R);
@@ -86,9 +85,9 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
 
         p1p2.setAll(positionEnd)
         p1p2.subtract(positionStart)
-        pvec.x = Math.random()
-        pvec.y = Math.random()
-        pvec.z = Math.random()
+        pvec.x = Math.random().toFloat()
+        pvec.y = Math.random().toFloat()
+        pvec.z = Math.random().toFloat()
         // MotmVector3 R = new MotmVector3(p1p2);
         rvec.setAll(p1p2)
         rvec.cross(pvec)
@@ -101,12 +100,12 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
         rvec.normalize()
         svec.normalize()
 
-        var x1: Double
-        var y1: Double
-        var z1: Double
-        var x2: Double
-        var y2: Double
-        var z2: Double
+        var x1: Float
+        var y1: Float
+        var z1: Float
+        var x2: Float
+        var y2: Float
+        var z2: Float
 
         /*
          * math: two tris per slice, wrapping for numSlices+1 (hit original again to close)
@@ -128,15 +127,15 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
         var n: FloatArray
         while (i <= numSlices) {
 
-            val angleInRadians1 = (i.toDouble() / numSlices.toDouble()
-                    * Math.PI * 2.0)
-            val angleInRadians2 = ((i + 1).toDouble() / numSlices.toDouble()
-                    * Math.PI * 2.0)
+            val angleInRadians1 = (i.toFloat() / numSlices.toFloat()
+                    * PIFLOAT * 2.0f)
+            val angleInRadians2 = ((i + 1).toFloat() / numSlices.toFloat()
+                    * PIFLOAT * 2.0f)
 
-            val s1 = radius * MathUtil.sin(angleInRadians1)
-            val s2 = radius * MathUtil.sin(angleInRadians2)
-            val c1 = radius * MathUtil.cos(angleInRadians1)
-            val c2 = radius * MathUtil.cos(angleInRadians2)
+            val s1 = radius * FastSinCos.sin(angleInRadians1)
+            val s2 = radius * FastSinCos.sin(angleInRadians2)
+            val c1 = radius * FastSinCos.cos(angleInRadians1)
+            val c2 = radius * FastSinCos.cos(angleInRadians2)
 
             /*
              * first the START to MID portion of the bond
@@ -148,16 +147,16 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             y1 = rvec.y * c1 + svec.y * s1
             z1 = rvec.z * c1 + svec.z * s1
 
-            p1[0] = (x1 + positionMid.x).toFloat()
-            p1[1] = (y1 + positionMid.y).toFloat()
-            p1[2] = (z1 + positionMid.z).toFloat()
+            p1[0] = (x1 + positionMid.x)
+            p1[1] = (y1 + positionMid.y)
+            p1[2] = (z1 + positionMid.z)
 
 
             // first bottom point
 
-            p2[0] = (x1 + positionStart.x).toFloat()
-            p2[1] = (y1 + positionStart.y).toFloat()
-            p2[2] = (z1 + positionStart.z).toFloat()
+            p2[0] = (x1 + positionStart.x)
+            p2[1] = (y1 + positionStart.y)
+            p2[2] = (z1 + positionStart.z)
 
 
             // SECOND BOTTOM point
@@ -165,9 +164,9 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             y2 = rvec.y * c2 + svec.y * s2
             z2 = rvec.z * c2 + svec.z * s2
 
-            p3[0] = (x2 + positionStart.x).toFloat()
-            p3[1] = (y2 + positionStart.y).toFloat()
-            p3[2] = (z2 + positionStart.z).toFloat()
+            p3[0] = (x2 + positionStart.x)
+            p3[1] = (y2 + positionStart.y)
+            p3[2] = (z2 + positionStart.z)
             // OK that is one triangle.
 
             n = XYZ.getNormal(p1, p2, p3)
@@ -177,16 +176,16 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
 
             // first top point
 
-            p1[0] = (x1 + positionMid.x).toFloat()
-            p1[1] = (y1 + positionMid.y).toFloat()
-            p1[2] = (z1 + positionMid.z).toFloat()
+            p1[0] = (x1 + positionMid.x)
+            p1[1] = (y1 + positionMid.y)
+            p1[2] = (z1 + positionMid.z)
 
 
             // SECOND BOTTOM point
 
-            p2[0] = (x2 + positionStart.x).toFloat()
-            p2[1] = (y2 + positionStart.y).toFloat()
-            p2[2] = (z2 + positionStart.z).toFloat()
+            p2[0] = (x2 + positionStart.x)
+            p2[1] = (y2 + positionStart.y)
+            p2[2] = (z2 + positionStart.z)
 
 
             // SECOND top point
@@ -195,9 +194,9 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             y2 = rvec.y * c2 + svec.y * s2
             z2 = rvec.z * c2 + svec.z * s2
 
-            p3[0] = (x2 + positionMid.x).toFloat()
-            p3[1] = (y2 + positionMid.y).toFloat()
-            p3[2] = (z2 + positionMid.z).toFloat()
+            p3[0] = (x2 + positionMid.x)
+            p3[1] = (y2 + positionMid.y)
+            p3[2] = (z2 + positionMid.z)
 
 
 
@@ -214,16 +213,16 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             y1 = rvec.y * c1 + svec.y * s1
             z1 = rvec.z * c1 + svec.z * s1
 
-            p1[0] = (x1 + positionEnd.x).toFloat()
-            p1[1] = (y1 + positionEnd.y).toFloat()
-            p1[2] = (z1 + positionEnd.z).toFloat()
+            p1[0] = (x1 + positionEnd.x)
+            p1[1] = (y1 + positionEnd.y)
+            p1[2] = (z1 + positionEnd.z)
 
 
             // first bottom point
 
-            p2[0] = (x1 + positionMid.x).toFloat()
-            p2[1] = (y1 + positionMid.y).toFloat()
-            p2[2] = (z1 + positionMid.z).toFloat()
+            p2[0] = (x1 + positionMid.x)
+            p2[1] = (y1 + positionMid.y)
+            p2[2] = (z1 + positionMid.z)
 
 
             // SECOND BOTTOM point
@@ -231,9 +230,9 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             y2 = rvec.y * c2 + svec.y * s2
             z2 = rvec.z * c2 + svec.z * s2
 
-            p3[0] = (x2 + positionMid.x).toFloat()
-            p3[1] = (y2 + positionMid.y).toFloat()
-            p3[2] = (z2 + positionMid.z).toFloat()
+            p3[0] = (x2 + positionMid.x)
+            p3[1] = (y2 + positionMid.y)
+            p3[2] = (z2 + positionMid.z)
             // OK that is one triangle.
 
             n = XYZ.getNormal(p1, p2, p3)
@@ -243,16 +242,16 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
 
             // first top point
 
-            p1[0] = (x1 + positionEnd.x).toFloat()
-            p1[1] = (y1 + positionEnd.y).toFloat()
-            p1[2] = (z1 + positionEnd.z).toFloat()
+            p1[0] = (x1 + positionEnd.x)
+            p1[1] = (y1 + positionEnd.y)
+            p1[2] = (z1 + positionEnd.z)
 
 
             // SECOND BOTTOM point
 
-            p2[0] = (x2 + positionMid.x).toFloat()
-            p2[1] = (y2 + positionMid.y).toFloat()
-            p2[2] = (z2 + positionMid.z).toFloat()
+            p2[0] = (x2 + positionMid.x)
+            p2[1] = (y2 + positionMid.y)
+            p2[2] = (z2 + positionMid.z)
 
             // SECOND top point
 
@@ -260,9 +259,9 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             y2 = rvec.y * c2 + svec.y * s2
             z2 = rvec.z * c2 + svec.z * s2
 
-            p3[0] = (x2 + positionEnd.x).toFloat()
-            p3[1] = (y2 + positionEnd.y).toFloat()
-            p3[2] = (z2 + positionEnd.z).toFloat()
+            p3[0] = (x2 + positionEnd.x)
+            p3[1] = (y2 + positionEnd.y)
+            p3[2] = (z2 + positionEnd.z)
 
 
 
