@@ -42,7 +42,7 @@ class RenderRibbon(private val molecule: Molecule) {
 
     private val cylinderIndexCount: Int = 0
     private lateinit var vertexData: FloatArray
-    private var mOffset: Int = 0
+    private var arrayOffset: Int = 0
     private val vboTopAndBottom = IntArray(1)
     private val vboBody = IntArray(1)
     private val ibo = IntArray(1)
@@ -296,9 +296,6 @@ class RenderRibbon(private val molecule: Molecule) {
         var y1: Double
         var z1: Double
 
-        //        float[] v1 = new float[(numSlices + 1) * 3];
-        //        float[] v2 = new float[(numSlices + 1) * 3];
-
         val numSlices = ribbonSlices
         val v1 = cache1
         val v2 = cache2
@@ -405,7 +402,6 @@ class RenderRibbon(private val molecule: Molecule) {
             temp.setAll(R2)
             temp.subtract(delta)
             temp.multiply(weight)
-            // R2.add(delta);
 
             /*
              * smooth the position as a running average with the 3 previous positions
@@ -477,7 +473,7 @@ class RenderRibbon(private val molecule: Molecule) {
 
 
             vertexData = BufferManager.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
-            mOffset = BufferManager.floatArrayIndex
+            arrayOffset = BufferManager.floatArrayIndex
 
             run {
 
@@ -561,7 +557,7 @@ class RenderRibbon(private val molecule: Molecule) {
                 // reuse the 2nd array
                 System.arraycopy(v2, 0, v1, 0, (numSlices + 1) * 3)
 
-                BufferManager.floatArrayIndex = mOffset
+                BufferManager.floatArrayIndex = arrayOffset
             }
         }
     }
@@ -608,8 +604,6 @@ class RenderRibbon(private val molecule: Molecule) {
         var y1: Double
         var z1: Double
 
-        //        float[] v1 = new float[(numSlices + 1) * 3];
-        //        float[] v2 = new float[(numSlices + 1) * 3];
         val numSlices = ribbonSlices
         val v1 = cache1
         val v2 = cache2
@@ -867,7 +861,7 @@ class RenderRibbon(private val molecule: Molecule) {
 
 
             vertexData = BufferManager.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
-            mOffset = BufferManager.floatArrayIndex
+            arrayOffset = BufferManager.floatArrayIndex
 
             run {
 
@@ -952,7 +946,7 @@ class RenderRibbon(private val molecule: Molecule) {
                 System.arraycopy(v2, 0, v1, 0, (numSlices + 1) * 3)
                 cache2_valid = true
 
-                BufferManager.floatArrayIndex = mOffset
+                BufferManager.floatArrayIndex = arrayOffset
             }
             whereInSpline++
         }
@@ -980,7 +974,7 @@ class RenderRibbon(private val molecule: Molecule) {
         val greenColor = floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f)
 
         vertexData = BufferManager.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
-        mOffset = BufferManager.floatArrayIndex
+        arrayOffset = BufferManager.floatArrayIndex
         for (i in 0 until numSlices) {
 
             p1[0] = v1[i * 3]
@@ -1048,7 +1042,7 @@ class RenderRibbon(private val molecule: Molecule) {
                 putTri(p1, p2, p3, n, greenColor)
             }
         }
-        BufferManager.floatArrayIndex = mOffset
+        BufferManager.floatArrayIndex = arrayOffset
     }
 
     private fun renderRibbon(path: CatmullRomCurve, start_index: Int, end_index: Int, descriptor_count: Int) {
@@ -1216,7 +1210,7 @@ class RenderRibbon(private val molecule: Molecule) {
             }
 
             vertexData = BufferManager.getFloatArray(6 * (numSlices + 1) * STRIDE_IN_FLOATS)
-            mOffset = BufferManager.floatArrayIndex
+            arrayOffset = BufferManager.floatArrayIndex
 
             //                if (thedot < 2.7) {
             //                    v1 = matchVertexCache(v1, numSlices + 1, v2, p1p2);
@@ -1300,7 +1294,7 @@ class RenderRibbon(private val molecule: Molecule) {
             // reuse the 2nd array
             System.arraycopy(endVertexCache, 0, v1, 0, (numSlices + 1) * 3)
             cache2_valid = true
-            BufferManager.floatArrayIndex = mOffset
+            BufferManager.floatArrayIndex = arrayOffset
         }
     }
 
@@ -1317,38 +1311,38 @@ class RenderRibbon(private val molecule: Molecule) {
         n[1] *= -normalBrightnessFactor.toFloat()
         n[2] *= -normalBrightnessFactor.toFloat()
 
-        vertexData[mOffset++] = p1[0]
-        vertexData[mOffset++] = p1[1]
-        vertexData[mOffset++] = p1[2]
-        vertexData[mOffset++] = n[0]
-        vertexData[mOffset++] = n[1]
-        vertexData[mOffset++] = n[2]
-        vertexData[mOffset++] = color[0]
-        vertexData[mOffset++] = color[1]
-        vertexData[mOffset++] = color[2]
-        vertexData[mOffset++] = color[3]
+        vertexData[arrayOffset++] = p1[0]
+        vertexData[arrayOffset++] = p1[1]
+        vertexData[arrayOffset++] = p1[2]
+        vertexData[arrayOffset++] = n[0]
+        vertexData[arrayOffset++] = n[1]
+        vertexData[arrayOffset++] = n[2]
+        vertexData[arrayOffset++] = color[0]
+        vertexData[arrayOffset++] = color[1]
+        vertexData[arrayOffset++] = color[2]
+        vertexData[arrayOffset++] = color[3]
 
-        vertexData[mOffset++] = p2[0]
-        vertexData[mOffset++] = p2[1]
-        vertexData[mOffset++] = p2[2]
-        vertexData[mOffset++] = n[0]
-        vertexData[mOffset++] = n[1]
-        vertexData[mOffset++] = n[2]
-        vertexData[mOffset++] = color[0]
-        vertexData[mOffset++] = color[1]
-        vertexData[mOffset++] = color[2]
-        vertexData[mOffset++] = color[3]
+        vertexData[arrayOffset++] = p2[0]
+        vertexData[arrayOffset++] = p2[1]
+        vertexData[arrayOffset++] = p2[2]
+        vertexData[arrayOffset++] = n[0]
+        vertexData[arrayOffset++] = n[1]
+        vertexData[arrayOffset++] = n[2]
+        vertexData[arrayOffset++] = color[0]
+        vertexData[arrayOffset++] = color[1]
+        vertexData[arrayOffset++] = color[2]
+        vertexData[arrayOffset++] = color[3]
 
-        vertexData[mOffset++] = p3[0]
-        vertexData[mOffset++] = p3[1]
-        vertexData[mOffset++] = p3[2]
-        vertexData[mOffset++] = n[0]
-        vertexData[mOffset++] = n[1]
-        vertexData[mOffset++] = n[2]
-        vertexData[mOffset++] = color[0]
-        vertexData[mOffset++] = color[1]
-        vertexData[mOffset++] = color[2]
-        vertexData[mOffset++] = color[3]
+        vertexData[arrayOffset++] = p3[0]
+        vertexData[arrayOffset++] = p3[1]
+        vertexData[arrayOffset++] = p3[2]
+        vertexData[arrayOffset++] = n[0]
+        vertexData[arrayOffset++] = n[1]
+        vertexData[arrayOffset++] = n[2]
+        vertexData[arrayOffset++] = color[0]
+        vertexData[arrayOffset++] = color[1]
+        vertexData[arrayOffset++] = color[2]
+        vertexData[arrayOffset++] = color[3]
     }
 
     // float[] start_vertex_cache = new float[(numSlices + 1) * 3];

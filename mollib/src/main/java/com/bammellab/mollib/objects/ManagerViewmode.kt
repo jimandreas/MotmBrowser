@@ -35,11 +35,16 @@ class ManagerViewmode(private val activity: Activity,
     private val atomToAtomBond = SegmentAtomToAtomBond(mol)
     private val renderRibbon = RenderRibbon(mol)
     private val renderNucleic = RenderNucleic(mol)
+    private val renderCaQuickLine = RenderCaAsQuickLine(mol)
     private var currentMode = 0
     private var drawMode = 0
 
     var displayHydrosFlag = false
     var geometrySlices = 10
+
+    fun getMode(): Int {
+        return currentMode
+    }
 
     fun createView() {
         currentMode = VIEW_INITIAL
@@ -98,6 +103,7 @@ class ManagerViewmode(private val activity: Activity,
             run bailout@{
                 //Timber.i("doViewMode: THRESHOLD mbyte = %d", initialAvailMem / 1024 / 1024)
 
+                BufferManager.setRenderCaFlag(false)
                 when (currentMode) {
                     VIEW_RIBBONS -> {
                         drawMode = D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_RIBBONS
@@ -156,6 +162,10 @@ class ManagerViewmode(private val activity: Activity,
                                 or D_SPHERES)
                         calcMemoryUsage(drawMode)
                         drawSpheres()
+                    }
+                    VIEW_CA_QUICK_LINE -> {
+                        BufferManager.setRenderCaFlag(true)
+                        renderCaQuickLine.renderQuickLine()
                     }
                 }
                 BufferManager.setBufferLoadingComplete()
@@ -576,8 +586,9 @@ class ManagerViewmode(private val activity: Activity,
         const val VIEW_STICK = 4
 //        const val VIEW_SPHERE = 5
         const val VIEW_SPHERE = 2
+        const val VIEW_CA_QUICK_LINE = 6
 
-        private const val VIEW_TOTAL_MODES = 5
+        private const val VIEW_TOTAL_MODES = 6
 
         //    private static final int VIEW_RIBBONS_ONLY = 99;
         //    private static final int VIEW_RIBBONS_AND_BACKBONE = 98;

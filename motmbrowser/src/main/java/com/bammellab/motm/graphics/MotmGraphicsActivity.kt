@@ -158,6 +158,7 @@ class MotmGraphicsActivity : AppCompatActivity() {
                 R.id.action_ball_and_stick -> ManagerViewmode.VIEW_BALL_AND_STICK
                 R.id.action_stick -> ManagerViewmode.VIEW_STICK
                 R.id.action_ribbons_and_balls -> ManagerViewmode.VIEW_RIBBONS_DEV_ALL
+                R.id.action_ca_quick_line -> ManagerViewmode.VIEW_CA_QUICK_LINE
                 else -> ManagerViewmode.VIEW_RIBBONS
             }
             processPdbs.pickViewMode(doMode)

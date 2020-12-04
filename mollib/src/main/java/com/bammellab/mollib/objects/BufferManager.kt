@@ -22,7 +22,6 @@
 
 package com.bammellab.mollib.objects
 
-import android.annotation.SuppressLint
 import android.opengl.GLES20
 import android.os.SystemClock
 import timber.log.Timber
@@ -69,8 +68,13 @@ object BufferManager {
     private var alreadyReportedUsage = false
     private var bufferLoadingComplete = false
     private var outOfMemoryFlag = false
+    private var renderCaFlag = false
 
     private lateinit var this_instance: BufferManager
+
+    fun setRenderCaFlag(flag: Boolean) {
+        renderCaFlag = flag
+    }
 
     /**
      * this is called by the ManagerViewMode module with a non-null
@@ -273,8 +277,6 @@ object BufferManager {
         } else {
             doTheActualRender(positionAttribute, colorAttribute, normalAttribute, doWireframeRendering)
         }
-
-
     }
 
     private fun doTheActualRender(
@@ -330,7 +332,7 @@ object BufferManager {
                 GLES20.glEnableVertexAttribArray(colorAttribute)
 
                 // Draw
-                val todo = if (doWireframeRendering) {
+                val todo = if (doWireframeRendering || renderCaFlag) {
                     GLES20.GL_LINES
                 } else {
                     GLES20.GL_TRIANGLES
