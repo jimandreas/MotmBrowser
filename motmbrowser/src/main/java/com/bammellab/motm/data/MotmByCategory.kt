@@ -1,21 +1,14 @@
 /*
- * Copyright (C) 2016-2018James Andreas
- *
- * From code from various sources (iosched, Sunshine advanced, Cheesesquare):
- *
- *  Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
+ *  Copyright 2020 Bammellab / James Andreas
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
  */
 
 package com.bammellab.motm.data
@@ -138,6 +131,7 @@ object MotmByCategory {
             "126",
             "45",
             "212",
+            "252", // DEC 2020 HepC
             "108",
             "221",
             "230",
@@ -167,6 +161,7 @@ object MotmByCategory {
             "103",
             "178",
             "76",
+            "252", // DEC 2020
             "163",
             "169",
             "33",
@@ -718,6 +713,7 @@ object MotmByCategory {
             "23",
             "58",
             "41",
+            "252", // DEC 2020 HepC
             "240",
             "1",
             "142",

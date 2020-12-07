@@ -586,7 +586,9 @@ object Corpus {
 
             "TRPV1 is an ion channel that senses heat and contributes to pain sensation.",//October 2020
 
-            "Adenylyl cyclase creates second messengers to amplify signals from G-protein coupled receptors"  // Nov 2020
+            "Adenylyl cyclase creates second messengers to amplify signals from G-protein coupled receptors",  // Nov 2020
+
+            "Structures of hepatitis C viral proteins have led to the discovery of direct-acting antivirals." // Dec 2020
 
     )
 
@@ -881,7 +883,9 @@ object Corpus {
             /* //motm/248 */ "Phytosulfokine Receptor",
             /* //motm/249 */ "SARS-CoV-2 RNA-dependent RNA Polymerase",
             /* //motm/250 */ "Capsaicin Receptor TRPV1",
-            /* //motm/251 */ "Adenylyl Cyclase"  // NOV 2020
+            /* //motm/251 */ "Adenylyl Cyclase",  // NOV 2020
+            /* //motm/252 */ "Hepatitis C Virus Protease/Helicase"  // DEC 2020
+
 
     )
 
