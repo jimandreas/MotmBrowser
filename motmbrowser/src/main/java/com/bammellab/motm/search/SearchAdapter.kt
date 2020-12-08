@@ -187,7 +187,7 @@ class SearchAdapter(
                 )
                 holder.recyclerListTopTextline.text = spannedString
 
-                val imageString = Corpus.motmImageListGet(motmIndex+1)
+                val imageString = Corpus.motmImageListGet(motmIndex)
                 val url = "$PDB_MOTM_THUMB_WEB_PREFIX$imageString?raw=true"
                 Glide.with(holder.recyclerListLeftGraphic.context)
                     .load(url)

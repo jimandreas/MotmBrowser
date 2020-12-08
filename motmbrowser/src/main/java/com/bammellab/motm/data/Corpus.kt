@@ -29,7 +29,7 @@ object Corpus {
      */
 
     fun motmImageListGet(index: Int): String {
-        if (index > motmThumbnailImageList.size-1 || index < 1) return "INVALIDINDEX"
+        if (index > motmThumbnailImageList.size-1 || index < 0) return "INVALIDINDEX"
         return (motmThumbnailImageList[index])
     }
 
@@ -296,7 +296,9 @@ object Corpus {
             "248-Phytosulfokine_Receptor-4z64_homepage-tn.png",
             "249-SARSCoV2_RNAdependent_RNA_Polymerase-6yyt_homepage-tn.png",
             "250-Capsaicin_Receptor_TRPV1-5is0_homepage-tn.png",
-            "251-Adenylyl_Cyclase-6r3q_homepage-tn.png"
+            "251-Adenylyl_Cyclase-6r3q_homepage-tn.png",
+            "252-Hepatitis_C_Virus_ProteaseHelicase-1cu1_homepage-tn.png"
+
 
     )
 

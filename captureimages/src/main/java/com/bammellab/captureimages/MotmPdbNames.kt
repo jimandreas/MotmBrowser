@@ -11,11 +11,38 @@
  *  limitations under the License
  */
 
-@file:Suppress("unused")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
 
 package com.bammellab.captureimages
 
 object MotmPdbNames {
+
+    val pdbNamesOctNovDec2020 = listOf(
+
+            "6dmw",
+            "5irz",
+            "5irx",
+
+            "5is0",
+
+
+            "6r3q",
+            "4clk",
+            "5u6p",
+            "1cjk",
+
+            "1cu1",
+            "4wtg",
+            "1zh1",
+            "1r7g",
+            "2oc8",
+            "3sv6",
+            "3sue",
+            "6p6l",
+            "6nzt")
+
+
+    val pdbNames : List<String> = pdbNamesOctNovDec2020
 
     val pdbNamesProblems = listOf(
             "3cmx",
@@ -29,7 +56,7 @@ object MotmPdbNames {
             "6c63",
             "6d6v"
 
-            )
+    )
     val pdbNames2 = listOf(
             "2c37",
             // "2tbv",  // next carbon problems
@@ -59,12 +86,12 @@ object MotmPdbNames {
 
             "1xi4"  // this one is trouble
 
-            )
+    )
 
     /*
      * PDBs with num of Atoms > 50K removed
      */
-    val pdbNames = listOf(
+    val pdbNamesFULL = listOf(
 
             "143d",
             "148l",
@@ -561,7 +588,7 @@ object MotmPdbNames {
             "1rva",
             "1rvc",
             "1rvf",
-           //  "1rw6",
+            //  "1rw6",
             //     Entry 1RW6 was removed from the distribution of released PDB entries (status Obsolete) on 2011-07-13.
             //    It has been replaced (superseded) by 3NYL.
             "1rwt",
@@ -648,7 +675,7 @@ object MotmPdbNames {
             "1www",
             "1x70",
             "1xf0",
-          //   "1xi4",  PROBLEMS!!
+            //   "1xi4",  PROBLEMS!!
             "1xka",
             "1xkk",
             "1xmb",
@@ -707,10 +734,10 @@ object MotmPdbNames {
             "2bku",
             "2bpt",
             "2brz",
-       //      "2btv", PROBLEMS (50K at limit)
+            //      "2btv", PROBLEMS (50K at limit)
             "2buk",
             "2c2a",
-       //    "2c37", PROBLEMS 46K
+            //    "2c37", PROBLEMS 46K
             "2cag",
             "2cas",
             "2cbj",
@@ -865,7 +892,7 @@ object MotmPdbNames {
             "2sod",
             "2src",
             "2taa",
-          //   "2tbv",  PROBLEMS with "nextCarbon" ??
+            //   "2tbv",  PROBLEMS with "nextCarbon" ??
             "2tmv",
             "2toh",
             "2tra",
@@ -941,7 +968,7 @@ object MotmPdbNames {
             "3eyc",
             "3f3e",
             "3f47",
-         //   "3fcs", // "nextCarbon" problem
+            //   "3fcs", // "nextCarbon" problem
             "3fke",
             "3frh",
             "3fsn",
@@ -1032,7 +1059,7 @@ object MotmPdbNames {
             "3r8f",
             "3rgk",
             "3rh8",
-          //  "3rif",  OOM error PROBLEM
+            //  "3rif",  OOM error PROBLEM
             "3rko",
             "3rui",
             "3rxw",
@@ -1180,7 +1207,7 @@ object MotmPdbNames {
             "4zpr",
             "4zqk",
             "4zwc",
-           // "5a1a", // OOM??  Yes there is a problem here
+            // "5a1a", // OOM??  Yes there is a problem here
             "5a22",
             "5ara",
             "5at1",
@@ -1198,7 +1225,7 @@ object MotmPdbNames {
             "5eqi",
             "5et3",
             "5g1n",
-           //  "5gar",  // OOM problems??
+            //  "5gar",  // OOM problems??
             "5ire",
             "5j7v",
             "5j89",
@@ -1231,16 +1258,16 @@ object MotmPdbNames {
             "5tzo",
             "5ucw",
             "5vb8",
-           // "5vkq", // OOM problem
-          //  "5vox", // NEXT oxygen problem
-          //  "5voy",  // skip for now...
-        //   "5voz",
+            // "5vkq", // OOM problem
+            //  "5vox", // NEXT oxygen problem
+            //  "5voy",  // skip for now...
+            //   "5voz",
             "5w1o",
             "5weo",
-        //    "5xnl", // 99K atoms!
+            //    "5xnl", // 99K atoms!
             "5yxw",
             "5z10",
-        //    "5zji", // OOM
+            //    "5zji", // OOM
             "6a95",
             "6adh",
             "6am8",
@@ -1252,13 +1279,13 @@ object MotmPdbNames {
             "6c6k",
             "6cfz",
             "6clz",
-           // "6crz", // OOM
+            // "6crz", // OOM
             "6d6v",
             "6db8",
             "6gpb",
             "6j4y",
             "6j8j",
-         //    "6kac", // 77K
+            //    "6kac", // 77K
             // "6kad",
             "6ldh",
             "6lu7",
@@ -1266,9 +1293,9 @@ object MotmPdbNames {
             "6mam",
             "6n7p",
             //"6nwa", // Atom Count: 137509 !!
-          //  "6o81",  // OOM
+            //  "6o81",  // OOM
             "6o85",
-         //    "6o9z", // OOM */
+            //    "6o9z", // OOM */
             "6p6w",
             "6pfk",
             "6tna",
@@ -1292,6 +1319,6 @@ object MotmPdbNames {
             "9pap",
             "9rub"
 
-            )
+    )
 
 }

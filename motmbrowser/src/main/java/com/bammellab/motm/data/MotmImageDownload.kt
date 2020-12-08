@@ -36,6 +36,8 @@ object MotmImageDownload {
 
     private val imageList = listOf(
 
+            "252",
+            "252-Hepatitis_C_Virus_ProteaseHelicase-1cu1_label",
             "251",
             "251-Adenylyl_Cyclase-6r3q",
             "250",
@@ -837,7 +839,7 @@ object MotmImageDownload {
             "2-BacteriophagephiX174-mature",
             "2-BacteriophagephiX174-1cd3",
             "1",
-            "1-Myoglobin-geis-myoglobin",
+            "1-Myoglobin-geis-0218-myoglobin",
             "1-Myoglobin-1pmb_1mbn",
             "1-Myoglobin-1mbo_JSmol",
 

@@ -1351,5 +1351,28 @@ object PDBs {
         pdbsByMonth.put(249, "2ahm")
         pdbsByMonth.put(249, "7bv2")
 
+
+        pdbsByMonth.put(250, "5is0")  // Capsaicin
+        pdbsByMonth.put(250, "6dmw")
+        pdbsByMonth.put(250, "5irz")
+        pdbsByMonth.put(250, "5irx")
+
+        pdbsByMonth.put(251, "6r3q") // Adenylyl Cyclase
+        pdbsByMonth.put(251, "4clk")
+        pdbsByMonth.put(251, "5u6p")
+        pdbsByMonth.put(251, "1cjk")
+
+        pdbsByMonth.put(252, "1cu1")  // Hepatitis C Virus Protease/Helicase
+        pdbsByMonth.put(252, "4wtg")
+        pdbsByMonth.put(252, "1zh1")
+        pdbsByMonth.put(252, "1r7g")
+        pdbsByMonth.put(252, "2oc8")
+        pdbsByMonth.put(252, "3sv6")
+        pdbsByMonth.put(252, "3sue")
+        pdbsByMonth.put(252, "6p6l")
+        pdbsByMonth.put(252, "6nzt")
+
+
+
     }
 }
