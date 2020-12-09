@@ -23,10 +23,49 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.GET_ACTIVITIES
 import android.content.pm.PackageManager.NameNotFoundException
+import android.content.res.AssetManager
+import android.content.res.Resources
 import android.net.Uri
 import androidx.appcompat.app.AlertDialog
+import com.kotmol.pdbParser.Molecule
+import com.kotmol.pdbParser.ParserPdbFile
+import timber.log.Timber
+import java.io.IOException
+import java.io.InputStream
 
 object Utility {
+
+    fun parsePdbInputStream(stream: InputStream, mol: Molecule, pdbName: String) {
+        val retainedMessages = mutableListOf<String>()
+        ParserPdbFile
+                .Builder(mol)
+                .setMoleculeName(pdbName)
+                .setMessageStrings(retainedMessages)
+                .loadPdbFromStream(stream)
+                .doBondProcessing(true)
+                .parse()
+        stream.close()
+    }
+
+
+    fun parsePdbFileFromAsset(activity: Activity, pdbAssetName: String, mol: Molecule) {
+        val name = "$pdbAssetName.pdb"
+        try {
+            val inputStream = activity.assets.open(name, AssetManager.ACCESS_BUFFER)
+            val retainedMessages = mutableListOf<String>()
+            ParserPdbFile
+                    .Builder(mol)
+                    .setMoleculeName(pdbAssetName)
+                    .setMessageStrings(retainedMessages)
+                    .loadPdbFromStream(inputStream)
+                    .doBondProcessing(true)
+                    .parse()
+            inputStream.close()
+        } catch (e: IOException) {
+            Timber.e(e, "Could not access asset: $name")
+            return
+        }
+    }
 
     fun failDialog(
             activityIn: Activity,

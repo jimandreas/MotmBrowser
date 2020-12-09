@@ -18,6 +18,8 @@ package com.bammellab.mollib
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import com.bammellab.mollib.LoadFromSource.*
+import com.bammellab.mollib.Utility.parsePdbFileFromAsset
+import com.bammellab.mollib.Utility.parsePdbInputStream
 import com.bammellab.mollib.objects.ManagerViewmode
 import com.bammellab.mollib.pdbDownload.PdbCallback
 import com.bammellab.mollib.pdbDownload.PdbDownload
@@ -47,7 +49,7 @@ class MollibProcessPdbs(
         private val pdbFileNames: List<String>,
         private val loadPdbFrom: LoadFromSource
 ) : SurfaceCreated, PdbCallback {
-    private val managePdbFile = ManagePdbFile(activity)
+    // private val managePdbFile = ManagePdbFile(activity)
     private var managerViewmode: ManagerViewmode? = null
     // private var nextNameIndex = -1
     private var captureImagesFlag = false
@@ -116,7 +118,7 @@ class MollibProcessPdbs(
 
             when (loadPdbFrom) {
                 FROM_ASSETS -> {
-                    managePdbFile.parsePdbFileFromAsset(name, mol)
+                    parsePdbFileFromAsset(activity, name, mol)
                     glSurfaceView.queueEvent {
                         managerViewmode!!.createView()
                         renderer.setMolecule(mol)
@@ -135,7 +137,7 @@ class MollibProcessPdbs(
                         }
                         val fileStream = FileInputStream(myFile)
 
-                        managePdbFile.parsePdbFile(fileStream, mol, name)
+                        parsePdbInputStream(fileStream, mol, name)
                         fileStream.close()
 
                     } catch (e: AccessDeniedException) {
@@ -247,7 +249,7 @@ class MollibProcessPdbs(
      * callback from PdbDownload when the pdb is in the cache or download is complete
      */
     override fun loadPdbFromStream(stream: InputStream) {
-        managePdbFile.parsePdbInputStream(stream, mol, pdbFileNames[nextNameIndex])
+        parsePdbInputStream(stream, mol, pdbFileNames[nextNameIndex])
         stream.close()
         glSurfaceView.queueEvent {
             managerViewmode!!.createView()
