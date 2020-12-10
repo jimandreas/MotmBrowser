@@ -33,9 +33,6 @@ import java.util.*
 /**
  * Buffer Manager
  *
- *
- * set up as a Singleton class to solve the following problems App-wide:
- *
  * 1) allocates a single vertex array for accumulating triangles
  *
  * 2) allocates a single FloatArray for preparing to copy to GL.
@@ -44,17 +41,11 @@ import java.util.*
  *
  * 4) Renders the GL buffers
  *
- * for more information on Android recommended Singleton Patterns, as opposed to subclassing
- * the Application class (not recommended practice) - see this link:
- *
- * http://developer.android.com/training/volley/requestqueue.html#singleton
- *
- * and List interface:
- * https://docs.oracle.com/javase/tutorial/collections/interfaces/list.html
  */
 
 interface ViewModeCallback {
     fun slowRender()
+    fun renderQuickLineOnTouch()
 }
 
 object BufferManager {
@@ -68,12 +59,17 @@ object BufferManager {
     private var alreadyReportedUsage = false
     private var bufferLoadingComplete = false
     private var outOfMemoryFlag = false
-    private var renderCaFlag = false
+
 
     private lateinit var this_instance: BufferManager
 
-    fun setRenderCaFlag(flag: Boolean) {
-        renderCaFlag = flag
+    private var lineModeFlag = false
+    fun doLineMode(flag: Boolean) {
+        lineModeFlag = flag
+    }
+    private var touchProcessing = false
+    fun renderLineDuringTouchProcessing(flag: Boolean) {
+        touchProcessing = flag
     }
 
     /**
@@ -264,7 +260,14 @@ object BufferManager {
             colorAttributeCache = colorAttribute
             normalAttributeCache = normalAttribute
             doWireframeRenderingCache = doWireframeRendering
-            viewModeCallback!!.slowRender()
+
+            // if touch, then do a quick line, otherwise render the whole mol using one buffer
+            if (touchProcessing) {
+                viewModeCallback!!.renderQuickLineOnTouch()
+            } else {
+                viewModeCallback!!.slowRender()
+            }
+
 
             // render the last buffer
             doTheActualRender(positionAttribute, colorAttribute, normalAttribute, doWireframeRendering)
@@ -332,7 +335,7 @@ object BufferManager {
                 GLES20.glEnableVertexAttribArray(colorAttribute)
 
                 // Draw
-                val todo = if (doWireframeRendering || renderCaFlag) {
+                val todo = if (doWireframeRendering || lineModeFlag) {
                     GLES20.GL_LINES
                 } else {
                     GLES20.GL_TRIANGLES

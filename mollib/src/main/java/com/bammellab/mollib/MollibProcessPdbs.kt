@@ -36,10 +36,11 @@ enum class LoadFromSource {
 
 /**
  * common code to parse and display PDB info
- *   from a PDB folder or from a local asset file.
+ *   Loads from wired-in assets (standalone app),
+ *     or from side-loaded file (captureimages app),
+ *     or downloaded from the RCSB website (motmbrowser app).
  *
- *   See also:
- *   https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md#structured-concurrency-lifecycle-and-coroutine-parent-child-hierarchy
+ *
  */
 class MollibProcessPdbs(
         private val activity: AppCompatActivity,
@@ -49,14 +50,19 @@ class MollibProcessPdbs(
         private val pdbFileNames: List<String>,
         private val loadPdbFrom: LoadFromSource
 ) : SurfaceCreated, PdbCallback {
-    // private val managePdbFile = ManagePdbFile(activity)
+
+
     private var managerViewmode: ManagerViewmode? = null
-    // private var nextNameIndex = -1
     private var captureImagesFlag = false
     private lateinit var pdbDownload: PdbDownload
-    private lateinit var mol : Molecule
+    private lateinit var mol: Molecule
     private val scope = MainScope()
 
+    /**
+     * getting started:
+     *    For capture images app - run a check to see if the
+     *    PDB files are side-loaded into the PDB folder.
+     */
     init {
         if (loadPdbFrom == FROM_SDCARD) {
             checkFilesLaunch()
@@ -78,14 +84,14 @@ class MollibProcessPdbs(
      * If FROM_CACHE mode is set, then PDBs are to be downloaded
      */
     override fun surfaceCreatedCallback() {
-        Timber.e("SURFACE CREATED CALLBACK")
         when (loadPdbFrom) {
             FROM_SDCARD -> renderer.allocateReadBitmapArrays()
             FROM_RCSB_OR_CACHE -> {
                 pdbDownload = PdbDownload(activity)
                 pdbDownload.initPdbCallback(this)
             }
-            else -> {}
+            else -> {
+            }
         }
         loadNextPdbFile()
     }
@@ -113,18 +119,12 @@ class MollibProcessPdbs(
             activity.runOnUiThread { activity.title = name }
             renderer.tossMoleculeToGC()
             mol = Molecule() // the one place where Molecule is allocated!!
-            managerViewmode = ManagerViewmode(
-                    activity, mol)
+            managerViewmode = ManagerViewmode(activity, mol)
 
             when (loadPdbFrom) {
                 FROM_ASSETS -> {
                     parsePdbFileFromAsset(activity, name, mol)
-                    glSurfaceView.queueEvent {
-                        managerViewmode!!.createView()
-                        renderer.setMolecule(mol)
-                        renderer.resetCamera()
-                        glSurfaceView.requestRender()
-                    }
+                    startRendering()
                 }
                 FROM_SDCARD -> {
                     try {
@@ -148,12 +148,7 @@ class MollibProcessPdbs(
                         Timber.e(e, "$name IO Exception")
                     }
 
-                    glSurfaceView.queueEvent {
-                        managerViewmode!!.createView()
-                        renderer.setMolecule(mol)
-                        renderer.resetCamera()
-                        glSurfaceView.requestRender()
-                    }
+                    startRendering()
                 }
                 FROM_RCSB_OR_CACHE -> {
                     pdbDownload.downloadPdb(name)
@@ -204,7 +199,7 @@ class MollibProcessPdbs(
                     bm.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
                     fileOutputStream.flush()
                     fileOutputStream.close()
-                    Timber.e("write OK: ${myFile}")
+                    Timber.e("write OK: $myFile")
                 }
 
             } catch (e: FileNotFoundException) {
@@ -216,9 +211,10 @@ class MollibProcessPdbs(
         }
     }
 
-    private fun checkFilesLaunch() = scope.launch() {
+    private fun checkFilesLaunch() = scope.launch {
         checkFiles()
     }
+
     private suspend fun checkFiles() {
         val data = withContext(Dispatchers.IO) { // will get dispatched to ForkJoinPool.commonPool (or equivalent)
             Timber.v("checkFiles: I'm working in thread ${Thread.currentThread().name}")
@@ -251,6 +247,10 @@ class MollibProcessPdbs(
     override fun loadPdbFromStream(stream: InputStream) {
         parsePdbInputStream(stream, mol, pdbFileNames[nextNameIndex])
         stream.close()
+        startRendering()
+    }
+
+    private fun startRendering() {
         glSurfaceView.queueEvent {
             managerViewmode!!.createView()
             renderer.setMolecule(mol)

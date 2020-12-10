@@ -340,7 +340,7 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
 }
 
 
-/*
+        /*
          * DEBUG:
          * optional vertex printout
          */

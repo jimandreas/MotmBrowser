@@ -89,6 +89,15 @@ class ManagerViewmode(private val activity: Activity,
         doViewMode()
     }
 
+    /**
+     * called by the BufferManager in slow Render mode
+     *    and a touch is processed.
+     */
+    override fun renderQuickLineOnTouch() {
+        BufferManager.doLineMode(true)
+        renderCaQuickLine.renderQuickLine()
+    }
+
     private fun doViewMode() {
 
         /*
@@ -103,7 +112,7 @@ class ManagerViewmode(private val activity: Activity,
             run bailout@{
                 //Timber.i("doViewMode: THRESHOLD mbyte = %d", initialAvailMem / 1024 / 1024)
 
-                BufferManager.setRenderCaFlag(false)
+                BufferManager.doLineMode(false)
                 when (currentMode) {
                     VIEW_RIBBONS -> {
                         drawMode = D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_RIBBONS
@@ -164,7 +173,7 @@ class ManagerViewmode(private val activity: Activity,
                         drawSpheres()
                     }
                     VIEW_CA_QUICK_LINE -> {
-                        BufferManager.setRenderCaFlag(true)
+                        BufferManager.doLineMode(true)
                         renderCaQuickLine.renderQuickLine()
                     }
                 }

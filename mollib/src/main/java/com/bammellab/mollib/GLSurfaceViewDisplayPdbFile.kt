@@ -26,6 +26,9 @@ import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_UP
 import android.view.SurfaceHolder
 import android.widget.Scroller
+import com.bammellab.mollib.RendererDisplayPdbFile.Companion.SHADER_PER_PIXEL
+import com.bammellab.mollib.RendererDisplayPdbFile.Companion.SHADER_POINT_NO_NORMALS
+import com.bammellab.mollib.objects.BufferManager
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
@@ -114,9 +117,14 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
             return true
         }
         renderMode = RENDERMODE_CONTINUOUSLY
+        renderer.overrideShader(SHADER_POINT_NO_NORMALS)
+        BufferManager.renderLineDuringTouchProcessing(true)
 
         if (m.actionMasked == ACTION_UP) {
             renderMode = RENDERMODE_WHEN_DIRTY
+            BufferManager.renderLineDuringTouchProcessing(false)
+            renderer.overrideShader(SHADER_PER_PIXEL)
+            requestRender()
         }
         //Number of touches
         val pointerCount = m.pointerCount

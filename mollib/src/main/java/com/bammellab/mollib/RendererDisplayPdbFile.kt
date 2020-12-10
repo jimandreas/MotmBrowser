@@ -177,7 +177,7 @@ class RendererDisplayPdbFile(
      */
     private val lightPosInEyeSpace = FloatArray(4)
 
-    private var useVertexShaderProgram = false
+    private var shaderProgramMode : Int = SHADER_PER_PIXEL
 
     /**
      * This is a handle to our per-vertex cube shading program.
@@ -362,11 +362,12 @@ class RendererDisplayPdbFile(
             deltaTranslateX = 0.0f
             deltaTranslateY = 0.0f
 
+           
             // Set our per-vertex lighting program.
-            val selectedProgramHandle = if (useVertexShaderProgram) {
-                perVertexProgramHandle
-            } else {
-                perPixelProgramHandle
+            val selectedProgramHandle = when (shaderProgramMode) {
+                SHADER_PER_VERTEX -> perVertexProgramHandle
+                SHADER_POINT_NO_NORMALS ->  pointProgramHandle
+                else ->  perPixelProgramHandle
             }
 
             GLES20.glUseProgram(selectedProgramHandle)
@@ -675,9 +676,17 @@ class RendererDisplayPdbFile(
         return programHandle
     }
 
-    // TODO: send message to Handler
+    // rotate through shader modes
     fun toggleShader() {
-        useVertexShaderProgram = !useVertexShaderProgram
+        shaderProgramMode = when (shaderProgramMode) {
+            SHADER_PER_PIXEL -> SHADER_PER_VERTEX
+            SHADER_PER_VERTEX -> SHADER_POINT_NO_NORMALS
+            else -> SHADER_PER_PIXEL
+        }
+    }
+
+    fun overrideShader(toWhat: Int) {
+        shaderProgramMode = toWhat
     }
 
     fun toggleHydrogenDisplayMode() {
@@ -990,6 +999,12 @@ class RendererDisplayPdbFile(
     }
 
     companion object {
+
+        const val SHADER_PER_VERTEX = 0
+        const val SHADER_PER_PIXEL = 1
+        const val SHADER_POINT_NO_NORMALS = 2
+        
+        
         private val screenVector1 = MotmVector3()
         private val screenVector2 = MotmVector3()
         private val tempVector1 = MotmVector3()
