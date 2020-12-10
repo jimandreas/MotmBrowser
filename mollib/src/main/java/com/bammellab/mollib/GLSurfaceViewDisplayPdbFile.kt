@@ -117,7 +117,9 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
             return true
         }
         renderMode = RENDERMODE_CONTINUOUSLY
-        renderer.overrideShader(SHADER_POINT_NO_NORMALS)
+        if (BufferManager.isBigMolecule) {
+            renderer.overrideShader(SHADER_POINT_NO_NORMALS)
+        }
         BufferManager.renderLineDuringTouchProcessing(true)
 
         if (m.actionMasked == ACTION_UP) {

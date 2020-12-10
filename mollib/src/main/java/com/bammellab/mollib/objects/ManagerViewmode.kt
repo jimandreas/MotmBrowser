@@ -73,8 +73,10 @@ class ManagerViewmode(private val activity: Activity,
         if (atomCount > 20000) {
             Timber.e("EMERGENCY atomcount - go into immediate mode rendering!!")
             BufferManager.initViewModeCallback(this)
+            BufferManager.bigMoleculeFlag( true )
         } else {
             BufferManager.initViewModeCallback(null)
+            BufferManager.bigMoleculeFlag( false )
         }
 
         doViewMode()

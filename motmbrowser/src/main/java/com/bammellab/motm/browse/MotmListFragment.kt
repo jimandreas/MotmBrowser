@@ -143,7 +143,7 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
 
             if (position == 0) {
                 val spannedString = Html.fromHtml("<strong><big>"
-                        + "Molecule of the Month<br>Nov 2020 - Jan 2000"
+                        + "Molecule of the Month<br>Dec 2020 - Jan 2000"
                         + "</big></strong><br><i>"
                 )
 

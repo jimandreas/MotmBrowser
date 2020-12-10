@@ -60,6 +60,11 @@ object BufferManager {
     private var bufferLoadingComplete = false
     private var outOfMemoryFlag = false
 
+    var isBigMolecule = false
+    fun bigMoleculeFlag(flag: Boolean) {
+        isBigMolecule = flag
+    }
+
 
     private lateinit var this_instance: BufferManager
 
