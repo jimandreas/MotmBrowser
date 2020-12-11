@@ -24,4 +24,7 @@
         <item name="colorOnSecondary">@color/black</item>
     </style>
 
+    <style name="SearchViewStyle" parent="@style/Widget.AppCompat.Toolbar">
+        <item name="navigationIcon">@drawable/ic_arrow_back_white_24px</item>
+    </style>
 </resources>
