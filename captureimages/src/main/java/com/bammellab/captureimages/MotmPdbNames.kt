@@ -734,10 +734,10 @@ object MotmPdbNames {
             "2bku",
             "2bpt",
             "2brz",
-            //      "2btv", PROBLEMS (50K at limit)
+                  "2btv", // PROBLEMS (50K at limit)
             "2buk",
             "2c2a",
-            //    "2c37", PROBLEMS 46K
+                "2c37", // PROBLEMS 46K
             "2cag",
             "2cas",
             "2cbj",
@@ -892,7 +892,7 @@ object MotmPdbNames {
             "2sod",
             "2src",
             "2taa",
-            //   "2tbv",  PROBLEMS with "nextCarbon" ??
+               "2tbv",  // PROBLEMS with "nextCarbon" ??
             "2tmv",
             "2toh",
             "2tra",

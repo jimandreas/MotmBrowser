@@ -72,6 +72,7 @@ object BufferManager {
     fun doLineMode(flag: Boolean) {
         lineModeFlag = flag
     }
+
     private var touchProcessing = false
     fun renderLineDuringTouchProcessing(flag: Boolean) {
         touchProcessing = flag
@@ -273,14 +274,13 @@ object BufferManager {
                 viewModeCallback!!.slowRender()
             }
 
-
             // render the last buffer
             doTheActualRender(positionAttribute, colorAttribute, normalAttribute, doWireframeRendering)
 
-            val endTime = SystemClock.uptimeMillis().toFloat()
-            val elapsedTime = (endTime - startTime) / 1000
-            val prettyPrint = String.format("%6.2f", elapsedTime)
-            Timber.e("slowRender $prettyPrint")
+//            val endTime = SystemClock.uptimeMillis().toFloat()
+//            val elapsedTime = (endTime - startTime) / 1000
+//            val prettyPrint = String.format("%6.2f", elapsedTime)
+//            Timber.e("slowRender $prettyPrint")
 
         } else {
             doTheActualRender(positionAttribute, colorAttribute, normalAttribute, doWireframeRendering)
@@ -320,24 +320,59 @@ object BufferManager {
             if (!arrayEntry.bufferInUse) {
                 continue
             }
+
+            val glError2 = GLES20.glGetError()
+            if (glError2 != GLES20.GL_NO_ERROR) {
+                Timber.e("GLERROR: $glError2")
+            }
+
+
             if (arrayEntry.glBuf[0] > 0) {
                 GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, arrayEntry.glBuf[0])
+
                 // associate the attributes with the bound buffer
-                GLES20.glVertexAttribPointer(positionAttribute,
-                        POSITION_DATA_SIZE_IN_ELEMENTS,
-                        GLES20.GL_FLOAT,
-                        false,
-                        STRIDE_IN_BYTES,
-                        0)  // offset
-                GLES20.glEnableVertexAttribArray(positionAttribute)
+                //  UPDATE: in "slow mode" - the simple shader
+                //          uses only position data, i.e. no normals or color attributes
+                if (positionAttribute >= 0) {
+                    GLES20.glVertexAttribPointer(
+                            positionAttribute,
+                            POSITION_DATA_SIZE_IN_ELEMENTS,
+                            GLES20.GL_FLOAT,
+                            false,
+                            STRIDE_IN_BYTES,
+                            0)  // offset
 
-                GLES20.glVertexAttribPointer(normalAttribute, NORMAL_DATA_SIZE_IN_ELEMENTS, GLES20.GL_FLOAT, false,
-                        STRIDE_IN_BYTES, POSITION_DATA_SIZE_IN_ELEMENTS * BYTES_PER_FLOAT)
-                GLES20.glEnableVertexAttribArray(normalAttribute)
+                    GLES20.glEnableVertexAttribArray(positionAttribute)
+                }
 
-                GLES20.glVertexAttribPointer(colorAttribute, COLOR_DATA_SIZE_IN_ELEMENTS, GLES20.GL_FLOAT, false,
-                        STRIDE_IN_BYTES, (POSITION_DATA_SIZE_IN_ELEMENTS + NORMAL_DATA_SIZE_IN_ELEMENTS) * BYTES_PER_FLOAT)
-                GLES20.glEnableVertexAttribArray(colorAttribute)
+                if (normalAttribute >= 0) {
+                    GLES20.glVertexAttribPointer(
+                            normalAttribute,
+                            NORMAL_DATA_SIZE_IN_ELEMENTS,
+                            GLES20.GL_FLOAT,
+                            false,
+                            STRIDE_IN_BYTES,
+                            POSITION_DATA_SIZE_IN_ELEMENTS * BYTES_PER_FLOAT)
+
+                    GLES20.glEnableVertexAttribArray(normalAttribute)
+                }
+
+                if (colorAttribute >= 0) {
+                    GLES20.glVertexAttribPointer(
+                            colorAttribute,
+                            COLOR_DATA_SIZE_IN_ELEMENTS,
+                            GLES20.GL_FLOAT,
+                            false,
+                            STRIDE_IN_BYTES,
+                            (POSITION_DATA_SIZE_IN_ELEMENTS + NORMAL_DATA_SIZE_IN_ELEMENTS) * BYTES_PER_FLOAT)
+
+                    GLES20.glEnableVertexAttribArray(colorAttribute)
+                }
+
+                val glError2 = GLES20.glGetError()
+                if (glError2 != GLES20.GL_NO_ERROR) {
+                    Timber.e("GLERROR: $glError2")
+                }
 
                 // Draw
                 val todo = if (doWireframeRendering || lineModeFlag) {
@@ -349,12 +384,13 @@ object BufferManager {
                 GLES20.glDrawArrays(todo, 0, arrayEntry.numVertices)
 
                 GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0)  // release
+
+                val glError3 = GLES20.glGetError()
+                if (glError3 != GLES20.GL_NO_ERROR) {
+                    Timber.e("GLERROR: $glError3")
+                }
+
             }
-            //            else {
-            // errorHandler(// do something );
-            // Timber.e("buffer manager render: buffer NOT MAPPED at index " + i);
-            // Do NOTHING
-            //            }
         }
 
         // GLES20.glEnable(GLES20.GL_CULL_FACE);
