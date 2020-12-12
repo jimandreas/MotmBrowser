@@ -288,7 +288,7 @@ class RendererDisplayPdbFile(
                 + "void main()                    \n"
                 + "{                              \n"
                 + "   gl_FragColor = vec4(1.0,    \n"
-                + "   1.0, 1.0, 1.0f);             \n"
+                + "   1.0, 1.0, 1.0);             \n"
                 + "}                              \n")
 
         val pointVertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, pointVertexShader)
