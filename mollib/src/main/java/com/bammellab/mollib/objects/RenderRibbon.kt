@@ -667,10 +667,12 @@ class RenderRibbon(private val molecule: Molecule) {
 
             if (carbon == null) {
                 Timber.e("RenderHelix: carbon null, where $whereInSpline start $start end $end")
+                whereInSpline++
                 continue
             }
             if (oxygen == null) {
                 Timber.e("RenderHelix: oxygen is null continuing")
+                whereInSpline++
                 continue
             }
 

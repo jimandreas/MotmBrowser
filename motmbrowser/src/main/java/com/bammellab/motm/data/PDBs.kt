@@ -18,6 +18,11 @@ import com.google.common.collect.Multimap
 
 /**
  * PDB reference list
+ *
+ * NOTES:
+ * the references below for PDB entries that are "too big" is no longer valied.
+ * The new constrained memory rendering algorithm handles these but takes more time rather than space.
+ * The comments have been left in the list to mark the previously ommitted PDB entries.
  */
 
 object PDBs {
@@ -51,7 +56,7 @@ object PDBs {
         pdbsByMonth.put(9, "1lyd")
         pdbsByMonth.put(9, "2lyz")
         pdbsByMonth.put(10, "1ffk")
-        // too big (2) 52017 pdbsByMonth.put(10, "1fjg")
+        pdbsByMonth.put(10, "1fjg")
         pdbsByMonth.put(10, "1fka")
         pdbsByMonth.put(11, "1rcx")
         pdbsByMonth.put(11, "1rlc")
@@ -90,7 +95,7 @@ object PDBs {
         pdbsByMonth.put(18, "1b7t")
         pdbsByMonth.put(18, "1br1")
         pdbsByMonth.put(18, "2mys")
-        // pdbsByMonth.put(19, "1alm");  no structure information, skip it
+        // pdbsByMonth.put(19, "1alm") // obsolete
         pdbsByMonth.put(19, "1atn")
         pdbsByMonth.put(19, "1hlu")
         pdbsByMonth.put(19, "1yvn")
@@ -133,7 +138,7 @@ object PDBs {
         pdbsByMonth.put(28, "1jky")
         pdbsByMonth.put(28, "1k8t")
         pdbsByMonth.put(28, "1k90")
-        // too big 61152 pdbsByMonth.put(28, "1tzo")
+        pdbsByMonth.put(28, "1tzo")
         pdbsByMonth.put(29, "1hvb")
         pdbsByMonth.put(29, "3pte")
         pdbsByMonth.put(29, "4blm")
@@ -211,7 +216,7 @@ object PDBs {
         pdbsByMonth.put(47, "1sva")
         pdbsByMonth.put(47, "1tbd")
         pdbsByMonth.put(48, "1cgp")
-        // pdbsByMonth.put(48, "1iw7") too big 59541
+        pdbsByMonth.put(48, "1iw7")
         pdbsByMonth.put(48, "1j59")
         pdbsByMonth.put(48, "1lb2")
         pdbsByMonth.put(49, "1ca2")
@@ -430,7 +435,7 @@ object PDBs {
         pdbsByMonth.put(85, "2bpt")
         pdbsByMonth.put(86, "1st0")
         pdbsByMonth.put(86, "2a1s")
-       //  pdbsByMonth.put(86, "2c37")  // has MASSIVE "next carbon" issues
+        pdbsByMonth.put(86, "2c37")
         pdbsByMonth.put(86, "2nn6")
         pdbsByMonth.put(87, "1a1t")
         pdbsByMonth.put(87, "1joc")
@@ -445,7 +450,7 @@ object PDBs {
         pdbsByMonth.put(88, "1gw5")
         pdbsByMonth.put(88, "1gyu")
         pdbsByMonth.put(88, "1ky7")
-        // pdbsByMonth.put(88, "1w63") // too big 81768
+        pdbsByMonth.put(88, "1w63")
         pdbsByMonth.put(88, "1xi4")
         pdbsByMonth.put(88, "2g30")
         pdbsByMonth.put(89, "1c96")
@@ -462,8 +467,11 @@ object PDBs {
         pdbsByMonth.put(90, "1u1z")
         pdbsByMonth.put(90, "2cf2")
         pdbsByMonth.put(90, "2fae")
-        // too big 69579 pdbsByMonth.put(90, "2uvb")
-        // pdbsByMonth.put(90, "2uvc") // too big 98680
+
+        // Entry: 4V59 supersedes: 2UVB, 2UVC
+
+//        pdbsByMonth.put(90, "2uvb")
+//        pdbsByMonth.put(90, "2uvc")
         pdbsByMonth.put(91, "1n4e")
         pdbsByMonth.put(91, "1rys")
         pdbsByMonth.put(91, "1sl2")
@@ -607,13 +615,18 @@ object PDBs {
         pdbsByMonth.put(120, "1kdf")
         pdbsByMonth.put(120, "1wfb")
         pdbsByMonth.put(120, "2pne")
-        // too big 51956 pdbsByMonth.put(121, "1hnw")
-        // pdbsByMonth.put(121, "1nji") // too big 98566 atoms
-        // too big 57397 pdbsByMonth.put(121, "2wdg")
+
+
+        pdbsByMonth.put(121, "1hnw") // too big 51956
+        pdbsByMonth.put(121, "1nji") // too big 98566 atoms
+
+        // Entry: 4V5C supersedes: 2WDG, 2WDH, 2WDI, 2WDJ
+        // pdbsByMonth.put(121, "2wdg") // obsolete
+
         // pdbsByMonth.put(121, "4v4j");  too big only CIF file available
         // pdbsByMonth.put(121, "4v4r");
-        // pdbsByMonth.put(121, "4v5d");
-        // pdbsByMonth.put(121, "4v5f");
+        // pdbsByMonth.put(121, "4v5d"); // 300K atoms!!
+        // pdbsByMonth.put(121, "4v5f"); // 312K atoms!!
         // pdbsByMonth.put(121, "4v5g");
         pdbsByMonth.put(122, "1jsp")
         pdbsByMonth.put(122, "1kbh")
@@ -680,9 +693,11 @@ object PDBs {
         pdbsByMonth.put(131, "1um2")
         pdbsByMonth.put(132, "1kac")
         pdbsByMonth.put(132, "1qiu")
-        // pdbsByMonth.put(132, "1vsz") // too big 92408
+         // pdbsByMonth.put(132, "1vsz") // was 92400 atoms
+         pdbsByMonth.put(132, "6cgv") // Entry: 6CGV supersedes: 4CWU/1VSZ (100K atoms!!) (has PDB file)
+
         pdbsByMonth.put(132, "2o39")
-        // pdbsByMonth.put(132, "3iyn") // too big 99615
+         // pdbsByMonth.put(132, "3iyn") //Entry: 6B1T supersedes: 3IYN (no PDB)
         pdbsByMonth.put(133, "1nod")
         pdbsByMonth.put(133, "1om4")
         pdbsByMonth.put(133, "1tll")
@@ -706,8 +721,8 @@ object PDBs {
         pdbsByMonth.put(137, "1vf5")
         pdbsByMonth.put(137, "3h1j")
         pdbsByMonth.put(138, "1smd")
-        // too big 53873 pdbsByMonth.put(138, "3aic")
-        // too big 57838 pdbsByMonth.put(138, "3aie")
+        pdbsByMonth.put(138, "3aic")  // too big 53873
+        pdbsByMonth.put(138, "3aie")  // too big 57838
         pdbsByMonth.put(138, "3hz3")
         pdbsByMonth.put(138, "3kll")
         pdbsByMonth.put(139, "1mht")
@@ -741,7 +756,7 @@ object PDBs {
         pdbsByMonth.put(143, "3ciy")
         pdbsByMonth.put(143, "3fxi")
         pdbsByMonth.put(144, "1zcd")
-        // too big 73948 pdbsByMonth.put(144, "2fug")
+        pdbsByMonth.put(144, "2fug")  // too big 73948
         pdbsByMonth.put(144, "3m9s")
         pdbsByMonth.put(144, "3rko")
         pdbsByMonth.put(145, "1ckm")
@@ -752,10 +767,10 @@ object PDBs {
         pdbsByMonth.put(145, "2qkm")
         pdbsByMonth.put(145, "3kyh")
         pdbsByMonth.put(146, "1bo4")
-        // too big 51894 pdbsByMonth.put(146, "1ibk")
-        // too big 52294 pdbsByMonth.put(146, "1ibl")
-        // too big 52184 pdbsByMonth.put(146, "1ibm")
-        // too big 51954 pdbsByMonth.put(146, "1j5e")
+        pdbsByMonth.put(146, "1ibk") // too big 51894
+        pdbsByMonth.put(146, "1ibl")
+        pdbsByMonth.put(146, "1ibm")
+         pdbsByMonth.put(146, "1j5e") // too big 51954
         pdbsByMonth.put(146, "1kny")
         pdbsByMonth.put(146, "1l8t")
         pdbsByMonth.put(146, "3frh")
@@ -820,13 +835,7 @@ object PDBs {
         pdbsByMonth.put(156, "2j1u")
         pdbsByMonth.put(156, "2obs")
         pdbsByMonth.put(156, "3i0g")
-        // HACK - add here to force a PDB
-        pdbsByMonth.put(156, "6o81")
-        pdbsByMonth.put(156, "6o85")
-        pdbsByMonth.put(156, "6o9z")
 
-        // TOO BIG pdbsByMonth.put(156, "6caj")
-        // TOO BIG pdbsByMonth.put(156, "6ezo")
         pdbsByMonth.put(157, "3iyq")
         pdbsByMonth.put(157, "3iyr")
         pdbsByMonth.put(157, "3iz4")
@@ -872,10 +881,10 @@ object PDBs {
         pdbsByMonth.put(165, "3vdx")
         pdbsByMonth.put(165, "4egg")
         pdbsByMonth.put(166, "1fnt")
-        // too big 56322 pdbsByMonth.put(166, "1pma")
+        pdbsByMonth.put(166, "1pma")// too big 56322
         // pdbsByMonth.put(166, "3l5q") // obsolete
         pdbsByMonth.put(166, "3unf")
-        // pdbsByMonth.put(166, "4CR2") // too big 80172
+         pdbsByMonth.put(166, "4CR2") // too big 80172
         pdbsByMonth.put(167, "1br0")
         pdbsByMonth.put(167, "1kil")
         pdbsByMonth.put(167, "1nsf")
@@ -952,7 +961,7 @@ object PDBs {
         pdbsByMonth.put(181, "4qqw")
         pdbsByMonth.put(181, "4qyz")
         pdbsByMonth.put(181, "4tvx")
-        // too big 54579 pdbsByMonth.put(181, "4u7u")
+        pdbsByMonth.put(181, "4u7u")// too big 54579
         pdbsByMonth.put(181, "4un3")
         pdbsByMonth.put(182, "1ir3")
         pdbsByMonth.put(182, "1irk")
@@ -1006,7 +1015,7 @@ object PDBs {
         pdbsByMonth.put(191, "3jad")
         pdbsByMonth.put(191, "3rif")
         pdbsByMonth.put(191, "4hfe")
-        // too big 60438 pdbsByMonth.put(191, "4tnv")
+        pdbsByMonth.put(191, "4tnv")// too big 60438
         pdbsByMonth.put(192, "1e4e")
         pdbsByMonth.put(192, "1fvm")
         pdbsByMonth.put(192, "2dln")
@@ -1085,9 +1094,9 @@ object PDBs {
         pdbsByMonth.put(204, "5j89")
         pdbsByMonth.put(204, "5jxe")
         pdbsByMonth.put(205, "4xmm")
-        // pdbsByMonth.put(205, "5a9q") // too big 95922
+         pdbsByMonth.put(205, "5a9q") // too big 95922  WOW works now
         pdbsByMonth.put(205, "5dis")
-        // too big 74314 pdbsByMonth.put(205, "5ijn")
+        pdbsByMonth.put(205, "5ijn") // too big 74314
         pdbsByMonth.put(206, "1a9w")
         pdbsByMonth.put(206, "1fdh")
         pdbsByMonth.put(206, "1i3d")
@@ -1178,7 +1187,7 @@ object PDBs {
         pdbsByMonth.put(221, "3j6r")
         pdbsByMonth.put(221, "4xr8")
         pdbsByMonth.put(221, "5w1o")
-        // too big 66862 pdbsByMonth.put(221, "5y9f")
+        pdbsByMonth.put(221, "5y9f") // too big 66862
         pdbsByMonth.put(221, "6bt3")
         pdbsByMonth.put(222, "3cyu")
         pdbsByMonth.put(222, "3nkx")
@@ -1202,8 +1211,8 @@ object PDBs {
         pdbsByMonth.put(225, "3amr")
         pdbsByMonth.put(225, "3mmj")
         pdbsByMonth.put(225, "4kbp")
-        // too big (1) 52017 pdbsByMonth.put(226, "1fjg")
-        // too big 53549 pdbsByMonth.put(226, "4ox9")
+        pdbsByMonth.put(226, "1fjg") // too big (1) 52017
+        pdbsByMonth.put(226, "4ox9")  // too big 53549
         pdbsByMonth.put(226, "5cfs")
         pdbsByMonth.put(226, "5cfu")
         pdbsByMonth.put(227, "143d")
@@ -1271,7 +1280,7 @@ object PDBs {
         pdbsByMonth.put(236, "2euf")
         pdbsByMonth.put(236, "5l2t")
         pdbsByMonth.put(236, "5l2s")
-        // pdbsByMonth.put(237, "4v6m")  // no PDB file too big Atom Count: 163040 !!
+         //pdbsByMonth.put(237, "4v6m")  // no PDB file CIF only: 163040 !!
         pdbsByMonth.put(237, "6clz")
         pdbsByMonth.put(237, "2n5e")
         pdbsByMonth.put(238, "1mrr")
@@ -1321,7 +1330,7 @@ object PDBs {
         pdbsByMonth.put(244, "5zji")
       //   pdbsByMonth.put(244, "6nwa") // CIF only
         pdbsByMonth.put(244, "5xnl")
-        // pdbsByMonth.put(245, "3jb9") // 86K atoms
+         pdbsByMonth.put(245, "3jb9") // 86K atoms
         pdbsByMonth.put(245, "6n7p")
         pdbsByMonth.put(245, "1mh1")
         pdbsByMonth.put(245, "1ryf")

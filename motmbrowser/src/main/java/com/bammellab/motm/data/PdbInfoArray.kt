@@ -1208,6 +1208,57 @@ object PdbInfo {
             PdbEntryInfo("9pap", "STRUCTURE OF PAPAIN REFINED AT 1.65 ANGSTROMS RESOLUTION"),
             PdbEntryInfo("9rub", "CRYSTAL STRUCTURE OF ACTIVATED RIBULOSE-1,5-BISPHOSPHATE CARBOXYLASE COMPLEXED WITH ITS SUBSTRATE, RIBULOSE-1,5-BISPHOSPHATE"),
 
+            // -----------------------------------------------
+            // new entries - were previously too big to render
+            // -----------------------------------------------
+
+
+            PdbEntryInfo("2tbv", "STRUCTURE OF TOMATO BUSHY STUNT VIRUS. V. COAT PROTEIN SEQUENCE DETERMINATION AND ITS STRUCTURAL IMPLICATIONS"),
+            PdbEntryInfo("1fjg", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH THE ANTIBIOTICS STREPTOMYCIN, SPECTINOMYCIN, AND PAROMOMYCIN"),
+// 1tzo was too big
+            PdbEntryInfo("1tzo", "Crystal Structure of the Anthrax Toxin Protective Antigen Heptameric Prepore"),
+// 1iw7
+            PdbEntryInfo("1iw7", "Crystal structure of the RNA polymerase holoenzyme from Thermus thermophilus at 2.6A resolution"),
+// pdbsByMonth.put(86, "2c37")
+            PdbEntryInfo("1w63", "AP1 clathrin adaptor core"),
+
+//  pdbsByMonth.put(121, "1nji") // too big 98566 atoms
+
+            PdbEntryInfo("1hnw", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH TETRACYCLINE"),
+            PdbEntryInfo("1nji", "Structure of chloramphenicol bound to the 50S ribosomal subunit"),
+
+            PdbEntryInfo("5xnl", "Structure of stacked C2S2M2-type PSII-LHCII supercomplex from Pisum sativum"),
+            PdbEntryInfo("6kac", "Cryo-EM structure of the C2S2-type PSII-LHCII supercomplex from Chlamydomonas reihardtii"),
+            PdbEntryInfo("3jb9", "Cryo-EM structure of the yeast spliceosome at 3.6 angstrom resolution"),
+            PdbEntryInfo("1fjg", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH THE ANTIBIOTICS STREPTOMYCIN, SPECTINOMYCIN, AND PAROMOMYCIN"),
+            PdbEntryInfo("4ox9", "Crystal structure of the aminoglycoside resistance methyltransferase NpmA bound to the 30S ribosomal subunit"),
+            PdbEntryInfo("5y9f", "Crystal structure of HPV59 pentamer in complex with the Fab fragment of antibody 28F10"),
+            PdbEntryInfo("5ijn", "Composite structure of the inner ring of the human nuclear pore complex (32 copies of Nup205)"),
+            PdbEntryInfo("5a9q", "Human nuclear pore complex"),
+
+
+            PdbEntryInfo("4tnv", "C. elegans glutamate-gated chloride channel (GluCl) in complex with Fab in a non-conducting conformation"),
+            PdbEntryInfo("4u7u", "Crystal structure of RNA-guided immune Cascade complex from E.coli"),
+            PdbEntryInfo("4CR2", "Deep classification of a large cryo-EM dataset defines the conformational landscape of the 26S proteasome"),
+            PdbEntryInfo("1pma", "PROTEASOME FROM THERMOPLASMA ACIDOPHILUM"),
+
+            PdbEntryInfo("6ezo", "Eukaryotic initiation factor EIF2B in complex with ISRIB"),  // special interest
+            PdbEntryInfo("1ibk", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH THE ANTIBIOTIC PAROMOMYCIN"),
+            PdbEntryInfo("1ibl", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH A MESSENGER RNA FRAGMENT AND COGNATE TRANSFER RNA ANTICODON STEM-LOOP BOUND AT THE A SITE AND WITH THE ANTIBIOTIC PAROMOMYCIN"),
+            PdbEntryInfo("1ibm", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH A MESSENGER RNA FRAGMENT AND COGNATE TRANSFER RNA ANTICODON STEM-LOOP BOUND AT THE A SITE"),
+            PdbEntryInfo("1j5e", "Structure of the Thermus thermophilus 30S Ribosomal Subunit"),
+
+
+            PdbEntryInfo("6cgv", "Revised crystal structure of human adenovirus"),  //Entry: 6CGV supersedes: 4CWU
+            PdbEntryInfo("3aic", "Crystal Structure of Glucansucrase from Streptococcus mutans"),
+            PdbEntryInfo("3aie", "Crystal Structure of glucansucrase from Streptococcus mutans"),
+            PdbEntryInfo("2fug", "Crystal structure of the hydrophilic domain of respiratory complex I from Thermus thermophilus"),
+            PdbEntryInfo("5a9q", "Human nuclear pore complex"),
+            PdbEntryInfo("5a9q", "Human nuclear pore complex"),
+
+
+
+
 
             )
 }
