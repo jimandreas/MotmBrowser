@@ -96,6 +96,7 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
 
             "1bna",
 
+            "3lohLONGBOND",
             "1aew_firstloop",
             "1f6g",
 
