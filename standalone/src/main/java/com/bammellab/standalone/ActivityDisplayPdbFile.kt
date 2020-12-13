@@ -94,10 +94,14 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
     // wire in the names and display names
     private val pdbFileNames2 = listOf(
 
+
+
+            "1aew_missing_ends", // fix missing atom ends
+
             "1bna",
 
-            "3lohLONGBOND",
-            "1aew_firstloop",
+            "3lohLONGBOND", // has a "LONGBOND" jump
+
             "1f6g",
 
 
