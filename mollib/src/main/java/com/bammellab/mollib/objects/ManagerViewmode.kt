@@ -24,6 +24,7 @@ import android.app.Activity
 import com.kotmol.pdbParser.AtomInformationTable
 import com.kotmol.pdbParser.Molecule
 import com.kotmol.pdbParser.PdbAtom
+import com.kotmol.pdbParser.PdbAtom.AtomType.IS_HETATM
 import timber.log.Timber
 
 class ManagerViewmode(private val activity: Activity,
@@ -70,13 +71,17 @@ class ManagerViewmode(private val activity: Activity,
 
         val atomCount = mol.atomNumberList.size
         Timber.d("atomCount = $atomCount")
+        geometrySlices = 10
         if (atomCount > 20000) {
             Timber.e("EMERGENCY atomcount - go into immediate mode rendering!!")
             BufferManager.initViewModeCallback(this)
-            BufferManager.bigMoleculeFlag( true )
+            BufferManager.bigMoleculeFlag(true)
         } else {
             BufferManager.initViewModeCallback(null)
-            BufferManager.bigMoleculeFlag( false )
+            BufferManager.bigMoleculeFlag(false)
+            if (atomCount < 10000) {
+                geometrySlices = 20
+            }
         }
 
         doViewMode()
@@ -119,6 +124,7 @@ class ManagerViewmode(private val activity: Activity,
                     VIEW_RIBBONS -> {
                         drawMode = D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_RIBBONS
                         calcMemoryUsage(drawMode)
+                        clearRenderThisAtomAsSphereFlag()
                         renderRibbon.renderModal()
                         renderNucleic.renderNucleic()
                         drawNucleicBonds()
@@ -137,6 +143,7 @@ class ManagerViewmode(private val activity: Activity,
                         if (!calcMemoryUsage(drawMode)) {
                             drawMode = D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_RIBBONS
                             currentMode = VIEW_RIBBONS
+                            clearRenderThisAtomAsSphereFlag()
                             renderRibbon.renderModal()
                             renderNucleic.renderNucleic()
                             drawNucleicBonds()
@@ -157,6 +164,7 @@ class ManagerViewmode(private val activity: Activity,
                         drawMode = (D_PIPE_RADIUS or D_NUCLEIC or D_HETATM or D_ALL_ATOMS
                                 or D_BONDS or D_SPHERES)
                         calcMemoryUsage(drawMode)
+                        clearRenderThisAtomAsSphereFlag()  // bonds will set the flag
                         drawPipeModel()
                         drawSpheres()
                     }
@@ -164,6 +172,7 @@ class ManagerViewmode(private val activity: Activity,
                         drawMode = (D_BALL_RADIUS or D_NUCLEIC or D_HETATM or D_ALL_ATOMS
                                 or D_BONDS or D_SPHERES)
                         calcMemoryUsage(drawMode)
+                        clearRenderThisAtomAsSphereFlag()  // bonds will set the flag
                         drawPipeModel()
                         drawSpheres()
                     }
@@ -172,6 +181,7 @@ class ManagerViewmode(private val activity: Activity,
                         drawMode = (D_REAL_RADIUS or D_NUCLEIC or D_HETATM or D_ALL_ATOMS
                                 or D_SPHERES)
                         calcMemoryUsage(drawMode)
+                        setRenderThisAtomAsSphereFlag()
                         drawSpheres()
                     }
                     VIEW_CA_QUICK_LINE -> {
@@ -311,7 +321,7 @@ class ManagerViewmode(private val activity: Activity,
                 Timber.e("null ptr : atom1: $atom1 atom2: $atom2")
                 continue
             }
-            if (atom1.atomType != PdbAtom.AtomType.IS_HETATM && atom2.atomType != PdbAtom.AtomType.IS_HETATM) {
+            if (atom1.atomType != IS_HETATM && atom2.atomType != IS_HETATM) {
                 continue
             }
 
@@ -332,12 +342,36 @@ class ManagerViewmode(private val activity: Activity,
     }
 
     /**
+     * for all the atoms - clear the flag that the atom
+     * needs to be rendered as a sphere.  This flag is set if the
+     * atom is at the end of a bond cylinder.
+     */
+    private fun clearRenderThisAtomAsSphereFlag() {
+        for (i in 0 until mol.atomNumberList.size) {
+            val atom = mol.atomNumberToAtomInfoHash[mol.atomNumberList[i]]
+            if (atom != null) {
+                atom.renderThisAtomAsSphere = false
+            }
+        }
+    }
+
+    private fun setRenderThisAtomAsSphereFlag() {
+        for (i in 0 until mol.atomNumberList.size) {
+            val atom = mol.atomNumberToAtomInfoHash[mol.atomNumberList[i]]
+            if (atom != null) {
+                // skip HOH (water) molecules
+                atom.renderThisAtomAsSphere = !(atom.atomType == IS_HETATM && atom.residueName == "HOH")
+            }
+        }
+    }
+
+    /**
      * TODO: right now this method is called for both ribbon mode and molecule mode
      *
      */
     private fun drawSpheres() {
 
-        var atom1: PdbAtom?
+        var atom: PdbAtom?
         var elementSymbol: String
         var ai: AtomInformationTable.AtomNameNumber?
         var useColor: FloatArray
@@ -358,43 +392,48 @@ class ManagerViewmode(private val activity: Activity,
         }
 
         for (i in 0 until mol.atomNumberList.size) {
-            atom1 = mol.atomNumberToAtomInfoHash[mol.atomNumberList[i]]
-            if (atom1 == null) {
+            atom = mol.atomNumberToAtomInfoHash[mol.atomNumberList[i]]
+            if (atom == null) {
                 Timber.e("drawSpheres: error - got null for %d", mol.atomNumberList[i])
                 continue
             }
             // skip HOH (water) molecules
-            if (atom1.atomType == PdbAtom.AtomType.IS_HETATM && atom1.residueName == "HOH") {
+            if (!atom.renderThisAtomAsSphere && atom.atomType == IS_HETATM && atom.residueName == "HOH") {
                 continue
             }
             // skip TER records
-            if (atom1.atomName == "TER_RECORD") {
+            if (atom.atomName == "TER_RECORD") {
                 continue
             }
-            if (atom1.atomType == PdbAtom.AtomType.IS_NUCLEIC) {
-                if (drawMode and D_NUCLEIC == 0) {
-                    continue
-                }
-            } else if (atom1.atomType == PdbAtom.AtomType.IS_HETATM) {
-                if (drawMode and D_HETATM == 0) {
-                    continue
-                }
-            } else if (atom1.elementSymbol == "H") {
-                if (!displayHydrosFlag) {
-                    continue
-                } else if (drawMode and D_ALL_ATOMS == 0) {
-                    continue
-                }
-            } else if (drawMode and D_ALL_ATOMS == 0) {
-                continue
-            }
-            if (atom1.atomBondCount == 0) {
-                if (atom1.atomName != "TER_RECORD") {
+//            if (atom1.atomType == PdbAtom.AtomType.IS_NUCLEIC) {
+//                if (drawMode and D_NUCLEIC == 0) {
+//                    continue
+//                }
+//            } else if (atom1.atomType == PdbAtom.AtomType.IS_HETATM) {
+//                if (drawMode and D_HETATM == 0) {
+//                    continue
+//                }
+//            } else if (atom1.elementSymbol == "H") {
+//                if (!displayHydrosFlag) {
+//                    continue
+//                } else if (drawMode and D_ALL_ATOMS == 0) {
+//                    continue
+//                }
+//            } else if (drawMode and D_ALL_ATOMS == 0) {
+//                if (atom1.atomType != PdbAtom.AtomType.IS_HETATM) {
+//                    continue
+//                }
+//            }
+            if (atom.atomBondCount == 0) {
+                if (atom.atomName != "TER_RECORD") {
                     Timber.e("%s: drawSpheres no bond at atom %d residue %s type %s",
-                            mol.molName, atom1.atomNumber, atom1.residueName, atom1.atomName)
+                            mol.molName, atom.atomNumber, atom.residueName, atom.atomName)
                 }
             }
-            elementSymbol = atom1.elementSymbol
+            if (!atom.renderThisAtomAsSphere) {
+                continue
+            }
+            elementSymbol = atom.elementSymbol
             ai = AtomInformationTable.atomSymboltoAtomNumNameColor[elementSymbol]
             useColor = ai?.color ?: color
             /*
@@ -403,9 +442,9 @@ class ManagerViewmode(private val activity: Activity,
             if (lookupRadius) {
                 radius = if (ai == null) {
                     Timber.e("drawSpheres: no AtomInfo at atom %d residue %s type %s",
-                            atom1.atomNumber,
-                            atom1.residueName,
-                            atom1.atomName)
+                            atom.atomNumber,
+                            atom.residueName,
+                            atom.atomName)
                     .25f
                 } else {
                     ai.vanDerWaalsRadius.toFloat() / 100f
@@ -424,7 +463,7 @@ class ManagerViewmode(private val activity: Activity,
             atomSphere.genSphere(
                     SPHERE_SLICES,
                     useRadius,
-                    atom1,
+                    atom,
                     useColor)
         }
         BufferManager.transferToGl()
@@ -503,56 +542,56 @@ class ManagerViewmode(private val activity: Activity,
         /*
          * calculate usage with normal slices
          */
-       /* geometrySlices = INITIAL_SLICES
-        var sphereGeometrySlices = INITIAL_SLICES / 2
-        var ribbons: Long = 0
-        var sphere: Long = 0
-        var bonds: Long = 0
+        /* geometrySlices = INITIAL_SLICES
+         var sphereGeometrySlices = INITIAL_SLICES / 2
+         var ribbons: Long = 0
+         var sphere: Long = 0
+         var bonds: Long = 0
 
-        if (dmode and D_RIBBONS != 0) {
-            ribbons = bondAllocation(INITIAL_SLICES).toLong()
-        }
+         if (dmode and D_RIBBONS != 0) {
+             ribbons = bondAllocation(INITIAL_SLICES).toLong()
+         }
 
-        if (dmode and D_BONDS != 0) {
-            bonds = ribbonAllocation(INITIAL_SLICES).toLong()
-        }
+         if (dmode and D_BONDS != 0) {
+             bonds = ribbonAllocation(INITIAL_SLICES).toLong()
+         }
 
-        if (dmode and D_SPHERES != 0) {
-            sphere = sphereAllocation(sphereGeometrySlices).toLong()
-        }
+         if (dmode and D_SPHERES != 0) {
+             sphere = sphereAllocation(sphereGeometrySlices).toLong()
+         }
 
-        val activityManager2 = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
-        val info2 = ActivityManager.MemoryInfo()
-        activityManager2.getMemoryInfo(info2)
-        var initialAvailMem = info2.threshold
+         val activityManager2 = activity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
+         val info2 = ActivityManager.MemoryInfo()
+         activityManager2.getMemoryInfo(info2)
+         var initialAvailMem = info2.threshold
 
-        initialAvailMem /= 2  // seems like we only get 1/2 to play with
+         initialAvailMem /= 2  // seems like we only get 1/2 to play with
 
-        if (ribbons + bonds + sphere > initialAvailMem) {
-            geometrySlices /= 2
+         if (ribbons + bonds + sphere > initialAvailMem) {
+             geometrySlices /= 2
 
-            if (dmode and D_RIBBONS != 0) {
-                ribbons = bondAllocation(geometrySlices).toLong()
-            }
-            if (dmode and D_BONDS != 0) {
-                bonds = ribbonAllocation(geometrySlices).toLong()
-            }
-            if (dmode and D_SPHERES != 0) {
-                sphere = sphereAllocation(geometrySlices).toLong()
-            }
+             if (dmode and D_RIBBONS != 0) {
+                 ribbons = bondAllocation(geometrySlices).toLong()
+             }
+             if (dmode and D_BONDS != 0) {
+                 bonds = ribbonAllocation(geometrySlices).toLong()
+             }
+             if (dmode and D_SPHERES != 0) {
+                 sphere = sphereAllocation(geometrySlices).toLong()
+             }
 
-            if (ribbons + bonds + sphere > initialAvailMem) {
-                val overdraw = initialAvailMem - ribbons - bonds - sphere
-                Timber.e("***  mema  TROUBLE delta: %d r: %d b: %d s: %d avail: %d",
-                        overdraw,
-                        ribbons,
-                        bonds,
-                        sphere,
-                        initialAvailMem)
+             if (ribbons + bonds + sphere > initialAvailMem) {
+                 val overdraw = initialAvailMem - ribbons - bonds - sphere
+                 Timber.e("***  mema  TROUBLE delta: %d r: %d b: %d s: %d avail: %d",
+                         overdraw,
+                         ribbons,
+                         bonds,
+                         sphere,
+                         initialAvailMem)
 
-                return false
-            }
-        } */
+                 return false
+             }
+         } */
         return true  // rendering will fit, hopefully
     }
 
@@ -591,11 +630,13 @@ class ManagerViewmode(private val activity: Activity,
          */
         const val VIEW_INITIAL = 0
         const val VIEW_RIBBONS = 1
-//        const val VIEW_RIBBONS_DEV_ALL = 2
+
+        //        const val VIEW_RIBBONS_DEV_ALL = 2
         const val VIEW_RIBBONS_DEV_ALL = 5
         const val VIEW_BALL_AND_STICK = 3
         const val VIEW_STICK = 4
-//        const val VIEW_SPHERE = 5
+
+        //        const val VIEW_SPHERE = 5
         const val VIEW_SPHERE = 2
         const val VIEW_CA_QUICK_LINE = 6
 

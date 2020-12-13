@@ -35,10 +35,10 @@ class SegmentAtomToAtomBond(private val molecule: Molecule) {
             atom1: PdbAtom,
             atom2: PdbAtom) {
 
-        /*
-         * TODO: scaling of brightness relative to size (normals are scaled down with the molecule!!
-         */
         normal_brightness_factor = (molecule.maxPostCenteringVectorMagnitude / BRIGHTNESS_FACTOR)
+
+        atom1.renderThisAtomAsSphere = true
+        atom2.renderThisAtomAsSphere = true
 
         var i = 0
         val startColor: FloatArray
