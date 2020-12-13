@@ -13,7 +13,7 @@
 
 @file:Suppress("UnnecessaryVariable", "unused", "UNUSED_VARIABLE")
 
-package com.bammellab.motm.data
+package com.bammellab.mollib.data
 
 import timber.log.Timber
 import java.util.*

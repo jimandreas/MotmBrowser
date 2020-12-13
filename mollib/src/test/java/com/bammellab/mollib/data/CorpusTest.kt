@@ -13,10 +13,10 @@
 
 @file:Suppress("UNUSED_VARIABLE")
 
-package com.bammellab.motm.data
+package com.bammellab.mollib.data
 
-import com.bammellab.motm.data.Corpus.motmDateByKey
-import com.bammellab.motm.data.Corpus.motmThumbnailImageList
+import com.bammellab.mollib.data.Corpus.motmDateByKey
+import com.bammellab.mollib.data.Corpus.motmThumbnailImageList
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals

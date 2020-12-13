@@ -17,10 +17,10 @@ package com.bammellab.motm.browse
 
 import android.view.View
 import androidx.fragment.app.Fragment
-import com.bammellab.motm.data.MotmByCategory.MotmCategoryBiotech
-import com.bammellab.motm.data.MotmByCategory.MotmCategoryHealth
-import com.bammellab.motm.data.MotmByCategory.MotmCategoryLife
-import com.bammellab.motm.data.MotmByCategory.MotmCategoryStructures
+import com.bammellab.mollib.data.MotmByCategory.MotmCategoryBiotech
+import com.bammellab.mollib.data.MotmByCategory.MotmCategoryHealth
+import com.bammellab.mollib.data.MotmByCategory.MotmCategoryLife
+import com.bammellab.mollib.data.MotmByCategory.MotmCategoryStructures
 import com.bammellab.motm.databinding.FragmentBrowseBinding
 import timber.log.Timber
 

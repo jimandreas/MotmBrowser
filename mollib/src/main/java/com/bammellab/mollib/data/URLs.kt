@@ -13,7 +13,7 @@
 
 @file:Suppress("deprecation", "unused")
 
-package com.bammellab.motm.data
+package com.bammellab.mollib.data
 
 //import retrofit2.Retrofit
 //import retrofit2.converter.simplexml.SimpleXmlConverterFactory

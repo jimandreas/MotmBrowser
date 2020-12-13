@@ -11,7 +11,7 @@
  *  limitations under the License
  */
 
-package com.bammellab.motm.data
+package com.bammellab.mollib.data
 
 object MotmByCategory {
 

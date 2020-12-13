@@ -28,8 +28,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.bammellab.motm.data.MotmByCategory
-import com.bammellab.motm.data.MotmByCategory.motmTabLabels
+import com.bammellab.mollib.data.MotmByCategory
+import com.bammellab.mollib.data.MotmByCategory.motmTabLabels
 import com.bammellab.motm.databinding.FragmentBrowseBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.MODE_SCROLLABLE

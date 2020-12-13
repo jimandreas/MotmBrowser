@@ -11,16 +11,15 @@
  *  limitations under the License
  */
 
-package com.bammellab.motm.data
+package com.bammellab.mollib.data
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
-
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-internal class MotmImageDownloadTest {
+import org.junit.jupiter.api.Assertions.*
+
+internal class PdbInfoTest {
 
     @BeforeEach
     fun setUp() {
@@ -31,25 +30,6 @@ internal class MotmImageDownloadTest {
     }
 
     @Test
-    @DisplayName("test getFirstTiffImageURL lookup function")
-    fun testGetFirstTiffImageURL() {
-
-        // test not present / error condition
-        var match = MotmImageDownload.motmTiffImageName(-1)
-        assertEquals("", match)
-
-        // test end condition
-        match = MotmImageDownload.motmTiffImageName(0)
-        assertEquals("", match)
-
-        // first entry
-        match = MotmImageDownload.motmTiffImageName(250)
-        assertNotEquals("", match)
-
-        // last entry
-        match = MotmImageDownload.motmTiffImageName(1)
-        assertNotEquals("", match)
-        assertEquals("1-Myoglobin-geis-myoglobin",
-                match)
+    fun searchPdbInfo() {
     }
 }

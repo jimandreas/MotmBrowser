@@ -26,11 +26,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bammellab.motm.R
-import com.bammellab.motm.data.Corpus
-import com.bammellab.motm.data.Corpus.invertPosition
-import com.bammellab.motm.data.Corpus.motmTagLinesGet
-import com.bammellab.motm.data.Corpus.motmTitleGet
-import com.bammellab.motm.data.URLs.PDB_MOTM_THUMB_WEB_PREFIX
+import com.bammellab.mollib.data.Corpus
+import com.bammellab.mollib.data.Corpus.invertPosition
+import com.bammellab.mollib.data.Corpus.motmTagLinesGet
+import com.bammellab.mollib.data.Corpus.motmTitleGet
+import com.bammellab.mollib.data.URLs.PDB_MOTM_THUMB_WEB_PREFIX
 import com.bammellab.motm.detail.MotmDetailActivity
 import com.bumptech.glide.Glide
 import timber.log.Timber

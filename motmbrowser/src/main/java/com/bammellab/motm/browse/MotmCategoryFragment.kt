@@ -27,10 +27,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bammellab.motm.R
-import com.bammellab.motm.data.Corpus
-import com.bammellab.motm.data.Corpus.motmTitleGet
-import com.bammellab.motm.data.MotmByCategory
-import com.bammellab.motm.data.URLs.PDB_MOTM_THUMB_WEB_PREFIX
+import com.bammellab.mollib.data.Corpus
+import com.bammellab.mollib.data.Corpus.motmTitleGet
+import com.bammellab.mollib.data.MotmByCategory
+import com.bammellab.mollib.data.URLs.PDB_MOTM_THUMB_WEB_PREFIX
 import com.bammellab.motm.detail.MotmDetailActivity
 import com.bumptech.glide.Glide
 import timber.log.Timber

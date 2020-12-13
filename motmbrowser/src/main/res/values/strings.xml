@@ -38,8 +38,8 @@
 
     <!-- CURRENT stuff-->
 
-    <string name="button_next_obj">Next OBJ</string>
-    <string name="button_prev_obj">Prev OBJ</string>
+    <string name="button_next_obj">Next PDB</string>
+    <string name="button_prev_obj">Prev PDB</string>
     <string name="button_change_view">Change View</string>
     <string name="button_select">Select</string>
 

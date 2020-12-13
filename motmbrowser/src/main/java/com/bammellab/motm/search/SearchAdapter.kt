@@ -26,11 +26,11 @@ import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.bammellab.motm.R
-import com.bammellab.motm.data.Corpus
-import com.bammellab.motm.data.Corpus.motmTitleGet
-import com.bammellab.motm.data.PdbInfo
-import com.bammellab.motm.data.URLs.PDB_IMAGE_WEB_PREFIX
-import com.bammellab.motm.data.URLs.PDB_MOTM_THUMB_WEB_PREFIX
+import com.bammellab.mollib.data.Corpus
+import com.bammellab.mollib.data.Corpus.motmTitleGet
+import com.bammellab.mollib.data.PdbInfo
+import com.bammellab.mollib.data.URLs.PDB_IMAGE_WEB_PREFIX
+import com.bammellab.mollib.data.URLs.PDB_MOTM_THUMB_WEB_PREFIX
 import com.bammellab.motm.detail.MotmDetailActivity
 import com.bammellab.motm.graphics.MotmGraphicsActivity
 import com.bammellab.motm.util.PrefsUtil

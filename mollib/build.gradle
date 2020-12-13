@@ -75,5 +75,8 @@ dependencies {
     implementation "com.kotmol.kotmolpdbparser:kotmolpdbparser:1.0.4-SNAPSHOT"
     //implementation deps.pdbparser
 
+    testImplementation deps.annotations
+    testImplementation deps.junit
+    testImplementation deps.truth
 
 }
