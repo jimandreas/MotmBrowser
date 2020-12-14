@@ -13,6 +13,10 @@
 
 package com.bammellab.mollib.data
 
+import com.bammellab.mollib.data.Corpus.corpus
+import com.bammellab.mollib.data.Corpus.motmTagLinesGet
+import com.bammellab.mollib.data.Corpus.motmTitleGet
+
 object MotmImageDownload {
 
     /**
@@ -32,6 +36,52 @@ object MotmImageDownload {
         }
         return imageList[match + 1]
 
+    }
+
+    data class FavoriteMotmImage(
+            val motmNumber: String,
+            val motmTitle: String = "",
+            val motmTagLine: String = "",
+            val motmGraphicName: String = "")
+
+    fun buildMotmImageList(): List<FavoriteMotmImage> {
+        var i = 0
+        val mList = mutableListOf<FavoriteMotmImage>()
+        try {
+            while (true) {
+                val baseVal = imageList[i].toInt()
+                if (baseVal == 0) {
+                    break
+                }
+                i += 1
+                while (true) {
+                    val nextVal = imageList[i].substringBefore('-').toInt()
+                    if (nextVal != baseVal) {
+                        break
+                    }
+                    val title = motmTitleGet(baseVal)
+                    val tagline = motmTagLinesGet(baseVal-1) // zero based list
+                    val entry = FavoriteMotmImage(
+                            motmNumber = baseVal.toString(),
+                            motmTitle = title,
+                            motmTagLine = tagline,
+                            motmGraphicName = imageList[i]
+                    )
+                    mList.add(entry)
+                    i += 1
+                    if (i >= imageList.size-1) {
+                        break
+                    }
+                }
+                if (i >= imageList.size) {
+                    break
+                }
+            }
+        } catch (e: Exception) {
+            // oops
+            println("OOPS $i ${imageList.size}")
+        }
+        return mList.toList()
     }
 
     private val imageList = listOf(
@@ -63,12 +113,15 @@ object MotmImageDownload {
             "244-Photosynthetic_Supercomplexes-5xnl",
             "244-Photosynthetic_Supercomplexes-6kad_6kac",
             "244-Photosynthetic_Supercomplexes-5zji_6nwa",
-            "243",
+
+            "242",
             "242-Voltagegated_Sodium_Channels-6j8j_twoview",
             "242-Voltagegated_Sodium_Channels-6a95_green",
-            "242",
+
+            "243",
             "243-Coronavirus_Proteases-6lu7",
             "243-Coronavirus_Proteases-1q2w_4ow0",
+
             "241",
             "241-Twenty_Years_of_Molecules-6j4y",
             "241-Twenty_Years_of_Molecules-records",
@@ -97,15 +150,19 @@ object MotmImageDownload {
             "234",
             "234-MDM2_and_Cancer-MDM2_painting",
             "234-MDM2_and_Cancer-MDM2",
+
             "233",
             "233-SNitrosylated_Hemoglobin-1buw",
             "233-SNitrosylated_Hemoglobin-2ifq",
-            "232",
+
+            "231",
             "231-Proteins_and_Biominerals-1q8h_4uxm",
             "231-Proteins_and_Biominerals-4jj0",
-            "231",
             "231-Measles_Virus_Proteins-measles",
+
+            "232",
             "232-Measles_Virus_Proteins-4uft",
+
             "230",
             "230-Initiation_Factor_eIF4E-1ap8_1rf8",
             "230-Initiation_Factor_eIF4E-complexes",
@@ -131,13 +188,16 @@ object MotmImageDownload {
             "223",
             "223-Piezo1_Mechanosensitive_Channel-6b3r",
             "223-Piezo1_Mechanosensitive_Channel-3um7_5vkq",
-            "222",
+
+            "221",
             "221-Proteins_and_Nanoparticles-5et3_motm",
             "221-Proteins_and_Nanoparticles-4prq",
             "221-Proteins_and_Nanoparticles-5oeh_3nkx",
-            "221",
+
+            "222",
             "222-Human_Papillomavirus_and_Vaccines-3j6r-6bt3",
             "222-Human_Papillomavirus_and_Vaccines-4xr8",
+
             "220",
             "220-Dehalogenases-4ur0",
             "220-Dehalogenases-dehalogenases",
@@ -187,12 +247,16 @@ object MotmImageDownload {
             "205",
             "205-Nuclear_Pore_Complex-5a9q_5ijn",
             "205-Nuclear_Pore_Complex-5dis",
+
             "204",
-            "203-PD1_Programmed_Cell_Death_Protein_1-3bik_3bp5",
-            "203-PD1_Programmed_Cell_Death_Protein_1-5dk3_5jxe",
+            "204-Aminopeptidase_1_and_Autophagy-5jh9_4r8f",
+
             "203",
             "203-Aminopeptidase_1_and_Autophagy-Selective_Autophagy_2016",
-            "204-Aminopeptidase_1_and_Autophagy-5jh9_4r8f",
+            "203-PD1_Programmed_Cell_Death_Protein_1-3bik_3bp5",
+            "203-PD1_Programmed_Cell_Death_Protein_1-5dk3_5jxe",
+
+
             "202",
             "202-Dipeptidyl_Peptidase4-1nu8",
             "202-Dipeptidyl_Peptidase4-Substrates2",
@@ -587,8 +651,8 @@ object MotmImageDownload {
             "76",
             "76-Hemagglutinin-1ruz-membrane",
             "76-Hemagglutinin-HA-action",
-            "75",
 
+            "75",
             "75-TissueFactor-1dan-composite",
             "75-TissueFactor-2hft-composite", // needs fixing -number
 
