@@ -79,3 +79,15 @@ Rajawali: Math functions leveraged from [Rajawali]
 
 [KotmolMotmImages]:https://github.com/kotmol/KotmolMotmImages
 
+## Other apps:
+
+* [Capture Images]
+
+* [Standalone]
+
+* [Sreensaver]
+
+[Capture Images]:README-captureimages.md
+[Standalone]:README-standalone.md
+[Screensaver]:README-screensaver.md
+

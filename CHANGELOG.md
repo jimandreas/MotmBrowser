@@ -1,7 +1,9 @@
 Change Log
 ==========
 
-Version 2.4 *(2020-12-11)*
+## MotmBrowser
+
+Version 2.4 *(2020-12-15)*
 ----------------------------
  * New: Molecules with more than 50K atoms are returned to the collection
  * Fix: #7 PDB 2TBV - hangs
