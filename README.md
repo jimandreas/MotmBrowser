@@ -85,7 +85,7 @@ Rajawali: Math functions leveraged from [Rajawali]
 
 * [Standalone]
 
-* [Sreensaver]
+* [Screensaver]
 
 [Capture Images]:README-captureimages.md
 [Standalone]:README-standalone.md
