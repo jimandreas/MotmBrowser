@@ -52,4 +52,11 @@ internal class MotmImageDownloadTest {
         assertEquals("1-Myoglobin-geis-0218-myoglobin",
                 match)
     }
+
+    @Test
+    @DisplayName("test basic screensaver list function")
+    fun buildMotmImageList() {
+        val foo : List<MotmImageDownload.FavoriteMotmImage> = MotmImageDownload.buildMotmImageList()
+        assertNotEquals(0, foo.size)
+    }
 }

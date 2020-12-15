@@ -29,6 +29,7 @@ import androidx.cardview.widget.CardView
 import com.bammellab.motm.R
 import com.bammellab.mollib.data.Corpus
 import com.bammellab.mollib.data.Corpus.motmTitleGet
+import com.bammellab.mollib.data.MotmImageDownload
 import com.bammellab.mollib.data.PDBs
 import com.bammellab.mollib.data.URLs.PDB_IMAGE_WEB_PREFIX
 import com.bammellab.mollib.data.URLs.PDB_MOTM_PNG_WEB_PREFIX
