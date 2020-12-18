@@ -13,9 +13,6 @@
 
 package com.bammellab.mollib.data
 
-import com.google.common.collect.ArrayListMultimap
-import com.google.common.collect.Multimap
-
 /**
  * PDB reference list
  *
@@ -1406,6 +1403,9 @@ object PDBs {
             MotmToPdbMap(252, "6p6l"),
             MotmToPdbMap(252, "6nzt")
     )
+   /*
+    Multimap is no longer used.
+
     val MotmToPdbMultimap: Multimap<Int, String> = ArrayListMultimap.create()
 
     init {
@@ -2232,11 +2232,11 @@ object PDBs {
         MotmToPdbMultimap.put(161, "2aai")
         MotmToPdbMultimap.put(161, "3srp")
 
-        /*
+        *//*
         * Entry 3U5D was removed from the distribution of released
         * PDB entries (status Obsolete) on 2014-12-09.  It has been replaced
         * (superseded) by 4V88.
-        */
+        *//*
 
         // MotmToPdbMultimap.put(161, "3u5d")
         MotmToPdbMultimap.put(161, "3u5e")
@@ -2762,12 +2762,20 @@ object PDBs {
 
 
     }
-
+*/
     //  data class MotmToPdbMap(val motmIndex: Int, val pdbName: String)
 
+    /**
+     * this map allows lookup of a Molecule of the Month index number
+     * and get back a list of PDB codes that were featured in that month's molecule
+     * writeup.
+     *
+     * The mapping (really "grouping") is completed only on first access
+     * to avoid the time penalty at startup.
+     */
     var mapMotmToPdbCodes : Map<Int, List<String>> = mapOf(Pair(0, listOf("")))
 
-    fun setupMotmToPdbCodes() {
+    private fun setupMotmToPdbCodes() {
         mapMotmToPdbCodes = pdbList.groupBy({it.motmIndex}, {it.pdbName})
     }
 
