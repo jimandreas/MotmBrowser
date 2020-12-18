@@ -51,6 +51,9 @@ object PdbInfo {
         return match
     }
 
+    fun obtainPdbInfoList(): List<PdbEntryInfo> {
+        return pdbInfoList
+    }
     private val pdbInfoList = listOf(
             PdbEntryInfo("143d", "SOLUTION STRUCTURE OF THE HUMAN TELOMERIC REPEAT D(AG3[T2AG3]3) OF THE G-QUADRUPLEX"),
             PdbEntryInfo("148l", "A COVALENT ENZYME-SUBSTRATE INTERMEDIATE WITH SACCHARIDE DISTORTION IN A MUTANT T4 LYSOZYME"),
@@ -1230,10 +1233,10 @@ object PdbInfo {
             PdbEntryInfo("1tzo", "Crystal Structure of the Anthrax Toxin Protective Antigen Heptameric Prepore"),
 // 1iw7
             PdbEntryInfo("1iw7", "Crystal structure of the RNA polymerase holoenzyme from Thermus thermophilus at 2.6A resolution"),
-// pdbsByMonth.put(86, "2c37")
+// MotmToPdbMap.put(86, "2c37")
             PdbEntryInfo("1w63", "AP1 clathrin adaptor core"),
 
-//  pdbsByMonth.put(121, "1nji") // too big 98566 atoms
+//  MotmToPdbMap.put(121, "1nji") // too big 98566 atoms
 
             PdbEntryInfo("1hnw", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH TETRACYCLINE"),
             PdbEntryInfo("1nji", "Structure of chloramphenicol bound to the 50S ribosomal subunit"),

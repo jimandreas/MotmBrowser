@@ -13,33 +13,34 @@
 
 package com.bammellab.mollib.data
 
-import com.bammellab.mollib.data.PDBs.groupedList
-import com.bammellab.mollib.data.PDBs.setupGroupedList
-import com.bammellab.mollib.data.PdbInfo.searchPdbInfo
+import com.bammellab.mollib.data.PDBs.obtainPdbMappingList
+import com.bammellab.mollib.data.PDBs.pullTheMap
+import com.bammellab.mollib.data.PdbInfo.obtainPdbInfoList
 import com.bammellab.mollib.data.PdbInfo.searchPdbInfoForNameMatch
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
-import timber.log.Timber
+import org.junit.jupiter.api.Test
 
 internal class PDBsTest {
 
-    private var thePdbGroupedList:  Map<Int, List<String>> = mapOf(Pair(0, listOf("")))
+    private var mapFromMotmNUmberToPdbList:  Map<Int, List<String>> = mapOf(Pair(0, listOf("")))
 
     @BeforeEach
     fun setUp() {
-        setupGroupedList()
-        thePdbGroupedList = groupedList
-        assertNotNull(thePdbGroupedList)
+        mapFromMotmNUmberToPdbList = pullTheMap()
+        assertNotNull(mapFromMotmNUmberToPdbList)
     }
+
+    /**
+     * a basic test to insure that the map of motm numbers to pdb code lists is initialized
+     */
 
     @Test
     @DisplayName("Basic test of Grouped List structure and extent")
     fun pullTheMapTest() {
-        val firstList = thePdbGroupedList[1]
-        val lastList = thePdbGroupedList[252] // current as of Dec 2020
+        val firstList = mapFromMotmNUmberToPdbList[1]
+        val lastList = mapFromMotmNUmberToPdbList[252] // current as of Dec 2020
 
         assertNotNull(firstList)
         assertNotNull(lastList)
@@ -50,10 +51,16 @@ internal class PDBsTest {
 
     }
 
+    /**
+     * verify that for all PDB codes in each map entry that there is a pdbInfoList entry
+     *
+     * This verifies the consistency of the two lists in one direction
+     */
+
     @Test
     @DisplayName("Match all entryies in Grouped List with an entry in the pdbInfoList")
     fun matchPdbGroupedListWithPdbInfoList() {
-        for (item in thePdbGroupedList) {
+        for (item in mapFromMotmNUmberToPdbList) {
             for (pdb in item.value) {
                 val resultList = searchPdbInfoForNameMatch(pdb)
                 assertNotNull(resultList)
@@ -66,9 +73,24 @@ internal class PDBsTest {
                     println("Error: duplicate pdb in pdbInfoList: $pdb, $resultList")
                 }
                 assertEquals(1, resultList.size)
-
                 assertEquals(pdb.toLowerCase(), resultList[0].pdbName.toLowerCase())
             }
+        }
+    }
+
+    @Test
+    @DisplayName("All entrys in pdbInfOList have a MotmNumberToPDB entry")
+    fun matchPdbInfoListToMotmMapList() {
+
+        val pdbInfo = obtainPdbInfoList()
+        val pdbMappingInfo = obtainPdbMappingList()
+
+        for (item in pdbInfo) {
+            val lookupVal = pdbMappingInfo.filter { it.pdbName == item.pdbName }
+            if (lookupVal.isEmpty()) {
+                println("no match for ${item.pdbName} in PDBs.kt")
+            }
+            assertFalse(lookupVal.isEmpty())
 
         }
     }
