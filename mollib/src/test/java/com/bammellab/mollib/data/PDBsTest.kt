@@ -86,7 +86,7 @@ internal class PDBsTest {
         val pdbMappingInfo = obtainPdbMappingList()
 
         for (item in pdbInfo) {
-            val lookupVal = pdbMappingInfo.filter { it.pdbName == item.pdbName }
+            val lookupVal = pdbMappingInfo.filter { it.pdbName.equals(item.pdbName, ignoreCase = true) }
             if (lookupVal.isEmpty()) {
                 println("no match for ${item.pdbName} in PDBs.kt")
             }

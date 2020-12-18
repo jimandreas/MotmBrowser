@@ -1348,8 +1348,8 @@ object PDBs {
             MotmToPdbMap(243, "6a95"),
             MotmToPdbMap(243, "5vb8"),
             MotmToPdbMap(243, "6p6w"),
-            //  MotmToPdbMap(244, "5xnl"), // 99K atoms
-            //  MotmToPdbMap(244, "6kac"), // 78K
+            MotmToPdbMap(244, "5xnl"), // 99K atoms
+            MotmToPdbMap(244, "6kac"), // 78K
             //   MotmToPdbMap(244, "6kad"), // CIF only
             MotmToPdbMap(244, "5zji"),
             //   MotmToPdbMap(244, "6nwa"), // CIF only

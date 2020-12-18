@@ -1200,7 +1200,7 @@ object PdbInfo {
             PdbEntryInfo("6m17", "The 2019-nCoV RBD/ACE2-B0AT1 complex"),
             PdbEntryInfo("6mam", "Cleaved Ebola GP in complex with a broadly neutralizing human antibody, ADI-15946"),
             PdbEntryInfo("6n7p", "S. cerevisiae spliceosomal E complex (UBC4)"),
-            PdbEntryInfo("6o85", "Electron cryo-microscopy of the eukaryotic translation initiation factor 2B bound to eukaryotic translation initiation factor 2 from Homo sapiens"),
+            //PdbEntryInfo("6o85", "Electron cryo-microscopy of the eukaryotic translation initiation factor 2B bound to eukaryotic translation initiation factor 2 from Homo sapiens"),
             PdbEntryInfo("6p6w", "Cryo-EM structure of voltage-gated sodium channel NavAb N49K/L109A/M116V/G94C/Q150C disulfide crosslinked mutant in the resting state"),
             PdbEntryInfo("6pfk", "PHOSPHOFRUCTOKINASE, INHIBITED T-STATE"),
             PdbEntryInfo("6tna", "CRYSTAL STRUCTURE OF YEAST PHENYLALANINE T-RNA. I.CRYSTALLOGRAPHIC REFINEMENT"),
@@ -1256,7 +1256,7 @@ object PdbInfo {
             PdbEntryInfo("4CR2", "Deep classification of a large cryo-EM dataset defines the conformational landscape of the 26S proteasome"),
             PdbEntryInfo("1pma", "PROTEASOME FROM THERMOPLASMA ACIDOPHILUM"),
 
-            PdbEntryInfo("6ezo", "Eukaryotic initiation factor EIF2B in complex with ISRIB"),  // special interest
+            //PdbEntryInfo("6ezo", "Eukaryotic initiation factor EIF2B in complex with ISRIB"),  // special interest
             PdbEntryInfo("1ibk", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH THE ANTIBIOTIC PAROMOMYCIN"),
             PdbEntryInfo("1ibl", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH A MESSENGER RNA FRAGMENT AND COGNATE TRANSFER RNA ANTICODON STEM-LOOP BOUND AT THE A SITE AND WITH THE ANTIBIOTIC PAROMOMYCIN"),
             PdbEntryInfo("1ibm", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH A MESSENGER RNA FRAGMENT AND COGNATE TRANSFER RNA ANTICODON STEM-LOOP BOUND AT THE A SITE"),
