@@ -100,6 +100,8 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
 
             "1bna",
 
+            "1xi4",   // loops!
+
             "3lohLONGBOND", // has a "LONGBOND" jump
 
             "1f6g",

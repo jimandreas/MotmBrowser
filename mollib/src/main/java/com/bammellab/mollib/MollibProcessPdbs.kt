@@ -11,7 +11,7 @@
  *  limitations under the License
  */
 
-@file:Suppress("UNUSED_VARIABLE")
+@file:Suppress("UNUSED_VARIABLE", "FunctionName", "MemberVisibilityCanBePrivate")
 
 package com.bammellab.mollib
 
@@ -30,7 +30,7 @@ import java.io.*
 
 enum class LoadFromSource {
     FROM_ASSETS,
-    FROM_SDCARD,
+    FROM_SDCARD_AND_CAPTURE,
     FROM_RCSB_OR_CACHE
 }
 
@@ -49,7 +49,7 @@ class MollibProcessPdbs(
         private var nextNameIndex: Int = -1,
         private val pdbFileNames: List<String>,
         private val loadPdbFrom: LoadFromSource
-) : SurfaceCreated, PdbCallback {
+) : SurfaceCreated, PdbCallback, UpdateRenderFinished {
 
 
     private var managerViewmode: ManagerViewmode? = null
@@ -64,10 +64,11 @@ class MollibProcessPdbs(
      *    PDB files are side-loaded into the PDB folder.
      */
     init {
-        if (loadPdbFrom == FROM_SDCARD) {
+        Timber.e("file name list is ${pdbFileNames.size} long")
+        renderer.setSurfaceCreatedListener(this)
+        if (loadPdbFrom == FROM_SDCARD_AND_CAPTURE) {
             checkFilesLaunch()
         }
-        renderer.setSurfaceCreatedListener(this)
         if (nextNameIndex >= 0) {
             nextNameIndex--
         }
@@ -84,17 +85,71 @@ class MollibProcessPdbs(
      * If FROM_CACHE mode is set, then PDBs are to be downloaded
      */
     override fun surfaceCreatedCallback() {
+        Timber.v("startProcessing: thread ${Thread.currentThread().name}")
+
         when (loadPdbFrom) {
-            FROM_SDCARD -> renderer.allocateReadBitmapArrays()
+            FROM_SDCARD_AND_CAPTURE ->  {
+                renderer.setUpdateListener(this)
+                loadSequentialData()
+            }
             FROM_RCSB_OR_CACHE -> {
                 pdbDownload = PdbDownload(activity)
                 pdbDownload.initPdbCallback(this)
+                loadNextPdbFile()
             }
             else -> {
+                loadNextPdbFile()
             }
         }
+
+    }
+
+    /**
+     * iterate through the file list:
+     * Parse
+     * render
+     * capture image
+     * write it to a file
+     */
+    private val jobCaptureImages = Job()
+    private fun loadSequentialData() = GlobalScope.launch(Dispatchers.IO + jobCaptureImages) {
+        renderer.allocateReadBitmapArrays()
+
         loadNextPdbFile()
     }
+
+    override fun updateActivity(name: String) {
+        GlobalScope.launch(Dispatchers.IO + jobCaptureImages) {
+            Timber.e("************")
+            Timber.e("WRITE CURRENT IMAGE")
+            Timber.e("************")
+            writeCurrentImage(name)
+            loadNextPdbFile()
+        }
+
+    }
+
+    /*override fun updateActivity(name: String) {
+        if (!pdbsCaptured.contains(name)) {
+            pdbsCaptured.add(name)
+            glSurfaceView.requestRender()
+            GlobalScope.launch {
+                glSurfaceView.requestRender()
+                delay(2000L)
+                Timber.e("************")
+                Timber.e("WRITE IMAGE")
+                Timber.e("************")
+                processPdbs.writeCurrentImage()
+            }
+            GlobalScope.launch {
+                delay(3000L)
+                Timber.e("************")
+                Timber.e("LOAD NEXT PDB")
+                Timber.e("************")
+                processPdbs.loadNextPdbFile()
+            }
+        }
+    }*/
 
     fun loadNextPdbFile() = scope.launch {
         if (++nextNameIndex == pdbFileNames.size) {
@@ -126,7 +181,7 @@ class MollibProcessPdbs(
                     parsePdbFileFromAsset(activity, name, mol)
                     startRendering()
                 }
-                FROM_SDCARD -> {
+                FROM_SDCARD_AND_CAPTURE -> {
                     try {
                         val cacheDir = activity.externalCacheDir
                         val myFile = File(cacheDir, "PDB/$name.pdb")
@@ -175,14 +230,10 @@ class MollibProcessPdbs(
         }
     }
 
-    fun writeCurrentImage() {
-        if (nextNameIndex < 0 || nextNameIndex > pdbFileNames.size - 1) {
-            return
-        }
+    fun writeCurrentImage(pdbName: String) {
         glSurfaceView.queueEvent {
             val internalSDcard = activity.externalCacheDir
             try {
-                val pdbName = pdbFileNames[nextNameIndex]
                 val testPath = File(internalSDcard, "Thumbs")
                 if (!testPath.exists()) {
                     testPath.mkdir()
@@ -207,6 +258,7 @@ class MollibProcessPdbs(
             } catch (e: IOException) {
                 Timber.e("IOException")
             }
+            Timber.v("DONE WRITING name = $pdbName")
 
         }
     }

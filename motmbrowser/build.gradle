@@ -135,8 +135,8 @@ dependencies {
     implementation deps.android.x.coreKtx
     implementation deps.android.x.cardview
     implementation deps.android.x.lifecycle
-    implementation deps.android.x.navigationfrag
-    implementation deps.android.x.navigationui
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
     implementation deps.android.x.preference
     implementation deps.android.x.viewpager
 

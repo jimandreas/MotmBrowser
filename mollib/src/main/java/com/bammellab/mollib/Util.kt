@@ -26,6 +26,8 @@ import android.content.pm.PackageManager.NameNotFoundException
 import android.content.res.AssetManager
 import android.content.res.Resources
 import android.net.Uri
+import android.opengl.GLES20.GL_NO_ERROR
+import android.opengl.GLES20.glGetError
 import androidx.appcompat.app.AlertDialog
 import com.kotmol.pdbParser.Molecule
 import com.kotmol.pdbParser.ParserPdbFile

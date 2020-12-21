@@ -16,7 +16,7 @@ package com.bammellab.captureimages
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
-import com.bammellab.mollib.LoadFromSource.FROM_SDCARD
+import com.bammellab.mollib.LoadFromSource.FROM_SDCARD_AND_CAPTURE
 import com.bammellab.mollib.MollibProcessPdbs
 import com.bammellab.mollib.RendererDisplayPdbFile
 import com.bammellab.mollib.UpdateRenderFinished
@@ -27,7 +27,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
+class ActivityImageCap : AppCompatActivity() {
 
     private lateinit var glSurfaceView: GLSurfaceViewDisplayPdbFile
     private lateinit var renderer: RendererDisplayPdbFile
@@ -54,7 +54,7 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
         val config = resources.configuration
         renderer = RendererDisplayPdbFile(this, glSurfaceView)
         glSurfaceView.setRenderer(renderer, config.densityDpi)
-        renderer.setUpdateListener(this)
+        //renderer.setUpdateListener(this)
         renderer.overrideInitialScale(.6f) // thumbnail size
 
         // This freezes the updates, now adjusted in GLSurfaceView
@@ -66,9 +66,9 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
                 renderer,
                 nextNameIndex = 0,
                 pdbFileNames = MotmPdbNames.pdbNames,
-                loadPdbFrom = FROM_SDCARD)
+                loadPdbFrom = FROM_SDCARD_AND_CAPTURE)
 
-        processPdbs.startProcessing(captureImages = true)
+        //processPdbs.startProcessing(captureImages = true)
     }
 
     override fun onResume() {
@@ -86,23 +86,5 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
         renderer.doCleanUp()
     }
 
-    override fun updateActivity(name: String) {
-        if (!pdbsCaptured.contains(name)) {
-            pdbsCaptured.add(name)
-            GlobalScope.launch {
-                delay(2000L)
-                Timber.e("************")
-                Timber.e("WRITE IMAGE")
-                Timber.e("************")
-                processPdbs.writeCurrentImage()
-            }
-            GlobalScope.launch {
-                delay(3000L)
-                Timber.e("************")
-                Timber.e("LOAD NEXT PDB")
-                Timber.e("************")
-                processPdbs.loadNextPdbFile()
-            }
-        }
-    }
+
 }
