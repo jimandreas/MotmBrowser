@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("UNUSED_ANONYMOUS_PARAMETER")
+
 package com.bammellab.screensaver
 
 import android.content.Intent
@@ -26,6 +28,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.google.android.apps.muzei.api.MuzeiContract
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -68,6 +72,17 @@ class MotmImageRedirectActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        lifecycle.addObserver(LifecycleEventObserver { source, event ->
+            println("MOTM Event received")
+            if (event == Lifecycle.Event.ON_STOP) {
+                println("MOTM PAUSING")
+            } else if (event == Lifecycle.Event.ON_RESUME) {
+                println("MOTM RESUMING")
+            }
+        })
+
         // First check whether MoleculeOfTheMonth is already selected
         val launchIntent = packageManager.getLaunchIntentForPackage(MUZEI_PACKAGE_NAME)
         if (MuzeiContract.Sources.isProviderSelected(this, BuildConfig.MOTMIMAGE_AUTHORITY)
@@ -83,7 +98,7 @@ class MotmImageRedirectActivity : ComponentActivity() {
             isMuzeiInstalled = true
         } catch (e: java.lang.Exception) {
             // Error here - muzei package not installed
-            println("Muzei is not installed")
+            println("MOTM Muzei is not installed")
 
             //  pop up an error dialog informing user that Muzei is not installed.
             //    On "OK", take them to the Muzei entry in the play store.
@@ -103,7 +118,7 @@ class MotmImageRedirectActivity : ComponentActivity() {
             return
         }
         if (!isMuzeiInstalled) {
-            println("HMMM muzei should have tested as installed here.  Quit")
+            println("MOTM muzei should have tested as installed here.  Quit")
             finish()
         }
 
@@ -136,7 +151,7 @@ class MotmImageRedirectActivity : ComponentActivity() {
                 // Start a coroutine
                 GlobalScope.launch {
                     delay(1000)
-                    println("Hello")
+                    println("MOTM Hello")
                     requestLauncherNoFinish.launch(intent)
                 }
 

@@ -18,7 +18,7 @@ import com.bammellab.mollib.data.MotmImageDownload.buildMotmImageList
 import com.google.android.apps.muzei.api.provider.Artwork
 import com.google.android.apps.muzei.api.provider.MuzeiArtProvider
 
-class PdbImageProvider : MuzeiArtProvider() {
+class MotmImageProvider : MuzeiArtProvider() {
     /**
      * set up the list of screensaver images
      * 1) call into the mollib to assemble the data list
