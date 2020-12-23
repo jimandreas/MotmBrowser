@@ -17,17 +17,23 @@
 package com.bammellab.screensaver
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import com.google.android.apps.muzei.api.MuzeiContract
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * This activity's sole purpose is to redirect users to Muzei, which is where they should
- * activate Muzei and then select the Unsplash source.
+ * activate Muzei and then select the Molecule of the Month source.
  *
  * You'll note the usage of the `enable_launcher` boolean resource value to only enable
  * this on API 29+ devices as it is on API 29+ that a launcher icon becomes mandatory for
@@ -43,7 +49,7 @@ import com.google.android.apps.muzei.api.MuzeiContract
  */
 class MotmImageRedirectActivity : ComponentActivity() {
     companion object {
-        private const val TAG = "UnsplashRedirect"
+        private const val TAG = "MotmRedirect"
         private const val MUZEI_PACKAGE_NAME = "net.nurik.roman.muzei"
         private const val PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=$MUZEI_PACKAGE_NAME"
     }
@@ -55,25 +61,64 @@ class MotmImageRedirectActivity : ComponentActivity() {
         finish()
     }
 
+    private val requestLauncherNoFinish = registerForActivityResult(StartActivityForResult()) {
+
+        //finish()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // First check whether Unsplash is already selected
+        // First check whether MoleculeOfTheMonth is already selected
         val launchIntent = packageManager.getLaunchIntentForPackage(MUZEI_PACKAGE_NAME)
-        if (MuzeiContract.Sources.isProviderSelected(this, com.bammellab.screensaver.BuildConfig.MOTMIMAGE_AUTHORITY)
+        if (MuzeiContract.Sources.isProviderSelected(this, BuildConfig.MOTMIMAGE_AUTHORITY)
                 && launchIntent != null) {
             // Already selected so just open Muzei
             requestLauncher.launch(launchIntent)
             return
         }
+
+        var isMuzeiInstalled = false
+        try {
+            val results = packageManager.getPackageInfo(MUZEI_PACKAGE_NAME, PackageManager.GET_ACTIVITIES)
+            isMuzeiInstalled = true
+        } catch (e: java.lang.Exception) {
+            // Error here - muzei package not installed
+            println("Muzei is not installed")
+
+            //  pop up an error dialog informing user that Muzei is not installed.
+            //    On "OK", take them to the Muzei entry in the play store.
+
+            with(this) {
+                AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.need_muzei))
+                        .setMessage(getString(R.string.toast_muzei_missing_error))
+                        .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
+                        .setPositiveButton(getString(com.bammellab.mollib.R.string.affirmative_respose))
+                        { _, _ ->
+                            //finish()
+                            val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(PLAY_STORE_LINK))
+                            requestLauncher.launch(intent)
+                        }.show()
+            }
+            return
+        }
+        if (!isMuzeiInstalled) {
+            println("HMMM muzei should have tested as installed here.  Quit")
+            finish()
+        }
+
+
         // Build the list of Intents plus the Toast message that should be displayed
         // to users when we successfully launch one of the Intents
         val intents = listOf(
-                MuzeiContract.Sources.createChooseProviderIntent(com.bammellab.screensaver.BuildConfig.MOTMIMAGE_AUTHORITY)
+                MuzeiContract.Sources.createChooseProviderIntent(BuildConfig.MOTMIMAGE_AUTHORITY)
                         to R.string.toast_enable_motmimage,
                 launchIntent
                         to R.string.toast_enable_motmimage_source,
                 Intent(Intent.ACTION_VIEW).setData(Uri.parse(PLAY_STORE_LINK))
                         to R.string.toast_muzei_missing_error)
+
+
         // Go through each Intent/message pair, trying each in turn
         val success = intents.fold(false) { success, (intent, toastMessage) ->
             if (success) {
@@ -81,12 +126,20 @@ class MotmImageRedirectActivity : ComponentActivity() {
                 // try any further Intents
                 return@fold success
             }
+
             if (intent == null) {
                 // A null Intent means there's nothing to attempt to launch
                 return@fold false
             }
             try {
-                requestLauncher.launch(intent)
+
+                // Start a coroutine
+                GlobalScope.launch {
+                    delay(1000)
+                    println("Hello")
+                    requestLauncherNoFinish.launch(intent)
+                }
+
                 // Only if the launch succeeds do we show the Toast and trigger success
                 Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show()
                 true

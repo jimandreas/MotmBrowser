@@ -58,5 +58,9 @@ internal class MotmImageDownloadTest {
     fun buildMotmImageList() {
         val foo : List<MotmImageDownload.FavoriteMotmImage> = MotmImageDownload.buildMotmImageList()
         assertNotEquals(0, foo.size)
+
+        // right now there are 252 months of the Molecule of the Month.
+        //  So there should be 252 entries in the image list
+        assertEquals(252, foo.size)
     }
 }

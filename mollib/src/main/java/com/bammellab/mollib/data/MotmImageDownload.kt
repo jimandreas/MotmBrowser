@@ -44,6 +44,22 @@ object MotmImageDownload {
             val motmTagLine: String = "",
             val motmGraphicName: String = "")
 
+    /**
+     * iterate through the list of the MotM images.
+     * These images are derived the images by David S Goodsell
+     * available at:  https://pdb101.rcsb.org/motm/motm-image-download
+     * "Molecule of the Month illustrations are available under a CC-BY-4.0 license."
+     *
+     * The images have been converted to PNG and the white background converted to
+     * transparent.   This is to allow their display in dark mode.
+     *
+     * This build iterator only picks the first molecule for each month.
+     * The subsequent molecules in each month are also wonderful but need
+     * work / review as the white to transparent conversion also converted white
+     * pixels in the interior of the molecules.   This causes display problems
+     * sometimes and so they need work.
+     *
+     */
     fun buildMotmImageList(): List<FavoriteMotmImage> {
         var i = 0
         val mList = mutableListOf<FavoriteMotmImage>()
@@ -54,27 +70,22 @@ object MotmImageDownload {
                     break
                 }
                 i += 1
+                // grab just the first image in any month
+                val title = motmTitleGet(baseVal)
+                val tagline = motmTagLinesGet(baseVal - 1) // zero based list
+                val entry = FavoriteMotmImage(
+                        motmNumber = baseVal.toString(),
+                        motmTitle = title,
+                        motmTagLine = tagline,
+                        motmGraphicName = imageList[i]
+                )
+                mList.add(entry)
                 while (true) {
+                    i += 1
                     val nextVal = imageList[i].substringBefore('-').toInt()
                     if (nextVal != baseVal) {
                         break
                     }
-                    val title = motmTitleGet(baseVal)
-                    val tagline = motmTagLinesGet(baseVal-1) // zero based list
-                    val entry = FavoriteMotmImage(
-                            motmNumber = baseVal.toString(),
-                            motmTitle = title,
-                            motmTagLine = tagline,
-                            motmGraphicName = imageList[i]
-                    )
-                    mList.add(entry)
-                    i += 1
-                    if (i >= imageList.size-1) {
-                        break
-                    }
-                }
-                if (i >= imageList.size) {
-                    break
                 }
             }
         } catch (e: Exception) {
