@@ -23,13 +23,17 @@ class MotmImageProvider : MuzeiArtProvider() {
      * set up the list of screensaver images
      * 1) call into the mollib to assemble the data list
      * 2) hand this data list to Muzei with all the appropriate builder attributes
+     *
+     *     Note that the list is reversed before handing the images to Muzei.
+     *     This means that the newest images will be first in the list -
+     *     currently at MotM 252 for Dec 2020.
      */
     override fun onLoadRequested(initial: Boolean) {
 
         val artworkList = mutableListOf<Artwork>()
 
         val theList = buildMotmImageList()
-        for (motm in theList) {
+        for (motm in theList.asReversed()) {
             val artwork = Artwork.Builder()
                     .token(motm.motmGraphicName)
                     .title(motm.motmTitle)

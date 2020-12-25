@@ -22,7 +22,11 @@
         Molecule of the Month</xliff:g> from the list of Sources in <xliff:g id="muzei_name">Muzei</xliff:g></string>
 
     <string name="need_muzei">Need Muzei installed</string>
-    <string name="toast_muzei_missing_error">You must install <xliff:g id="muzei_name">Muzei</xliff:g> to use this Source</string>
+
+    <string name="toast_muzei_missing_error">
+        The Molecule of the Month screensaver supplies images to the <xliff:g id="muzei_name">Muzei</xliff:g> App.
+        Please install <xliff:g id="muzei_name">Muzei</xliff:g> and then select the Molecule of the Month as the source
+        for images.</string>
     <string name="toast_play_store_missing_error">Could not install <xliff:g id="muzei_name">Muzei</xliff:g> from the <xliff:g id="google_play">Google Play</xliff:g> Store</string>
 
 
