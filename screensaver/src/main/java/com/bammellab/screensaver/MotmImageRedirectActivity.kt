@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("UNUSED_ANONYMOUS_PARAMETER")
+@file:Suppress("UNUSED_ANONYMOUS_PARAMETER", "UNUSED_VARIABLE", "VARIABLE_WITH_REDUNDANT_INITIALIZER")
 
 package com.bammellab.screensaver
 

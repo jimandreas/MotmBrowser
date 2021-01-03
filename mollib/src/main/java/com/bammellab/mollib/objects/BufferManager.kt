@@ -369,8 +369,8 @@ object BufferManager {
                     GLES20.glEnableVertexAttribArray(colorAttribute)
                 }
 
-                val glError2 = GLES20.glGetError()
-                if (glError2 != GLES20.GL_NO_ERROR) {
+                val glError3 = GLES20.glGetError()
+                if (glError3 != GLES20.GL_NO_ERROR) {
                     Timber.e("GLERROR: $glError2")
                 }
 
@@ -385,8 +385,8 @@ object BufferManager {
 
                 GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0)  // release
 
-                val glError3 = GLES20.glGetError()
-                if (glError3 != GLES20.GL_NO_ERROR) {
+                val glError4 = GLES20.glGetError()
+                if (glError4 != GLES20.GL_NO_ERROR) {
                     Timber.e("GLERROR: $glError3")
                 }
 
