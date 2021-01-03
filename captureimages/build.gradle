@@ -118,6 +118,7 @@ dependencies {
     implementation deps.android.x.cardview
     implementation deps.android.x.coreKtx
     implementation deps.android.x.constraintLayout
+    implementation deps.android.x.lifecycleKtx
 
     implementation deps.guava
     implementation deps.timber

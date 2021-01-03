@@ -27,18 +27,33 @@ object PdbInfo {
      * where the name contains the search string
      */
     fun searchPdbInfo(searchTerm: String): List<PdbEntryInfo> {
-        val startTime = System.currentTimeMillis()
+        //val startTime = System.currentTimeMillis()
         val s = searchTerm.toLowerCase(Locale.ROOT)
         val match = pdbInfoList.filter {
             it.pdbInfo.toLowerCase(Locale.ROOT).contains(s)
                     || it.pdbName.toLowerCase(Locale.ROOT).equals(s)
         }
-        Timber.v("TIME LAPSED: %d milliseoncs, %d matches",
-                System.currentTimeMillis() - startTime,
-                 match.size)
+//        Timber.v("TIME LAPSED: %d milliseoncs, %d matches",
+//                System.currentTimeMillis() - startTime,
+//                 match.size)
         return match
     }
 
+    fun searchPdbInfoForNameMatch(searchTerm: String): List<PdbEntryInfo> {
+        //val startTime = System.currentTimeMillis()
+        val s = searchTerm.toLowerCase(Locale.ROOT)
+        val match = pdbInfoList.filter {
+                    it.pdbName.toLowerCase(Locale.ROOT).equals(s)
+        }
+//        Timber.v("TIME LAPSED: %d milliseoncs, %d matches",
+//                System.currentTimeMillis() - startTime,
+//                 match.size)
+        return match
+    }
+
+    fun obtainPdbInfoList(): List<PdbEntryInfo> {
+        return pdbInfoList
+    }
     private val pdbInfoList = listOf(
             PdbEntryInfo("143d", "SOLUTION STRUCTURE OF THE HUMAN TELOMERIC REPEAT D(AG3[T2AG3]3) OF THE G-QUADRUPLEX"),
             PdbEntryInfo("148l", "A COVALENT ENZYME-SUBSTRATE INTERMEDIATE WITH SACCHARIDE DISTORTION IN A MUTANT T4 LYSOZYME"),
@@ -1185,7 +1200,7 @@ object PdbInfo {
             PdbEntryInfo("6m17", "The 2019-nCoV RBD/ACE2-B0AT1 complex"),
             PdbEntryInfo("6mam", "Cleaved Ebola GP in complex with a broadly neutralizing human antibody, ADI-15946"),
             PdbEntryInfo("6n7p", "S. cerevisiae spliceosomal E complex (UBC4)"),
-            PdbEntryInfo("6o85", "Electron cryo-microscopy of the eukaryotic translation initiation factor 2B bound to eukaryotic translation initiation factor 2 from Homo sapiens"),
+            //PdbEntryInfo("6o85", "Electron cryo-microscopy of the eukaryotic translation initiation factor 2B bound to eukaryotic translation initiation factor 2 from Homo sapiens"),
             PdbEntryInfo("6p6w", "Cryo-EM structure of voltage-gated sodium channel NavAb N49K/L109A/M116V/G94C/Q150C disulfide crosslinked mutant in the resting state"),
             PdbEntryInfo("6pfk", "PHOSPHOFRUCTOKINASE, INHIBITED T-STATE"),
             PdbEntryInfo("6tna", "CRYSTAL STRUCTURE OF YEAST PHENYLALANINE T-RNA. I.CRYSTALLOGRAPHIC REFINEMENT"),
@@ -1214,15 +1229,14 @@ object PdbInfo {
 
 
             PdbEntryInfo("2tbv", "STRUCTURE OF TOMATO BUSHY STUNT VIRUS. V. COAT PROTEIN SEQUENCE DETERMINATION AND ITS STRUCTURAL IMPLICATIONS"),
-            PdbEntryInfo("1fjg", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH THE ANTIBIOTICS STREPTOMYCIN, SPECTINOMYCIN, AND PAROMOMYCIN"),
 // 1tzo was too big
             PdbEntryInfo("1tzo", "Crystal Structure of the Anthrax Toxin Protective Antigen Heptameric Prepore"),
 // 1iw7
             PdbEntryInfo("1iw7", "Crystal structure of the RNA polymerase holoenzyme from Thermus thermophilus at 2.6A resolution"),
-// pdbsByMonth.put(86, "2c37")
+// MotmToPdbMap.put(86, "2c37")
             PdbEntryInfo("1w63", "AP1 clathrin adaptor core"),
 
-//  pdbsByMonth.put(121, "1nji") // too big 98566 atoms
+//  MotmToPdbMap.put(121, "1nji") // too big 98566 atoms
 
             PdbEntryInfo("1hnw", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH TETRACYCLINE"),
             PdbEntryInfo("1nji", "Structure of chloramphenicol bound to the 50S ribosomal subunit"),
@@ -1242,7 +1256,7 @@ object PdbInfo {
             PdbEntryInfo("4CR2", "Deep classification of a large cryo-EM dataset defines the conformational landscape of the 26S proteasome"),
             PdbEntryInfo("1pma", "PROTEASOME FROM THERMOPLASMA ACIDOPHILUM"),
 
-            PdbEntryInfo("6ezo", "Eukaryotic initiation factor EIF2B in complex with ISRIB"),  // special interest
+            //PdbEntryInfo("6ezo", "Eukaryotic initiation factor EIF2B in complex with ISRIB"),  // special interest
             PdbEntryInfo("1ibk", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH THE ANTIBIOTIC PAROMOMYCIN"),
             PdbEntryInfo("1ibl", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH A MESSENGER RNA FRAGMENT AND COGNATE TRANSFER RNA ANTICODON STEM-LOOP BOUND AT THE A SITE AND WITH THE ANTIBIOTIC PAROMOMYCIN"),
             PdbEntryInfo("1ibm", "STRUCTURE OF THE THERMUS THERMOPHILUS 30S RIBOSOMAL SUBUNIT IN COMPLEX WITH A MESSENGER RNA FRAGMENT AND COGNATE TRANSFER RNA ANTICODON STEM-LOOP BOUND AT THE A SITE"),
@@ -1253,11 +1267,53 @@ object PdbInfo {
             PdbEntryInfo("3aic", "Crystal Structure of Glucansucrase from Streptococcus mutans"),
             PdbEntryInfo("3aie", "Crystal Structure of glucansucrase from Streptococcus mutans"),
             PdbEntryInfo("2fug", "Crystal structure of the hydrophilic domain of respiratory complex I from Thermus thermophilus"),
-            PdbEntryInfo("5a9q", "Human nuclear pore complex"),
-            PdbEntryInfo("5a9q", "Human nuclear pore complex"),
 
-
-
+            PdbEntryInfo("1YQV", "The crystal structure of the antibody Fab HyHEL5 complex with lysozyme at 1.7A resolution"),  // was 3HFL
+            PdbEntryInfo("3CF1", "Structure of P97/vcp in complex with ADP/ADP.alfx"),
+            PdbEntryInfo("5OWU", "Kap95:Nup1 complex"),  // Entry: 5OWU supersedes: 2BPT
+            PdbEntryInfo("2C37", "RNASE PH CORE OF THE ARCHAEAL EXOSOME IN COMPLEX WITH U8 RNA"),
+            PdbEntryInfo("2VGL", "AP2 CLATHRIN ADAPTOR CORE"),
+            PdbEntryInfo("1XI4", "Clathrin D6 Coat"),
+            PdbEntryInfo("3SNP", "Crystal structure analysis of iron regulatory protein 1 in complex with ferritin H IRE RNA"),
+            PdbEntryInfo("4AC9", "CRYSTAL STRUCTURE OF TRANSLATION ELONGATION FACTOR SELB FROM METHANOCOCCUS MARIPALUDIS IN COMPLEX WITH GDP"),
+            PdbEntryInfo("5KSD", "Crystal Structure of a Plasma Membrane Proton Pump"),
+            PdbEntryInfo("4FE5", "Crystal structure of the xpt-pbuX guanine riboswitch aptamer domain in complex with hypoxanthine"),
+            PdbEntryInfo("3FCS", "Structure of complete ectodomain of integrin aIIBb3"),
+            PdbEntryInfo("5UGY", "Influenza hemagglutinin in complex with a neutralizing antibody"),
+            PdbEntryInfo("4TVX", "Crystal structure of the E. coli CRISPR RNA-guided surveillance complex, Cascade"),
+            PdbEntryInfo("4ZXB", "Structure of the human insulin receptor ectodomain, IRDeltabeta construct, in complex with four Fab molecules"),
+            PdbEntryInfo("5KQV", "Insulin receptor ectodomain construct comprising domains L1,CR,L2, FnIII-1 and alphaCT peptide in complex with bovine insulin and FAB 83-14 (REVISED STRUCTURE)"),
+            PdbEntryInfo("5ZGE", "Crystal structure of NDM-1 at pH5.5 (Bis-Tris) in complex with hydrolyzed ampicillin"),
+            PdbEntryInfo("3rif", "C. elegans glutamate-gated chloride channel (GluCl) in complex with Fab, ivermectin and glutamate."),
+            PdbEntryInfo("5a1a", "2.2 A resolution cryo-EM structure of beta-galactosidase in complex with a cell-permeant inhibitor"),
+            PdbEntryInfo("2btv", "ATOMIC MODEL FOR BLUETONGUE VIRUS (BTV) CORE"),
+            PdbEntryInfo("5GAR", "Thermus thermophilus V/A-ATPase, conformation 1"),
+            PdbEntryInfo("5vox", "Yeast V-ATPase in complex with Legionella pneumophila effector SidK (rotational state 1)"),
+            PdbEntryInfo("5voy", "Yeast V-ATPase in complex with Legionella pneumophila effector SidK (rotational state 2)"),
+            PdbEntryInfo("5voz", "Yeast V-ATPase in complex with Legionella pneumophila effector SidK (rotational state 3)"),
+            PdbEntryInfo("5vkq", "Structure of a mechanotransduction ion channel Drosophila NOMPC in nanodisc)"),
+            PdbEntryInfo("4xxb", "Crystal structure of human MDM2-RPL11"),
+            PdbEntryInfo("5mnj", "Structure of MDM2-MDMX-UbcH5B-ubiquitin complex"),
+            PdbEntryInfo("5zji", "Structure of photosystem I supercomplex with light-harvesting complexes I and II"),
+            PdbEntryInfo("6crz", "SARS Spike Glycoprotein, Trypsin-cleaved, Stabilized variant, C3 symmetry"),
+            PdbEntryInfo("6XQB", "SARS-CoV-2 RdRp/RNA complex, Entry: 6XQB supersedes: 6X2G"),
+            PdbEntryInfo("5is0", "Structure of TRPV1 in complex with capsazepine, determined in lipid nanodisc"),
+            PdbEntryInfo("6dmw", "Calmodulin-bound full-length rbTRPV5"),
+            PdbEntryInfo("5irz", "Structure of TRPV1 determined in lipid nanodisc"),
+            PdbEntryInfo("5irx", "Structure of TRPV1 in complex with DkTx and RTX, determined in lipid nanodisc"),
+            PdbEntryInfo("6r3q", "The structure of a membrane adenylyl cyclase bound to an activated stimulatory G protein"),
+            PdbEntryInfo("4clk", "Crystal structure of human soluble Adenylyl Cyclase in complex with alpha,beta-methyleneadenosine-5'-triphosphate"),
+            PdbEntryInfo("5u6p", "Structure of the human HCN1 hyperpolarization-activated cyclic nucleotide-gated ion channel in complex with cAMP"),
+            PdbEntryInfo("1cjk", "COMPLEX OF GS-ALPHA WITH THE CATALYTIC DOMAINS OF MAMMALIAN ADENYLYL CYCLASE: COMPLEX WITH ADENOSINE 5'-(ALPHA THIO)-TRIPHOSPHATE (RP), MG, AND MN"),
+            PdbEntryInfo("1cu1", "CRYSTAL STRUCTURE OF AN ENZYME COMPLEX FROM HEPATITIS C VIRUS"),
+            PdbEntryInfo("4wtg", "CRYSTAL STRUCTURE OF HCV NS5B GENOTYPE 2A JFH-1 ISOLATE WITH S15G E86Q E87Q C223H V321I MUTATIONS AND DELTA8 BETA HAIRPIN LOOP DELETION IN COMPLEX WITH SOFOSBUVIR DIPHOSPHATE GS-607596, MN2+ AND SYMMETRICAL PRIMER TEMPLATE 5'-CAAAAUUU"),
+            PdbEntryInfo("1ZH1", "Structure of the zinc-binding domain of HCV NS5A"),
+            PdbEntryInfo("1r7g", "NMR structure of the membrane anchor domain (1-31) of the nonstructural protein 5A (NS5A) of hepatitis C virus (Minimized average structure, Sample in 100mM DPC)"),
+            PdbEntryInfo("2OC8", "Structure of Hepatitis C Viral NS3 protease domain complexed with NS4A peptide and ketoamide SCH503034"),
+            PdbEntryInfo("3SV6", "Crystal structure of NS3/4A protease in complex with Telaprevir"),
+            PdbEntryInfo("3sue", "Crystal structure of NS3/4A protease variant R155K in complex with MK-5172"),
+            PdbEntryInfo("6p6l", "HCV NS3/4A protease domain of genotype 1a in complex with glecaprevir"),
+            PdbEntryInfo("6nzt", "Crystal structure of HCV NS3/4A protease in complex with voxilaprevir"),
 
 
             )

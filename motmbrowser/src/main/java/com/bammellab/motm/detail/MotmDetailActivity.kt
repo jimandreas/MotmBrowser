@@ -170,7 +170,7 @@ class MotmDetailActivity : AppCompatActivity() {
          * populate the Motm detail recyclerview with the PDB entries discussed
          * in the monthly feature.
          */
-        val pdbs = PDBs.pdbsByMonth.get(motmNumber)
+        val pdbs = PDBs.pdbListGivenMotmNumber(motmNumber) ?: return
         val pdbsStringArray = pdbs.toTypedArray()
         for (pdbId in pdbs) {
             val view = LayoutInflater.from(this)

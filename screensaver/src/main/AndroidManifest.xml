@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  Copyright 2020 Bammellab / James Andreas
   ~  Licensed under the Apache License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -16,47 +15,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.bammellab.screensaver"
     tools:ignore="GoogleAppIndexingWarning">
-    <!-- Requires OpenGL ES 2.0 -->
-    <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true" />
 
-    <uses-permission
-        android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:fullBackupContent="false"
+
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity-alias
-            android:name=".PdbImageLauncherActivity"
-            android:enabled="@bool/enable_launcher"
-            android:targetActivity=".MotmImageRedirectActivity">
+        <activity
+            android:name=".MotmImageRedirectActivity"
+            android:theme="@style/Theme.ThemeScreensaver">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity-alias>
-        <activity
-            android:name=".MotmImageRedirectActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        </activity>
 
         <provider
-            android:name=".PdbImageProvider"
+            android:name=".MotmImageProvider"
             android:authorities="com.bammellab.screensaver"
-            android:label="@string/motm_source_title"
             android:description="@string/motm_source_description"
             android:exported="true"
+            android:label="@string/motm_source_title"
             android:permission="com.google.android.apps.muzei.api.ACCESS_PROVIDER">
 
             <intent-filter>
-                <action android:name="com.google.android.apps.muzei.api.MuzeiArtProvider"/>
+                <action android:name="com.google.android.apps.muzei.api.MuzeiArtProvider" />
             </intent-filter>
 
         </provider>
-
 
 
     </application>

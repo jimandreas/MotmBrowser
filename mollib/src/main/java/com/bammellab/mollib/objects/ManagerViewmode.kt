@@ -73,7 +73,7 @@ class ManagerViewmode(private val activity: Activity,
         Timber.d("atomCount = $atomCount")
         geometrySlices = 10
         if (atomCount > 20000) {
-            Timber.e("EMERGENCY atomcount - go into immediate mode rendering!!")
+            Timber.i("Large molecule mode.  atomCount > 20000")
             BufferManager.initViewModeCallback(this)
             BufferManager.bigMoleculeFlag(true)
         } else {
@@ -184,6 +184,7 @@ class ManagerViewmode(private val activity: Activity,
                         setRenderThisAtomAsSphereFlag()
                         drawSpheres()
                     }
+                    // not used now - retain for future debugging
                     VIEW_CA_QUICK_LINE -> {
                         BufferManager.doLineMode(true)
                         renderCaQuickLine.renderQuickLine()

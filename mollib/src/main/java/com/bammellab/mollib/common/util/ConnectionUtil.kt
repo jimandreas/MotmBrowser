@@ -235,23 +235,23 @@ class ConnectionUtil(private val context: Context) : LifecycleObserver {
     }
 
     inner class ConnectionMonitor : NetworkCallback() {
-        private var mConnectionStateListener: ConnectionStateListener? = null
+        private var connectionStateListener1: ConnectionStateListener? = null
         fun setOnConnectionStateListener(connectionStateListener: ConnectionStateListener?) {
-            mConnectionStateListener = connectionStateListener
+            connectionStateListener1 = connectionStateListener
         }
 
         override fun onAvailable(network: Network) {
             if (isConnected) return
             //Log.d(TAG, "onAvailable: ")
-            if (mConnectionStateListener != null) {
-                mConnectionStateListener!!.onAvailable(true)
+            if (connectionStateListener1 != null) {
+                connectionStateListener1!!.onAvailable(true)
                 isConnected = true
             }
         }
 
         override fun onLost(network: Network) {
             if (availableNetworksCount() == 0) {
-                mConnectionStateListener!!.onAvailable(false)
+                connectionStateListener1?.onAvailable(false)
                 isConnected = false
             }
         }

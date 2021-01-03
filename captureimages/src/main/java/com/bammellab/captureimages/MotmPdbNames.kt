@@ -17,6 +17,64 @@ package com.bammellab.captureimages
 
 object MotmPdbNames {
 
+
+
+    val pdbNamesDec18 = listOf(
+            "1bna",
+            "4fe5",
+            "1zh1",
+ //           "3cmx",
+//            "2tbv",
+//            "1tzo",
+//            "1iw7",
+//            "1w63",
+//            "1hnw",
+//            "1nji",
+//            "1fjg",
+//            "4ox9",
+//            "5y9f",
+//            "5ijn",
+//            "5a9q",
+//            "4tnv",
+//            "4u7u",
+//            "4CR2",
+//            "1pma",
+//            "1ibk",
+//            "1ibl",
+//            "1ibm",
+//            "1j5e",
+//            "6cgv",
+//            "3aic",
+//            "3aie",
+//            "2fug",
+//            "1YQV",
+//            "3CF1",
+//            "5OWU",
+//            "2C37",
+//            "2VGL",
+           //  "1XI4",  // infinite loop???
+           // "3SNP",
+            "3CMX",
+//            "4AC9",
+//            "5KSD",
+//            "4FE5",
+//            "3FCS",
+//            "5UGY",
+            // "4TVX", ??
+            "4ZXB",
+            "5KQV",
+//            "5ZGE",
+//            "2btv",
+//            "5GAR",
+//            "5voz",
+//            "6XQB",
+//            "1ZH1",
+//            "2OC8",
+//            "4SV6",
+
+            )
+    val pdbNames : List<String> = pdbNamesDec18
+
     val pdbNamesOctNovDec2020 = listOf(
 
             "6dmw",
@@ -42,7 +100,7 @@ object MotmPdbNames {
             "6nzt")
 
 
-    val pdbNames : List<String> = pdbNamesOctNovDec2020
+
 
     val pdbNamesProblems = listOf(
             "3cmx",

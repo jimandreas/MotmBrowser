@@ -26,6 +26,8 @@ package com.bammellab.mollib
 import android.app.Activity
 import android.graphics.Bitmap
 import android.opengl.GLES20
+import android.opengl.GLES20.*
+import android.opengl.GLES30.glReadBuffer
 import android.opengl.GLES30.glReadPixels
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
@@ -67,7 +69,7 @@ class RendererDisplayPdbFile(
     private var listener: UpdateRenderFinished? = null
     private var surfaceCreated: SurfaceCreated? = null
     private var pdbLoaded = false
-    private var listenerIsUpdated = false
+    private var listenerIsUpdated = 0
 
     fun setSurfaceCreatedListener(listener: SurfaceCreated) {
         surfaceCreated = listener
@@ -220,12 +222,12 @@ class RendererDisplayPdbFile(
         molecule = moleculeIn
         reportedTimeFlag = false
         Timber.v("mol is set")
-        listenerIsUpdated = false
+        listenerIsUpdated = 0
     }
 
     fun tossMoleculeToGC() {
         molecule = null
-        listenerIsUpdated = true
+        listenerIsUpdated = 0
     }
 
     override fun onSurfaceCreated(glUnused: GL10, config: EGLConfig) {
@@ -316,16 +318,16 @@ class RendererDisplayPdbFile(
         }
     }
 
-    override fun onSurfaceChanged(glUnused: GL10?, width: Int, height: Int) {
+    override fun onSurfaceChanged(glUnused: GL10?, widthIn: Int, heightIn: Int) {
         // Timber.e("Scale is $scaleCurrentF $this")
         // Set the OpenGL viewport to the same size as the surface.
-        GLES20.glViewport(0, 0, width, height)
-        mWidth = width
-        mHeight = height
+        GLES20.glViewport(0, 0, widthIn, heightIn)
+        width = widthIn
+        height = heightIn
 
         // Create a new perspective projection matrix. The height will stay the same
         // while the width will vary as per aspect ratio.
-        val ratio = width.toFloat() / height
+        val ratio = widthIn.toFloat() / heightIn
         val left = -ratio * scaleCurrentF
         val right = ratio * scaleCurrentF
         val bottom = -1.0f * scaleCurrentF
@@ -353,7 +355,7 @@ class RendererDisplayPdbFile(
 
         if (!selectModeFlag) {
             if (scaleCurrentF != scalePrevious) {
-                onSurfaceChanged(null, mWidth, mHeight)  // adjusts view
+                onSurfaceChanged(null, width, height)  // adjusts view
                 scalePrevious = scaleCurrentF
             }
 
@@ -440,14 +442,20 @@ class RendererDisplayPdbFile(
 
         if (updateListener != null) {
             if (molecule != null && molecule!!.molName.isNotEmpty()) {
-                if (!listenerIsUpdated) {
-                    try {
-                        val name = molecule!!.molName
-                        Timber.e("onDrawFrame: Update Activity")
-                        activity.runOnUiThread { updateListener!!.updateActivity(name) }
-                        listenerIsUpdated = true
-                    } catch (e: Exception) {
-                        Timber.e("NULL pointer in renderer")
+                if (listenerIsUpdated < 5) {
+                    listenerIsUpdated += 1
+                    Timber.d("DRAW number $listenerIsUpdated")
+                    if (listenerIsUpdated == 5) {  // hey five times works!!
+                        listenerIsUpdated += 1
+                        try {
+                            val name = molecule!!.molName
+                            Timber.e("onDrawFrame: Update Activity")
+                            activity.runOnUiThread { updateListener!!.updateActivity(name) }
+                        } catch (e: Exception) {
+                            Timber.e("NULL pointer in renderer")
+                        }
+                    } else {
+                        glSurfaceView.requestRender() // Hack for double buffering
                     }
                 }
             }
@@ -970,11 +978,30 @@ class RendererDisplayPdbFile(
 
     fun readGlBufferToBitmap(x: Int, y: Int, w: Int, h: Int): Bitmap? {
 
+
+//        b = IntArray(width * height)
+//        bt = IntArray(width * height)
+//        ib = IntBuffer.wrap(b)
+//        ib.position(0)
+//        glReadBuffer(GL_BACK);
+//        glReadPixels(0,0,width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib)
+//        var non_zero = 0
+//        for (i in 0 until width * height) {
+//            if (b[i] != 0xff000000.toInt()) {
+//                non_zero += 1
+//            }
+//
+//        }
+//        Timber.d("$non_zero")
+
+        glFlush()
         ib.position(0)
+
+        //glReadBuffer(GL_BACK)
         glReadPixels(x, y, w, h, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib)
         val glError = GLES20.glGetError()
         if (glError != GLES20.GL_NO_ERROR) {
-            Timber.e("OnDrawFrame, glerror =  $glError")
+            Timber.e("readGlBufferToBitmap, glerror =  ${glError.toString(16)}")
         }
         var i = 0
         var k = 0
@@ -1017,8 +1044,8 @@ class RendererDisplayPdbFile(
         private const val INITIAL_SCALE = 0.2f
         private var saveScale = 0f
 
-        private var mHeight: Int = 0
-        private var mWidth: Int = 0
+        private var height: Int = 0
+        private var width: Int = 0
         private var lastReportedAtom = -1
         private val mViewport = intArrayOf(0, 0, 0, 0)
     }

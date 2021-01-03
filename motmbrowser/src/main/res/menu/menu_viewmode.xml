@@ -45,11 +45,4 @@
         android:title="@string/action_ribbons_and_balls"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_ca_quick_line"
-        android:orderInCategory="100"
-        android:title="@string/action_ca_quick_line"
-        app:showAsAction="never" />
-
-
 </menu>
