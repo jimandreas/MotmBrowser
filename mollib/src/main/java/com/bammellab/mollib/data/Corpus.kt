@@ -297,9 +297,8 @@ object Corpus {
             "249-SARSCoV2_RNAdependent_RNA_Polymerase-6yyt_homepage-tn.png",
             "250-Capsaicin_Receptor_TRPV1-5is0_homepage-tn.png",
             "251-Adenylyl_Cyclase-6r3q_homepage-tn.png",
-            "252-Hepatitis_C_Virus_ProteaseHelicase-1cu1_homepage-tn.png"
-
-
+            "252-Hepatitis_C_Virus_ProteaseHelicase-1cu1_homepage-tn.png",
+            "253-Expressome-6x9q_homepage-tn.png"
     )
 
 
@@ -590,7 +589,9 @@ object Corpus {
 
             "Adenylyl cyclase creates second messengers to amplify signals from G-protein coupled receptors",  // Nov 2020
 
-            "Structures of hepatitis C viral proteins have led to the discovery of direct-acting antivirals." // Dec 2020
+            "Structures of hepatitis C viral proteins have led to the discovery of direct-acting antivirals.", // Dec 2020
+
+            "In bacteria, ribosomes start building proteins as messenger RNA is being transcribed" // Jan 2021
 
     )
 
@@ -886,9 +887,8 @@ object Corpus {
             /* //motm/249 */ "SARS-CoV-2 RNA-dependent RNA Polymerase",
             /* //motm/250 */ "Capsaicin Receptor TRPV1",
             /* //motm/251 */ "Adenylyl Cyclase",  // NOV 2020
-            /* //motm/252 */ "Hepatitis C Virus Protease/Helicase"  // DEC 2020
-
-
+            /* //motm/252 */ "Hepatitis C Virus Protease/Helicase",  // DEC 2020
+            /* //motm/253 */ "Expressome"  // JAN 2021
     )
 
     /**

@@ -13,7 +13,6 @@
 
 package com.bammellab.mollib.data
 
-import com.bammellab.mollib.data.Corpus.corpus
 import com.bammellab.mollib.data.Corpus.motmTagLinesGet
 import com.bammellab.mollib.data.Corpus.motmTitleGet
 
@@ -38,7 +37,7 @@ object MotmImageDownload {
 
     }
 
-    data class FavoriteMotmImage(
+    data class ScreensaverMotmImage(
             val motmNumber: String,
             val motmTitle: String = "",
             val motmTagLine: String = "",
@@ -59,10 +58,17 @@ object MotmImageDownload {
      * pixels in the interior of the molecules.   This causes display problems
      * sometimes and so they need work.
      *
+     * The Muzei app in the "Browse" function displays starting at the 0'th entry
+     * of the list.  The actual automatic selection seems to start at the end of the
+     * list.   These are the oldest molecules (starting Jan 2000) in the list.
+     *
+     * A few selected "favorites" have been added to the end of the list to
+     * jazz-up the initial experience.
+     *
      */
-    fun buildMotmImageList(): List<FavoriteMotmImage> {
+    fun buildMotmImageList(): List<ScreensaverMotmImage> {
         var i = 0
-        val mList = mutableListOf<FavoriteMotmImage>()
+        val mList = mutableListOf<ScreensaverMotmImage>()
         try {
             while (true) {
                 val baseVal = imageList[i].toInt()
@@ -73,7 +79,7 @@ object MotmImageDownload {
                 // grab just the first image in any month
                 val title = motmTitleGet(baseVal)
                 val tagline = motmTagLinesGet(baseVal - 1) // zero based list
-                val entry = FavoriteMotmImage(
+                val entry = ScreensaverMotmImage(
                         motmNumber = baseVal.toString(),
                         motmTitle = title,
                         motmTagLine = tagline,
@@ -92,11 +98,27 @@ object MotmImageDownload {
             // oops
             println("OOPS $i ${imageList.size}")
         }
+        
+        val featuredSet = listOf(247,234,245)
+        for (featured in featuredSet) {
+            // grab just the first image in any month
+            val title = motmTitleGet(featured)
+            val tagline = motmTagLinesGet(featured - 1) // zero based list
+            val entry = ScreensaverMotmImage(
+                    motmNumber = featured.toString(),
+                    motmTitle = title,
+                    motmTagLine = tagline,
+                    motmGraphicName = motmTiffImageName(featured)
+            )
+            mList.add(entry)
+        }
         return mList.toList()
     }
 
     private val imageList = listOf(
-
+            "253",
+            "253-Expressome-6x9q_composite",
+            "253-Expressome-6ztm_6x9q",
             "252",
             "252-Hepatitis_C_Virus_ProteaseHelicase-1cu1_label",
             "251",
@@ -914,9 +936,9 @@ object MotmImageDownload {
             "2-BacteriophagephiX174-mature",
             "2-BacteriophagephiX174-1cd3",
             "1",
-            "1-Myoglobin-geis-0218-myoglobin",
             "1-Myoglobin-1pmb_1mbn",
-            "1-Myoglobin-1mbo_JSmol",
+            "1-Myoglobin-geis-0218-myoglobin", // http://pdb101.rcsb.org/sci-art/geis-archive/about
+            "1-Myoglobin-1mbo_JSmol", // JS mol image
 
             "0" // end marker
 

@@ -1401,7 +1401,12 @@ object PDBs {
             MotmToPdbMap(252, "3sv6"),
             MotmToPdbMap(252, "3sue"),
             MotmToPdbMap(252, "6p6l"),
-            MotmToPdbMap(252, "6nzt")
+            MotmToPdbMap(252, "6nzt"),
+
+// Note that the other molecules for Jan 2021 are around 170K molecules in size.
+// That is too large for a PDB file and too large for this viewer (mmCIF only)
+
+            MotmToPdbMap(253, "5my1")
     )
    /*
     Multimap is no longer used.
