@@ -61,16 +61,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+
         </com.google.android.material.appbar.AppBarLayout>
 
-        <include layout="@layout/fragment_fastscroll"/>
+
 
         <!--latest and greatest-->
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <include layout="@layout/fragment_fastscroll"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

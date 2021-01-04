@@ -17,6 +17,7 @@
     android:id="@+id/bubble_scroll_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_behavior="com.bammellab.motm.util.KeepWithinParentBoundsScrollingBehavior"
     tools:context=".browse.MotmListFragment">
 
     <!--Fast Scroll Handle-->
