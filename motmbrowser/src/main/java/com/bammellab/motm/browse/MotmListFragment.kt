@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -11,7 +11,7 @@
  *  limitations under the License
  */
 
-@file:Suppress("unused", "unused_variable", "unused_parameter")
+@file:Suppress("unused", "unused_variable", "unused_parameter", "DEPRECATION")
 
 package com.bammellab.motm.browse
 
@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.text.Html
 import android.util.TypedValue
 import android.view.*
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,10 +38,25 @@ import timber.log.Timber
 import java.util.*
 
 class MotmListFragment : androidx.fragment.app.Fragment() {
+
+    var motmListGlobal: List<String>? = null
+    private lateinit var rootView: View
+    private lateinit var recyclerView: RecyclerView
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val rv = inflater.inflate(
-                R.layout.fragment_recyclerview, container, false) as RecyclerView
+        rootView = inflater.inflate(
+                R.layout.fragment_fastscroll, container, false)
+//                R.layout.fragment_recyclerview, container, false)
+        val rv = rootView.findViewById<RecyclerView>(R.id.fast_scroll_recyclerview)
+        val constraintLayout =
+                rootView.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.bubble_scroll_constraint_layout)
         setupRecyclerView(rv)
+        recyclerView = rv
+
+        val fsb = FastscrollBubble(constraintLayout, recyclerView, viewLifecycleOwner, motmListGlobal!!.toTypedArray())
+        fsb.setup()
+
         return rv
     }
 
@@ -58,8 +74,18 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
         for (i in 0 until numItems) {
             list.add(Corpus.corpus[i])
         }
+        motmListGlobal = list
         return list
     }
+
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        val parentView = recyclerView.parent
+//        if (parentView is FrameLayout) {
+//            Timber.e("parent View is $parentView")
+//        }
+//
+//    }
 
     class SimpleStringRecyclerViewAdapter(context: Context, private val motmList: List<String>)
         : RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder>() {
@@ -126,7 +152,7 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 //            holder.boundString = motmList[position]
-            val invertPosition = invertPosition(position-1)
+            val invertPosition = invertPosition(position - 1)
             holder.boundString = (invertPosition + 1).toString() // motm tables are one based, position starts at zero
 
             holder.v.setOnClickListener { v ->
@@ -179,6 +205,7 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
             return motmList.size
         }
     }
+
     companion object {
         private const val VIEW_TYPE_HEADER = 0
         private const val VIEW_TYPE_MOTM = 1

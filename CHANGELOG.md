@@ -3,6 +3,12 @@ Change Log
 
 ## MotmBrowser
 
+Version 2.5 (TBD)
+----------------------------
+ * New: fast scroll for "ALL" list (the 20 years of the Molecule of the Month (MotM))
+ * Added: Jan 2021 MotM "Expressome"
+ * Screensaver subproject - incorporated a "Muzei" type screensaver to serve up MotM images
+
 Version 2.4 *(2020-12-15)*
 ----------------------------
  * New: Molecules with more than 50K atoms are returned to the collection
