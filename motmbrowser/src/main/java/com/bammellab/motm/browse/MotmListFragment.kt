@@ -24,6 +24,7 @@ import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bammellab.motm.R
@@ -37,7 +38,7 @@ import com.bumptech.glide.Glide
 import timber.log.Timber
 import java.util.*
 
-class MotmListFragment : androidx.fragment.app.Fragment() {
+class MotmListFragment(val cl: ConstraintLayout) : androidx.fragment.app.Fragment() {
 
     var motmListGlobal: List<String>? = null
     private lateinit var rootView: View
@@ -46,15 +47,14 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         rootView = inflater.inflate(
-                R.layout.fragment_fastscroll, container, false)
-//                R.layout.fragment_recyclerview, container, false)
-        val rv = rootView.findViewById<RecyclerView>(R.id.fast_scroll_recyclerview)
-        val constraintLayout =
-                rootView.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.bubble_scroll_constraint_layout)
+//                R.layout.fragment_fastscroll, container, false)
+                R.layout.fragment_recyclerview, container, false)
+        val rv = rootView as RecyclerView
+
         setupRecyclerView(rv)
         recyclerView = rv
 
-        val fsb = FastscrollBubble(constraintLayout, recyclerView, viewLifecycleOwner, motmListGlobal!!.toTypedArray())
+        val fsb = FastscrollBubble(cl, recyclerView, viewLifecycleOwner, motmListGlobal!!.toTypedArray())
         fsb.setup()
 
         return rv

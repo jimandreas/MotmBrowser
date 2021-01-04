@@ -24,6 +24,7 @@ import android.view.View
 import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -36,7 +37,7 @@ import com.bammellab.motm.util.OneShotTimer
 import timber.log.Timber
 
 class FastscrollBubble(
-        private val constraintLayout: View,
+        private val constraintLayout: ConstraintLayout,
         private val recyclerView: RecyclerView,
         private val viewLifecycleOwner: LifecycleOwner,
         private val monthList: Array<String>)

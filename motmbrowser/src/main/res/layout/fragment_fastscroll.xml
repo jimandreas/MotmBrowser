@@ -21,15 +21,15 @@
 
     <!--Fast Scroll Handle-->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fast_scroll_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:scrollbarAlwaysDrawVerticalTrack="false"
-        android:scrollbars="none"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/fast_scroll_recyclerview"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:overScrollMode="never"-->
+<!--        android:scrollbarAlwaysDrawVerticalTrack="false"-->
+<!--        android:scrollbars="none"-->
+<!--        tools:layout_editor_absoluteX="0dp"-->
+<!--        tools:layout_editor_absoluteY="0dp" />-->
 
     <ImageView
         android:id="@+id/thumbFastscrollerImageview"
@@ -39,9 +39,9 @@
         android:focusable="true"
         android:src="@drawable/ic_fastscroll_slider_lightmode"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/fast_scroll_recyclerview"
-        app:layout_constraintStart_toEndOf="@+id/fast_scroll_recyclerview"
-        app:layout_constraintTop_toTopOf="@+id/fast_scroll_recyclerview"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
         tools:ignore="ContentDescription"
         tools:visibility="visible" />
 
