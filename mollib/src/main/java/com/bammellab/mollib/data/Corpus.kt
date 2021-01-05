@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -632,6 +632,48 @@ object Corpus {
         if (index > corpus.size || index < 0) return 0
         return (corpus.size - index - 1)
     }
+
+    /*
+     * The short month names are used in the fast scroll list of all MotM entries
+     */
+    private val monthNamesShort = arrayOf(
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+    )
+
+
+    private fun monthStringByKey(key: Int): String {
+        if (key < 1) return ("INVALID DATE")
+        val month = (key - 1) % 12
+        val year = (key - 1) / 12 + 2000
+
+        val retString = monthNamesShort[month] + " " + String.format("%4d", year)
+        // String.format("%6.2f", elapsed_time);
+
+        return retString
+    }
+
+    fun generateMonthList(): Array<String> {
+        val initList = mutableListOf<String>()
+
+        var j = 0
+        for (i in numMonths downTo 1) {
+            initList.add(monthStringByKey(i))
+        }
+        return initList.toTypedArray()
+    }
+
+    const val numMonths = 253
 
     // grep the href in the motm-by-date file
 

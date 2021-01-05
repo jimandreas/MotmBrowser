@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -11,7 +11,7 @@
  *  limitations under the License
  */
 
-@file:Suppress("unused", "unused_variable", "unused_parameter")
+@file:Suppress("unused", "unused_variable", "unused_parameter", "DEPRECATION")
 
 package com.bammellab.motm.browse
 
@@ -21,12 +21,15 @@ import android.os.Bundle
 import android.text.Html
 import android.util.TypedValue
 import android.view.*
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bammellab.motm.R
 import com.bammellab.mollib.data.Corpus
+import com.bammellab.mollib.data.Corpus.generateMonthList
 import com.bammellab.mollib.data.Corpus.invertPosition
 import com.bammellab.mollib.data.Corpus.motmTagLinesGet
 import com.bammellab.mollib.data.Corpus.motmTitleGet
@@ -36,11 +39,25 @@ import com.bumptech.glide.Glide
 import timber.log.Timber
 import java.util.*
 
-class MotmListFragment : androidx.fragment.app.Fragment() {
+class MotmListFragment(val cl: ConstraintLayout) : androidx.fragment.app.Fragment() {
+
+    private lateinit var rootView: View
+    private lateinit var recyclerView: RecyclerView
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val rv = inflater.inflate(
-                R.layout.fragment_recyclerview, container, false) as RecyclerView
+        rootView = inflater.inflate(
+//                R.layout.fragment_fastscroll, container, false)
+                R.layout.fragment_recyclerview, container, false)
+        val rv = rootView as RecyclerView
+
         setupRecyclerView(rv)
+        recyclerView = rv
+
+        val monthList = generateMonthList()
+        val fsb = FastscrollBubble(cl, recyclerView, viewLifecycleOwner, monthList)
+        fsb.setup()
+
         return rv
     }
 
@@ -58,8 +75,18 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
         for (i in 0 until numItems) {
             list.add(Corpus.corpus[i])
         }
+
         return list
     }
+
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        val parentView = recyclerView.parent
+//        if (parentView is FrameLayout) {
+//            Timber.e("parent View is $parentView")
+//        }
+//
+//    }
 
     class SimpleStringRecyclerViewAdapter(context: Context, private val motmList: List<String>)
         : RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder>() {
@@ -95,16 +122,10 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
 
         // Add a header for position 0
         override fun getItemViewType(position: Int): Int {
-            val entry = motmList[position]
-
             return if (position == 0)
                 VIEW_TYPE_HEADER
             else
                 VIEW_TYPE_MOTM
-        }
-
-        fun getValueAt(position: Int): String {
-            return motmList[position]
         }
 
         init {
@@ -126,7 +147,7 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 //            holder.boundString = motmList[position]
-            val invertPosition = invertPosition(position-1)
+            val invertPosition = invertPosition(position - 1)
             holder.boundString = (invertPosition + 1).toString() // motm tables are one based, position starts at zero
 
             holder.v.setOnClickListener { v ->
@@ -176,9 +197,10 @@ class MotmListFragment : androidx.fragment.app.Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return motmList.size
+            return motmList.size+1 // plus one for the header
         }
     }
+
     companion object {
         private const val VIEW_TYPE_HEADER = 0
         private const val VIEW_TYPE_MOTM = 1

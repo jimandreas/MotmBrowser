@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -18,6 +18,7 @@ package com.bammellab.motm
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleObserver
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -98,7 +99,8 @@ class MainActivity :
     fun getFragmentCacheHandle(): BrowseFragmentCache {
         if (fragmentCache == null) {
             fragmentCache = BrowseFragmentCache()
-            fragmentCache!!.createFragments()
+            val cl = this.findViewById<ConstraintLayout>(R.id.bubble_scroll_constraint_layout)
+            fragmentCache!!.createFragments(cl)
         }
 
         return fragmentCache!!
