@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -19,12 +19,8 @@ import com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
 import com.bammellab.mollib.LoadFromSource.FROM_SDCARD_AND_CAPTURE
 import com.bammellab.mollib.MollibProcessPdbs
 import com.bammellab.mollib.RendererDisplayPdbFile
-import com.bammellab.mollib.UpdateRenderFinished
 import com.bammellab.mollib.Utility.checkForOpengl
 import com.bammellab.mollib.Utility.failDialog
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ActivityImageCap : AppCompatActivity() {
@@ -32,7 +28,6 @@ class ActivityImageCap : AppCompatActivity() {
     private lateinit var glSurfaceView: GLSurfaceViewDisplayPdbFile
     private lateinit var renderer: RendererDisplayPdbFile
     private lateinit var processPdbs: MollibProcessPdbs
-    private val pdbsCaptured = mutableListOf("")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.v("onCreate")

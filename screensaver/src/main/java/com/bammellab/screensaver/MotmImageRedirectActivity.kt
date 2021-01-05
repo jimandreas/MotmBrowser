@@ -22,7 +22,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
@@ -159,7 +158,7 @@ class MotmImageRedirectActivity : ComponentActivity() {
                 Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show()
                 true
             } catch (e: Exception) {
-                Log.v(TAG, "Intent $intent failed", e)
+                //Log.v(TAG, "Intent $intent failed", e)
                 false
             }
         }

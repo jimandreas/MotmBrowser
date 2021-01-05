@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -32,7 +32,8 @@ android {
         textOutput 'stdout'
         lintConfig rootProject.file('lint.xml')
         disable "UnusedResources",
-            "VectorRaster"
+            "VectorRaster",
+            "DefaultLocale"
 
         // (borrowed from Jake Wharton - not true here as yet)
         // We run a full lint analysis as build part in CI, so skip vital checks for assemble task.
@@ -64,7 +65,7 @@ dependencies {
 
     implementation deps.android.x.appcompat
     implementation deps.android.x.coreKtx
-    implementation deps.android.x.preference
+    implementation deps.android.x.preferenceKtx
 
 
     implementation deps.timber

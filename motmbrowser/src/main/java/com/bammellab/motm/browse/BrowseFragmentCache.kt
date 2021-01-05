@@ -22,7 +22,6 @@ import com.bammellab.mollib.data.MotmByCategory.MotmCategoryBiotech
 import com.bammellab.mollib.data.MotmByCategory.MotmCategoryHealth
 import com.bammellab.mollib.data.MotmByCategory.MotmCategoryLife
 import com.bammellab.mollib.data.MotmByCategory.MotmCategoryStructures
-import com.bammellab.motm.R
 import com.bammellab.motm.databinding.FragmentBrowseBinding
 import timber.log.Timber
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -44,8 +44,8 @@ internal class PDBsTest {
 
         assertNotNull(firstList)
         assertNotNull(lastList)
-        assert(firstList!!.isNotEmpty())
-        assert(lastList!!.isNotEmpty())
+        assertTrue(firstList!!.isNotEmpty())
+        assertTrue(lastList!!.isNotEmpty())
 
         assertEquals(9, lastList.size)
 

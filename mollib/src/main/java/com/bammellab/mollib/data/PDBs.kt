@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -2778,7 +2778,7 @@ object PDBs {
      * The mapping (really "grouping") is completed only on first access
      * to avoid the time penalty at startup.
      */
-    var mapMotmToPdbCodes : Map<Int, List<String>> = mapOf(Pair(0, listOf("")))
+    private var mapMotmToPdbCodes : Map<Int, List<String>> = mapOf(Pair(0, listOf("")))
 
     private fun setupMotmToPdbCodes() {
         mapMotmToPdbCodes = pdbList.groupBy({it.motmIndex}, {it.pdbName})
@@ -2795,7 +2795,7 @@ object PDBs {
         if (mapMotmToPdbCodes.size < 2) {
             setupMotmToPdbCodes()
         }
-        return mapMotmToPdbCodes.get(motmNumber)
+        return mapMotmToPdbCodes[motmNumber]
     }
 
 }

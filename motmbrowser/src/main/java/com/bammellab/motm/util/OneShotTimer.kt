@@ -11,7 +11,7 @@
  *  limitations under the License
  */
 
-@file:Suppress("unused")
+@file:Suppress("unused", "UNUSED_PARAMETER")
 
 package com.bammellab.motm.util
 

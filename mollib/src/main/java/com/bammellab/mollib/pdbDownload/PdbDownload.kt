@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -20,8 +20,6 @@ import android.widget.Toast
 import com.bammellab.mollib.common.util.ConnectionUtil
 import com.bammellab.mollib.pdbDownload.MollibDefs.RCSB_DOWNLOAD_PATH
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okhttp3.*
 import timber.log.Timber

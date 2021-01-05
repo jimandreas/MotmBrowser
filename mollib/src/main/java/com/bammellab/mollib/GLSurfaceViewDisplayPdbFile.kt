@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -277,8 +277,8 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
      * Calculate the degree to be rotated by.
      */
     private fun rotation(event: MotionEvent): Float {
-        val deltaX = (event.getX(0) - event.getX(1)).toFloat()
-        val deltaY = (event.getY(0) - event.getY(1)).toFloat()
+        val deltaX = (event.getX(0) - event.getX(1))
+        val deltaY = (event.getY(0) - event.getY(1))
         val radians = atan2(deltaY, deltaX)
         return Math.toDegrees(radians.toDouble()).toFloat()
     }

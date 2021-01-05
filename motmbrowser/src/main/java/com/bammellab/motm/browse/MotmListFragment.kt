@@ -20,26 +20,27 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.util.TypedValue
-import android.view.*
-import android.widget.FrameLayout
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bammellab.motm.R
 import com.bammellab.mollib.data.Corpus
 import com.bammellab.mollib.data.Corpus.generateMonthList
 import com.bammellab.mollib.data.Corpus.invertPosition
 import com.bammellab.mollib.data.Corpus.motmTagLinesGet
 import com.bammellab.mollib.data.Corpus.motmTitleGet
 import com.bammellab.mollib.data.URLs.PDB_MOTM_THUMB_WEB_PREFIX
+import com.bammellab.motm.R
 import com.bammellab.motm.detail.MotmDetailActivity
 import com.bumptech.glide.Glide
 import timber.log.Timber
 import java.util.*
 
-class MotmListFragment(val cl: ConstraintLayout) : androidx.fragment.app.Fragment() {
+class MotmListFragment(private val cl: ConstraintLayout) : androidx.fragment.app.Fragment() {
 
     private lateinit var rootView: View
     private lateinit var recyclerView: RecyclerView

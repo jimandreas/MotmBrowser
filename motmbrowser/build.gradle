@@ -134,11 +134,11 @@ dependencies {
     implementation deps.android.x.constraintLayout
     implementation deps.android.x.coreKtx
     implementation deps.android.x.cardview
-    implementation deps.android.x.lifecycle
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
-    implementation deps.android.x.preference
-    implementation deps.android.x.viewpager
+    implementation deps.android.x.lifecycleKtx
+    implementation deps.android.x.navigationfragKtx
+    implementation deps.android.x.navigationuiKtx
+    implementation deps.android.x.preferenceKtx
+    implementation deps.android.x.viewpager2
 
     implementation deps.okhttp.client
     implementation deps.retrofit.client
