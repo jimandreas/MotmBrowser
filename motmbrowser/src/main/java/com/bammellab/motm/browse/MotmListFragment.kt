@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bammellab.motm.R
 import com.bammellab.mollib.data.Corpus
+import com.bammellab.mollib.data.Corpus.generateMonthList
 import com.bammellab.mollib.data.Corpus.invertPosition
 import com.bammellab.mollib.data.Corpus.motmTagLinesGet
 import com.bammellab.mollib.data.Corpus.motmTitleGet
@@ -40,7 +41,6 @@ import java.util.*
 
 class MotmListFragment(val cl: ConstraintLayout) : androidx.fragment.app.Fragment() {
 
-    var motmListGlobal: List<String>? = null
     private lateinit var rootView: View
     private lateinit var recyclerView: RecyclerView
 
@@ -54,7 +54,8 @@ class MotmListFragment(val cl: ConstraintLayout) : androidx.fragment.app.Fragmen
         setupRecyclerView(rv)
         recyclerView = rv
 
-        val fsb = FastscrollBubble(cl, recyclerView, viewLifecycleOwner, motmListGlobal!!.toTypedArray())
+        val monthList = generateMonthList()
+        val fsb = FastscrollBubble(cl, recyclerView, viewLifecycleOwner, monthList)
         fsb.setup()
 
         return rv
@@ -74,7 +75,7 @@ class MotmListFragment(val cl: ConstraintLayout) : androidx.fragment.app.Fragmen
         for (i in 0 until numItems) {
             list.add(Corpus.corpus[i])
         }
-        motmListGlobal = list
+
         return list
     }
 
@@ -121,16 +122,10 @@ class MotmListFragment(val cl: ConstraintLayout) : androidx.fragment.app.Fragmen
 
         // Add a header for position 0
         override fun getItemViewType(position: Int): Int {
-            val entry = motmList[position]
-
             return if (position == 0)
                 VIEW_TYPE_HEADER
             else
                 VIEW_TYPE_MOTM
-        }
-
-        fun getValueAt(position: Int): String {
-            return motmList[position]
         }
 
         init {
@@ -202,7 +197,7 @@ class MotmListFragment(val cl: ConstraintLayout) : androidx.fragment.app.Fragmen
         }
 
         override fun getItemCount(): Int {
-            return motmList.size
+            return motmList.size+1 // plus one for the header
         }
     }
 

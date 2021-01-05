@@ -26,6 +26,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Lifecycle.Event.*
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -78,7 +79,14 @@ class FastscrollBubble(
         t2010.show()
         t2005.show()
         tcurrent.show()
+    }
 
+    private fun hideAll() {
+        t2015.visibility = View.INVISIBLE
+        t2010.visibility = View.INVISIBLE
+        t2005.visibility = View.INVISIBLE
+        tcurrent.visibility = View.INVISIBLE
+        thumbImageView.visibility = View.INVISIBLE
     }
 
     private fun View.show() {
@@ -138,24 +146,35 @@ class FastscrollBubble(
         fadeOutDates()
     }
 
+    /**
+     * ON_PAUSE and ON_RESUME signal entry and exit to the "ALL" view pager section.
+     * Use these signals to control the native recyclerview scroll bar display.
+     */
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
 
-//        when (event) {
-//
-//            ON_CREATE -> Timber.v("On_CREATE")
-//
-//            ON_START -> Timber.v("On_START")
-//
-//            ON_RESUME -> Timber.v("On_RESUME")
-//
-//            ON_PAUSE -> Timber.v("On_PAUSE")
-//
-//            ON_STOP -> Timber.v("On_STOP")
-//
-//            ON_DESTROY -> Timber.v("On_DESTROY")
-//
-//            ON_ANY -> Timber.v("On_ANY")
-//        }
+        when (event) {
+
+            ON_RESUME -> {
+                Timber.v("On_RESUME")
+                recyclerView.isVerticalScrollBarEnabled = false
+            }
+
+            ON_PAUSE -> {
+                Timber.v("On_PAUSE")
+                recyclerView.isVerticalScrollBarEnabled = true
+                hideAll()
+            }
+
+            ON_CREATE -> Timber.v("On_CREATE")
+
+            ON_START -> Timber.v("On_START")
+
+            ON_STOP -> Timber.v("On_STOP")
+
+            ON_DESTROY -> Timber.v("On_DESTROY")
+
+            ON_ANY -> Timber.v("On_ANY")
+        }
     }
 
     inner class ThumbListener : Animator.AnimatorListener {
