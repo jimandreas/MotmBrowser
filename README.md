@@ -11,9 +11,9 @@ This viewer is under continuous development.
 Screenshots:
 ------------
 
-<img src="docs/screenshots/startup_screencap.PNG" width = 200> The Home screen of the Molecule of the Month Browser
-<img src="docs/screenshots/1bna_screencap.PNG" width = 200> A ribbon view of the 1BNA PDB entry
-<img src="docs/screenshots/MotmFastScroll.gif" width = 200> A fast scroll through 20 years and over 250 Molecule of the Month entries!!
+<img src="docs/screenshots/startup_screencap.PNG" width = 200> The Home screen of the Molecule of the Month Browser<br>
+<img src="docs/screenshots/1bna_screencap.PNG" width = 200> A ribbon view of the 1BNA PDB entry<br>
+<img src="docs/screenshots/MotmFastScroll.gif" width = 200> A fast scroll through 20 years and over 250 Molecule of the Month entries!!<br>
 
 The MotmBrowser references the awesome work by the RCSB team.
 
