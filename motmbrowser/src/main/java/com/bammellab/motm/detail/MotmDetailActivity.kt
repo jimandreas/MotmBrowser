@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -41,6 +41,7 @@ import com.bammellab.mollib.data.URLs.RCSB_PDB_INFO_SUFFIX
 import com.bammellab.motm.graphics.MotmGraphicsActivity
 import com.bammellab.motm.pdb.PdbFetcherCoroutine
 import com.bammellab.motm.util.PrefsUtil
+import com.bammellab.motm.util.Util.toastAnError
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
@@ -127,16 +128,10 @@ class MotmDetailActivity : AppCompatActivity() {
         loadBackdrop()
 
         motmDetailCard.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-
-                intent.data = Uri.parse(
-                        PDB_MOTM_PREFIX
-                                + motmNumber
-                                + PDB_MOTM_SUFFIX
-                )
-                startActivity(intent)
-            }
+            startMotmWebViewActivity()
+        }
     }
+
 
 
     private fun loadBackdrop() {
@@ -208,98 +203,111 @@ class MotmDetailActivity : AppCompatActivity() {
             im.tag = pdbId
             view.tag = pdbId
 
+            // load the text field via retrofit
+            val fetcher = PdbFetcherCoroutine(pdbId, pdbCardText)
+            fetcher.pdbFetcherCoroutine()
+
             /*
+             * --------------
+             * Click Handlers
+             * --------------
              * respond to a click on the RCSB PDB imageview button
              *    Vector to the PDB info entry on the RCSB website
              * A pref setting determines if the action should be confirmed
              */
             pdbLink.setOnClickListener { v ->
                 if (PrefsUtil.prefsTouchToOpenSetting) {
-                    val pdbOfInterest = v.tag as String
-                    val intentRCSB = Intent(Intent.ACTION_VIEW)
-                    intentRCSB.data = Uri.parse(
-                            RCSB_PDB_INFO_PREFIX
-                                    + pdbOfInterest + RCSB_PDB_INFO_SUFFIX
-                    )
-
-                    try {
-                        Timber.i("start activity intent: $intentRCSB, $intentRCSB.data")
-                        startActivity(intentRCSB)
-                    } catch (e: Exception) {
-                        Timber.e(e, "exception on startActivity")
-                    }
+                    startPdbViewActivity(v)
                     return@setOnClickListener
+                } else {
+                    val snackbar = Snackbar.make(v, "RCSB PDB info", Snackbar.LENGTH_LONG)
+                    snackbar.setAction("View website") {
+                        startPdbViewActivity(v)
+                    }
+                    snackbar.show()
                 }
-
-                val snackbar = Snackbar.make(v, "RCSB PDB info", Snackbar.LENGTH_LONG)
-                val pdbOfInterest = v.tag as String
-                snackbar.setAction("View website") {
-                    val intentRCSB = Intent(Intent.ACTION_VIEW)
-
-                    intentRCSB.data = Uri.parse(
-                            RCSB_PDB_INFO_PREFIX
-                                    + pdbOfInterest + RCSB_PDB_INFO_SUFFIX
-                    )
-                    startActivity(intentRCSB)
-                }
-                snackbar.show()
             }
 
             /*
-             * respond to a click on the molecule (PDB)
-             *    experiment with master / detail
+             * respond to a click on the molecule (PDB) - start 3D viewer
              */
             im.setOnClickListener { v -> start3dViewer(v, pdbsStringArray) }
             view.setOnClickListener { v -> start3dViewer(v, pdbsStringArray) }
-            // load the text field via retrofit
-            val fetcher = PdbFetcherCoroutine(pdbId, pdbCardText)
-            fetcher.pdbFetcherCoroutine()
         }
     }
+
+    private fun startPdbViewActivity(v: View) {
+        val pdbOfInterest = v.tag as String
+        val intentRCSB = Intent(Intent.ACTION_VIEW)
+        intentRCSB.data = Uri.parse(
+                RCSB_PDB_INFO_PREFIX
+                        + pdbOfInterest + RCSB_PDB_INFO_SUFFIX
+        )
+
+        try {
+            Timber.i("start activity intent: $intentRCSB, $intentRCSB.data")
+            startActivity(intentRCSB)
+        } catch (e: Exception) {
+            Timber.e(e, "exception on startActivity")
+            toastAnError(this, "Error on viewing PDB info")
+        }
+    }
+
+    private fun startMotmWebViewActivity() {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW)
+
+            intent.data = Uri.parse(
+                    PDB_MOTM_PREFIX
+                            + motmNumber
+                            + PDB_MOTM_SUFFIX
+            )
+            startActivity(intent)
+        } catch (e: Exception) {
+            Timber.e(e, "exception on Motm Web View Activity")
+            toastAnError(this, "Error on viewing Molecule Of The Month")
+        }
+    }
+
+
     private fun start3dViewer(v: View, pdbsStringArray: Array<String>) {
-        val snackbar = Snackbar.make(v, R.string.snackbar_go_to_3d, Snackbar.LENGTH_LONG)
 
         val pdbOfInterest = v.tag as String
         if (pdbOfInterest.isEmpty()) {
             return
         }
-        if (PrefsUtil.prefsTouchToOpenSetting) {
-            val i = pdbsStringArray.indexOf(pdbOfInterest)
-            if (i >= 0) {
-                val intent = Intent(
-                        this@MotmDetailActivity, MotmGraphicsActivity::class.java)
-                intent.putExtra(
-                        MotmGraphicsActivity.PDB_NAME_LIST, pdbsStringArray)
-                intent.putExtra(
-                        MotmGraphicsActivity.PDB_NAME_LIST_INDEX, i)
-                startActivity(intent)
-            }
+
+        val i = pdbsStringArray.indexOf(pdbOfInterest)
+        if (i < 0) { // shouldn't happen
+            Timber.e("ERROR: Couldn't find $pdbOfInterest in $pdbsStringArray")
             return
         }
-        @Suppress("RedundantSamConstructor")
-        snackbar.setAction(R.string.snackbar_go_to_3d_start, View.OnClickListener {
-            /*
-             * get the index of our chosen PDB to pass along to the viewer
-             */
-            var i = 0
-            while (i < pdbsStringArray.size) {
-                if (pdbsStringArray[i] == pdbOfInterest) {
-                    break
-                }
-                i++
-            }
-            if (i < pdbsStringArray.size) {
-                val intent = Intent(
-                        this@MotmDetailActivity, MotmGraphicsActivity::class.java)
-                intent.putExtra(
-                        MotmGraphicsActivity.PDB_NAME_LIST, pdbsStringArray)
-                intent.putExtra(
-                        MotmGraphicsActivity.PDB_NAME_LIST_INDEX, i)
-                startActivity(intent)
-            }
-        })
-        snackbar.show()
 
+        if (PrefsUtil.prefsTouchToOpenSetting) {
+            start3DviewerActivity(pdbsStringArray, i)
+        } else {
+            val snackbar = Snackbar.make(v, R.string.snackbar_go_to_3d, Snackbar.LENGTH_LONG)
+            snackbar.setAction(R.string.snackbar_go_to_3d_start) {
+                start3DviewerActivity(pdbsStringArray, i)
+            }
+            snackbar.show()
+        }
+
+    }
+
+    private fun start3DviewerActivity(pdbsStringArray: Array<String>, i: Int) {
+        try {
+            val intent = Intent(
+                    this@MotmDetailActivity, MotmGraphicsActivity::class.java)
+            intent.putExtra(
+                    MotmGraphicsActivity.PDB_NAME_LIST, pdbsStringArray)
+            intent.putExtra(
+                    MotmGraphicsActivity.PDB_NAME_LIST_INDEX, i)
+            startActivity(intent)
+        } catch (e: Exception) {
+            Timber.e("Error starting 3D Viewer")
+            toastAnError(this, "Error on starting 3D viewer")
+        }
     }
 
     // this brings the UI back to where it left off when the detail was selected

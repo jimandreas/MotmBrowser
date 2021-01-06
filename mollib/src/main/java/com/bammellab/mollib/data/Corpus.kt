@@ -943,7 +943,7 @@ object Corpus {
      */
     data class MotmEntryInfo(val theIndexNumber: Int, val tagLine: String, val corpusLine: String)
     fun searchMotmInfo(searchTerm: String): List<MotmEntryInfo> {
-        val startTime = System.currentTimeMillis()
+        //val startTime = System.currentTimeMillis()
         val s = searchTerm.toLowerCase(Locale.ROOT)
         val matchTag = (motmTagLines
                 .withIndex().filter {it.value.toLowerCase(Locale.ROOT).contains(s)}
@@ -957,9 +957,9 @@ object Corpus {
         val resultsList = mergeBothLists.map {
             MotmEntryInfo(it, motmTagLines[it], corpus[it])}
 
-        Timber.v("TIME LAPSED: %d milliseconds, %d matches",
-                System.currentTimeMillis() - startTime,
-                resultsList.size)
+//        Timber.v("TIME LAPSED: %d milliseconds, %d matches",
+//                System.currentTimeMillis() - startTime,
+//                resultsList.size)
 
         return resultsList
     }
