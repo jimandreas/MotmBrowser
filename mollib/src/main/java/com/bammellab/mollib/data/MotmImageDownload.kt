@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -283,13 +283,13 @@ object MotmImageDownload {
 
             "204",
             "204-Aminopeptidase_1_and_Autophagy-5jh9_4r8f",
+            "204-PD1_Programmed_Cell_Death_Protein_1-3bik_3bp5",
+            "204-PD1_Programmed_Cell_Death_Protein_1-5dk3_5jxe",
 
             "203",
             "203-Aminopeptidase_1_and_Autophagy-Selective_Autophagy_2016",
-            "203-PD1_Programmed_Cell_Death_Protein_1-3bik_3bp5",
-            "203-PD1_Programmed_Cell_Death_Protein_1-5dk3_5jxe",
-
-
+            "203-Aminopeptidase_1_and_Autophagy-5jh9_4r8f",
+            
             "202",
             "202-Dipeptidyl_Peptidase4-1nu8",
             "202-Dipeptidyl_Peptidase4-Substrates2",

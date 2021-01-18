@@ -17,7 +17,12 @@ package com.bammellab.captureimages
 
 object MotmPdbNames {
 
-
+    val pdbNamesJan18 = listOf(
+            "5my1",
+            "3fcs",
+            "2c37",
+            "1su4"
+    )
 
     val pdbNamesDec18 = listOf(
             "4xxb",
