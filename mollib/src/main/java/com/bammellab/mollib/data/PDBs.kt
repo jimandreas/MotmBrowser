@@ -111,7 +111,7 @@ object PDBs {
             MotmToPdbMap(21, "1igt"),
             MotmToPdbMap(21, "1igy"),
             // MotmToPdbMap(21, "3hfl"), // Obsolete - It has been replaced (superseded) by 1YQV.
-            MotmToPdbMap(21, "1YQV"), // Obsolete - It has been replaced (superseded) by 1YQV.
+            MotmToPdbMap(21, "1yqv"), // Obsolete - It has been replaced (superseded) by 1YQV.
 
 
             MotmToPdbMap(21, "3hfm"),
@@ -412,7 +412,7 @@ object PDBs {
             MotmToPdbMap(80, "1g3i"),
             MotmToPdbMap(80, "1nsf"),
 //            MotmToPdbMap(80, "1oz4"),
-            MotmToPdbMap(80, "3CF1"), // entry: 3CF1 supersedes: 1OZ4, 1YQ0
+            MotmToPdbMap(80, "3cf1"), // entry: 3CF1 supersedes: 1OZ4, 1YQ0
             MotmToPdbMap(80, "1r7r"),
             MotmToPdbMap(80, "1svm"),
             MotmToPdbMap(80, "1yyf"),
@@ -875,7 +875,7 @@ object PDBs {
             // MotmToPdbMap(161, "3u5d"),
 //            MotmToPdbMap(161, "3u5e"),
             // 4V88 has 417K atoms - no PDB file!!
-//            MotmToPdbMap(161, "4V88"), // Entry: 4V88 supersedes: 3U5B, 3U5C, 3U5D, 3U5E, 3U5F, 3U5G, 3U5H, 3U5I
+//            MotmToPdbMap(161, "4v88"), // Entry: 4V88 supersedes: 3U5B, 3U5C, 3U5D, 3U5E, 3U5F, 3U5G, 3U5H, 3U5I
             MotmToPdbMap(161, "4imv"),
             MotmToPdbMap(162, "1dfn"),
             MotmToPdbMap(162, "2k6o"),
@@ -900,7 +900,7 @@ object PDBs {
             MotmToPdbMap(166, "1pma"),
             // MotmToPdbMap(166, "3l5q"), // obsolete
             MotmToPdbMap(166, "3unf"),
-            MotmToPdbMap(166, "4CR2"),
+            MotmToPdbMap(166, "4cr2"),
             MotmToPdbMap(167, "1br0"),
             MotmToPdbMap(167, "1kil"),
             MotmToPdbMap(167, "1nsf"),
@@ -1377,7 +1377,7 @@ object PDBs {
             MotmToPdbMap(249, "7bzf"),
             MotmToPdbMap(249, "7bv2"),
 //            MotmToPdbMap(249, "6x2g"),
-            MotmToPdbMap(249, "6XQB"), // Entry: 6XQB supersedes: 6X2G
+            MotmToPdbMap(249, "6xqb"), // Entry: 6XQB supersedes: 6X2G
             MotmToPdbMap(249, "2ahm"),
             MotmToPdbMap(249, "7bv2"),
 
@@ -1438,3 +1438,4 @@ object PDBs {
     }
 
 }
+
