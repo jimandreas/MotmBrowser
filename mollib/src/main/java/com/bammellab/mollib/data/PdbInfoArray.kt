@@ -42,7 +42,7 @@ object PdbInfo {
         //val startTime = System.currentTimeMillis()
         val s = searchTerm.toLowerCase(Locale.ROOT)
         val match = pdbInfoList.filter {
-                    it.pdbName.toLowerCase(Locale.ROOT).equals(s)
+            it.pdbName.toLowerCase(Locale.ROOT).equals(s)
         }
 //        Timber.v("TIME LAPSED: %d milliseoncs, %d matches",
 //                System.currentTimeMillis() - startTime,
@@ -1252,7 +1252,7 @@ object PdbInfo {
 
             PdbEntryInfo("4tnv", "C. elegans glutamate-gated chloride channel (GluCl) in complex with Fab in a non-conducting conformation"),
             PdbEntryInfo("4u7u", "Crystal structure of RNA-guided immune Cascade complex from E.coli"),
-            PdbEntryInfo("4CR2", "Deep classification of a large cryo-EM dataset defines the conformational landscape of the 26S proteasome"),
+            PdbEntryInfo("4cr2", "Deep classification of a large cryo-EM dataset defines the conformational landscape of the 26S proteasome"),
             PdbEntryInfo("1pma", "PROTEASOME FROM THERMOPLASMA ACIDOPHILUM"),
 
             //PdbEntryInfo("6ezo", "Eukaryotic initiation factor EIF2B in complex with ISRIB"),  // special interest
@@ -1267,26 +1267,26 @@ object PdbInfo {
             PdbEntryInfo("3aie", "Crystal Structure of glucansucrase from Streptococcus mutans"),
             PdbEntryInfo("2fug", "Crystal structure of the hydrophilic domain of respiratory complex I from Thermus thermophilus"),
 
-            PdbEntryInfo("1YQV", "The crystal structure of the antibody Fab HyHEL5 complex with lysozyme at 1.7A resolution"),  // was 3HFL
-            PdbEntryInfo("3CF1", "Structure of P97/vcp in complex with ADP/ADP.alfx"),
-            PdbEntryInfo("5OWU", "Kap95:Nup1 complex"),  // Entry: 5OWU supersedes: 2BPT
-            PdbEntryInfo("2C37", "RNASE PH CORE OF THE ARCHAEAL EXOSOME IN COMPLEX WITH U8 RNA"),
-            PdbEntryInfo("2VGL", "AP2 CLATHRIN ADAPTOR CORE"),
-            PdbEntryInfo("1XI4", "Clathrin D6 Coat"),
-            PdbEntryInfo("3SNP", "Crystal structure analysis of iron regulatory protein 1 in complex with ferritin H IRE RNA"),
-            PdbEntryInfo("4AC9", "CRYSTAL STRUCTURE OF TRANSLATION ELONGATION FACTOR SELB FROM METHANOCOCCUS MARIPALUDIS IN COMPLEX WITH GDP"),
-            PdbEntryInfo("5KSD", "Crystal Structure of a Plasma Membrane Proton Pump"),
-            PdbEntryInfo("4FE5", "Crystal structure of the xpt-pbuX guanine riboswitch aptamer domain in complex with hypoxanthine"),
-            PdbEntryInfo("3FCS", "Structure of complete ectodomain of integrin aIIBb3"),
-            PdbEntryInfo("5UGY", "Influenza hemagglutinin in complex with a neutralizing antibody"),
-            PdbEntryInfo("4TVX", "Crystal structure of the E. coli CRISPR RNA-guided surveillance complex, Cascade"),
-            PdbEntryInfo("4ZXB", "Structure of the human insulin receptor ectodomain, IRDeltabeta construct, in complex with four Fab molecules"),
-            PdbEntryInfo("5KQV", "Insulin receptor ectodomain construct comprising domains L1,CR,L2, FnIII-1 and alphaCT peptide in complex with bovine insulin and FAB 83-14 (REVISED STRUCTURE)"),
-            PdbEntryInfo("5ZGE", "Crystal structure of NDM-1 at pH5.5 (Bis-Tris) in complex with hydrolyzed ampicillin"),
+            PdbEntryInfo("1yqv", "The crystal structure of the antibody Fab HyHEL5 complex with lysozyme at 1.7A resolution"),  // was 3HFL
+            PdbEntryInfo("3cf1", "Structure of P97/vcp in complex with ADP/ADP.alfx"),
+            PdbEntryInfo("5owu", "Kap95:Nup1 complex"),  // Entry: 5OWU supersedes: 2BPT
+            PdbEntryInfo("2c37", "RNASE PH CORE OF THE ARCHAEAL EXOSOME IN COMPLEX WITH U8 RNA"),
+            PdbEntryInfo("2vgl", "AP2 CLATHRIN ADAPTOR CORE"),
+            PdbEntryInfo("1xi4", "Clathrin D6 Coat"),
+            PdbEntryInfo("3snp", "Crystal structure analysis of iron regulatory protein 1 in complex with ferritin H IRE RNA"),
+            PdbEntryInfo("4ac9", "CRYSTAL STRUCTURE OF TRANSLATION ELONGATION FACTOR SELB FROM METHANOCOCCUS MARIPALUDIS IN COMPLEX WITH GDP"),
+            PdbEntryInfo("5ksd", "Crystal Structure of a Plasma Membrane Proton Pump"),
+            PdbEntryInfo("4fe5", "Crystal structure of the xpt-pbuX guanine riboswitch aptamer domain in complex with hypoxanthine"),
+            PdbEntryInfo("3fcs", "Structure of complete ectodomain of integrin aIIBb3"),
+            PdbEntryInfo("5ugy", "Influenza hemagglutinin in complex with a neutralizing antibody"),
+            PdbEntryInfo("4tvx", "Crystal structure of the E. coli CRISPR RNA-guided surveillance complex, Cascade"),
+            PdbEntryInfo("4zxb", "Structure of the human insulin receptor ectodomain, IRDeltabeta construct, in complex with four Fab molecules"),
+            PdbEntryInfo("5kqv", "Insulin receptor ectodomain construct comprising domains L1,CR,L2, FnIII-1 and alphaCT peptide in complex with bovine insulin and FAB 83-14 (REVISED STRUCTURE)"),
+            PdbEntryInfo("5zge", "Crystal structure of NDM-1 at pH5.5 (Bis-Tris) in complex with hydrolyzed ampicillin"),
             PdbEntryInfo("3rif", "C. elegans glutamate-gated chloride channel (GluCl) in complex with Fab, ivermectin and glutamate."),
             PdbEntryInfo("5a1a", "2.2 A resolution cryo-EM structure of beta-galactosidase in complex with a cell-permeant inhibitor"),
             PdbEntryInfo("2btv", "ATOMIC MODEL FOR BLUETONGUE VIRUS (BTV) CORE"),
-            PdbEntryInfo("5GAR", "Thermus thermophilus V/A-ATPase, conformation 1"),
+            PdbEntryInfo("5gar", "Thermus thermophilus V/A-ATPase, conformation 1"),
             PdbEntryInfo("5vox", "Yeast V-ATPase in complex with Legionella pneumophila effector SidK (rotational state 1)"),
             PdbEntryInfo("5voy", "Yeast V-ATPase in complex with Legionella pneumophila effector SidK (rotational state 2)"),
             PdbEntryInfo("5voz", "Yeast V-ATPase in complex with Legionella pneumophila effector SidK (rotational state 3)"),
@@ -1295,7 +1295,7 @@ object PdbInfo {
             PdbEntryInfo("5mnj", "Structure of MDM2-MDMX-UbcH5B-ubiquitin complex"),
             PdbEntryInfo("5zji", "Structure of photosystem I supercomplex with light-harvesting complexes I and II"),
             PdbEntryInfo("6crz", "SARS Spike Glycoprotein, Trypsin-cleaved, Stabilized variant, C3 symmetry"),
-            PdbEntryInfo("6XQB", "SARS-CoV-2 RdRp/RNA complex, Entry: 6XQB supersedes: 6X2G"),
+            PdbEntryInfo("6xqb", "SARS-CoV-2 RdRp/RNA complex, Entry: 6XQB supersedes: 6X2G"),
             PdbEntryInfo("5is0", "Structure of TRPV1 in complex with capsazepine, determined in lipid nanodisc"),
             PdbEntryInfo("6dmw", "Calmodulin-bound full-length rbTRPV5"),
             PdbEntryInfo("5irz", "Structure of TRPV1 determined in lipid nanodisc"),
@@ -1306,10 +1306,10 @@ object PdbInfo {
             PdbEntryInfo("1cjk", "COMPLEX OF GS-ALPHA WITH THE CATALYTIC DOMAINS OF MAMMALIAN ADENYLYL CYCLASE: COMPLEX WITH ADENOSINE 5'-(ALPHA THIO)-TRIPHOSPHATE (RP), MG, AND MN"),
             PdbEntryInfo("1cu1", "CRYSTAL STRUCTURE OF AN ENZYME COMPLEX FROM HEPATITIS C VIRUS"),
             PdbEntryInfo("4wtg", "CRYSTAL STRUCTURE OF HCV NS5B GENOTYPE 2A JFH-1 ISOLATE WITH S15G E86Q E87Q C223H V321I MUTATIONS AND DELTA8 BETA HAIRPIN LOOP DELETION IN COMPLEX WITH SOFOSBUVIR DIPHOSPHATE GS-607596, MN2+ AND SYMMETRICAL PRIMER TEMPLATE 5'-CAAAAUUU"),
-            PdbEntryInfo("1ZH1", "Structure of the zinc-binding domain of HCV NS5A"),
+            PdbEntryInfo("1zh1", "Structure of the zinc-binding domain of HCV NS5A"),
             PdbEntryInfo("1r7g", "NMR structure of the membrane anchor domain (1-31) of the nonstructural protein 5A (NS5A) of hepatitis C virus (Minimized average structure, Sample in 100mM DPC)"),
-            PdbEntryInfo("2OC8", "Structure of Hepatitis C Viral NS3 protease domain complexed with NS4A peptide and ketoamide SCH503034"),
-            PdbEntryInfo("3SV6", "Crystal structure of NS3/4A protease in complex with Telaprevir"),
+            PdbEntryInfo("2oc8", "Structure of Hepatitis C Viral NS3 protease domain complexed with NS4A peptide and ketoamide SCH503034"),
+            PdbEntryInfo("3sv6", "Crystal structure of NS3/4A protease in complex with Telaprevir"),
             PdbEntryInfo("3sue", "Crystal structure of NS3/4A protease variant R155K in complex with MK-5172"),
             PdbEntryInfo("6p6l", "HCV NS3/4A protease domain of genotype 1a in complex with glecaprevir"),
             PdbEntryInfo("6nzt", "Crystal structure of HCV NS3/4A protease in complex with voxilaprevir"),
