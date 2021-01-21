@@ -1279,7 +1279,7 @@ object PdbInfo {
             PdbEntryInfo("4fe5", "Crystal structure of the xpt-pbuX guanine riboswitch aptamer domain in complex with hypoxanthine"),
             PdbEntryInfo("3fcs", "Structure of complete ectodomain of integrin aIIBb3"),
             PdbEntryInfo("5ugy", "Influenza hemagglutinin in complex with a neutralizing antibody"),
-            PdbEntryInfo("4tvx", "Crystal structure of the E. coli CRISPR RNA-guided surveillance complex, Cascade"),
+// CIF only           PdbEntryInfo("4tvx", "Crystal structure of the E. coli CRISPR RNA-guided surveillance complex, Cascade"),
             PdbEntryInfo("4zxb", "Structure of the human insulin receptor ectodomain, IRDeltabeta construct, in complex with four Fab molecules"),
             PdbEntryInfo("5kqv", "Insulin receptor ectodomain construct comprising domains L1,CR,L2, FnIII-1 and alphaCT peptide in complex with bovine insulin and FAB 83-14 (REVISED STRUCTURE)"),
             PdbEntryInfo("5zge", "Crystal structure of NDM-1 at pH5.5 (Bis-Tris) in complex with hydrolyzed ampicillin"),

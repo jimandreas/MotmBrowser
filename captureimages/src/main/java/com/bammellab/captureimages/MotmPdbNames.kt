@@ -79,7 +79,7 @@ object MotmPdbNames {
 //            "4SV6",
 
             )
-    val pdbNames : List<String> = pdbNamesDec18
+    val pdbNames : List<String> = pdbNamesJan18
 
     val pdbNamesOctNovDec2020 = listOf(
 

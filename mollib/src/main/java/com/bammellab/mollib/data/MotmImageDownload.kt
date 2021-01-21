@@ -147,13 +147,15 @@ object MotmImageDownload {
             "244-Photosynthetic_Supercomplexes-6kad_6kac",
             "244-Photosynthetic_Supercomplexes-5zji_6nwa",
 
-            "242",
-            "242-Voltagegated_Sodium_Channels-6j8j_twoview",
-            "242-Voltagegated_Sodium_Channels-6a95_green",
+            // unswapping 243 / 242 (messes up screensaver)
 
             "243",
-            "243-Coronavirus_Proteases-6lu7",
-            "243-Coronavirus_Proteases-1q2w_4ow0",
+            "243-Voltagegated_Sodium_Channels-6j8j_twoview",
+            "243-Voltagegated_Sodium_Channels-6a95_green",
+
+            "242",
+            "242-Coronavirus_Proteases-6lu7",
+            "242-Coronavirus_Proteases-1q2w_4ow0",
 
             "241",
             "241-Twenty_Years_of_Molecules-6j4y",

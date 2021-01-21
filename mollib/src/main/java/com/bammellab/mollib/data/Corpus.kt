@@ -15,7 +15,6 @@
 
 package com.bammellab.mollib.data
 
-import timber.log.Timber
 import java.util.*
 
 /**
@@ -240,11 +239,14 @@ object Corpus {
             "202-Dipeptidyl_Peptidase4-1nu8_homepage-tn.png",
             // END funkyness
 
-            "204-Aminopeptidase_1_and_Autophagy-4r8f_homepage-tn.png",
-            "203-PD1_Programmed_Cell_Death_Protein_1-203_homepage-tn.png",
+            "203-Aminopeptidase_1_and_Autophagy-4r8f_homepage-tn.png",
+
+            "204-PD1_Programmed_Cell_Death_Protein_1-203_homepage-tn.png",
+
 
             // note: 10/2020 - still swapped.
             // START: note that 203/204 is funky - They are SWAPPED.   And has stayed that way.
+            //   unswapped here
 
             "205-Nuclear_Pore_Complex-NPC_homepage-tn.png",
             "206-Globin_Evolution-Globin_Homepage-tn.png",
@@ -286,9 +288,13 @@ object Corpus {
             "239-Phospholipase_A2-1bp2_homepage-tn.png",
             "240-HypoxiaInducible_Factors-1lqb_homepage-tn.png",
             "241-Twenty_Years_of_Molecules-6j4y_homepage-tn.png",
-            "243-Coronavirus_Proteases-6lu7_homepage-tn.png",
-            "242-Voltagegated_Sodium_Channels-6j8j_homepage-tn.png",
-            // 243/242 are swapped??
+//            "243-Coronavirus_Proteases-6lu7_homepage-tn.png",
+//            "242-Voltagegated_Sodium_Channels-6j8j_homepage-tn.png",
+
+            "242-Coronavirus_Proteases-6lu7_homepage-tn.png",
+            "243-Voltagegated_Sodium_Channels-6j8j_homepage-tn.png",
+
+            // 243/242 are swapped??  - reverse this or it messes up the screensaver
             "244-Photosynthetic_Supercomplexes-5xnl_homepage-tn.png",
             "245-Spliceosomes-3jb9_homepage-tn.png",
             "246-Coronavirus_Spike-6crz_6vxx_homepage2-tn.png",
