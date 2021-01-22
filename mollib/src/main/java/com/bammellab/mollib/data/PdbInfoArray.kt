@@ -1313,6 +1313,8 @@ object PdbInfo {
             PdbEntryInfo("3sue", "Crystal structure of NS3/4A protease variant R155K in complex with MK-5172"),
             PdbEntryInfo("6p6l", "HCV NS3/4A protease domain of genotype 1a in complex with glecaprevir"),
             PdbEntryInfo("6nzt", "Crystal structure of HCV NS3/4A protease in complex with voxilaprevir"),
+            // Jan 2021
+            PdbEntryInfo("5my1", "Architecture of a transcribing-translating expressome")
 
 
             )

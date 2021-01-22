@@ -284,7 +284,6 @@ object MotmImageDownload {
             "205-Nuclear_Pore_Complex-5dis",
 
             "204",
-            "204-Aminopeptidase_1_and_Autophagy-5jh9_4r8f",
             "204-PD1_Programmed_Cell_Death_Protein_1-3bik_3bp5",
             "204-PD1_Programmed_Cell_Death_Protein_1-5dk3_5jxe",
 

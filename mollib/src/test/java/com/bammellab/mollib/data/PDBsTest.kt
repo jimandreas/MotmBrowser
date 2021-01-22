@@ -23,9 +23,16 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 internal class PDBsTest {
+    // MAINTENANCE - update last MotM number as they are added
+    private val lastMotmIdentifier = 253 // current as of Jan 2021
+    private val lastMotmPdbListSize = 1 // number of pdb entries for Jan 2021
 
     private var mapFromMotmNUmberToPdbList:  Map<Int, List<String>> = mapOf(Pair(0, listOf("")))
 
+    /**
+     * All of the tests use this map
+     *    where a MotM int maps to a list of PDB strings
+     */
     @BeforeEach
     fun setUp() {
         mapFromMotmNUmberToPdbList = pullTheMap()
@@ -40,14 +47,14 @@ internal class PDBsTest {
     @DisplayName("Basic test of Grouped List structure and extent")
     fun pullTheMapTest() {
         val firstList = mapFromMotmNUmberToPdbList[1]
-        val lastList = mapFromMotmNUmberToPdbList[252] // current as of Dec 2020
+        val lastList = mapFromMotmNUmberToPdbList[lastMotmIdentifier]
 
         assertNotNull(firstList)
         assertNotNull(lastList)
         assertTrue(firstList!!.isNotEmpty())
         assertTrue(lastList!!.isNotEmpty())
 
-        assertEquals(9, lastList.size)
+        assertEquals(lastMotmPdbListSize, lastList.size)
 
     }
 
@@ -65,7 +72,7 @@ internal class PDBsTest {
                 val resultList = searchPdbInfoForNameMatch(pdb)
                 assertNotNull(resultList)
                 if (resultList.isEmpty()) {
-                    println("no match found for $pdb, failing")
+                    println("no match found for $pdb at $item in PdbInfoArray/pdbInfoList, did you add it?")
                 }
                 // returned search value should be same as search pdb
                 assertEquals(pdb.toLowerCase(), resultList[0].pdbName.toLowerCase())

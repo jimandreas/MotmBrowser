@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -49,7 +49,7 @@ internal class MotmImageDownloadTest {
         // last entry
         match = MotmImageDownload.motmTiffImageName(1)
         assertNotEquals("", match)
-        assertEquals("1-Myoglobin-geis-0218-myoglobin",
+        assertEquals("1-Myoglobin-1pmb_1mbn",
                 match)
     }
 
