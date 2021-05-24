@@ -73,7 +73,9 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
         // until the fling ends. This code (ab)uses a ValueAnimator object to generate
         // a callback on every animation frame. We don't use the animated value at all.
 
-        val scrollAnimator = ValueAnimator.ofFloat(0f, 1f)
+        val scrollAnimator = ValueAnimator.ofFloat(0f, 1f).apply {
+            start()
+        }
         scrollAnimator.addUpdateListener {
             // tickScrollAnimation();
         }

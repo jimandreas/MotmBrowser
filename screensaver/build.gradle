@@ -10,11 +10,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-
-apply plugin: 'com.android.application'
-//apply plugin: 'org.jetbrains.kotlin.android'
-//apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
 
 def versionMajor = 1
 def versionMinor = 2
