@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -54,7 +54,7 @@ class MollibProcessPdbs(
 
     private var managerViewmode: ManagerViewmode? = null
     private var captureImagesFlag = false
-    private lateinit var pdbDownload: PdbDownload
+    private var pdbDownload: PdbDownload
     private lateinit var mol: Molecule
     private val scope = MainScope()
 
@@ -66,6 +66,7 @@ class MollibProcessPdbs(
     init {
         Timber.e("file name list is ${pdbFileNames.size} long")
         renderer.setSurfaceCreatedListener(this)
+        pdbDownload = PdbDownload(activity)
         if (loadPdbFrom == FROM_SDCARD_AND_CAPTURE) {
             checkFilesLaunch()
         }
@@ -93,7 +94,7 @@ class MollibProcessPdbs(
                 loadSequentialData()
             }
             FROM_RCSB_OR_CACHE -> {
-                pdbDownload = PdbDownload(activity)
+
                 pdbDownload.initPdbCallback(this)
                 loadNextPdbFile()
             }

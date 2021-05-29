@@ -74,7 +74,7 @@ dependencies {
 
     implementation deps.okhttp.client
 
-    implementation "com.kotmol.kotmolpdbparser:kotmolpdbparser:1.0.4-SNAPSHOT"
+    implementation deps.pdbparser
     //implementation deps.pdbparser
 
     testImplementation deps.annotations

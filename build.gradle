@@ -22,7 +22,7 @@ buildscript {
     // this section is for dependencies that fly in flocks
     ext.versions = [
         'supportLibrary'  : '29.1.0',
-        'kotlin'          : '1.4.21',
+        'kotlin'          : '1.5.0',
         'kotlinCoroutines': '1.2.1',
         'okhttp'          : '4.9.0',
         'retrofit'        : '2.9.0',
@@ -99,7 +99,8 @@ buildscript {
             'compiler': "com.google.dagger:dagger-compiler:${versions.dagger}",
         ],
 
-        'pdbparser'      : "com.kotmol.kotmolpdbparser:kotmolpdbparser:1.0.4-SNAPSHOT",
+        //'pdbparser'      : "com.kotmol.kotmolpdbparser:kotmolpdbparser:1.0.4-SNAPSHOT",
+        'pdbparser'      : "com.kotmol.kotmolpdbparser:kotmolpdbparser:1.0.5",
 
         'okio'           : 'com.squareup.okio:okio:1.14.0',
         'moshi'          : 'com.squareup.moshi:moshi:1.5.0',
@@ -143,8 +144,9 @@ allprojects {
     repositories {
         jcenter()
         google()
+        mavenCentral()
         maven { url "https://kotlin.bintray.com/kotlinx" }
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+       // maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 
     // Force all of the primary support libraries to use the same version.
