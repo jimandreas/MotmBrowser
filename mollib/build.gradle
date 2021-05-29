@@ -75,10 +75,9 @@ dependencies {
     implementation deps.okhttp.client
 
     implementation deps.pdbparser
-    //implementation deps.pdbparser
 
     testImplementation deps.annotations
-    testImplementation deps.junit
+    testImplementation deps.jupiter
     testImplementation deps.truth
 
 }

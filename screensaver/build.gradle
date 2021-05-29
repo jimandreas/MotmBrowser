@@ -129,13 +129,13 @@ dependencies {
     implementation deps.kotlin.coroutines.android
 
 
-    implementation 'androidx.activity:activity-ktx:1.3.0-alpha07'
-    implementation 'androidx.fragment:fragment-ktx:1.3.3'
-    implementation 'com.google.android.material:material:1.3.0'
+    implementation deps.android.x.activityKtx
+    implementation deps.android.x.coreKtx
+    implementation deps.android.material
     implementation deps.android.x.cardview
     implementation deps.android.x.coreKtx
     implementation deps.android.x.constraintLayout
-    implementation 'androidx.work:work-runtime-ktx:2.7.0-alpha03'
+    implementation deps.android.x.work
 
     implementation deps.muzei
 
@@ -146,7 +146,7 @@ dependencies {
     // implementation deps.pdbparser
 
     testImplementation deps.annotations
-    testImplementation deps.junit
+    testImplementation deps.jupiter
     testImplementation deps.truth
 }
 

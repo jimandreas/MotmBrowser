@@ -114,11 +114,11 @@ dependencies {
     implementation deps.kotlin.coroutines.jdk
     implementation deps.kotlin.coroutines.android
 
-    implementation 'com.google.android.material:material:1.3.0'
+    implementation deps.android.material
     implementation deps.android.x.cardview
     implementation deps.android.x.coreKtx
     implementation deps.android.x.constraintLayout
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation deps.android.x.lifecycleruntime
 
     implementation deps.guava
     implementation deps.timber
@@ -126,7 +126,7 @@ dependencies {
     implementation deps.pdbparser
 
     testImplementation deps.annotations
-    testImplementation deps.junit
+    testImplementation deps.jupiter
     testImplementation deps.truth
 }
 

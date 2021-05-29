@@ -130,14 +130,14 @@ dependencies {
     implementation deps.kotlin.coroutines.jdk
     implementation deps.kotlin.coroutines.android
 
-    implementation 'com.google.android.material:material:1.3.0'
+    implementation deps.android.material
     implementation deps.android.x.appcompat
     implementation deps.android.x.constraintLayout
     implementation deps.android.x.coreKtx
     implementation deps.android.x.cardview
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation deps.android.x.lifecycleKtx
+    implementation deps.android.x.navigationfragKtx
+    implementation deps.android.x.navigationuiKtx
     implementation deps.android.x.preferenceKtx
     implementation deps.android.x.viewpager2
 
@@ -153,6 +153,6 @@ dependencies {
     kapt deps.glide
 
     testImplementation deps.annotations
-    testImplementation deps.junit
+    testImplementation deps.jupiter
     testImplementation deps.truth
 }
