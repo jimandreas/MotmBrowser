@@ -120,7 +120,7 @@ dependencies {
     implementation deps.android.x.constraintLayout
     implementation deps.android.x.lifecycleruntime
 
-    implementation deps.guava
+    // implementation deps.guava
     implementation deps.timber
 
     implementation deps.pdbparser

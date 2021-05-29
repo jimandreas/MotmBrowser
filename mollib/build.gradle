@@ -68,9 +68,8 @@ dependencies {
     implementation deps.android.x.coreKtx
     implementation deps.android.x.preferenceKtx
 
-
     implementation deps.timber
-    implementation deps.guava
+    //implementation deps.guava
 
     implementation deps.okhttp.client
 

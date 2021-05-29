@@ -148,7 +148,7 @@ dependencies {
     implementation deps.pdbparser
     implementation deps.timber
     implementation deps.picasso
-    implementation deps.guava
+    // implementation deps.guava
     implementation deps.glide
     kapt deps.glide
 

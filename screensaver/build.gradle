@@ -139,14 +139,10 @@ dependencies {
 
     implementation deps.muzei
 
-    implementation "com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava"
+    //implementation "com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava"
 
-    //implementation deps.guava
-
-    // implementation deps.pdbparser
-
-    testImplementation deps.annotations
-    testImplementation deps.jupiter
-    testImplementation deps.truth
+//    testImplementation deps.annotations
+//    testImplementation deps.jupiter
+//    testImplementation deps.truth
 }
 
