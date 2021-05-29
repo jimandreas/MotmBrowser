@@ -950,12 +950,12 @@ object Corpus {
     data class MotmEntryInfo(val theIndexNumber: Int, val tagLine: String, val corpusLine: String)
     fun searchMotmInfo(searchTerm: String): List<MotmEntryInfo> {
         //val startTime = System.currentTimeMillis()
-        val s = searchTerm.toLowerCase(Locale.ROOT)
+        val s = searchTerm.lowercase(Locale.ROOT)
         val matchTag = (motmTagLines
-                .withIndex().filter {it.value.toLowerCase(Locale.ROOT).contains(s)}
+                .withIndex().filter {it.value.lowercase(Locale.ROOT).contains(s)}
                 .map { it.index }).toIntArray()
         val matchCorpus = (corpus
-                .withIndex().filter {it.value.toLowerCase(Locale.ROOT).contains(s)}
+                .withIndex().filter {it.value.lowercase(Locale.ROOT).contains(s)}
                 .map { it.index }).toIntArray()
 
         val mergeBothLists = (intArrayOf(*matchTag, *matchCorpus).sortedByDescending { it }).distinct()

@@ -27,10 +27,10 @@ object PdbInfo {
      */
     fun searchPdbInfo(searchTerm: String): List<PdbEntryInfo> {
         //val startTime = System.currentTimeMillis()
-        val s = searchTerm.toLowerCase(Locale.ROOT)
+        val s = searchTerm.lowercase(Locale.ROOT)
         val match = pdbInfoList.filter {
-            it.pdbInfo.toLowerCase(Locale.ROOT).contains(s)
-                    || it.pdbName.toLowerCase(Locale.ROOT).equals(s)
+            it.pdbInfo.lowercase(Locale.ROOT).contains(s)
+                    || it.pdbName.lowercase(Locale.ROOT).equals(s)
         }
 //        Timber.v("TIME LAPSED: %d milliseoncs, %d matches",
 //                System.currentTimeMillis() - startTime,
@@ -40,9 +40,9 @@ object PdbInfo {
 
     fun searchPdbInfoForNameMatch(searchTerm: String): List<PdbEntryInfo> {
         //val startTime = System.currentTimeMillis()
-        val s = searchTerm.toLowerCase(Locale.ROOT)
+        val s = searchTerm.lowercase(Locale.ROOT)
         val match = pdbInfoList.filter {
-            it.pdbName.toLowerCase(Locale.ROOT).equals(s)
+            it.pdbName.lowercase(Locale.ROOT).equals(s)
         }
 //        Timber.v("TIME LAPSED: %d milliseoncs, %d matches",
 //                System.currentTimeMillis() - startTime,

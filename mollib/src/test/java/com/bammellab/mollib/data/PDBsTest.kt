@@ -75,12 +75,12 @@ internal class PDBsTest {
                     println("no match found for $pdb at $item in PdbInfoArray/pdbInfoList, did you add it?")
                 }
                 // returned search value should be same as search pdb
-                assertEquals(pdb.toLowerCase(), resultList[0].pdbName.toLowerCase())
+                assertEquals(pdb.lowercase(), resultList[0].pdbName.lowercase())
                 if (resultList.size > 1) {
                     println("Error: duplicate pdb in pdbInfoList: $pdb, $resultList")
                 }
                 assertEquals(1, resultList.size)
-                assertEquals(pdb.toLowerCase(), resultList[0].pdbName.toLowerCase())
+                assertEquals(pdb.lowercase(), resultList[0].pdbName.lowercase())
             }
         }
     }
