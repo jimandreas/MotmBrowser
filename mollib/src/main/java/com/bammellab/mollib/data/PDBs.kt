@@ -1405,7 +1405,55 @@ object PDBs {
 // Note that the other molecules for Jan 2021 are around 170K molecules in size.
 // That is too large for a PDB file and too large for this viewer (mmCIF only)
 
-            MotmToPdbMap(253, "5my1")
+            // Jan 2021
+            MotmToPdbMap(253, "5my1"),
+
+            // Feb 2021
+            MotmToPdbMap(254, "6wlb"),
+            MotmToPdbMap(254, "2icy"),
+            MotmToPdbMap(254, "3s27"),
+            MotmToPdbMap(254, "4hg6"),
+
+            // Mar 2021
+            MotmToPdbMap(255, "3dnb"),
+            MotmToPdbMap(255, "3lpv"),
+            MotmToPdbMap(255, "1ckt"),
+            MotmToPdbMap(255, "5a39"),
+            MotmToPdbMap(255, "2r7z"),
+            MotmToPdbMap(255, "2r8k"),
+            MotmToPdbMap(255, "6bs1"),
+            MotmToPdbMap(255, "1ckt"),
+            MotmToPdbMap(255, "6m97"),
+            MotmToPdbMap(255, "5djl"),
+
+            // April 2021
+            MotmToPdbMap(256, "7k8t"),
+            MotmToPdbMap(256, "7k43"),
+            MotmToPdbMap(256, "6zdh"),
+            MotmToPdbMap(256, "7c2l"),
+            MotmToPdbMap(256, "7l06"),
+            MotmToPdbMap(256, "6zxn"),
+            MotmToPdbMap(256, "7kkl"),
+            MotmToPdbMap(256, "7cwu"),
+            MotmToPdbMap(256, "7cwn"),
+
+            // May 2021
+            MotmToPdbMap(257, "1fdh"),
+            MotmToPdbMap(257, "4hhb"),
+            MotmToPdbMap(257, "6ki6"),
+            MotmToPdbMap(257, "1b86"),
+            MotmToPdbMap(257, "1fdh"),
+            MotmToPdbMap(257, "2h4z"),
+
+
+            // June 2021
+            MotmToPdbMap(258, "1m2z"),
+            MotmToPdbMap(258, "1glu"),
+            MotmToPdbMap(258, "6xk0"),
+            MotmToPdbMap(258, "4k2c"),
+            MotmToPdbMap(258, "1m2z"),
+            MotmToPdbMap(258, "4p6x")
+
     )
 
 

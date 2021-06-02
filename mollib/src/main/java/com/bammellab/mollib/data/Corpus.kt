@@ -304,7 +304,12 @@ object Corpus {
             "250-Capsaicin_Receptor_TRPV1-5is0_homepage-tn.png",
             "251-Adenylyl_Cyclase-6r3q_homepage-tn.png",
             "252-Hepatitis_C_Virus_ProteaseHelicase-1cu1_homepage-tn.png",
-            "253-Expressome-6x9q_homepage-tn.png"
+            "253-Expressome-6x9q_homepage-tn.png",
+            "254-Cellulose_Synthase-6wlb_composite.png",
+            "255-Cisplatin_and_DNA-Fig1.png",
+            "256-SARSCoV2_Spike_and_Antibodies-Spike_Antibodies.png",
+            "257-Fetal_Hemoglobin-1fdh_4hhb.png"
+
     )
 
 
@@ -597,8 +602,12 @@ object Corpus {
 
             "Structures of hepatitis C viral proteins have led to the discovery of direct-acting antivirals.", // Dec 2020
 
-            "In bacteria, ribosomes start building proteins as messenger RNA is being transcribed" // Jan 2021
-
+            "In bacteria, ribosomes start building proteins as messenger RNA is being transcribed", // Jan 2021
+            "Plants build tough cellulose strands one sugar at a time.",
+            "Cisplatin treats cancer by causing damage to the DNA of cancer cells.",
+            "Structural biologists are revealing the many ways that antibodies recognize SARS-CoV-2",
+            "Fetal hemoglobin allows a growing fetus to receive oxygen from their mother.", // May 2021
+            ""
     )
 
     private val monthNames = arrayOf(
@@ -936,7 +945,12 @@ object Corpus {
             /* //motm/250 */ "Capsaicin Receptor TRPV1",
             /* //motm/251 */ "Adenylyl Cyclase",  // NOV 2020
             /* //motm/252 */ "Hepatitis C Virus Protease/Helicase",  // DEC 2020
-            /* //motm/253 */ "Expressome"  // JAN 2021
+            /* //motm/253 */ "Expressome",  // JAN 2021
+            /* //motm/254 */ "Cellulose Synthase",  // FEB 2021
+            /* //motm/255 */ "Cisplatin and DNA",  // MAR 2021
+            /* //motm/256 */ "SARS-CoV-2 Spike and Antibodies",  // APR 2021
+            /* //motm/257 */ "Fetal Hemoglobin",  // MAY 2021
+            /* //motm/258 */ "TBD"  // JUN 2021
     )
 
     /**

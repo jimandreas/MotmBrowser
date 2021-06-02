@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -46,6 +46,7 @@ object MotmByCategory {
             "82",
             "139",
             "45",
+            "257",
             "83",
             "138",
             "52",
@@ -95,6 +96,7 @@ object MotmByCategory {
             "231",
             "136",
             "204",
+            "256",
             "193",
             "98",
             "63",
@@ -126,6 +128,7 @@ object MotmByCategory {
             "177",
             "56",
             "214",
+            "255",
             "236",
             "34",
             "126",
@@ -173,6 +176,7 @@ object MotmByCategory {
             "20",
             "200",
             "249",
+            "256",
             "246",
             "47",
             "98",
@@ -262,6 +266,7 @@ object MotmByCategory {
             "Coronavirus",
             "242",
             "249",
+            "256",
             "246"
 
     )
@@ -395,6 +400,7 @@ object MotmByCategory {
             "Molecular Infrastructure",
             "19",
             "99",
+            "254",
             "4",
             "134",
             "175",
@@ -411,6 +417,7 @@ object MotmByCategory {
             "88",
             "159",
             "35",
+            "257",
             "208",
             "41",
             "85",
@@ -457,6 +464,7 @@ object MotmByCategory {
 
             "Molecules and the Environment",
             "216",
+            "254",
             "220",
             "212",
             "201",
@@ -471,6 +479,7 @@ object MotmByCategory {
             "27",
             "49",
             "66",
+            "254",
             "124",
             "137",
             "218",
@@ -595,6 +604,7 @@ object MotmByCategory {
 
             "Central Dogma",
             "16",
+            "255",
             "23",
             "3",
             "121",
