@@ -66,8 +66,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 //    kotlinOptions {
 //        jvmTarget = '11'
@@ -83,9 +83,9 @@ android {
         textOutput file('stdout')
         textReport true
     }
+    namespace 'com.bammellab.motm'
 
 }
-
 
 
 // signing solution courtesy of http://gist.github.com/gabrielemariotti/6856974
@@ -113,7 +113,7 @@ if (propFile.canRead()) {
 dependencies {
     implementation project(':mollib')
     implementation deps.kotlin.stdlib.jdk
-    implementation deps.kotlin.coroutines.jdk
+//    implementation deps.kotlin.coroutines.jdk
     implementation deps.kotlin.coroutines.android
 
     implementation deps.android.material

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2021 Bammellab / James Andreas
+ *  Copyright 2023 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -110,14 +110,16 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
         var deltay: Float
         var deltaSpacing: Float
 
+
+        if (m == null) {
+            return true
+        }
+
         // hand the event to the GestureDetector
         // ignore the result for now.
         // TODO:  hook up fling logic
         val result = gestureDetector!!.onTouchEvent(m)
 
-        if (m == null) {
-            return true
-        }
         renderMode = RENDERMODE_CONTINUOUSLY
         if (BufferManager.isBigMolecule) {
             renderer.overrideShader(SHADER_POINT_NO_NORMALS)

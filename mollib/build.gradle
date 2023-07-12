@@ -23,10 +23,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_11
+//        targetCompatibility JavaVersion.VERSION_11
+//    }
 
 
     buildTypes {
@@ -50,12 +50,17 @@ android {
         textOutput file('stdout')
         textReport true
     }
+    namespace 'com.bammellab.mollib'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
 
 }
 
 dependencies {
     implementation deps.kotlin.stdlib.jdk
-    implementation deps.kotlin.coroutines.jdk
+//    implementation deps.kotlin.coroutines.jdk
     implementation deps.kotlin.coroutines.android
 
 

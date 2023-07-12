@@ -1,5 +1,5 @@
 /*
- *  Copyright 2021 Bammellab / James Andreas
+ *  Copyright 2023 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -130,12 +130,12 @@ class FastscrollBubble(
     }
 
     private fun slideOutAnimationThumb() {
-        val l = ThumbListener()
+       // val l = ThumbListener()
         with(thumbImageView) {
             animate().apply {
                 duration = 500
                 translationX(width.toFloat())
-                setListener(l)
+               // setListener(l)
                 start()
             }
         }
@@ -177,7 +177,7 @@ class FastscrollBubble(
         }
     }
 
-    inner class ThumbListener : Animator.AnimatorListener {
+/*    inner class ThumbListener : Animator.AnimatorListener {
 
         override fun onAnimationEnd(animation: Animator?) {
             // Timber.e("ON END")
@@ -192,7 +192,7 @@ class FastscrollBubble(
 
         override fun onAnimationRepeat(animation: Animator?) {
         }
-    }
+    }*/
 
     inner class ScrollListener : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {

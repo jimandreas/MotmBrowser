@@ -51,8 +51,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     lint {
         abortOnError false
@@ -65,6 +65,7 @@ android {
         textOutput file('stdout')
         textReport true
     }
+    namespace 'com.bammellab.standalone'
 
 }
 
@@ -95,7 +96,7 @@ if (propFile.canRead()) {
 dependencies {
     implementation project(':mollib')
     implementation deps.kotlin.stdlib.jdk
-    implementation deps.kotlin.coroutines.jdk
+//    implementation deps.kotlin.coroutines.jdk
     implementation deps.kotlin.coroutines.android
 
     implementation deps.android.material
