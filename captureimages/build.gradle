@@ -32,7 +32,7 @@ android {
 
         versionCode versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
-        resConfigs 'en'
+        resourceConfigurations += ['en']
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -99,19 +99,19 @@ dependencies {
 //    implementation deps.kotlin.coroutines.jdk
     implementation deps.kotlin.coroutines.android
 
-    implementation deps.android.material
+    implementation 'com.google.android.material:material:1.11.0-alpha01'
     implementation deps.android.x.cardview
-    implementation deps.android.x.coreKtx
+    implementation 'androidx.core:core-ktx:1.10.1'
     implementation deps.android.x.constraintLayout
     implementation deps.android.x.lifecycleruntime
 
     // implementation deps.guava
-    implementation deps.timber
+    implementation 'com.jakewharton.timber:timber:5.0.1'
 
     implementation deps.pdbparser
 
-    testImplementation deps.annotations
-    testImplementation deps.jupiter
-    testImplementation deps.truth
+    testImplementation 'org.jetbrains:annotations:24.0.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testImplementation 'com.google.truth:truth:1.1.5'
 }
 
