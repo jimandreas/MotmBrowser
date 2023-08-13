@@ -14,9 +14,9 @@
 // leveraged (plagarized) from https://github.com/JakeWharton/SdkSearch/blob/master/build.gradle
 buildscript {
     ext.buildConfig = [
-        'compileSdk': 33,
+        'compileSdk': 34,
         'minSdk'    : 21,
-        'targetSdk' : 33,
+        'targetSdk' : 34,
     ]
 
     // this section is for dependencies that fly in flocks
@@ -132,8 +132,7 @@ buildscript {
     ext.isCiBuild = System.getenv('CI') == 'true'
 
     repositories {
-        //noinspection JcenterRepositoryObsolete
-        jcenter()
+        mavenCentral()
         google()
         maven { url "https://kotlin.bintray.com/kotlinx" }
     }
@@ -147,8 +146,6 @@ buildscript {
 
 allprojects {
     repositories {
-        //noinspection JcenterRepositoryObsolete
-        jcenter()
         google()
         mavenCentral()
         maven { url "https://kotlin.bintray.com/kotlinx" }
@@ -156,7 +153,7 @@ allprojects {
     }
 
     // Force all of the primary support libraries to use the same version.
-    configurations.all {
+    configurations.configureEach {
         resolutionStrategy {
             eachDependency { details ->
                 if (details.requested.group == 'com.android.support') {
@@ -166,13 +163,15 @@ allprojects {
         }
     }
 
-    tasks.withType(Test) {
-        testLogging {
-            events "skipped", "failed", "passed"
+    tasks.withType(Test).tap {
+        configureEach {
+            testLogging {
+                events "skipped", "failed", "passed"
+            }
         }
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }

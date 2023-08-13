@@ -299,15 +299,15 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
      * processing.
      */
     private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
-        override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        /*override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
 
             // Timber.w("onScroll");
             return true
-        }
+        }*/
 
         // not implemented - probably a bad idea
         //   might be good to average out the pivot to help with jitter
-        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        /*override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
 
             // Timber.w("onFling");
             //            // Set up the Scroller for a fling
@@ -332,7 +332,7 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
             //                scrollAnimator.start();
             //            }
             return true
-        }
+        }*/
 
         override fun onDown(e: MotionEvent): Boolean {
 
@@ -340,6 +340,24 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                 stopScrolling()
             }
             return true
+        }
+
+        override fun onScroll(
+            e1: MotionEvent?,
+            e2: MotionEvent,
+            distanceX: Float,
+            distanceY: Float
+        ): Boolean {
+            return super.onScroll(e1, e2, distanceX, distanceY)
+        }
+
+        override fun onFling(
+            e1: MotionEvent?,
+            e2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
+            return super.onFling(e1, e2, velocityX, velocityY)
         }
     }
 
