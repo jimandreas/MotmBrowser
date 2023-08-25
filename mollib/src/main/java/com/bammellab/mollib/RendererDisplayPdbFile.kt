@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -25,7 +25,7 @@ package com.bammellab.mollib
 
 import android.app.Activity
 import android.graphics.Bitmap
-import android.opengl.GLES20
+import android.opengl.GLES20.*
 import android.opengl.GLES30.glReadPixels
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
@@ -67,7 +67,7 @@ class RendererDisplayPdbFile(
     private var listener: UpdateRenderFinished? = null
     private var surfaceCreated: SurfaceCreated? = null
     private var pdbLoaded = false
-    private var listenerIsUpdated = false
+    private var listenerIsUpdated = 0
 
     fun setSurfaceCreatedListener(listener: SurfaceCreated) {
         surfaceCreated = listener
@@ -108,7 +108,7 @@ class RendererDisplayPdbFile(
     @Volatile
     var deltaTranslateY = 0f
 
-    var initialScale = INITIAL_SCALE
+    private var initialScale = INITIAL_SCALE
 
     @Volatile
     var scaleCurrentF = initialScale
@@ -220,23 +220,23 @@ class RendererDisplayPdbFile(
         molecule = moleculeIn
         reportedTimeFlag = false
         Timber.v("mol is set")
-        listenerIsUpdated = false
+        listenerIsUpdated = 0
     }
 
     fun tossMoleculeToGC() {
         molecule = null
-        listenerIsUpdated = true
+        listenerIsUpdated = 0
     }
 
     override fun onSurfaceCreated(glUnused: GL10, config: EGLConfig) {
         // Set the background clear color to black.
-        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
         // Use culling to remove back faces.
-        GLES20.glEnable(GLES20.GL_CULL_FACE)
+        glEnable(GL_CULL_FACE)
 
         // Enable depth testing
-        GLES20.glEnable(GLES20.GL_DEPTH_TEST)
+        glEnable(GL_DEPTH_TEST)
 
         // Position the eye in front of the origin.
         val eyeX = 0.0f
@@ -260,8 +260,8 @@ class RendererDisplayPdbFile(
 
         var vertexShader = xYZ.vertexShaderLesson2
         var fragmentShader = xYZ.fragmentShaderLesson2
-        var vertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, vertexShader)
-        var fragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader)
+        var vertexShaderHandle = compileShader(GL_VERTEX_SHADER, vertexShader)
+        var fragmentShaderHandle = compileShader(GL_FRAGMENT_SHADER, fragmentShader)
 
         perVertexProgramHandle = createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
                 arrayOf("a_Position", "a_Color", "a_Normal"))
@@ -269,8 +269,8 @@ class RendererDisplayPdbFile(
         /* add in a pixel shader from lesson 3 - switchable */
         vertexShader = xYZ.vertexShaderLesson3
         fragmentShader = xYZ.fragmentShaderLesson3
-        vertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, vertexShader)
-        fragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader)
+        vertexShaderHandle = compileShader(GL_VERTEX_SHADER, vertexShader)
+        fragmentShaderHandle = compileShader(GL_FRAGMENT_SHADER, fragmentShader)
         perPixelProgramHandle = createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
                 arrayOf("a_Position", "a_Color", "a_Normal"))
 
@@ -291,8 +291,8 @@ class RendererDisplayPdbFile(
                 + "   1.0, 1.0, 1.0);             \n"
                 + "}                              \n")
 
-        val pointVertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, pointVertexShader)
-        val pointFragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, pointFragmentShader)
+        val pointVertexShaderHandle = compileShader(GL_VERTEX_SHADER, pointVertexShader)
+        val pointFragmentShaderHandle = compileShader(GL_FRAGMENT_SHADER, pointFragmentShader)
         pointProgramHandle = createAndLinkProgram(pointVertexShaderHandle, pointFragmentShaderHandle,
                 arrayOf("a_Position"))
 
@@ -316,16 +316,16 @@ class RendererDisplayPdbFile(
         }
     }
 
-    override fun onSurfaceChanged(glUnused: GL10?, width: Int, height: Int) {
+    override fun onSurfaceChanged(glUnused: GL10?, widthIn: Int, heightIn: Int) {
         // Timber.e("Scale is $scaleCurrentF $this")
         // Set the OpenGL viewport to the same size as the surface.
-        GLES20.glViewport(0, 0, width, height)
-        mWidth = width
-        mHeight = height
+        glViewport(0, 0, widthIn, heightIn)
+        width = widthIn
+        height = heightIn
 
         // Create a new perspective projection matrix. The height will stay the same
         // while the width will vary as per aspect ratio.
-        val ratio = width.toFloat() / height
+        val ratio = widthIn.toFloat() / heightIn
         val left = -ratio * scaleCurrentF
         val right = ratio * scaleCurrentF
         val bottom = -1.0f * scaleCurrentF
@@ -336,8 +336,8 @@ class RendererDisplayPdbFile(
 
         Matrix.frustumM(projectionMatrix, 0, left, right, bottom, top, near, far)
 
-        val glError = GLES20.glGetError()
-        if (glError != GLES20.GL_NO_ERROR) {
+        val glError = glGetError()
+        if (glError != GL_NO_ERROR) {
             Timber.e("GLERROR: $glError")
         }
     }
@@ -345,7 +345,7 @@ class RendererDisplayPdbFile(
     override fun onDrawFrame(glUnused: GL10) {
 
         val startTime = SystemClock.uptimeMillis().toFloat()
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
+        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
 
         if (molecule == null) {
             return
@@ -353,7 +353,7 @@ class RendererDisplayPdbFile(
 
         if (!selectModeFlag) {
             if (scaleCurrentF != scalePrevious) {
-                onSurfaceChanged(null, mWidth, mHeight)  // adjusts view
+                onSurfaceChanged(null, width, height)  // adjusts view
                 scalePrevious = scaleCurrentF
             }
 
@@ -370,14 +370,14 @@ class RendererDisplayPdbFile(
                 else ->  perPixelProgramHandle
             }
 
-            GLES20.glUseProgram(selectedProgramHandle)
+            glUseProgram(selectedProgramHandle)
             // Set program handles for drawing.
-            mVPMatrixHandle = GLES20.glGetUniformLocation(selectedProgramHandle, "u_MVPMatrix")
-            mVMatrixHandle = GLES20.glGetUniformLocation(selectedProgramHandle, "u_MVMatrix")
-            lightPosHandle = GLES20.glGetUniformLocation(selectedProgramHandle, "u_LightPos")
-            positionHandle = GLES20.glGetAttribLocation(selectedProgramHandle, "a_Position")
-            colorHandle = GLES20.glGetAttribLocation(selectedProgramHandle, "a_Color")
-            normalHandle = GLES20.glGetAttribLocation(selectedProgramHandle, "a_Normal")
+            mVPMatrixHandle = glGetUniformLocation(selectedProgramHandle, "u_MVPMatrix")
+            mVMatrixHandle = glGetUniformLocation(selectedProgramHandle, "u_MVMatrix")
+            lightPosHandle = glGetUniformLocation(selectedProgramHandle, "u_LightPos")
+            positionHandle = glGetAttribLocation(selectedProgramHandle, "a_Position")
+            colorHandle = glGetAttribLocation(selectedProgramHandle, "a_Color")
+            normalHandle = glGetAttribLocation(selectedProgramHandle, "a_Normal")
 
             // Calculate position of the light. Push into the distance.
             Matrix.setIdentityM(lightModelMatrix, 0)
@@ -411,8 +411,8 @@ class RendererDisplayPdbFile(
 
             // END of DEBUG cube
 
-            val glError = GLES20.glGetError()
-            if (glError != GLES20.GL_NO_ERROR) {
+            val glError = glGetError()
+            if (glError != GL_NO_ERROR) {
                 Timber.e("GLERROR: $glError")
             }
 
@@ -440,14 +440,20 @@ class RendererDisplayPdbFile(
 
         if (updateListener != null) {
             if (molecule != null && molecule!!.molName.isNotEmpty()) {
-                if (!listenerIsUpdated) {
-                    try {
-                        val name = molecule!!.molName
-                        Timber.e("onDrawFrame: Update Activity")
-                        activity.runOnUiThread { updateListener!!.updateActivity(name) }
-                        listenerIsUpdated = true
-                    } catch (e: Exception) {
-                        Timber.e("NULL pointer in renderer")
+                if (listenerIsUpdated < 5) {
+                    listenerIsUpdated += 1
+                    Timber.d("DRAW number $listenerIsUpdated")
+                    if (listenerIsUpdated == 5) {  // hey five times works!!
+                        listenerIsUpdated += 1
+                        try {
+                            val name = molecule!!.molName
+                            Timber.e("onDrawFrame: Update Activity")
+                            activity.runOnUiThread { updateListener!!.updateActivity(name) }
+                        } catch (e: Exception) {
+                            Timber.e("NULL pointer in renderer")
+                        }
+                    } else {
+                        glSurfaceView.requestRender() // Hack for double buffering
                     }
                 }
             }
@@ -482,7 +488,7 @@ class RendererDisplayPdbFile(
         Matrix.multiplyMM(mVPMatrix, 0, viewMatrix, 0, modelMatrix, 0)
 
         // Pass in the modelview matrix.
-        GLES20.glUniformMatrix4fv(mVMatrixHandle, 1, false, mVPMatrix, 0)
+        glUniformMatrix4fv(mVMatrixHandle, 1, false, mVPMatrix, 0)
 
         val mvmB4 = mVPMatrix
 
@@ -493,18 +499,18 @@ class RendererDisplayPdbFile(
         System.arraycopy(temporaryMatrix, 0, mVPMatrix, 0, 16)
 
         // Pass in the combined matrix.
-        GLES20.glUniformMatrix4fv(mVPMatrixHandle, 1, false, mVPMatrix, 0)
+        glUniformMatrix4fv(mVPMatrixHandle, 1, false, mVPMatrix, 0)
 
         // Pass in the light position in eye space.
-        GLES20.glUniform3f(lightPosHandle, lightPosInEyeSpace[0], lightPosInEyeSpace[1], lightPosInEyeSpace[2])
+        glUniform3f(lightPosHandle, lightPosInEyeSpace[0], lightPosInEyeSpace[1], lightPosInEyeSpace[2])
 
         val mm = modelMatrix
         val vm = viewMatrix
         val mvm = mVPMatrix
         val light = lightPosInEyeSpace
 
-        val glError = GLES20.glGetError()
-        if (glError != GLES20.GL_NO_ERROR) {
+        val glError = glGetError()
+        if (glError != GL_NO_ERROR) {
             Timber.e("OnDrawFrame, glerror =  $glError")
         }
     }
@@ -549,7 +555,7 @@ class RendererDisplayPdbFile(
         // Pass in the modelview matrix.
         // GLES20.glUniformMatrix4fv(mVMatrixHandle, 1, false, mVPMatrix, 0);
         Matrix.setIdentityM(temporaryMatrix, 0)
-        GLES20.glUniformMatrix4fv(mVMatrixHandle, 1, false, temporaryMatrix, 0)
+        glUniformMatrix4fv(mVMatrixHandle, 1, false, temporaryMatrix, 0)
 
         // This multiplies the modelview matrix by the projection matrix,
         // and stores the result in the MVP matrix
@@ -559,13 +565,13 @@ class RendererDisplayPdbFile(
 
         // Pass in the combined matrix.
         // GLES20.glUniformMatrix4fv(mVPMatrixHandle, 1, false, mVPMatrix, 0);
-        GLES20.glUniformMatrix4fv(mVPMatrixHandle, 1, false, projectionMatrix, 0)
+        glUniformMatrix4fv(mVPMatrixHandle, 1, false, projectionMatrix, 0)
 
         // Pass in the light position in eye space.
-        GLES20.glUniform3f(lightPosHandle, lightPosInEyeSpace[0], lightPosInEyeSpace[1], lightPosInEyeSpace[2])
+        glUniform3f(lightPosHandle, lightPosInEyeSpace[0], lightPosInEyeSpace[1], lightPosInEyeSpace[2])
 
-        val glError = GLES20.glGetError()
-        if (glError != GLES20.GL_NO_ERROR) {
+        val glError = glGetError()
+        if (glError != GL_NO_ERROR) {
             Timber.e("OnDrawFrame, glerror =  $glError")
         }
     }
@@ -574,22 +580,22 @@ class RendererDisplayPdbFile(
      * Draws a point representing the position of the light.
      */
     private fun drawLight() {
-        val pointMVPMatrixHandle = GLES20.glGetUniformLocation(pointProgramHandle, "u_MVPMatrix")
-        val pointPositionHandle = GLES20.glGetAttribLocation(pointProgramHandle, "a_Position")
+        val pointMVPMatrixHandle = glGetUniformLocation(pointProgramHandle, "u_MVPMatrix")
+        val pointPositionHandle = glGetAttribLocation(pointProgramHandle, "a_Position")
 
         // Pass in the position.
-        GLES20.glVertexAttrib3f(pointPositionHandle, lightPosInModelSpace[0], lightPosInModelSpace[1], lightPosInModelSpace[2])
+        glVertexAttrib3f(pointPositionHandle, lightPosInModelSpace[0], lightPosInModelSpace[1], lightPosInModelSpace[2])
 
         // Since we are not using a buffer object, disable vertex arrays for this attribute.
-        GLES20.glDisableVertexAttribArray(pointPositionHandle)
+        glDisableVertexAttribArray(pointPositionHandle)
 
         // Pass in the transformation matrix.
         Matrix.multiplyMM(mVPMatrix, 0, viewMatrix, 0, lightModelMatrix, 0)
         Matrix.multiplyMM(mVPMatrix, 0, projectionMatrix, 0, mVPMatrix, 0)
-        GLES20.glUniformMatrix4fv(pointMVPMatrixHandle, 1, false, mVPMatrix, 0)
+        glUniformMatrix4fv(pointMVPMatrixHandle, 1, false, mVPMatrix, 0)
 
         // Draw the point.
-        GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1)
+        glDrawArrays(GL_POINTS, 0, 1)
     }
 
     /**
@@ -600,23 +606,23 @@ class RendererDisplayPdbFile(
      * @return An OpenGL handle to the shader.
      */
     private fun compileShader(shaderType: Int, shaderSource: String): Int {
-        var shaderHandle = GLES20.glCreateShader(shaderType)
+        var shaderHandle = glCreateShader(shaderType)
 
         if (shaderHandle != 0) {
             // Pass in the shader source.
-            GLES20.glShaderSource(shaderHandle, shaderSource)
+            glShaderSource(shaderHandle, shaderSource)
 
             // Compile the shader.
-            GLES20.glCompileShader(shaderHandle)
+            glCompileShader(shaderHandle)
 
             // Get the compilation status.
             val compileStatus = IntArray(1)
-            GLES20.glGetShaderiv(shaderHandle, GLES20.GL_COMPILE_STATUS, compileStatus, 0)
+            glGetShaderiv(shaderHandle, GL_COMPILE_STATUS, compileStatus, 0)
 
             // If the compilation failed, delete the shader.
             if (compileStatus[0] == 0) {
-                Timber.e("Error compiling shader: ${GLES20.glGetShaderInfoLog(shaderHandle)}")
-                GLES20.glDeleteShader(shaderHandle)
+                Timber.e("Error compiling shader: ${glGetShaderInfoLog(shaderHandle)}")
+                glDeleteShader(shaderHandle)
                 shaderHandle = 0
             }
         }
@@ -637,34 +643,34 @@ class RendererDisplayPdbFile(
      * @return An OpenGL handle to the program.
      */
     private fun createAndLinkProgram(vertexShaderHandle: Int, fragmentShaderHandle: Int, attributes: Array<String>?): Int {
-        var programHandle = GLES20.glCreateProgram()
+        var programHandle = glCreateProgram()
 
         if (programHandle != 0) {
             // Bind the vertex shader to the program.
-            GLES20.glAttachShader(programHandle, vertexShaderHandle)
+            glAttachShader(programHandle, vertexShaderHandle)
 
             // Bind the fragment shader to the program.
-            GLES20.glAttachShader(programHandle, fragmentShaderHandle)
+            glAttachShader(programHandle, fragmentShaderHandle)
 
             // Bind attributes
             if (attributes != null) {
                 val size = attributes.size
                 for (i in 0 until size) {
-                    GLES20.glBindAttribLocation(programHandle, i, attributes[i])
+                    glBindAttribLocation(programHandle, i, attributes[i])
                 }
             }
 
             // Link the two shaders together into a program.
-            GLES20.glLinkProgram(programHandle)
+            glLinkProgram(programHandle)
 
             // Get the link status.
             val linkStatus = IntArray(1)
-            GLES20.glGetProgramiv(programHandle, GLES20.GL_LINK_STATUS, linkStatus, 0)
+            glGetProgramiv(programHandle, GL_LINK_STATUS, linkStatus, 0)
 
             // If the link failed, delete the program.
             if (linkStatus[0] == 0) {
-                Timber.e("Error compiling shader: ${GLES20.glGetShaderInfoLog(programHandle)}")
-                GLES20.glDeleteProgram(programHandle)
+                Timber.e("Error compiling shader: ${glGetShaderInfoLog(programHandle)}")
+                glDeleteProgram(programHandle)
                 programHandle = 0
             }
         }
@@ -970,11 +976,30 @@ class RendererDisplayPdbFile(
 
     fun readGlBufferToBitmap(x: Int, y: Int, w: Int, h: Int): Bitmap? {
 
+
+//        b = IntArray(width * height)
+//        bt = IntArray(width * height)
+//        ib = IntBuffer.wrap(b)
+//        ib.position(0)
+//        glReadBuffer(GL_BACK);
+//        glReadPixels(0,0,width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib)
+//        var non_zero = 0
+//        for (i in 0 until width * height) {
+//            if (b[i] != 0xff000000.toInt()) {
+//                non_zero += 1
+//            }
+//
+//        }
+//        Timber.d("$non_zero")
+
+        glFlush()
         ib.position(0)
+
+        //glReadBuffer(GL_BACK)
         glReadPixels(x, y, w, h, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib)
-        val glError = GLES20.glGetError()
-        if (glError != GLES20.GL_NO_ERROR) {
-            Timber.e("OnDrawFrame, glerror =  $glError")
+        val glError = glGetError()
+        if (glError != GL_NO_ERROR) {
+            Timber.e("readGlBufferToBitmap, glerror =  ${glError.toString(16)}")
         }
         var i = 0
         var k = 0
@@ -1017,8 +1042,8 @@ class RendererDisplayPdbFile(
         private const val INITIAL_SCALE = 0.2f
         private var saveScale = 0f
 
-        private var mHeight: Int = 0
-        private var mWidth: Int = 0
+        private var height: Int = 0
+        private var width: Int = 0
         private var lastReportedAtom = -1
         private val mViewport = intArrayOf(0, 0, 0, 0)
     }

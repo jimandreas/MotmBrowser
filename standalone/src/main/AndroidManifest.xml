@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~  Copyright 2020 Bammellab / James Andreas
+  ~  Copyright 2023 Bammellab / James Andreas
   ~  Licensed under the Apache License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
   ~  You may obtain a copy of the License at
@@ -14,7 +14,6 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.bammellab.standalone"
     tools:ignore="GoogleAppIndexingWarning">
     <!-- We require OpenGL ES 2.0 -->
     <uses-feature
@@ -29,6 +28,7 @@
         tools:ignore="AllowBackup">
         <activity
             android:name="com.bammellab.standalone.ActivityDisplayPdbFile"
+            android:exported="true"
             android:label="@string/activity_load_pdb_file_title"
             android:theme="@style/Theme.DesignDemo2" >
             <intent-filter>

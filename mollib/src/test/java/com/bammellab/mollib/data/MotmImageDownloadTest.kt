@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -49,14 +49,19 @@ internal class MotmImageDownloadTest {
         // last entry
         match = MotmImageDownload.motmTiffImageName(1)
         assertNotEquals("", match)
-        assertEquals("1-Myoglobin-geis-0218-myoglobin",
+        assertEquals("1-Myoglobin-1pmb_1mbn",
                 match)
     }
 
+    // the MotM list is now 253 entries  plus 3 featured images - so 256 total
     @Test
     @DisplayName("test basic screensaver list function")
     fun buildMotmImageList() {
-        val foo : List<MotmImageDownload.FavoriteMotmImage> = MotmImageDownload.buildMotmImageList()
+        val foo : List<MotmImageDownload.ScreensaverMotmImage> = MotmImageDownload.buildMotmImageList()
         assertNotEquals(0, foo.size)
+
+        // right now there are 253 months of the Molecule of the Month.
+        //  So there should be 252 entries in the image list
+        assertEquals(256, foo.size)
     }
 }

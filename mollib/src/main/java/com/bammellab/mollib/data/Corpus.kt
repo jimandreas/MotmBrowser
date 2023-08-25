@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -15,7 +15,6 @@
 
 package com.bammellab.mollib.data
 
-import timber.log.Timber
 import java.util.*
 
 /**
@@ -240,11 +239,14 @@ object Corpus {
             "202-Dipeptidyl_Peptidase4-1nu8_homepage-tn.png",
             // END funkyness
 
-            "204-Aminopeptidase_1_and_Autophagy-4r8f_homepage-tn.png",
-            "203-PD1_Programmed_Cell_Death_Protein_1-203_homepage-tn.png",
+            "203-Aminopeptidase_1_and_Autophagy-4r8f_homepage-tn.png",
+
+            "204-PD1_Programmed_Cell_Death_Protein_1-203_homepage-tn.png",
+
 
             // note: 10/2020 - still swapped.
             // START: note that 203/204 is funky - They are SWAPPED.   And has stayed that way.
+            //   unswapped here
 
             "205-Nuclear_Pore_Complex-NPC_homepage-tn.png",
             "206-Globin_Evolution-Globin_Homepage-tn.png",
@@ -286,9 +288,13 @@ object Corpus {
             "239-Phospholipase_A2-1bp2_homepage-tn.png",
             "240-HypoxiaInducible_Factors-1lqb_homepage-tn.png",
             "241-Twenty_Years_of_Molecules-6j4y_homepage-tn.png",
-            "243-Coronavirus_Proteases-6lu7_homepage-tn.png",
-            "242-Voltagegated_Sodium_Channels-6j8j_homepage-tn.png",
-            // 243/242 are swapped??
+//            "243-Coronavirus_Proteases-6lu7_homepage-tn.png",
+//            "242-Voltagegated_Sodium_Channels-6j8j_homepage-tn.png",
+
+            "242-Coronavirus_Proteases-6lu7_homepage-tn.png",
+            "243-Voltagegated_Sodium_Channels-6j8j_homepage-tn.png",
+
+            // 243/242 are swapped??  - reverse this or it messes up the screensaver
             "244-Photosynthetic_Supercomplexes-5xnl_homepage-tn.png",
             "245-Spliceosomes-3jb9_homepage-tn.png",
             "246-Coronavirus_Spike-6crz_6vxx_homepage2-tn.png",
@@ -297,8 +303,12 @@ object Corpus {
             "249-SARSCoV2_RNAdependent_RNA_Polymerase-6yyt_homepage-tn.png",
             "250-Capsaicin_Receptor_TRPV1-5is0_homepage-tn.png",
             "251-Adenylyl_Cyclase-6r3q_homepage-tn.png",
-            "252-Hepatitis_C_Virus_ProteaseHelicase-1cu1_homepage-tn.png"
-
+            "252-Hepatitis_C_Virus_ProteaseHelicase-1cu1_homepage-tn.png",
+            "253-Expressome-6x9q_homepage-tn.png",
+            "254-Cellulose_Synthase-6wlb_composite.png",
+            "255-Cisplatin_and_DNA-Fig1.png",
+            "256-SARSCoV2_Spike_and_Antibodies-Spike_Antibodies.png",
+            "257-Fetal_Hemoglobin-1fdh_4hhb.png"
 
     )
 
@@ -590,8 +600,14 @@ object Corpus {
 
             "Adenylyl cyclase creates second messengers to amplify signals from G-protein coupled receptors",  // Nov 2020
 
-            "Structures of hepatitis C viral proteins have led to the discovery of direct-acting antivirals." // Dec 2020
+            "Structures of hepatitis C viral proteins have led to the discovery of direct-acting antivirals.", // Dec 2020
 
+            "In bacteria, ribosomes start building proteins as messenger RNA is being transcribed", // Jan 2021
+            "Plants build tough cellulose strands one sugar at a time.",
+            "Cisplatin treats cancer by causing damage to the DNA of cancer cells.",
+            "Structural biologists are revealing the many ways that antibodies recognize SARS-CoV-2",
+            "Fetal hemoglobin allows a growing fetus to receive oxygen from their mother.", // May 2021
+            ""
     )
 
     private val monthNames = arrayOf(
@@ -631,6 +647,48 @@ object Corpus {
         if (index > corpus.size || index < 0) return 0
         return (corpus.size - index - 1)
     }
+
+    /*
+     * The short month names are used in the fast scroll list of all MotM entries
+     */
+    private val monthNamesShort = arrayOf(
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+    )
+
+
+    private fun monthStringByKey(key: Int): String {
+        if (key < 1) return ("INVALID DATE")
+        val month = (key - 1) % 12
+        val year = (key - 1) / 12 + 2000
+
+        val retString = monthNamesShort[month] + " " + String.format("%4d", year)
+        // String.format("%6.2f", elapsed_time);
+
+        return retString
+    }
+
+    fun generateMonthList(): Array<String> {
+        val initList = mutableListOf<String>()
+
+        var j = 0
+        for (i in numMonths downTo 1) {
+            initList.add(monthStringByKey(i))
+        }
+        return initList.toTypedArray()
+    }
+
+    private const val numMonths = 253
 
     // grep the href in the motm-by-date file
 
@@ -886,9 +944,13 @@ object Corpus {
             /* //motm/249 */ "SARS-CoV-2 RNA-dependent RNA Polymerase",
             /* //motm/250 */ "Capsaicin Receptor TRPV1",
             /* //motm/251 */ "Adenylyl Cyclase",  // NOV 2020
-            /* //motm/252 */ "Hepatitis C Virus Protease/Helicase"  // DEC 2020
-
-
+            /* //motm/252 */ "Hepatitis C Virus Protease/Helicase",  // DEC 2020
+            /* //motm/253 */ "Expressome",  // JAN 2021
+            /* //motm/254 */ "Cellulose Synthase",  // FEB 2021
+            /* //motm/255 */ "Cisplatin and DNA",  // MAR 2021
+            /* //motm/256 */ "SARS-CoV-2 Spike and Antibodies",  // APR 2021
+            /* //motm/257 */ "Fetal Hemoglobin",  // MAY 2021
+            /* //motm/258 */ "TBD"  // JUN 2021
     )
 
     /**
@@ -901,13 +963,13 @@ object Corpus {
      */
     data class MotmEntryInfo(val theIndexNumber: Int, val tagLine: String, val corpusLine: String)
     fun searchMotmInfo(searchTerm: String): List<MotmEntryInfo> {
-        val startTime = System.currentTimeMillis()
-        val s = searchTerm.toLowerCase(Locale.ROOT)
+        //val startTime = System.currentTimeMillis()
+        val s = searchTerm.lowercase(Locale.ROOT)
         val matchTag = (motmTagLines
-                .withIndex().filter {it.value.toLowerCase(Locale.ROOT).contains(s)}
+                .withIndex().filter {it.value.lowercase(Locale.ROOT).contains(s)}
                 .map { it.index }).toIntArray()
         val matchCorpus = (corpus
-                .withIndex().filter {it.value.toLowerCase(Locale.ROOT).contains(s)}
+                .withIndex().filter {it.value.lowercase(Locale.ROOT).contains(s)}
                 .map { it.index }).toIntArray()
 
         val mergeBothLists = (intArrayOf(*matchTag, *matchCorpus).sortedByDescending { it }).distinct()
@@ -915,9 +977,9 @@ object Corpus {
         val resultsList = mergeBothLists.map {
             MotmEntryInfo(it, motmTagLines[it], corpus[it])}
 
-        Timber.v("TIME LAPSED: %d milliseconds, %d matches",
-                System.currentTimeMillis() - startTime,
-                resultsList.size)
+//        Timber.v("TIME LAPSED: %d milliseconds, %d matches",
+//                System.currentTimeMillis() - startTime,
+//                resultsList.size)
 
         return resultsList
     }

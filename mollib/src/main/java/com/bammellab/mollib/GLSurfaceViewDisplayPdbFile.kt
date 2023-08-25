@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2023 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -73,7 +73,9 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
         // until the fling ends. This code (ab)uses a ValueAnimator object to generate
         // a callback on every animation frame. We don't use the animated value at all.
 
-        val scrollAnimator = ValueAnimator.ofFloat(0f, 1f)
+        val scrollAnimator = ValueAnimator.ofFloat(0f, 1f).apply {
+            start()
+        }
         scrollAnimator.addUpdateListener {
             // tickScrollAnimation();
         }
@@ -108,14 +110,16 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
         var deltay: Float
         var deltaSpacing: Float
 
+
+        if (m == null) {
+            return true
+        }
+
         // hand the event to the GestureDetector
         // ignore the result for now.
         // TODO:  hook up fling logic
         val result = gestureDetector!!.onTouchEvent(m)
 
-        if (m == null) {
-            return true
-        }
         renderMode = RENDERMODE_CONTINUOUSLY
         if (BufferManager.isBigMolecule) {
             renderer.overrideShader(SHADER_POINT_NO_NORMALS)
@@ -277,8 +281,8 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
      * Calculate the degree to be rotated by.
      */
     private fun rotation(event: MotionEvent): Float {
-        val deltaX = (event.getX(0) - event.getX(1)).toFloat()
-        val deltaY = (event.getY(0) - event.getY(1)).toFloat()
+        val deltaX = (event.getX(0) - event.getX(1))
+        val deltaY = (event.getY(0) - event.getY(1))
         val radians = atan2(deltaY, deltaX)
         return Math.toDegrees(radians.toDouble()).toFloat()
     }
@@ -295,15 +299,15 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
      * processing.
      */
     private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
-        override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        /*override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
 
             // Timber.w("onScroll");
             return true
-        }
+        }*/
 
         // not implemented - probably a bad idea
         //   might be good to average out the pivot to help with jitter
-        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        /*override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
 
             // Timber.w("onFling");
             //            // Set up the Scroller for a fling
@@ -328,7 +332,7 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
             //                scrollAnimator.start();
             //            }
             return true
-        }
+        }*/
 
         override fun onDown(e: MotionEvent): Boolean {
 
@@ -336,6 +340,24 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                 stopScrolling()
             }
             return true
+        }
+
+        override fun onScroll(
+            e1: MotionEvent?,
+            e2: MotionEvent,
+            distanceX: Float,
+            distanceY: Float
+        ): Boolean {
+            return super.onScroll(e1, e2, distanceX, distanceY)
+        }
+
+        override fun onFling(
+            e1: MotionEvent?,
+            e2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
+            return super.onFling(e1, e2, velocityX, velocityY)
         }
     }
 

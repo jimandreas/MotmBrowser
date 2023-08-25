@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2023 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -57,7 +57,7 @@ object PrefsUtil {
     suspend fun initPreferences() {
         if (prefsContext == null) return
         withContext(Dispatchers.IO) {
-            prefs = PreferenceManager.getDefaultSharedPreferences(prefsContext)
+            prefs = PreferenceManager.getDefaultSharedPreferences(prefsContext!!)
 
             updateTheme(prefs, prefsContext!!.resources)
 
@@ -114,7 +114,7 @@ object PrefsUtil {
     }
 
     fun getStringSet(key: String, defaultValue: Set<String>): Set<String>? {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(prefsContext)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(prefsContext!!)
         val set = prefs.getStringSet(key, defaultValue)
         return if (set == null) null else Collections.unmodifiableSet(set)
     }

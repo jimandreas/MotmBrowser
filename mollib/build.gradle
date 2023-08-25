@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2022 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -10,9 +10,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-
-apply plugin: 'com.android.library'
-apply plugin: 'org.jetbrains.kotlin.android'
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -22,23 +23,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_11
+//        targetCompatibility JavaVersion.VERSION_11
+//    }
 
-    lintOptions {
-        textReport true
-        textOutput 'stdout'
-        lintConfig rootProject.file('lint.xml')
-        disable "UnusedResources",
-            "VectorRaster"
-
-        // (borrowed from Jake Wharton - not true here as yet)
-        // We run a full lint analysis as build part in CI, so skip vital checks for assemble task.
-        checkReleaseBuilds false
-        abortOnError false
-    }
 
     buildTypes {
         release {
@@ -53,30 +42,41 @@ android {
     testOptions {
         execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+        disable 'UnusedResources', 'VectorRaster', 'DefaultLocale'
+        lintConfig file('lint.xml')
+        textOutput file('stdout')
+        textReport true
+    }
+    namespace 'com.bammellab.mollib'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
 
 }
 
 dependencies {
     implementation deps.kotlin.stdlib.jdk
-    implementation deps.kotlin.coroutines.jdk
+//    implementation deps.kotlin.coroutines.jdk
     implementation deps.kotlin.coroutines.android
 
 
     implementation deps.android.x.appcompat
     implementation deps.android.x.coreKtx
-    implementation deps.android.x.preference
-
+    implementation deps.android.x.preferenceKtx
 
     implementation deps.timber
-    implementation deps.guava
+    //implementation deps.guava
 
     implementation deps.okhttp.client
 
-    implementation "com.kotmol.kotmolpdbparser:kotmolpdbparser:1.0.4-SNAPSHOT"
-    //implementation deps.pdbparser
+    implementation deps.pdbparser
 
     testImplementation deps.annotations
-    testImplementation deps.junit
+    testImplementation deps.jupiter
     testImplementation deps.truth
 
 }

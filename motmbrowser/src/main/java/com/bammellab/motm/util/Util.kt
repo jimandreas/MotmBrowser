@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -19,6 +19,7 @@ import android.content.Context
 import android.os.StrictMode
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import com.bammellab.motm.BuildConfig
 
 object Util {
@@ -44,6 +45,10 @@ object Util {
         } else {
             return func()
         }
+    }
+
+    fun toastAnError(context: Context, errorString: String) {
+        Toast.makeText(context, errorString, Toast.LENGTH_LONG).show()
     }
 
 }

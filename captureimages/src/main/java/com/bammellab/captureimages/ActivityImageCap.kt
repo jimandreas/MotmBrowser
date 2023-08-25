@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -16,23 +16,18 @@ package com.bammellab.captureimages
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
-import com.bammellab.mollib.LoadFromSource.FROM_SDCARD
+import com.bammellab.mollib.LoadFromSource.FROM_SDCARD_AND_CAPTURE
 import com.bammellab.mollib.MollibProcessPdbs
 import com.bammellab.mollib.RendererDisplayPdbFile
-import com.bammellab.mollib.UpdateRenderFinished
 import com.bammellab.mollib.Utility.checkForOpengl
 import com.bammellab.mollib.Utility.failDialog
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
+class ActivityImageCap : AppCompatActivity() {
 
     private lateinit var glSurfaceView: GLSurfaceViewDisplayPdbFile
     private lateinit var renderer: RendererDisplayPdbFile
     private lateinit var processPdbs: MollibProcessPdbs
-    private val pdbsCaptured = mutableListOf("")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.v("onCreate")
@@ -54,7 +49,7 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
         val config = resources.configuration
         renderer = RendererDisplayPdbFile(this, glSurfaceView)
         glSurfaceView.setRenderer(renderer, config.densityDpi)
-        renderer.setUpdateListener(this)
+        //renderer.setUpdateListener(this)
         renderer.overrideInitialScale(.6f) // thumbnail size
 
         // This freezes the updates, now adjusted in GLSurfaceView
@@ -65,10 +60,11 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
                 glSurfaceView,
                 renderer,
                 nextNameIndex = 0,
-                pdbFileNames = MotmPdbNames.pdbNames,
-                loadPdbFrom = FROM_SDCARD)
+//                pdbFileNames = MotmPdbNames.pdbNames,
+                pdbFileNames = MotmPdbNames.pdbNames2021,
+                loadPdbFrom = FROM_SDCARD_AND_CAPTURE)
 
-        processPdbs.startProcessing(captureImages = true)
+        //processPdbs.startProcessing(captureImages = true)
     }
 
     override fun onResume() {
@@ -86,23 +82,5 @@ class ActivityImageCap : AppCompatActivity(), UpdateRenderFinished {
         renderer.doCleanUp()
     }
 
-    override fun updateActivity(name: String) {
-        if (!pdbsCaptured.contains(name)) {
-            pdbsCaptured.add(name)
-            GlobalScope.launch {
-                delay(2000L)
-                Timber.e("************")
-                Timber.e("WRITE IMAGE")
-                Timber.e("************")
-                processPdbs.writeCurrentImage()
-            }
-            GlobalScope.launch {
-                delay(3000L)
-                Timber.e("************")
-                Timber.e("LOAD NEXT PDB")
-                Timber.e("************")
-                processPdbs.loadNextPdbFile()
-            }
-        }
-    }
+
 }

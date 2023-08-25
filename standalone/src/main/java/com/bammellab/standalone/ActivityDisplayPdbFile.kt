@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2022 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -99,6 +99,10 @@ class ActivityDisplayPdbFile : AppCompatActivity(), UpdateRenderFinished {
             "1aew_missing_ends", // fix missing atom ends
 
             "1bna",
+
+            "6yej",
+
+            "1xi4",   // loops!
 
             "3lohLONGBOND", // has a "LONGBOND" jump
 

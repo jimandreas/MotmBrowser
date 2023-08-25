@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -24,7 +24,6 @@ import android.content.Intent
 import android.content.pm.PackageManager.GET_ACTIVITIES
 import android.content.pm.PackageManager.NameNotFoundException
 import android.content.res.AssetManager
-import android.content.res.Resources
 import android.net.Uri
 import androidx.appcompat.app.AlertDialog
 import com.kotmol.pdbParser.Molecule

@@ -46,6 +46,6 @@ _sandbox
 # signing for release version
 gradle/signing.properties
 
-
-
+# random cruft
+stdout
 

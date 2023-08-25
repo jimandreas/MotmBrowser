@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -16,6 +16,7 @@
 package com.bammellab.motm.browse
 
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.bammellab.mollib.data.MotmByCategory.MotmCategoryBiotech
 import com.bammellab.mollib.data.MotmByCategory.MotmCategoryHealth
@@ -32,7 +33,7 @@ class BrowseFragmentCache {
 
     val fragList = mutableListOf<FragmentEntry>()
 
-    fun createFragments() {
+    fun createFragments(cl: ConstraintLayout) {
         Timber.e("creating Fragments")
         var f = FragmentEntry(createFragment(MotmCategoryHealth), "Health and Disease")
         fragList.add(f)
@@ -43,7 +44,8 @@ class BrowseFragmentCache {
         f = FragmentEntry(createFragment(MotmCategoryStructures), "Structures")
         fragList.add(f)
         // all Motm entries - no headers - just a list ordered by the increasing pub date
-        f = FragmentEntry(MotmListFragment(), "All")
+
+        f = FragmentEntry(MotmListFragment(cl), "All")
         fragList.add(f)
     }
 

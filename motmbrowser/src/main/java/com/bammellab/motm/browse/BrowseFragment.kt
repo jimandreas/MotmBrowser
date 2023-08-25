@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -24,12 +24,14 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bammellab.mollib.data.MotmByCategory
 import com.bammellab.mollib.data.MotmByCategory.motmTabLabels
+import com.bammellab.motm.R
 import com.bammellab.motm.databinding.FragmentBrowseBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.MODE_SCROLLABLE
@@ -77,6 +79,7 @@ class BrowseFragment : androidx.fragment.app.Fragment() {
                 return fragmentFlavor(position)
             }
 
+
             override fun getItemCount(): Int {
                 return 5
             }
@@ -90,9 +93,6 @@ class BrowseFragment : androidx.fragment.app.Fragment() {
                 tab.text = ""
             }
         }.attach()
-       /* TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = Card.DECK[position].toString()
-        }.attach()*/
 
         return binding.root
     }
@@ -104,7 +104,10 @@ class BrowseFragment : androidx.fragment.app.Fragment() {
             1 -> wireUpFragment(MotmByCategory.MotmCategoryLife)
             2 -> wireUpFragment(MotmByCategory.MotmCategoryBiotech)
             3 -> wireUpFragment(MotmByCategory.MotmCategoryStructures)
-            else -> MotmListFragment()
+            else -> {
+                val cl = binding.root.findViewById<ConstraintLayout>(R.id.bubble_scroll_constraint_layout)
+                MotmListFragment(cl)
+            }
         }
         return f
     }

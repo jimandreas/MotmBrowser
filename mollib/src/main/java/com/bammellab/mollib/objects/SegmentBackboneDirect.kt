@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2021 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -25,12 +25,10 @@ package com.bammellab.mollib.objects
 
 import android.opengl.GLES20
 import com.bammellab.mollib.common.math.FastSinCos
-import com.bammellab.mollib.common.math.MathUtil
 import com.bammellab.mollib.common.math.MotmVector3
 import com.bammellab.mollib.objects.GlobalObject.BRIGHTNESS_FACTOR
 import com.kotmol.pdbParser.KotmolVector3
 import com.kotmol.pdbParser.Molecule
-
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 

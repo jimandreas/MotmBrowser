@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Bammellab / James Andreas
+ *  Copyright 2022 Bammellab / James Andreas
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -10,16 +10,17 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
 
 
 def versionMajor = 2
-def versionMinor = 4
+def versionMinor = 5
 def versionPatch = 0
-def versionBuild = 2401
+def versionBuild = 2501
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -32,8 +33,8 @@ android {
 
         versionCode versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        resourceConfigurations += ['en']
 
-        resConfigs 'en'
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
     }
@@ -65,40 +66,26 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
-    lintOptions {
-        textReport true
-        textOutput 'stdout'
-        lintConfig rootProject.file('lint.xml')
-        disable "UnusedResources",
-            "VectorRaster",
-            "StaticFieldLeak",
-            "UseCompoundDrawables",
-            "TypographyEllipsis",
-            "IconLauncherShape",
-            "IconLocation",
-            "Autofill",
-            "RtlEnabled"
-
-        checkDependencies true
-        checkTestSources true
-        explainIssues false
-
-        // from Jake Wharton - not true yet for this project:
-        // We run a full lint analysis as build part in CI, so skip vital checks for assemble task.
-        checkReleaseBuilds false
-
-        // added to keep going
+//    kotlinOptions {
+//        jvmTarget = '11'
+//    }
+    lint {
         abortOnError false
+        checkDependencies true
+        checkReleaseBuilds false
+        checkTestSources true
+        disable 'UnusedResources', 'VectorRaster', 'StaticFieldLeak', 'UseCompoundDrawables', 'TypographyEllipsis', 'IconLauncherShape', 'IconLocation', 'Autofill', 'RtlEnabled'
+        explainIssues false
+        lintConfig file('lint.xml')
+        textOutput file('stdout')
+        textReport true
     }
-}
+    namespace 'com.bammellab.motm'
 
+}
 
 
 // signing solution courtesy of http://gist.github.com/gabrielemariotti/6856974
@@ -126,7 +113,7 @@ if (propFile.canRead()) {
 dependencies {
     implementation project(':mollib')
     implementation deps.kotlin.stdlib.jdk
-    implementation deps.kotlin.coroutines.jdk
+//    implementation deps.kotlin.coroutines.jdk
     implementation deps.kotlin.coroutines.android
 
     implementation deps.android.material
@@ -134,11 +121,11 @@ dependencies {
     implementation deps.android.x.constraintLayout
     implementation deps.android.x.coreKtx
     implementation deps.android.x.cardview
-    implementation deps.android.x.lifecycle
-    implementation deps.android.x.navigationfrag
-    implementation deps.android.x.navigationui
-    implementation deps.android.x.preference
-    implementation deps.android.x.viewpager
+    implementation deps.android.x.lifecycleKtx
+    implementation deps.android.x.navigationfragKtx
+    implementation deps.android.x.navigationuiKtx
+    implementation deps.android.x.preferenceKtx
+    implementation deps.android.x.viewpager2
 
     implementation deps.okhttp.client
     implementation deps.retrofit.client
@@ -147,11 +134,11 @@ dependencies {
     implementation deps.pdbparser
     implementation deps.timber
     implementation deps.picasso
-    implementation deps.guava
+    // implementation deps.guava
     implementation deps.glide
     kapt deps.glide
 
     testImplementation deps.annotations
-    testImplementation deps.junit
+    testImplementation deps.jupiter
     testImplementation deps.truth
 }

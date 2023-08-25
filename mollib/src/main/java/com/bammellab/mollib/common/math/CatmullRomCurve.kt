@@ -29,6 +29,7 @@ package com.bammellab.mollib.common.math
  * specific language governing permissions and limitations under the License.
  */
 
+import timber.log.Timber
 import java.util.Collections
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.floor
@@ -64,8 +65,14 @@ class CatmullRomCurve : ICurve.ICurve3D {
     }
 
     fun addPoint(point: MotmVector3) {
-        mPoints.add(point)
-        numPoints++
+        try {
+            mPoints.add(point)
+            numPoints++
+        } catch (e: Exception) {
+            Timber.e("ERROR on addPoint")
+        } catch (outOfMemoryError: OutOfMemoryError) {
+            Timber.e("Oops out of memory error on add point")
+        }
     }
 
     fun getPoint(index: Int): MotmVector3 {
