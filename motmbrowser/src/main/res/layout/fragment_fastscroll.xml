@@ -49,7 +49,7 @@
     <!--Time Markers-->
     <TextView
         android:id="@+id/t2015"
-        android:layout_width="50dp"
+        android:layout_width="100dp"
         android:layout_height="30dp"
         android:layout_marginEnd="100dp"
         android:background="@drawable/nine_patch_decent_blue"
@@ -71,7 +71,7 @@
 
     <TextView
         android:id="@+id/t2010"
-        android:layout_width="50dp"
+        android:layout_width="100dp"
         android:layout_height="30dp"
         android:layout_marginEnd="100dp"
         android:background="@drawable/nine_patch_decent_blue"
@@ -93,7 +93,7 @@
 
     <TextView
         android:id="@+id/t2005"
-        android:layout_width="50dp"
+        android:layout_width="100dp"
         android:layout_height="30dp"
         android:layout_marginEnd="100dp"
         android:background="@drawable/nine_patch_decent_blue"
@@ -115,7 +115,7 @@
 
     <TextView
         android:id="@+id/tcurrent"
-        android:layout_width="100sp"
+        android:layout_width="150sp"
         android:layout_height="40sp"
         android:layout_marginEnd="100dp"
         android:background="@drawable/nine_patch_decent_blue"
