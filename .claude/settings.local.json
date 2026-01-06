@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /c/a/j/active/MotmBrowser diff README.md)"
+    ]
+  }
+}
