@@ -18,9 +18,9 @@ plugins {
 
 
 def versionMajor = 2
-def versionMinor = 5
+def versionMinor = 6
 def versionPatch = 0
-def versionBuild = 2501
+def versionBuild = 2601
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -69,9 +69,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-//    kotlinOptions {
-//        jvmTarget = '11'
-//    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
     lint {
         abortOnError false
         checkDependencies true
