@@ -10,6 +10,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
+
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
@@ -18,9 +20,9 @@ plugins {
 
 
 def versionMajor = 2
-def versionMinor = 6
+def versionMinor = 7
 def versionPatch = 0
-def versionBuild = 2601
+def versionBuild = 2701
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -46,8 +48,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles(
                 getDefaultProguardFile('proguard-android-optimize.txt'),
                 'proguard-rules.pro',
