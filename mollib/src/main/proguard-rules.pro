@@ -13,3 +13,6 @@
 #
 ## OkHttp platform used only on JVM and when Conscrypt dependency is available.
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
+
+### Keep mollib data classes that are accessed from consuming apps
+-keep class com.bammellab.mollib.data.** { *; }

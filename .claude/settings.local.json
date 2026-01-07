@@ -1,17 +1,6 @@
 {
   "permissions": {
     "allow": [
-      "Bash(wc:*)",
-      "Bash(cat:*)",
-      "Bash(git -C /c/a/j/active/MotmBrowser status)",
-      "Bash(git -C /c/a/j/active/MotmBrowser log --oneline -5)",
-      "Bash(git -C /c/a/j/active/MotmBrowser add CLAUDE.md)",
-      "Bash(git -C /c/a/j/active/MotmBrowser commit -m \"$\\(cat <<''EOF''\nAdd CLAUDE.md for Claude Code guidance\n\nProvides build commands, test instructions, and architecture overview for AI-assisted development.\n\n🤖 Generated with [Claude Code]\\(https://claude.ai/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(./gradlew.bat:*)",
-      "Bash(git -C /c/a/j/active/MotmBrowser diff)",
-      "WebSearch",
-      "Bash(git -C /c/a/j/active/MotmBrowser diff --stat)",
-      "Bash(git -C /c/a/j/active/MotmBrowser log --oneline -3)"
     ]
   }
 }

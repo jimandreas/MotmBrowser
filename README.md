@@ -5,7 +5,7 @@ supports browsing of the excellent Molecule of the Month (MotM) feature:
 
 http://pdb101.rcsb.org/motm/motm-about
 
-The MotmBrowser contains a 3D viewer for viewing the featured [RCSB Protein Data Bank] (PDB) molecules.
+The MotmBrowser contains a 3D viewer for viewing the featured [RCSB Protein Data Bank] PDB molecules.
 This viewer is under continuous development.
 
 Screenshots:
@@ -17,7 +17,7 @@ Screenshots:
 
 The MotmBrowser references the awesome work by the RCSB team.
 
-from [https://pdb101.rcsb.org/more/how-to-cite]
+from https://pdb101.rcsb.org/more/how-to-cite
 
 ```
 Materials and images are free for use. Please cite PDB-101 (PDB101.rcsb.org).
@@ -45,9 +45,8 @@ Note: RCSB = Research Collaboratory for Structural Bioinformatics
 
 Image credits:<br>
 
-* [Launch icon] :  <br>
-    [https://en.wikipedia.org/wiki/List_of_interstellar_and_circumstellar_molecules#/media/File:Trihydrogen-cation-3D-vdW.png]<br>
-The H+ 3 cation is one of the most abundant ions in the universe. It was first detected in 1993.[71][72]
+* [Launch icon]:<br>
+The H+3 cation is one of the most abundant ions in the universe. It was first detected in 1993.
 
 * The [MotM images] are derived from the pdp101 website and are used under the [CC-BY-4.0 license].
 
@@ -57,11 +56,11 @@ The H+ 3 cation is one of the most abundant ions in the universe. It was first d
 
 <b><i>The Motmbrowser user interface is leveraged from the following:</i></b><br>
 
-Original CheeseSquare repo: [http://github.com/chrisbanes/cheesesquare]
+Original CheeseSquare repo: http://github.com/chrisbanes/cheesesquare
 
-Wikipedia search functionality: [https://github.com/wikimedia/apps-android-wikipedia]
+Wikipedia search functionality: https://github.com/wikimedia/apps-android-wikipedia
 
-OpenGL tutorials: [https://github.com/jimandreas/AndroidOpenGLESLessons]
+OpenGL tutorials: https://github.com/jimandreas/AndroidOpenGLESLessons
 
 Rajawali: Math functions leveraged from [Rajawali]
 
