@@ -32,7 +32,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/molecule_in_question"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintTop_creator="1" />
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:contentDescription="@string/molecule_in_question"
-        app:layout_constraintLeft_toRightOf="@+id/avatar"
+        app:layout_constraintStart_toEndOf="@+id/avatar"
         app:layout_constraintTop_toTopOf="@+id/avatar"
         tools:text="desc goes here" />
 
@@ -54,7 +54,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/molecule_in_question"
-        app:layout_constraintLeft_toRightOf="@+id/avatar"
+        app:layout_constraintStart_toEndOf="@+id/avatar"
         app:layout_constraintTop_toBottomOf="@+id/motmtext1"
         tools:text="placeholder text" />
 </androidx.constraintlayout.widget.ConstraintLayout>
