@@ -19,6 +19,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.LifecycleObserver
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -44,6 +46,15 @@ class MainActivity :
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+
+        // Handle edge-to-edge display for Android 15+ (SDK 35)
+        val container = findViewById<ConstraintLayout>(R.id.container)
+        ViewCompat.setOnApplyWindowInsetsListener(container) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         PrefsUtil.managePrefsInBackground()
 
         navView = findViewById(R.id.nav_view)
