@@ -13,9 +13,27 @@
 
 @file:Suppress("MoveVariableDeclarationIntoWhen", "LiftReturnOrAssignment")
 
+/*
+CLAUDE OPUS 4.5 changes:
+
+  Critical bug fixes:
+  1. Fixed line 305 - Changed bottomAddedScrollValue to topAddedScrollValue
+  2. Moved static state to instance variables - currentState, bottomAddedScrollValue, topAddedScrollValue are now per-instance
+  3. Refactored state logic - Bottom/top region detection now uses mutually exclusive when expression
+
+  Resource management:
+  4. Added cleanup in ON_DESTROY - Removes scroll listener and cancels timer
+
+  Safety improvements:
+  5. Added bounds checking - All monthList[index] accesses now use coerceIn(0, lastValidIndex)
+  6. Made animations consistent - Added .start() to show() and fade() functions
+
+  Code quality:
+  7. Replaced magic number - 1.8f multiplier replaced with calculated offset using getLocationOnScreen()
+  8. Removed unused variable - Deleted previousY
+ */
 package com.bammellab.motm.browse
 
-import android.animation.Animator
 import android.annotation.SuppressLint
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
@@ -26,15 +44,22 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Lifecycle.Event.*
+import androidx.lifecycle.Lifecycle.Event.ON_ANY
+import androidx.lifecycle.Lifecycle.Event.ON_CREATE
+import androidx.lifecycle.Lifecycle.Event.ON_DESTROY
+import androidx.lifecycle.Lifecycle.Event.ON_PAUSE
+import androidx.lifecycle.Lifecycle.Event.ON_RESUME
+import androidx.lifecycle.Lifecycle.Event.ON_START
+import androidx.lifecycle.Lifecycle.Event.ON_STOP
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bammellab.motm.R
-import com.bammellab.motm.browse.FastscrollBubble.Companion.BOTTOMSTATE.*
+import com.bammellab.motm.browse.FastscrollBubble.Companion.BOTTOMSTATE.POSITION_IS_AT_BOTTOM
+import com.bammellab.motm.browse.FastscrollBubble.Companion.BOTTOMSTATE.POSITION_IS_AT_TOP
+import com.bammellab.motm.browse.FastscrollBubble.Companion.BOTTOMSTATE.POSITION_IS_IN_MIDDLE_SECTION
 import com.bammellab.motm.util.OneShotTimer
-
 import timber.log.Timber
 
 class FastscrollBubble(
@@ -51,15 +76,20 @@ class FastscrollBubble(
     private lateinit var tcurrent: TextView
     var numMonths : Int = monthList.size
 
+    // Instance state (moved from companion object to avoid shared state issues)
+    private var currentState = BOTTOMSTATE.POSITION_IS_IN_MIDDLE_SECTION
+    private var bottomAddedScrollValue = 0
+    private var topAddedScrollValue = 0
 
     private lateinit var debugTextView: TextView  // set to VISIBLE for debugging
 
     private val thumbTimer = OneShotTimer(recyclerView.context)
+    private lateinit var scrollListener: ScrollListener
 
     @SuppressLint("ClickableViewAccessibility")
     fun setup() {
-        val l = ScrollListener()
-        recyclerView.addOnScrollListener(l)
+        scrollListener = ScrollListener()
+        recyclerView.addOnScrollListener(scrollListener)
         viewLifecycleOwner.lifecycle.addObserver(this)
 
         thumbImageView = constraintLayout.findViewById(R.id.thumbFastscrollerImageview)
@@ -95,7 +125,7 @@ class FastscrollBubble(
             animate().apply {
                 duration = 200
                 alpha(1.0f)
-            }
+            }.start()
         }
     }
 
@@ -108,11 +138,10 @@ class FastscrollBubble(
 
     private fun View.fade() {
         with(this) {
-            //this.visibility = VISIBLE
             animate().apply {
                 duration = 200
                 alpha(0.0f)
-            }
+            }.start()
         }
     }
 
@@ -171,7 +200,12 @@ class FastscrollBubble(
 
             ON_STOP -> Timber.v("On_STOP")
 
-            ON_DESTROY -> Timber.v("On_DESTROY")
+            ON_DESTROY -> {
+                Timber.v("On_DESTROY")
+                // Clean up resources to avoid leaks
+                recyclerView.removeOnScrollListener(scrollListener)
+                thumbTimer.cancelTimer()
+            }
 
             ON_ANY -> Timber.v("On_ANY")
         }
@@ -247,57 +281,57 @@ class FastscrollBubble(
 
 
             /*
-             *  Bottom region handling- the thumb must stop at the boundary
-             *  of the recyclerView but the scrolling should continue to the last value
+             *  Region handling - the thumb must stop at boundaries but scrolling
+             *  continues to show correct values. Uses mutually exclusive state transitions.
              */
-
             var str = ""
+            val bottomThreshold = recyclerView.height.toFloat() - thumbImageView.height.toFloat()
+            val topThreshold = thumbImageView.height.toFloat()
 
-            if (unclippedPos > recyclerView.height.toFloat() - thumbImageView.height.toFloat()) {
-                if (currentState == POSITION_IS_IN_MIDDLE_SECTION) {
-                    currentState = POSITION_IS_AT_BOTTOM // entering the bottom region
-                    bottomAddedScrollValue = 0
-                }
-            } else {
-                currentState = POSITION_IS_IN_MIDDLE_SECTION
+            // Determine new state based on position (mutually exclusive)
+            val newState = when {
+                unclippedPos > bottomThreshold -> POSITION_IS_AT_BOTTOM
+                unclippedPos < topThreshold -> POSITION_IS_AT_TOP
+                else -> POSITION_IS_IN_MIDDLE_SECTION
             }
 
+            // Reset scroll value counters when entering a boundary region
+            if (newState != currentState) {
+                when (newState) {
+                    POSITION_IS_AT_BOTTOM -> bottomAddedScrollValue = 0
+                    POSITION_IS_AT_TOP -> topAddedScrollValue = 0
+                    POSITION_IS_IN_MIDDLE_SECTION -> {
+                        bottomAddedScrollValue = 0
+                        topAddedScrollValue = 0
+                    }
+                }
+                currentState = newState
+            }
+
+            // Set display string based on current state (with bounds checking)
+            val lastValidIndex = monthList.size - 1
             when (currentState) {
                 POSITION_IS_IN_MIDDLE_SECTION -> {
-                    str = monthList[ave.toInt()]
+                    val index = ave.toInt().coerceIn(0, lastValidIndex)
+                    str = monthList[index]
                 }
                 POSITION_IS_AT_BOTTOM -> {
                     bottomAddedScrollValue += 1
-                    val index = ave.toInt() + bottomAddedScrollValue
-                    str = monthList[index.coerceIn(0, monthList.lastIndex)]
-                }
-                else -> {
-                }
-            }
-
-            /*
-             *  Top region handling- the thumb must stop at the boundary
-             *  of the recyclerView but the scrolling should continue to the last value
-             */
-            if (unclippedPos < thumbImageView.height.toFloat()) {
-                if (currentState == POSITION_IS_IN_MIDDLE_SECTION) {
-                    currentState = POSITION_IS_AT_TOP // entering the bottom region
-                    topAddedScrollValue = 0
-                }
-            } else {
-                currentState = POSITION_IS_IN_MIDDLE_SECTION
-            }
-
-            when (currentState) {
-                POSITION_IS_IN_MIDDLE_SECTION -> {
-                    str = monthList[ave.toInt()]
+                    val index = if (ave.toInt() + bottomAddedScrollValue < last - 1) {
+                        (ave.toInt() + bottomAddedScrollValue).coerceIn(0, lastValidIndex)
+                    } else {
+                        (last - 1).coerceIn(0, lastValidIndex)
+                    }
+                    str = monthList[index]
                 }
                 POSITION_IS_AT_TOP -> {
                     topAddedScrollValue += 1
-                    val index = ave.toInt() - topAddedScrollValue
-                    str = monthList[index.coerceIn(0, monthList.lastIndex)]
-                }
-                else -> {
+                    val index = if (ave.toInt() - topAddedScrollValue > 1) {
+                        (ave.toInt() - topAddedScrollValue).coerceIn(0, lastValidIndex)
+                    } else {
+                        0
+                    }
+                    str = monthList[index]
                 }
             }
 
@@ -316,17 +350,21 @@ class FastscrollBubble(
         when (action) {
             ACTION_DOWN -> {
                 showDateLine()
-                previousY = m.y
                 thumbTimer.setTimerValue(3000)
             }
             ACTION_MOVE -> {
                 thumbTimer.setTimerValue(3000)
-                // this is tuned - still has mild hysteresis problems.
-                val pos = (m.rawY - tHeight * 1.8f) * numMonths.toFloat() / rHeight
+                // Calculate offset based on RecyclerView's actual screen position
+                val location = IntArray(2)
+                recyclerView.getLocationOnScreen(location)
+                val recyclerViewTop = location[1].toFloat()
+                val touchOffset = recyclerViewTop + tHeight / 2f
+                val pos = (m.rawY - touchOffset) * numMonths.toFloat() / rHeight
                 debugTextView.text = pos.toString()
-                // recyclerView.smoothScrollToPosition(pos.toInt()) // this doesn't work
-                recyclerView.scrollToPosition(pos.toInt())
-                //Timber.v("${m.rawY} ${m.y}  pos $pos recyclerView Y ${recyclerView.y} Y+H ${recyclerView.y + recyclerView.height}")
+                // Bias 5 elements higher to compensate for visual offset
+                val biasedPos = pos.toInt() - 5
+                val clampedPos = biasedPos.coerceIn(0, numMonths - 1)
+                recyclerView.scrollToPosition(clampedPos)
             }
         }
         return false
@@ -342,12 +380,6 @@ class FastscrollBubble(
     }*/
 
     companion object {
-        private var previousY = 0f
-
-        private var currentState = POSITION_IS_IN_MIDDLE_SECTION
-        private var bottomAddedScrollValue = 0
-        private var topAddedScrollValue = 0
-
         enum class BOTTOMSTATE {
             POSITION_IS_AT_TOP,
             POSITION_IS_IN_MIDDLE_SECTION,
