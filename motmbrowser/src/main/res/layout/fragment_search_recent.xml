@@ -35,7 +35,7 @@
             android:id="@+id/search_empty_image"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:contentDescription="@null"
+            android:contentDescription="@string/content_desc_empty_search"
             app:srcCompat="@drawable/ic_search_24px" />
 
         <TextView

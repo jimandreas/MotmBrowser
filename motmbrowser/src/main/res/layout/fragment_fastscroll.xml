@@ -40,10 +40,9 @@
         android:focusable="true"
         android:src="@drawable/ic_fastscroll_slider_lightmode"
         android:visibility="visible"
-
+        android:contentDescription="@string/content_desc_fastscroll_thumb"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="parent"
-        tools:ignore="ContentDescription"
         tools:visibility="visible" />
 
     <!--Time Markers-->
