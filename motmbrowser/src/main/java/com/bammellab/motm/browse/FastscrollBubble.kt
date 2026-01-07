@@ -268,11 +268,8 @@ class FastscrollBubble(
                 }
                 POSITION_IS_AT_BOTTOM -> {
                     bottomAddedScrollValue += 1
-                    if (ave.toInt() + bottomAddedScrollValue < last - 1) {
-                        str = monthList[ave.toInt() + bottomAddedScrollValue]
-                    } else {
-                        str = monthList[last - 1]
-                    }
+                    val index = ave.toInt() + bottomAddedScrollValue
+                    str = monthList[index.coerceIn(0, monthList.lastIndex)]
                 }
                 else -> {
                 }
@@ -297,11 +294,8 @@ class FastscrollBubble(
                 }
                 POSITION_IS_AT_TOP -> {
                     topAddedScrollValue += 1
-                    if (ave.toInt() - bottomAddedScrollValue > 1) {
-                        str = monthList[ave.toInt() - topAddedScrollValue]
-                    } else {
-                        str = monthList[0]
-                    }
+                    val index = ave.toInt() - topAddedScrollValue
+                    str = monthList[index.coerceIn(0, monthList.lastIndex)]
                 }
                 else -> {
                 }
