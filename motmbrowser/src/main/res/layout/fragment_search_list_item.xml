@@ -17,9 +17,9 @@
     style="@style/MyCardViewStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/card_margin"
+    android:layout_marginStart="@dimen/card_margin"
     android:layout_marginTop="@dimen/card_margin_skinny"
-    android:layout_marginRight="@dimen/card_margin"
+    android:layout_marginEnd="@dimen/card_margin"
     android:layout_marginBottom="@dimen/card_margin_skinny"
 
     android:clickable="true"
@@ -36,7 +36,7 @@
             android:layout_height="100dp"
             android:contentDescription="@string/molecule_in_question"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_constraintLeft_creator="1"
             tools:layout_constraintTop_creator="1" />

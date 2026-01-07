@@ -136,6 +136,13 @@
         <item>system</item>
     </array>
 
+    <!--Content descriptions for accessibility-->
+    <string name="content_desc_bammellab_logo">Bammellab logo</string>
+    <string name="content_desc_expand_collapse">Expand or collapse section</string>
+    <string name="content_desc_empty_search">No recent searches</string>
+    <string name="content_desc_app_icon">Application icon</string>
+    <string name="content_desc_fastscroll_thumb">Fast scroll handle</string>
+
     <!--About activity strings-->
 
     <string name="about">About</string>

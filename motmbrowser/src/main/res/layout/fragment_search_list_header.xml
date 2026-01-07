@@ -17,9 +17,9 @@
     style="@style/MyCardViewStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/card_margin"
+    android:layout_marginStart="@dimen/card_margin"
     android:layout_marginTop="@dimen/card_margin_skinny"
-    android:layout_marginRight="@dimen/card_margin"
+    android:layout_marginEnd="@dimen/card_margin"
     android:layout_marginBottom="@dimen/card_margin_skinny"
 
     android:clickable="true"
@@ -36,8 +36,8 @@
             android:layout_height="50dp"
             android:background="@drawable/ic_arrow_drop_down_grey_24px"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="@string/content_desc_expand_collapse"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="ContentDescription"
             tools:layout_constraintLeft_creator="1"
             tools:layout_constraintTop_creator="1" />
 

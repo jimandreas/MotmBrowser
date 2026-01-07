@@ -21,6 +21,6 @@
     android:fontFamily="sans-serif"
     android:gravity="center_vertical"
     android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     android:textSize="20sp"
-    tools:text="Sample recent search term"
-    tools:ignore="RtlSymmetry" />
+    tools:text="Sample recent search term" />
