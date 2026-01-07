@@ -24,6 +24,9 @@ import android.widget.Button
 import android.widget.PopupMenu
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.bammellab.mollib.GLSurfaceViewDisplayPdbFile
 import com.bammellab.mollib.LoadFromSource.FROM_RCSB_OR_CACHE
 import com.bammellab.mollib.MollibProcessPdbs
@@ -75,6 +78,15 @@ class MotmGraphicsActivity : AppCompatActivity() {
         // TODO: complain dialog if the list is empty
 
         setContentView(R.layout.activity_graphics)
+
+        // Handle edge-to-edge display for Android 15+ (SDK 35)
+        val container = findViewById<ConstraintLayout>(R.id.activity_graphics_layout)
+        ViewCompat.setOnApplyWindowInsetsListener(container) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         buttonPreviousObj = findViewById(R.id.button_prev_obj)
         buttonNextObj = findViewById(R.id.button_next_obj)
         buttonSelect = findViewById(R.id.button_select)
