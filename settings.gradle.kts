@@ -11,4 +11,22 @@
  *  limitations under the License
  */
 
-include ':mollib', ':motmbrowser', ':standalone', ':captureimages', ':screensaver'
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "MotmBrowser"
+
+include(":mollib", ":motmbrowser", ":standalone", ":captureimages", ":screensaver")

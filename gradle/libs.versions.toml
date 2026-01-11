@@ -1,0 +1,106 @@
+# Version Catalog for MotmBrowser
+# https://docs.gradle.org/current/userguide/platforms.html
+
+[versions]
+# Build configuration
+compileSdk = "35"
+minSdk = "21"
+targetSdk = "35"
+
+# Plugin versions
+agp = "8.13.2"
+kotlin = "2.1.0"
+
+# Kotlin
+kotlinCoroutines = "1.9.0"
+
+# AndroidX
+androidxActivity = "1.9.3"
+androidxAnnotation = "1.9.1"
+androidxAppcompat = "1.7.0"
+androidxCardview = "1.0.0"
+androidxConstraintlayout = "2.2.0"
+androidxCore = "1.15.0"
+androidxFragment = "1.8.5"
+androidxLifecycle = "2.8.7"
+androidxNavigation = "2.8.5"
+androidxPreference = "1.2.1"
+androidxRecyclerview = "1.3.2"
+androidxTestRunner = "1.6.2"
+androidxViewpager2 = "1.1.0"
+androidxWork = "2.10.0"
+
+# Google
+material = "1.12.0"
+
+# Networking
+okhttp = "4.12.0"
+retrofit = "2.11.0"
+
+# Image loading
+glide = "4.16.0"
+picasso = "2.71828"
+
+# Utilities
+gson = "2.11.0"
+timber = "5.0.1"
+pdbparser = "1.0.5"
+muzei = "3.4.2"
+
+# Testing
+junit5 = "5.11.4"
+truth = "1.4.4"
+jetbrainsAnnotations = "26.0.1"
+
+[libraries]
+# Kotlin
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }
+
+# AndroidX
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
+androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidxAnnotation" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidxAppcompat" }
+androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "androidxCardview" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidxConstraintlayout" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "androidxFragment" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidxNavigation" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidxNavigation" }
+androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "androidxPreference" }
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidxRecyclerview" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTestRunner" }
+androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "androidxViewpager2" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
+
+# Google
+material = { module = "com.google.android.material:material", version.ref = "material" }
+
+# Networking
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttp" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+
+# Image loading
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
+picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
+
+# Utilities
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+pdbparser = { module = "com.kotmol.kotmolpdbparser:kotmolpdbparser", version.ref = "pdbparser" }
+muzei-api = { module = "com.google.android.apps.muzei:muzei-api", version.ref = "muzei" }
+
+# Testing
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
+truth = { module = "com.google.truth:truth", version.ref = "truth" }
+jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotations" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
