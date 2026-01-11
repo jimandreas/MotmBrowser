@@ -14,3 +14,18 @@
 ## OkHttp platform used only on JVM and when Conscrypt dependency is available.
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
 
+### Retrofit
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class retrofit2.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+-dontwarn retrofit2.**
+
+### Gson
+-keep class com.google.gson.** { *; }
+
+### Keep classes with @Keep annotation
+-keep @androidx.annotation.Keep class * { *; }
+

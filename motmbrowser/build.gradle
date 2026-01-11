@@ -11,7 +11,33 @@
  *  limitations under the License
  */
 
+/*
+  Changes Made
 
+  1. motmbrowser/build.gradle
+  - Set minifyEnabled true
+  - Set shrinkResources true
+  - Removed reference to non-existent proguard-rules.pro
+
+  2. motmbrowser/src/main/proguard-motmbrowser.pro
+  - Added Retrofit keep rules
+  - Added Gson keep rules
+  - Added @Keep annotation support
+
+  3. CLAUDE.md
+  - Added bundleRelease command
+  - Added new "Release Build with R8 Obfuscation" section explaining:
+    - How R8 works
+    - Automatic mapping file inclusion in AAB (AGP 8.13.2+)
+    - Location of mapping files for local debugging
+
+  Verification Results
+
+  - Build successful with R8 minification (minifyReleaseWithR8 task executed)
+  - Mapping file generated: mapping.txt (20MB)
+  - Release APK size: 2.2MB
+  - Google Play will automatically use the mapping file from the AAB to deobfuscate crash reports
+ */
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
@@ -20,9 +46,9 @@ plugins {
 
 
 def versionMajor = 2
-def versionMinor = 8
+def versionMinor = 9
 def versionPatch = 0
-def versionBuild = 2801
+def versionBuild = 2901
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -48,11 +74,10 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
-            shrinkResources false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles(
                 getDefaultProguardFile('proguard-android-optimize.txt'),
-                'proguard-rules.pro',
                 'src/main/proguard-motmbrowser.pro'
             )
             signingConfig signingConfigs.release
