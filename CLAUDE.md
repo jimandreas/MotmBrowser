@@ -17,7 +17,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 # Build release (requires gradle/signing.properties)
 ./gradlew.bat :motmbrowser:assembleRelease
+
+# Build release AAB (for Google Play)
+./gradlew.bat :motmbrowser:bundleRelease
 ```
+
+## Release Build with R8 Obfuscation
+
+Release builds use R8 for code shrinking and obfuscation. R8 scrambles function names (e.g., `calculateUserScore()` becomes `a()`) to reduce file size and protect intellectual property.
+
+**Mapping files** are automatically included in the AAB under `BUNDLE-METADATA/` (AGP 8.13.2+). Google Play uses these to deobfuscate crash reports automatically - no manual upload required.
+
+For local debugging, mapping files are generated at:
+- `motmbrowser/build/outputs/mapping/release/mapping.txt`
+
+ProGuard rules are in `motmbrowser/src/main/proguard-motmbrowser.pro`.
 
 ## Testing
 
