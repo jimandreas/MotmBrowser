@@ -308,7 +308,63 @@ object Corpus {
             "254-Cellulose_Synthase-6wlb_composite.png",
             "255-Cisplatin_and_DNA-Fig1.png",
             "256-SARSCoV2_Spike_and_Antibodies-Spike_Antibodies.png",
-            "257-Fetal_Hemoglobin-1fdh_4hhb.png"
+            "257-Fetal_Hemoglobin-1fdh_4hhb.png",
+            "258-Glucocorticoid_Receptor-homepage-tn.png",
+            "259-Designed_Proteins-homepage-tn.png",
+            "260-Ribonuclease_P-homepage-tn.png",
+            "261-DNA_Sequencing_Nanopores-homepage-tn.png",
+            "262-Fifty_Years_PDB-homepage-tn.png",
+            "263-Acetohydroxyacid_Synthase-homepage-tn.png",
+            "264-SARS_CoV_2_Spike_Variants-homepage-tn.png",
+            "265-Golgi_Casein_Kinase-homepage-tn.png",
+            "266-Oligosaccharyltransferase-homepage-tn.png",
+            "267-VEGF_and_Angiogenesis-homepage-tn.png",
+            "268-HER2_neu_and_Trastuzumab-homepage-tn.png",
+            "269-Nicotine_Cancer_Addiction-homepage-tn.png",
+            "270-Pyruvate_Kinase_M2-homepage-tn.png",
+            "271-NHEJ_Supercomplexes-homepage-tn.png",
+            "272-Secretory_Antibodies-homepage-tn.png",
+            "273-Respiratory_Supercomplex-homepage-tn.png",
+            "274-Phytohormone_DWARF14-homepage-tn.png",
+            "275-Actin_Arp2_3_Complex-homepage-tn.png",
+            "276-Click_Chemistry-homepage-tn.png",
+            "277-Plastic_eating_Enzymes-homepage-tn.png",
+            "278-SARS_CoV_2_Nucleocapsid-homepage-tn.png",
+            "279-APC_Cyclosome-homepage-tn.png",
+            "280-MHC_I_Peptide_Loading-homepage-tn.png",
+            "281-Cellulases_Bioenergy-homepage-tn.png",
+            "282-Odorant_Receptors-homepage-tn.png",
+            "283-c_Abl_Kinase_Imatinib-homepage-tn.png",
+            "284-ATM_ATR_Kinases-homepage-tn.png",
+            "285-Histone_Deacetylases-homepage-tn.png",
+            "286-RSV_Fusion_Glycoprotein-homepage-tn.png",
+            "287-ZAR1_Resistosome-homepage-tn.png",
+            "288-Vitamins-homepage-tn.png",
+            "289-Mediator-homepage-tn.png",
+            "290-Nanowires-homepage-tn.png",
+            "291-Hyaluronidases-homepage-tn.png",
+            "292-YES_Complex-homepage-tn.png",
+            "293-CFTR_Cystic_Fibrosis-homepage-tn.png",
+            "294-Injectisome-homepage-tn.png",
+            "295-Ribosome_Diversity-homepage-tn.png",
+            "296-ESCRT_III-homepage-tn.png",
+            "297-Carbon_Capture-homepage-tn.png",
+            "298-Angiotensin_Blood_Pressure-homepage-tn.png",
+            "299-Malaria_Parasite_PTEX-homepage-tn.png",
+            "300-Flagellar_Motor-homepage-tn.png",
+            "301-Polyketide_Synthases-homepage-tn.png",
+            "302-H5_Hemagglutinin-homepage-tn.png",
+            "303-Enoyl_CoA_Carboxylases-homepage-tn.png",
+            "304-Apolipoprotein_B_100-homepage-tn.png",
+            "305-TOC_TIC_Translocon-homepage-tn.png",
+            "306-Eastern_Equine_Encephalitis-homepage-tn.png",
+            "307-Beta_Lactamase-homepage-tn.png",
+            "308-Arc-homepage-tn.png",
+            "309-Abscisic_Acid_Receptor-homepage-tn.png",
+            "310-Incretins-homepage-tn.png",
+            "311-GLP_1_Receptor_Agonists-homepage-tn.png",
+            "312-FOXP3-homepage-tn.png",
+            "313-Natural_RNA_Assemblies-homepage-tn.png"
 
     )
 
@@ -607,7 +663,62 @@ object Corpus {
             "Cisplatin treats cancer by causing damage to the DNA of cancer cells.",
             "Structural biologists are revealing the many ways that antibodies recognize SARS-CoV-2",
             "Fetal hemoglobin allows a growing fetus to receive oxygen from their mother.", // May 2021
-            ""
+            "An anti-inflammatory drug has given us a new way to fight the COVID-19 pandemic.", // Jun 2021
+            "What if people with no formal experience in science could help to improve or even rewrite nature, simply by playing a game?", // Jul 2021
+            "The ribozyme ribonuclease P cleaves pre-tRNA to form functional tRNA.", // Aug 2021
+            "Designer nanopores work with enzymes to offer pocket-sized DNA sequencing.", // Sep 2021
+            "The Protein Data Bank is celebrating its golden anniversary!", // Oct 2021
+            "In plants, AHAS performs the first step in synthesis of three essential amino acids, making it an effective target for herbicides.", // Nov 2021
+            "SARS-CoV-2 is constantly changing, posing new challenges during the COVID19 pandemic.", // Dec 2021
+            "Casein and many other secreted proteins are phosphorylated by Golgi casein kinase.", // Jan 2022
+            "Oligosaccharyltransferase adds a protective coat of carbohydrates to proteins.", // Feb 2022
+            "VEGF promotes blood vessel formation (angiogenesis), affecting cancer proliferation, wound healing, and other bodily processes.", // Mar 2022
+            "Trastuzumab monoclonal antibodies targeting HER2 receptors are at the forefront of breast cancer treatment.", // Apr 2022
+            "Nicotine causes addiction by interacting with receptors in the brain.", // May 2022
+            "Pyruvate kinases are the paradoxical gatekeepers for cancer cell metabolism and growth.", // Jun 2022
+            "Lethal double-strand breaks in the DNA genome are repaired by NHEJ.", // Jul 2022
+            "Secretory immunoglobulins are our most abundant antibodies, providing a first line of defense against pathogens.", // Aug 2022
+            "In our mitochondria, three electron-transport complexes assemble into a supercomplex.", // Sep 2022
+            "Some phytohormones mobilize the cell's protein degradation machinery to regulate plant growth and development.", // Oct 2022
+            "By mimicking actin, Arp2/3 complex helps build a complex cytoskeleton that supports and shapes cells.", // Nov 2022
+            "A modular approach to chemistry simplifies the construction of complex protein-targeting molecules.", // Dec 2022
+            "Researchers are looking to Nature to find ways to dispose of discarded plastic.", // Jan 2023
+            "Home test kits for SARS-CoV-2 test for the presence of nucleocapsid, the protein that packages the viral genome in infectious virions.", // Feb 2023
+            "APC/C guards the checkpoints that regulate key steps in the cell cycle.", // Mar 2023
+            "Several steps of quality control optimize the peptides that are displayed by MHC I.", // Apr 2023
+            "Powerful fungal enzymes break down cellulose during industrial production of ethanol from plant material.", // May 2023
+            "Our sense of smell relies on odorant receptors that recognize specific scents.", // Jun 2023
+            "Protein kinases are being targeted by new anti-cancer drugs.", // Jul 2023
+            "Dividing cells use ATM and ATR kinases to respond to DNA damage.", // Aug 2023
+            "Histone deacetylases regulate access to genetic information by modifying histones.", // Sep 2023
+            "Structures of the fusion glycoprotein from respiratory syncytial virus (RSV) were used to engineer effective vaccines to fight viral infection.", // Oct 2023
+            "Plants protect themselves from infection with immune system machines such as the resistosome.", // Nov 2023
+            "Vitamins are essential molecular tools that are obtained through a healthy diet.", // Dec 2023
+            "Mediator integrates regulatory information to decide when genes need to be transcribed.", // Jan 2024
+            "Nanowires conduct electrons one at a time inside biological molecules.", // Feb 2024
+            "Long carbohydrate chains are used to make our bodies flexible and resilient.", // Mar 2024
+            "Bacteriophage phiX174 makes a small protein that kills bacterial cells.", // Apr 2024
+            "Cystic fibrosis is currently treated using drugs that enhance the function of mutated CFTR.", // May 2024
+            "Salmonella bacteria inject a cocktail of effector proteins into cells to disable their defenses.", // Jun 2024
+            "By comparing the structures of ribosomes from different organisms, we can explore the evolution of life.", // Jul 2024
+            "ESCRT-III forms helical assemblies that remodel cellular membranes.", // Aug 2024
+            "Scientists are studying cyanobacteria to improve the productivity of agricultural crops.", // Sep 2024
+            "Many medications for controlling high blood pressure inhibit the action of the peptide hormone angiotensin.", // Oct 2024
+            "The parasite that causes malaria exports hundreds of proteins to remodel the cells that it infects.", // Nov 2024
+            "Bidirectional motors power the swimming of many bacterial cells.", // Dec 2024
+            "Large multienzyme complexes that synthesize diverse small molecules in a stepwise manner.", // Jan 2025
+            "Sugar-binding protein on the surface of the H5N1 avian influenza virus.", // Feb 2025
+            "Enzymes that can quickly and efficiently fix carbon.", // Mar 2025
+            "Insights into how LDL is removed from the bloodstream.", // Apr 2025
+            "The large TOC-TIC supercomplex transports proteins into the chloroplast.", // May 2025
+            "Infection by EEEV can cause severe neurological disease.", // Jun 2025
+            "Researchers visualize the mechanism of antibiotic resistance.", // Jul 2025
+            "An unexpected link between viruses and the brain.", // Aug 2025
+            "Regulating drought tolerance in plants.", // Sep 2025
+            "GLP-1 and GIP are hormones that are released soon after you eat a meal.", // Oct 2025
+            "Popular and effective drugs for the treatment of obesity and diabetes.", // Nov 2025
+            "A master transcriptional regulator of immune tolerance.", // Dec 2025
+            "Large and intricate naturally occurring structures composed exclusively of RNA." // Jan 2026
     )
 
     private val monthNames = arrayOf(
@@ -688,7 +799,7 @@ object Corpus {
         return initList.toTypedArray()
     }
 
-    private const val numMonths = 253
+    private const val numMonths = 313
 
     // grep the href in the motm-by-date file
 
@@ -950,7 +1061,62 @@ object Corpus {
             /* //motm/255 */ "Cisplatin and DNA",  // MAR 2021
             /* //motm/256 */ "SARS-CoV-2 Spike and Antibodies",  // APR 2021
             /* //motm/257 */ "Fetal Hemoglobin",  // MAY 2021
-            /* //motm/258 */ "TBD"  // JUN 2021
+            /* //motm/258 */ "Glucocorticoid Receptor and Dexamethasone",  // JUN 2021
+            /* //motm/259 */ "Designed Proteins and Citizen Science",  // JUL 2021
+            /* //motm/260 */ "Ribonuclease P",  // AUG 2021
+            /* //motm/261 */ "DNA-Sequencing Nanopores",  // SEP 2021
+            /* //motm/262 */ "Fifty Years of Open Access to PDB Structures",  // OCT 2021
+            /* //motm/263 */ "Acetohydroxyacid Synthase",  // NOV 2021
+            /* //motm/264 */ "SARS-CoV-2 Spike Variants",  // DEC 2021
+            /* //motm/265 */ "Golgi Casein Kinase",  // JAN 2022
+            /* //motm/266 */ "Oligosaccharyltransferase",  // FEB 2022
+            /* //motm/267 */ "Vascular Endothelial Growth Factor (VEGF) and Angiogenesis",  // MAR 2022
+            /* //motm/268 */ "HER2/neu and Trastuzumab",  // APR 2022
+            /* //motm/269 */ "Nicotine, Cancer, and Addiction",  // MAY 2022
+            /* //motm/270 */ "Pyruvate Kinase M2",  // JUN 2022
+            /* //motm/271 */ "Non-Homologous End Joining Supercomplexes",  // JUL 2022
+            /* //motm/272 */ "Secretory Antibodies",  // AUG 2022
+            /* //motm/273 */ "Respiratory Supercomplex",  // SEP 2022
+            /* //motm/274 */ "Phytohormone Receptor DWARF14",  // OCT 2022
+            /* //motm/275 */ "Actin Branching by Arp2/3 Complex",  // NOV 2022
+            /* //motm/276 */ "Click Chemistry",  // DEC 2022
+            /* //motm/277 */ "Plastic-eating Enzymes",  // JAN 2023
+            /* //motm/278 */ "SARS-CoV-2 Nucleocapsid and Home Tests",  // FEB 2023
+            /* //motm/279 */ "Anaphase-Promoting Complex/Cyclosome",  // MAR 2023
+            /* //motm/280 */ "MHC I Peptide Loading Complex",  // APR 2023
+            /* //motm/281 */ "Cellulases and Bioenergy",  // MAY 2023
+            /* //motm/282 */ "Odorant Receptors",  // JUN 2023
+            /* //motm/283 */ "c-Abl Protein Kinase and Imatinib",  // JUL 2023
+            /* //motm/284 */ "ATM and ATR Kinases",  // AUG 2023
+            /* //motm/285 */ "Histone Deacetylases",  // SEP 2023
+            /* //motm/286 */ "RSV Fusion Glycoprotein",  // OCT 2023
+            /* //motm/287 */ "ZAR1 Resistosome",  // NOV 2023
+            /* //motm/288 */ "Vitamins",  // DEC 2023
+            /* //motm/289 */ "Mediator",  // JAN 2024
+            /* //motm/290 */ "Nanowires",  // FEB 2024
+            /* //motm/291 */ "Hyaluronidases",  // MAR 2024
+            /* //motm/292 */ "YES Complex",  // APR 2024
+            /* //motm/293 */ "CFTR and Cystic Fibrosis",  // MAY 2024
+            /* //motm/294 */ "Injectisome",  // JUN 2024
+            /* //motm/295 */ "Ribosome Diversity",  // JUL 2024
+            /* //motm/296 */ "ESCRT-III",  // AUG 2024
+            /* //motm/297 */ "Carbon Capture Mechanisms",  // SEP 2024
+            /* //motm/298 */ "Angiotensin and Blood Pressure",  // OCT 2024
+            /* //motm/299 */ "Malaria Parasite PTEX",  // NOV 2024
+            /* //motm/300 */ "Flagellar Motor",  // DEC 2024
+            /* //motm/301 */ "Assembly Line Polyketide Synthases",  // JAN 2025
+            /* //motm/302 */ "H5 Hemagglutinin",  // FEB 2025
+            /* //motm/303 */ "Enoyl-CoA Carboxylases/Reductases",  // MAR 2025
+            /* //motm/304 */ "Apolipoprotein B-100 and LDL Receptor",  // APR 2025
+            /* //motm/305 */ "TOC-TIC Translocon",  // MAY 2025
+            /* //motm/306 */ "Eastern Equine Encephalitis Virus",  // JUN 2025
+            /* //motm/307 */ "Capturing Beta-Lactamase in Action",  // JUL 2025
+            /* //motm/308 */ "Arc",  // AUG 2025
+            /* //motm/309 */ "Abscisic Acid Receptor",  // SEP 2025
+            /* //motm/310 */ "Incretins",  // OCT 2025
+            /* //motm/311 */ "GLP-1 Receptor Agonists",  // NOV 2025
+            /* //motm/312 */ "FOXP3",  // DEC 2025
+            /* //motm/313 */ "Natural RNA-Only Assemblies"  // JAN 2026
     )
 
     /**

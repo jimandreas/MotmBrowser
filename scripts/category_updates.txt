@@ -1,0 +1,233 @@
+============================================================
+UPDATES FOR MotmByCategory.kt
+============================================================
+
+
+// === MotmCategoryHealth ===
+// Add these molecule numbers to the appropriate categories
+
+            "Antimicrobial Resistance",
+            "307",
+
+            "Cancer",
+            "267",
+            "268",
+            "269",
+            "270",
+            "271",
+            "279",
+            "283",
+            "284",
+            "285",
+
+            "Coronavirus",
+            "258",
+            "264",
+            "278",
+
+            "Diabetes",
+            "310",
+            "311",
+
+            "Drug Action",
+            "258",
+            "276",
+            "279",
+            "285",
+            "307",
+            "311",
+
+            "Drugs and the Brain",
+            "308",
+
+            "Immune System",
+            "272",
+            "278",
+            "280",
+            "286",
+            "287",
+            "312",
+
+            "Infectious Disease", // NEW CATEGORY
+            "294",
+            "299",
+            "302",
+
+            "Peak Performance", // NEW CATEGORY
+            "263",
+            "269",
+            "273",
+            "282",
+            "288",
+            "298",
+
+            "Toxins and Poisons",
+            "310",
+
+            "Vaccines", // NEW CATEGORY
+            "262",
+            "286",
+            "306",
+
+            "Viruses",
+            "258",
+            "278",
+            "286",
+            "292",
+            "302",
+            "306",
+            "308",
+
+            "You and Your Health",
+            "269",
+            "278",
+            "288",
+            "291",
+            "293",
+            "298",
+            "311",
+            "312",
+
+
+// === MotmCategoryLife ===
+// Add these molecule numbers to the appropriate categories
+
+            "Biological Energy",
+            "270",
+            "273",
+            "281",
+
+            "Biology of Plants",
+            "263",
+            "274",
+            "287",
+            "297",
+            "305",
+            "309",
+
+            "Cellular Signaling",
+            "258",
+            "267",
+            "268",
+            "269",
+            "274",
+            "279",
+            "282",
+            "283",
+            "284",
+            "298",
+            "310",
+
+            "Central Dogma",
+            "271",
+            "285",
+            "289",
+
+            "Enzymes",
+            "263",
+            "277",
+            "301",
+
+            "Molecular Evolution",
+            "295",
+            "308",
+
+            "Molecular Infrastructure",
+            "275",
+            "291",
+            "296",
+
+            "Molecular Motors",
+            "300",
+            "305",
+
+            "Molecules for a Sustainable Future", // NEW CATEGORY
+            "274",
+            "277",
+            "297",
+
+            "Nucleic Acids",
+            "260",
+            "284",
+            "312",
+            "313",
+
+            "Protein Synthesis",
+            "260",
+            "266",
+            "289",
+            "295",
+
+            "Transport",
+            "265",
+            "290",
+            "293",
+            "294",
+            "305",
+
+
+// === MotmCategoryBiotech ===
+// Add these molecule numbers to the appropriate categories
+
+            "Biotechnology",
+            "261",
+            "277",
+
+            "Nanotechnology",
+            "261",
+            "290",
+            "301",
+
+            "Renewable Energy",
+            "281",
+
+
+// === MotmCategoryStructures ===
+// Add these molecule numbers to the appropriate categories
+
+            "Biomolecular Structural Biology",
+            "262",
+            "303",
+            "304",
+            "308",
+            "310",
+            "311",
+            "313",
+
+            "Biomolecules",
+            "259",
+            "262",
+
+            "Nobel Prizes and PDB structures", // NEW CATEGORY
+            "276",
+            "312",
+
+            "PDB Data", // NEW CATEGORY
+            "262",
+
+            "Protein Structure Prediction, Design, and Computed Structure Models", // NEW CATEGORY
+            "259",
+            "287",
+
+
+// === UNKNOWN CATEGORIES (need manual mapping) ===
+// Category: "Annotation Browser"
+// Molecules: 281
+
+// Category: "HIV infection"
+// Molecules: 262
+
+// Category: "PDB-101 coronavirus resources."
+// Molecules: 258
+
+// Category: "adaptive and innate immunities"
+// Molecules: 287
+
+// Category: "atomic structures of viruses"
+// Molecules: 262
+
+// Category: "resources at PDB-101."
+// Molecules: 292
+
+// Category: "retrovirus HIV and AIDS"
+// Molecules: 308
