@@ -389,62 +389,150 @@ object MotmByCategory {
     val MotmCategoryLife = arrayOf(
 
         "Section Molecules of Life",
-        "Protein Synthesis",
-        "80",   // AAA+ Proteases
+
+
+        "Biological Energy",
         "89",   // Aconitase and Iron Regulatory Protein 1
-        "210",  // Adenine Riboswitch in Action
-        "16",   // Aminoacyl-tRNA Synthetases
-        "181",  // Cascade and CRISPR
-        "48",   // Catabolite Activator Protein
-        "32",   // Chaperones
-        "23",   // DNA
-        "168",  // DNA Helicase
-        "55",   // DNA Ligase
-        "139",  // DNA Methyltransferases
-        "3",    // DNA Polymerase
-        "81",   // Elongation Factors
-        "122",  // Enhanceosome
+        "13",   // Alcohol Dehydrogenase
+        "74",   // Alpha-amylase
+        "72",   // ATP Synthase
+        "27",   // Bacteriorhodopsin
+        "198",  // Beta-galactosidase
+        "216",  // Biodegradable Plastic
+        "93",   // Citrate Synthase
+        "154",  // Citric Acid Cycle
+        "144",  // Complex I
+        "137",  // Cytochrome bc1
+        "36",   // Cytochrome c
+        "5",    // Cytochrome c Oxidase
+        "90",   // Fatty Acid Synthase
+        "174",  // GFP-like Proteins
+        "24",   // Glycogen Phosphorylase
+        "50",   // Glycolytic Enzymes
+        "42",   // Green Fluorescent Protein (GFP)
+        "240",  // Hypoxia-Inducible Factors
+        "129",  // Isocitrate Dehydrogenase
+        "102",  // Lactate Dehydrogenase
+        "78",   // Luciferase
+        "1",    // Myoglobin
+        "244",  // Photosynthetic Supercomplexes
+        "22",   // Photosystem I
+        "183",  // Phototropin
+        "153",  // Pyruvate Dehydrogenase Complex
+        "147",  // Rhodopsin
+        "46",   // Trypsin
+        "270",  // Pyruvate Kinase M2
+        "273",  // Respiratory Supercomplex
+        "281",  // Cellulases and Bioenergy
+
+        "Biology of Plants",
+        "309",  // Abscisic Acid Receptor
+        "263",  // Acetohydroxyacid Synthase
+        "110",  // Auxin and TIR1 Ubiquitin Ligase
+        "27",   // Bacteriorhodopsin
+        "297",  // Carbon Capture Mechanisms
+        "49",   // Carbonic Anhydrase
+        "66",   // Carbonic Anhydrase II
+        "254",  // Cellulose Synthase
+        "124",  // Concanavalin A and Circular Permutation
+        "137",  // Cytochrome bc1
+        "218",  // EPSP Synthase and Weedkillers
+        "90",   // Fatty Acid Synthase
+        "42",   // Green Fluorescent Protein (GFP)
+        "201",  // Isoprene Synthase
+        "199",  // Monellin
+        "26",   // Nitrogenase
+        "244",  // Phycobilisome
+        "22",   // Photosystem I
+        "59",   // Photosystem II
+        "183",  // Phytochrome
+        "274",  // Phytohormone Receptor DWARF14
+        "248",  // Phototropin
+        "161",  // Ricin
+        "11",   // Rubisco
+        "180",  // TAL Effectors
+        "305",  // TOC-TIC Translocon
+        "287",  // ZAR1 Resistosome
+
+        "Bioluminescence and Fluorescence",
+        "229",  // Fluorescent RNA Aptamers
+        "174",  // GFP-like Proteins
+        "42",   // Green Fluorescent Protein (GFP)
+
+        "Cellular Signaling",
+        "71",   // Acetylcholine Receptor
+        "54",   // Acetylcholinesterase
+        "251",  // Adenylyl Cyclase
+        "100",  // Adrenergic Receptors
+        "235",  // AMPA Receptor
+        "92",   // Anabolic Steroids
+        "279",  // Anaphase-Promoting Complex / Cyclosome
+        "298",  // Angiotensin and Blood Pressure
+        "284",  // ATM and ATR Kinases
+        "110",  // Auxin and TIR1 Ubiquitin Ligase
+        "283",  // c-Abl Protein Kinase and Imatinib
+        "51",   // Calcium Pump
+        "44",   // Calmodulin
+        "152",  // Caspase-Activated DNase
+        "250",  // Capsaicin Receptor TRPV1
+        "236",  // Cyclin and Cyclin-dependent Kinase
+        "17",   // Cytochrome P450
+        "194",  // Designer Insulins
+        "202",  // Dipeptidyl Peptidase 4
+        "126",  // Epidermal Growth Factor
         "45",   // Estrogen Receptor
-        "86",   // Exosomes
-        "41",   // Hemoglobin
-        "33",   // HIV Reverse Transcriptase
-        "108",  // Hsp90
-        "230",  // Initiation Factor eIF4E
-        "131",  // Inteins
-        "39",   // lac Repressor
-        "9",    // Lysozyme
-        "145",  // Messenger RNA Capping
-        "7",    // Nucleosome
-        "141",  // O-GlcNAc Transferase
-        "112",  // Oct and Sox Transcription Factors
-        "31",   // p53 Tumor Suppressor
-        "106",  // Poly(A) Polymerase
-        "166",  // Proteasome
-        "172",  // RecA and Rad51
-        "8",    // Restriction Enzymes
-        "140",  // Rhomboid Protease GlpG
-        "10",   // Ribosomal Subunits
-        "121",  // Ribosome
-        "130",  // Riboswitches
-        "40",   // RNA Polymerase
-        "104",  // Selenocysteine Synthase
-        "65",   // Self-splicing RNA
-        "213",  // Sirtuins
-        "150",  // Sliding Clamps
-        "98",   // Small Interfering RNA (siRNA)
-        "67",   // TATA-Binding Protein
-        "91",   // Thymine Dimers
-        "73",   // Topoisomerases
-        "15",   // Transfer RNA
-        "157",  // Transfer-Messenger RNA
-        "84",   // Transposase
-        "60",   // Ubiquitin
-        "87",   // Zinc Fingers
+        "58",   // G Proteins
+        "184",  // Glucagon
+        "258",  // Glucocorticoid Receptor and Dexamethasone
+        "191",  // GPCR Kinases
+        "52",   // Growth Hormone
+        "268",  // HER2/neu and Trastuzumab
+        "310",  // Incretins
+        "14",   // Insulin
+        "182",  // Insulin Receptor
+        "128",  // Interferons
+        "149",  // Leptin
+        "107",  // Lipid-linked Oligosaccharide
+        "171",  // Neurotransmitter Transporters
+        "68",   // Nitric Oxide Synthase
+        "269",  // Nicotine, Cancer, and Addiction
+        "133",  // Nuclear Receptors
+        "282",  // Odorant Receptors
+        "217",  // Opioid Receptors
+        "204",  // PD-1 (Programmed Cell Death Protein 1)
+        "207",  // Photoactive Yellow Protein
+        "183",  // Phytochrome
+        "274",  // Phytohormone Receptor DWARF14
+        "248",  // Phototropin
+        "223",  // Piezo1 Mechanosensitive Channel
+        "38",   // Potassium Channels
+        "195",  // RAF Protein Kinases
+        "148",  // Ras Protein
+        "186",  // Receptor for Advanced Glycation End Products
+        "147",  // Rhodopsin
+        "164",  // Serotonin Receptor
+        "167",  // Ser/Thr Protein Phosphatases
+        "43",   // Src Tyrosine Kinase
+        "75",   // Tumor Necrosis Factor
+        "190",  // Ubiquitin
+        "267",  // VEGF and Angiogenesis
+        "155",  // Vitamin D Receptor
+        "243",  // Voltage-gated Sodium Channels
+
+        "Central Dogma",
+        "16",   // Aminoacyl-tRNA Synthetases
+        "255",  // Cisplatin and DNA
+        "23",   // DNA
+        "3",    // DNA Polymerase
         "253",  // Expressome
-        "260",  // Ribonuclease P
-        "266",  // Oligosaccharyltransferase
+        "285",  // Histone Deacetylases
         "289",  // Mediator
-        "295",  // Ribosome Diversity
+        "271",  // Non-Homologous End Joining Supercomplexes
+        "121",  // Ribosome
+        "40",   // RNA Polymerase
+        "249",  // SARS-CoV-2 RNA-dependent RNA Polymerase
+        "245",  // Spliceosomes
+        "15",   // Transfer RNA
 
         "Enzymes",
         "80",   // AAA+ Proteases
@@ -520,6 +608,25 @@ object MotmByCategory {
         "277",  // Plastic-eating Enzymes
         "301",  // Assembly Line Polyketide Synthases
 
+        "Molecular Evolution",
+        "120",  // Antifreeze Proteins
+        "308",  // Arc
+        "124",  // Concanavalin A and Circular Permutation
+        "36",   // Cytochrome c
+        "5",    // Cytochrome c Oxidase
+        "34",   // Dihydrofolate Reductase
+        "228",  // Directed Evolution of Enzymes
+        "206",  // Globin Evolution
+        "78",   // Luciferase
+        "125",  // Parvoviruses
+        "29",   // Penicillin-binding Proteins
+        "121",  // Ribosome
+        "295",  // Ribosome Diversity
+        "84",   // Transposase
+        "192",  // Vancomycin
+        "155",  // Vitamin D Receptor
+
+
         "Molecular Infrastructure",
         "19",   // Actin
         "99",   // Cadherin
@@ -536,107 +643,6 @@ object MotmByCategory {
         "291",  // Hyaluronidases
         "296",  // ESCRT-III
 
-        "Transport",
-        "203",  // Aminopeptidase 1 and Autophagy
-        "92",   // Anabolic Steroids
-        "173",  // Aquaporin
-        "88",   // Clathrin
-        "159",  // Erythrocruorin
-        "35",   // Ferritin and Transferrin
-        "257",  // Fetal Hemoglobin
-        "208",  // Glucose Transporters
-        "41",   // Hemoglobin
-        "85",   // Importins
-        "95",   // Multidrug Resistance Transporters
-        "237",  // Nanodiscs and HDL
-        "171",  // Neurotransmitter Transporters
-        "205",  // Nuclear Pore Complex
-        "123",  // P-glycoprotein
-        "158",  // Proton-Gated Urea Channel
-        "233",  // S-Nitrosylated Hemoglobin
-        "37",   // Serum Albumin
-        "118",  // Sodium-Potassium Pump
-        "265",  // Golgi Casein Kinase
-        "290",  // Nanowires
-        "293",  // CFTR and Cystic Fibrosis
-        "294",  // Injectisome
-        "305",  // TOC-TIC Translocon
-
-        "Biological Energy",
-        "89",   // Aconitase and Iron Regulatory Protein 1
-        "13",   // Alcohol Dehydrogenase
-        "74",   // Alpha-amylase
-        "72",   // ATP Synthase
-        "27",   // Bacteriorhodopsin
-        "198",  // Beta-galactosidase
-        "216",  // Biodegradable Plastic
-        "93",   // Citrate Synthase
-        "154",  // Citric Acid Cycle
-        "144",  // Complex I
-        "137",  // Cytochrome bc1
-        "36",   // Cytochrome c
-        "5",    // Cytochrome c Oxidase
-        "90",   // Fatty Acid Synthase
-        "174",  // GFP-like Proteins
-        "24",   // Glycogen Phosphorylase
-        "50",   // Glycolytic Enzymes
-        "42",   // Green Fluorescent Protein (GFP)
-        "240",  // Hypoxia-Inducible Factors
-        "129",  // Isocitrate Dehydrogenase
-        "102",  // Lactate Dehydrogenase
-        "78",   // Luciferase
-        "1",    // Myoglobin
-        "244",  // Photosynthetic Supercomplexes
-        "22",   // Photosystem I
-        "183",  // Phototropin
-        "153",  // Pyruvate Dehydrogenase Complex
-        "147",  // Rhodopsin
-        "46",   // Trypsin
-        "270",  // Pyruvate Kinase M2
-        "273",  // Respiratory Supercomplex
-        "281",  // Cellulases and Bioenergy
-
-        "Molecules and the Environment",
-        "216",  // Biodegradable Plastic
-        "254",  // Cellulose Synthase
-        "220",  // Dehalogenases
-        "212",  // Glutathione Transferases
-        "201",  // Isoprene Synthase
-        "179",  // Methyl-coenzyme M Reductase
-        "26",   // Nitrogenase
-        "22",   // Photosystem I
-        "59",   // Photosystem II
-        "225",  // Phytase
-
-        "Biology of Plants",
-        "309",  // Abscisic Acid Receptor
-        "263",  // Acetohydroxyacid Synthase
-        "110",  // Auxin and TIR1 Ubiquitin Ligase
-        "27",   // Bacteriorhodopsin
-        "297",  // Carbon Capture Mechanisms
-        "49",   // Carbonic Anhydrase
-        "66",   // Carbonic Anhydrase II
-        "254",  // Cellulose Synthase
-        "124",  // Concanavalin A and Circular Permutation
-        "137",  // Cytochrome bc1
-        "218",  // EPSP Synthase and Weedkillers
-        "90",   // Fatty Acid Synthase
-        "42",   // Green Fluorescent Protein (GFP)
-        "201",  // Isoprene Synthase
-        "199",  // Monellin
-        "26",   // Nitrogenase
-        "244",  // Phycobilisome
-        "22",   // Photosystem I
-        "59",   // Photosystem II
-        "183",  // Phytochrome
-        "274",  // Phytohormone Receptor DWARF14
-        "248",  // Phototropin
-        "161",  // Ricin
-        "11",   // Rubisco
-        "180",  // TAL Effectors
-        "305",  // TOC-TIC Translocon
-        "287",  // ZAR1 Resistosome
-
         "Molecular Motors",
         "72",   // ATP Synthase
         "176",  // Dynein
@@ -647,65 +653,20 @@ object MotmByCategory {
         "300",  // Flagellar Motor
         "305",  // TOC-TIC Translocon
 
-        "Cellular Signaling",
-        "71",   // Acetylcholine Receptor
-        "54",   // Acetylcholinesterase
-        "251",  // Adenylyl Cyclase
-        "100",  // Adrenergic Receptors
-        "235",  // AMPA Receptor
-        "92",   // Anabolic Steroids
-        "279",  // Anaphase-Promoting Complex / Cyclosome
-        "298",  // Angiotensin and Blood Pressure
-        "284",  // ATM and ATR Kinases
-        "110",  // Auxin and TIR1 Ubiquitin Ligase
-        "283",  // c-Abl Protein Kinase and Imatinib
-        "51",   // Calcium Pump
-        "44",   // Calmodulin
-        "152",  // Caspase-Activated DNase
-        "250",  // Capsaicin Receptor TRPV1
-        "236",  // Cyclin and Cyclin-dependent Kinase
-        "17",   // Cytochrome P450
-        "194",  // Designer Insulins
-        "202",  // Dipeptidyl Peptidase 4
-        "126",  // Epidermal Growth Factor
-        "45",   // Estrogen Receptor
-        "58",   // G Proteins
-        "184",  // Glucagon
-        "258",  // Glucocorticoid Receptor and Dexamethasone
-        "191",  // GPCR Kinases
-        "52",   // Growth Hormone
-        "268",  // HER2/neu and Trastuzumab
-        "310",  // Incretins
-        "14",   // Insulin
-        "182",  // Insulin Receptor
-        "128",  // Interferons
-        "149",  // Leptin
-        "107",  // Lipid-linked Oligosaccharide
-        "171",  // Neurotransmitter Transporters
-        "68",   // Nitric Oxide Synthase
-        "269",  // Nicotine, Cancer, and Addiction
-        "133",  // Nuclear Receptors
-        "282",  // Odorant Receptors
-        "217",  // Opioid Receptors
-        "204",  // PD-1 (Programmed Cell Death Protein 1)
-        "207",  // Photoactive Yellow Protein
-        "183",  // Phytochrome
+        "Molecules for a Sustainable Future",
+        "216",  // Biodegradable Plastic
+        "297",  // Carbon Capture Mechanisms
+        "254",  // Cellulose Synthase
+        "220",  // Dehalogenases
+        "212",  // Glutathione Transferases
+        "201",  // Isoprene Synthase
+        "179",  // Methyl-coenzyme M Reductase
+        "26",   // Nitrogenase
+        "22",   // Photosystem I
+        "59",   // Photosystem II
+        "225",  // Phytase
         "274",  // Phytohormone Receptor DWARF14
-        "248",  // Phototropin
-        "223",  // Piezo1 Mechanosensitive Channel
-        "38",   // Potassium Channels
-        "195",  // RAF Protein Kinases
-        "148",  // Ras Protein
-        "186",  // Receptor for Advanced Glycation End Products
-        "147",  // Rhodopsin
-        "164",  // Serotonin Receptor
-        "167",  // Ser/Thr Protein Phosphatases
-        "43",   // Src Tyrosine Kinase
-        "75",   // Tumor Necrosis Factor
-        "190",  // Ubiquitin
-        "267",  // VEGF and Angiogenesis
-        "155",  // Vitamin D Receptor
-        "243",  // Voltage-gated Sodium Channels
+        "277",   // Plastic-eating Enzymes
 
         "Nucleic Acids",
         "210",  // Adenine Riboswitch in Action
@@ -731,70 +692,94 @@ object MotmByCategory {
         "157",  // Transfer-Messenger RNA
         "155",  // Vitamin D Receptor
 
-        "Bioluminescence and Fluorescence",
-        "229",  // Fluorescent RNA Aptamers
-        "174",  // GFP-like Proteins
-        "42",   // Green Fluorescent Protein (GFP)
-
-        "Molecular Evolution",
-        "120",  // Antifreeze Proteins
-        "308",  // Arc
-        "124",  // Concanavalin A and Circular Permutation
-        "36",   // Cytochrome c
-        "5",    // Cytochrome c Oxidase
-        "34",   // Dihydrofolate Reductase
-        "228",  // Directed Evolution of Enzymes
-        "206",  // Globin Evolution
-        "78",   // Luciferase
-        "125",  // Parvoviruses
-        "29",   // Penicillin-binding Proteins
+        "Protein Synthesis",
+        "80",   // AAA+ Proteases
+        "89",   // Aconitase and Iron Regulatory Protein 1
+        "210",  // Adenine Riboswitch in Action
+        "16",   // Aminoacyl-tRNA Synthetases
+        "181",  // Cascade and CRISPR
+        "48",   // Catabolite Activator Protein
+        "32",   // Chaperones
+        "23",   // DNA
+        "168",  // DNA Helicase
+        "55",   // DNA Ligase
+        "139",  // DNA Methyltransferases
+        "3",    // DNA Polymerase
+        "81",   // Elongation Factors
+        "122",  // Enhanceosome
+        "45",   // Estrogen Receptor
+        "86",   // Exosomes
+        "253",  // Expressome
+        "41",   // Hemoglobin
+        "33",   // HIV Reverse Transcriptase
+        "108",  // Hsp90
+        "230",  // Initiation Factor eIF4E
+        "131",  // Inteins
+        "39",   // lac Repressor
+        "9",    // Lysozyme
+        "289",  // Mediator
+        "145",  // Messenger RNA Capping
+        "7",    // Nucleosome
+        "141",  // O-GlcNAc Transferase
+        "112",  // Oct and Sox Transcription Factors
+        "266",  // Oligosaccharyltransferase
+        "31",   // p53 Tumor Suppressor
+        "106",  // Poly(A) Polymerase
+        "166",  // Proteasome
+        "172",  // RecA and Rad51
+        "8",    // Restriction Enzymes
+        "140",  // Rhomboid Protease GlpG
+        "260",  // Ribonuclease P
+        "10",   // Ribosomal Subunits
         "121",  // Ribosome
         "295",  // Ribosome Diversity
-        "84",   // Transposase
-        "192",  // Vancomycin
-        "155",  // Vitamin D Receptor
-
-        "Central Dogma",
-        "16",   // Aminoacyl-tRNA Synthetases
-        "255",  // Cisplatin and DNA
-        "23",   // DNA
-        "3",    // DNA Polymerase
-        "253",  // Expressome
-        "285",  // Histone Deacetylases
-        "289",  // Mediator
-        "271",  // Non-Homologous End Joining Supercomplexes
-        "121",  // Ribosome
+        "130",  // Riboswitches
         "40",   // RNA Polymerase
-        "249",  // SARS-CoV-2 RNA-dependent RNA Polymerase
-        "245",  // Spliceosomes
+        "104",  // Selenocysteine Synthase
+        "65",   // Self-splicing RNA
+        "213",  // Sirtuins
+        "150",  // Sliding Clamps
+        "98",   // Small Interfering RNA (siRNA)
+        "67",   // TATA-Binding Protein
+        "91",   // Thymine Dimers
+        "73",   // Topoisomerases
         "15",   // Transfer RNA
+        "157",  // Transfer-Messenger RNA
+        "84",   // Transposase
+        "60",   // Ubiquitin
+        "87",   // Zinc Fingers
 
-        "Molecules for a Sustainable Future",
-        "216",  // Biodegradable Plastic
-        "297",  // Carbon Capture Mechanisms
-        "254",  // Cellulose Synthase
-        "220",  // Dehalogenases
-        "212",  // Glutathione Transferases
-        "201",  // Isoprene Synthase
-        "179",  // Methyl-coenzyme M Reductase
-        "26",   // Nitrogenase
-        "22",   // Photosystem I
-        "59",   // Photosystem II
-        "225",  // Phytase
-        "274",  // Phytohormone Receptor DWARF14
-        "277"   // Plastic-eating Enzymes
+        "Transport",
+        "203",  // Aminopeptidase 1 and Autophagy
+        "92",   // Anabolic Steroids
+        "173",  // Aquaporin
+        "293",  // CFTR and Cystic Fibrosis
+        "88",   // Clathrin
+        "159",  // Erythrocruorin
+        "35",   // Ferritin and Transferrin
+        "257",  // Fetal Hemoglobin
+        "265",  // Golgi Casein Kinase
+        "208",  // Glucose Transporters
+        "41",   // Hemoglobin
+        "85",   // Importins
+        "294",  // Injectisome
+        "95",   // Multidrug Resistance Transporters
+        "237",  // Nanodiscs and HDL
+        "290",  // Nanowires
+        "171",  // Neurotransmitter Transporters
+        "205",  // Nuclear Pore Complex
+        "123",  // P-glycoprotein
+        "158",  // Proton-Gated Urea Channel
+        "233",  // S-Nitrosylated Hemoglobin
+        "37",   // Serum Albumin
+        "118",  // Sodium-Potassium Pump
+        "305"  // TOC-TIC Translocon
     )
 
     val MotmCategoryBiotech = arrayOf(
 
         "Section Biotech and Nanotech",
 
-        "Recombinant DNA",
-        "198",  // Beta-galactosidase
-        "55",   // DNA Ligase
-        "3",    // DNA Polymerase
-        "112",  // Oct and Sox Transcription Factors
-        "8",    // Restriction Enzymes
 
         "Biotechnology",
         "13",   // Alcohol Dehydrogenase
@@ -837,6 +822,14 @@ object MotmByCategory {
         "222",  // Proteins and Nanoparticles
         "161",  // Ricin
         "180",  // TAL Effectors
+
+        "Recombinant DNA",
+        "198",  // Beta-galactosidase
+        "55",   // DNA Ligase
+        "3",    // DNA Polymerase
+        "112",  // Oct and Sox Transcription Factors
+        "8",    // Restriction Enzymes
+
 
         "Renewable Energy",
         "281",   // Cellulases and Bioenergy
