@@ -80,6 +80,14 @@ object MotmByCategory {
             "209",
             "155",
             "117",
+            "269",  // Nicotine, Cancer, and Addiction
+            "278",  // SARS-CoV-2 Nucleocapsid and Home Tests
+            "288",  // Vitamins
+            "291",  // Hyaluronidases
+            "293",  // CFTR and Cystic Fibrosis
+            "298",  // Angiotensin and Blood Pressure
+            "311",  // GLP-1 Receptor Agonists
+            "312",  // FOXP3
 
             "Immune System",
             "21",
@@ -102,6 +110,12 @@ object MotmByCategory {
             "63",
             "209",
             "143",
+            "272",  // Secretory Antibodies
+            "278",  // SARS-CoV-2 Nucleocapsid and Home Tests
+            "280",  // MHC I Peptide Loading Complex
+            "286",  // RSV Fusion Glycoprotein
+            "287",  // ZAR1 Resistosome
+            "312",  // FOXP3
 
             "HIV and AIDS",
             "170",
@@ -122,6 +136,8 @@ object MotmByCategory {
             "14",
             "182",
             "186",
+            "310",  // Incretins
+            "311",  // GLP-1 Receptor Agonists
 
             "Cancer",
             "160",
@@ -155,6 +171,15 @@ object MotmByCategory {
             "227",
             "91",
             "73",
+            "267",  // VEGF and Angiogenesis
+            "268",  // HER2/neu and Trastuzumab
+            "269",  // Nicotine, Cancer, and Addiction
+            "270",  // Pyruvate Kinase M2
+            "271",  // Non-Homologous End Joining Supercomplexes
+            "279",  // Anaphase-Promoting Complex / Cyclosome
+            "283",  // c-Abl Protein Kinase and Imatinib
+            "284",  // ATM and ATR Kinases
+            "285",  // Histone Deacetylases
 
             "Viruses",
             "132",
@@ -182,6 +207,13 @@ object MotmByCategory {
             "98",
             "109",
             "197",
+            "258",  // Glucocorticoid Receptor and Dexamethasone
+            "278",  // SARS-CoV-2 Nucleocapsid and Home Tests
+            "286",  // RSV Fusion Glycoprotein
+            "292",  // YES Complex
+            "302",  // H5 Hemagglutinin
+            "306",  // Eastern Equine Encephalitis Virus
+            "308",  // Arc
 
             "Toxins and Poisons",
             "71",
@@ -201,6 +233,7 @@ object MotmByCategory {
             "40",
             "118",
             "73",
+            "310",  // Incretins
 
             "Drug Action",
             "160",
@@ -232,6 +265,12 @@ object MotmByCategory {
             "164",
             "188",
             "192",
+            "258",  // Glucocorticoid Receptor and Dexamethasone
+            "276",  // Click Chemistry
+            "279",  // Anaphase-Promoting Complex / Cyclosome
+            "285",  // Histone Deacetylases
+            "307",  // Capturing Beta-Lactamase in Action
+            "311",  // GLP-1 Receptor Agonists
 
             "Antimicrobial Resistance",
             "146",
@@ -243,6 +282,7 @@ object MotmByCategory {
             "121",
             "188",
             "192",
+            "307",  // Capturing Beta-Lactamase in Action
 
             "Drugs and the Brain",
             "71",
@@ -262,12 +302,34 @@ object MotmByCategory {
             "164",
             "167",
             "118",
+            "308",  // Arc
 
             "Coronavirus",
             "242",
             "249",
             "256",
-            "246"
+            "246",
+            "258",  // Glucocorticoid Receptor and Dexamethasone
+            "264",  // SARS-CoV-2 Spike Variants
+            "278",  // SARS-CoV-2 Nucleocapsid and Home Tests
+
+            "Infectious Disease",
+            "294",  // Injectisome
+            "299",  // Malaria Parasite PTEX
+            "302",  // H5 Hemagglutinin
+
+            "Peak Performance",
+            "263",  // Acetohydroxyacid Synthase
+            "269",  // Nicotine, Cancer, and Addiction
+            "273",  // Respiratory Supercomplex
+            "282",  // Odorant Receptors
+            "288",  // Vitamins
+            "298",  // Angiotensin and Blood Pressure
+
+            "Vaccines",
+            "262",  // Fifty Years of Open Access to PDB Structures
+            "286",  // RSV Fusion Glycoprotein
+            "306"   // Eastern Equine Encephalitis Virus
 
     )
 
@@ -325,6 +387,10 @@ object MotmByCategory {
             "84",
             "60",
             "87",
+            "260",  // Ribonuclease P
+            "266",  // Oligosaccharyltransferase
+            "289",  // Mediator
+            "295",  // Ribosome Diversity
 
             "Enzymes",
             "80",
@@ -396,6 +462,9 @@ object MotmByCategory {
             "84",
             "46",
             "117",
+            "263",  // Acetohydroxyacid Synthase
+            "277",  // Plastic-eating Enzymes
+            "301",  // Assembly Line Polyketide Synthases
 
             "Molecular Infrastructure",
             "19",
@@ -409,6 +478,9 @@ object MotmByCategory {
             "209",
             "185",
             "114",
+            "275",  // Actin Branching by Arp2/3 Complex
+            "291",  // Hyaluronidases
+            "296",  // ESCRT-III
 
             "Transport",
             "203",
@@ -430,6 +502,11 @@ object MotmByCategory {
             "233",
             "37",
             "118",
+            "265",  // Golgi Casein Kinase
+            "290",  // Nanowires
+            "293",  // CFTR and Cystic Fibrosis
+            "294",  // Injectisome
+            "305",  // TOC-TIC Translocon
 
             "Biological Energy",
             "89",
@@ -461,6 +538,9 @@ object MotmByCategory {
             "153",
             "147",
             "46",
+            "270",  // Pyruvate Kinase M2
+            "273",  // Respiratory Supercomplex
+            "281",  // Cellulases and Bioenergy
 
             "Molecules and the Environment",
             "216",
@@ -497,6 +577,12 @@ object MotmByCategory {
             "161",
             "11",
             "180",
+            "263",  // Acetohydroxyacid Synthase
+            "274",  // Phytohormone Receptor DWARF14
+            "287",  // ZAR1 Resistosome
+            "297",  // Carbon Capture Mechanisms
+            "305",  // TOC-TIC Translocon
+            "309",  // Abscisic Acid Receptor
 
             "Molecular Motors",
             "72",
@@ -505,6 +591,8 @@ object MotmByCategory {
             "18",
             "211",
             "219",
+            "300",  // Flagellar Motor
+            "305",  // TOC-TIC Translocon
 
             "Cellular Signaling",
             "71",
@@ -551,6 +639,17 @@ object MotmByCategory {
             "43",
             "75",
             "190",
+            "258",  // Glucocorticoid Receptor and Dexamethasone
+            "267",  // VEGF and Angiogenesis
+            "268",  // HER2/neu and Trastuzumab
+            "269",  // Nicotine, Cancer, and Addiction
+            "274",  // Phytohormone Receptor DWARF14
+            "279",  // Anaphase-Promoting Complex / Cyclosome
+            "282",  // Odorant Receptors
+            "283",  // c-Abl Protein Kinase and Imatinib
+            "284",  // ATM and ATR Kinases
+            "298",  // Angiotensin and Blood Pressure
+            "310",  // Incretins
 
             "Nucleic Acids",
             "71",
@@ -580,6 +679,10 @@ object MotmByCategory {
             "91",
             "15",
             "157",
+            "260",  // Ribonuclease P
+            "284",  // ATM and ATR Kinases
+            "312",  // FOXP3
+            "313",  // Natural RNA-Only Assemblies
 
             "Bioluminescence and Fluorescence",
             "229",
@@ -601,6 +704,8 @@ object MotmByCategory {
             "84",
             "192",
             "155",
+            "295",  // Ribosome Diversity
+            "308",  // Arc
 
             "Central Dogma",
             "16",
@@ -611,7 +716,15 @@ object MotmByCategory {
             "40",
             "249",
             "245",
-            "15"
+            "15",
+            "271",  // Non-Homologous End Joining Supercomplexes
+            "285",  // Histone Deacetylases
+            "289",  // Mediator
+
+            "Molecules for a Sustainable Future",
+            "274",  // Phytohormone Receptor DWARF14
+            "277",  // Plastic-eating Enzymes
+            "297"   // Carbon Capture Mechanisms
     )
 
     val MotmCategoryBiotech = arrayOf(
@@ -641,7 +754,8 @@ object MotmByCategory {
             "199",
             "12",
             "225",
-
+            "261",  // DNA-Sequencing Nanopores
+            "277",  // Plastic-eating Enzymes
 
             "Nanotechnology",
             "132",
@@ -661,11 +775,15 @@ object MotmByCategory {
             "222",
             "161",
             "180",
+            "261",  // DNA-Sequencing Nanopores
+            "290",  // Nanowires
+            "301",  // Assembly Line Polyketide Synthases
 
             "Renewable Energy",
             "228",
             "111",
-            "179"
+            "179",
+            "281"   // Cellulases and Bioenergy
     )
 
     val MotmCategoryStructures = arrayOf(
@@ -684,6 +802,8 @@ object MotmByCategory {
             "41",
             "14",
             "200",
+            "259",  // Designed Proteins and Citizen Science
+            "262",  // Fifty Years of Open Access to PDB Structures
 
             "Biomolecular Structural Biology",
             "210",
@@ -697,6 +817,13 @@ object MotmByCategory {
             "104",
             "46",
             "241", // 20 years of molecules
+            "262",  // Fifty Years of Open Access to PDB Structures
+            "303",  // Enoyl-CoA Carboxylases/Reductases
+            "304",  // Apolipoprotein B-100 and LDL Receptor
+            "308",  // Arc
+            "310",  // Incretins
+            "311",  // GLP-1 Receptor Agonists
+            "313",  // Natural RNA-Only Assemblies
 
             "Hybrid Methods",
             "189",
@@ -736,7 +863,16 @@ object MotmByCategory {
             "40",
             "245",
             "227",
-            "109"
+            "109",
+            "276",  // Click Chemistry
+            "312",  // FOXP3
+
+            "PDB Data",
+            "262",  // Fifty Years of Open Access to PDB Structures
+
+            "Protein Structure Prediction",
+            "259",  // Designed Proteins and Citizen Science
+            "287"   // ZAR1 Resistosome
 
     )
 }

@@ -41,9 +41,15 @@ ProGuard rules are in `motmbrowser/src/main/proguard-motmbrowser.pro`.
 
 # Run mollib unit tests only
 ./gradlew.bat :mollib:test
+
+# Run a single test class
+./gradlew.bat :mollib:test --tests "com.bammellab.mollib.data.CorpusTest"
+
+# Run a single test method
+./gradlew.bat :mollib:test --tests "com.bammellab.mollib.data.CorpusTest.testCorpusSize"
 ```
 
-Tests use JUnit 5 (Jupiter) with Truth assertions. Test files are in `mollib/src/test/`.
+Tests use JUnit 5 (Jupiter) with Truth assertions. Test files are in `mollib/src/test/java/`.
 
 ## Linting
 
@@ -80,9 +86,10 @@ This is a multi-module Android project written in Kotlin that displays 3D molecu
 
 - OpenGL ES 2.0/3.0 for 3D molecule rendering
 - PDB file parsing via `kotmolpdbparser` library
-- Target SDK 34, min SDK 21, Java 17
+- Target SDK 36, min SDK 23, Java 11
 - Networking: OkHttp3 + Retrofit2
 - Image loading: Glide
+- Dependencies managed via Gradle version catalog (`gradle/libs.versions.toml`)
 
 ### Test PDB Files
 

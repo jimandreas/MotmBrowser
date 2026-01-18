@@ -3,54 +3,54 @@
 
 [versions]
 # Build configuration
-compileSdk = "35"
-minSdk = "21"
-targetSdk = "35"
+compileSdk = "36"
+minSdk = "23"
+targetSdk = "36"
 
 # Plugin versions
 agp = "8.13.2"
-kotlin = "2.1.0"
+kotlin = "2.3.0"
 
 # Kotlin
-kotlinCoroutines = "1.9.0"
+kotlinCoroutines = "1.10.2"
 
 # AndroidX
-androidxActivity = "1.9.3"
+androidxActivity = "1.12.2"
 androidxAnnotation = "1.9.1"
-androidxAppcompat = "1.7.0"
+androidxAppcompat = "1.7.1"
 androidxCardview = "1.0.0"
-androidxConstraintlayout = "2.2.0"
-androidxCore = "1.15.0"
-androidxFragment = "1.8.5"
-androidxLifecycle = "2.8.7"
-androidxNavigation = "2.8.5"
+androidxConstraintlayout = "2.2.1"
+androidxCore = "1.17.0"
+androidxFragment = "1.8.9"
+androidxLifecycle = "2.10.0"
+androidxNavigation = "2.9.6"
 androidxPreference = "1.2.1"
-androidxRecyclerview = "1.3.2"
-androidxTestRunner = "1.6.2"
+androidxRecyclerview = "1.4.0"
+androidxTestRunner = "1.7.0"
 androidxViewpager2 = "1.1.0"
-androidxWork = "2.10.0"
+androidxWork = "2.11.0"
 
 # Google
-material = "1.12.0"
+material = "1.13.0"
 
 # Networking
-okhttp = "4.12.0"
-retrofit = "2.11.0"
+okhttp = "5.3.2"
+retrofit = "3.0.0"
 
 # Image loading
-glide = "4.16.0"
+glide = "5.0.5"
 picasso = "2.71828"
 
 # Utilities
-gson = "2.11.0"
+gson = "2.13.2"
 timber = "5.0.1"
 pdbparser = "1.0.5"
 muzei = "3.4.2"
 
 # Testing
-junit5 = "5.11.4"
-truth = "1.4.4"
-jetbrainsAnnotations = "26.0.1"
+junit5 = "6.0.2"
+truth = "1.4.5"
+jetbrainsAnnotations = "26.0.2-1"
 
 [libraries]
 # Kotlin

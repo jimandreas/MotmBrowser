@@ -1,0 +1,294 @@
+============================================================
+UPDATES FOR PDBs.kt
+============================================================
+
+// Add these entries before the closing ) of pdbList
+// (after the last MotmToPdbMap entry, add a comma first)
+
+            // Molecule 278
+            MotmToPdbMap(278, "6wji"),
+            MotmToPdbMap(278, "6yi3"),
+            MotmToPdbMap(278, "7act"),
+            MotmToPdbMap(278, "7cr5"),
+            MotmToPdbMap(278, "7n3c"),
+            MotmToPdbMap(278, "7sts"),
+
+            // Molecule 279
+            MotmToPdbMap(279, "4n14"),
+            MotmToPdbMap(279, "5a31"),
+            MotmToPdbMap(279, "5g04"),
+            MotmToPdbMap(279, "5lcw"),
+
+            // Molecule 280
+            MotmToPdbMap(280, "1hoc"),
+            MotmToPdbMap(280, "5ab0"),
+            MotmToPdbMap(280, "5mzo"),
+            MotmToPdbMap(280, "5opi"),
+            MotmToPdbMap(280, "5u1d"),
+            MotmToPdbMap(280, "5wer"),
+            MotmToPdbMap(280, "6cbp"),
+            MotmToPdbMap(280, "6rah"),
+            MotmToPdbMap(280, "6ran"),
+            MotmToPdbMap(280, "7qpd"),
+
+            // Molecule 281
+            MotmToPdbMap(281, "1eg1"),
+            MotmToPdbMap(281, "2mwk"),
+            MotmToPdbMap(281, "2vtc"),
+            MotmToPdbMap(281, "3zyz"),
+            MotmToPdbMap(281, "4c4c"),
+            MotmToPdbMap(281, "7cel"),
+
+            // Molecule 282
+            MotmToPdbMap(282, "1e00"),
+            MotmToPdbMap(282, "1pbo"),
+            MotmToPdbMap(282, "3n7h"),
+            MotmToPdbMap(282, "7lid"),
+            MotmToPdbMap(282, "8f76"),
+
+            // Molecule 283
+            MotmToPdbMap(283, "1opl"),
+            MotmToPdbMap(283, "1t46"),
+            MotmToPdbMap(283, "1xbb"),
+            MotmToPdbMap(283, "1zzp"),
+            MotmToPdbMap(283, "2g2i"),
+            MotmToPdbMap(283, "2hyy"),
+
+            // Molecule 284
+            MotmToPdbMap(284, "4gnx"),
+            MotmToPdbMap(284, "5dny"),
+            MotmToPdbMap(284, "5gox"),
+            MotmToPdbMap(284, "5np0"),
+            MotmToPdbMap(284, "5yz0"),
+            MotmToPdbMap(284, "6s8f"),
+            MotmToPdbMap(284, "6z3a"),
+            MotmToPdbMap(284, "7ni5"),
+            MotmToPdbMap(284, "7ni6"),
+
+            // Molecule 285
+            MotmToPdbMap(285, "1kx5"),
+            MotmToPdbMap(285, "1t64"),
+            MotmToPdbMap(285, "1t69"),
+            MotmToPdbMap(285, "2v5w"),
+            MotmToPdbMap(285, "3c10"),
+            MotmToPdbMap(285, "5edu"),
+            MotmToPdbMap(285, "6z6p"),
+
+            // Molecule 286
+            MotmToPdbMap(286, "3rrr"),
+            MotmToPdbMap(286, "4jhw"),
+            MotmToPdbMap(286, "4mmv"),
+            MotmToPdbMap(286, "5udc"),
+
+            // Molecule 287
+            MotmToPdbMap(287, "6j5t"),
+            MotmToPdbMap(287, "6j5v"),
+            MotmToPdbMap(287, "6j5w"),
+
+            // Molecule 288
+            MotmToPdbMap(288, "1p4m"),
+            MotmToPdbMap(288, "2biw"),
+            MotmToPdbMap(288, "2wsi"),
+            MotmToPdbMap(288, "3fpz"),
+            MotmToPdbMap(288, "3w67"),
+            MotmToPdbMap(288, "4bta"),
+            MotmToPdbMap(288, "4req"),
+            MotmToPdbMap(288, "6wv5"),
+            MotmToPdbMap(288, "7zsc"),
+
+            // Molecule 289
+            MotmToPdbMap(289, "5iyd"),
+            MotmToPdbMap(289, "6w1s"),
+            MotmToPdbMap(289, "7enc"),
+            MotmToPdbMap(289, "7enj"),
+            MotmToPdbMap(289, "7lbm"),
+            MotmToPdbMap(289, "8gxs"),
+
+            // Molecule 290
+            MotmToPdbMap(290, "6ef8"),
+            MotmToPdbMap(290, "6nef"),
+            MotmToPdbMap(290, "7lq5"),
+            MotmToPdbMap(290, "7qv7"),
+            MotmToPdbMap(290, "7tfs"),
+            MotmToPdbMap(290, "7xkm"),
+            MotmToPdbMap(290, "8d9m"),
+
+            // Molecule 291
+            MotmToPdbMap(291, "1fcv"),
+            MotmToPdbMap(291, "2c3f"),
+            MotmToPdbMap(291, "2hya"),
+            MotmToPdbMap(291, "2pe4"),
+            MotmToPdbMap(291, "7eyo"),
+            MotmToPdbMap(291, "8fnx"),
+            MotmToPdbMap(291, "8fyg"),
+
+            // Molecule 292
+            MotmToPdbMap(292, "4jpp"),
+            MotmToPdbMap(292, "5ckr"),
+            MotmToPdbMap(292, "8g02"),
+
+            // Molecule 293
+            MotmToPdbMap(293, "5uak"),
+            MotmToPdbMap(293, "6bqn"),
+            MotmToPdbMap(293, "6msm"),
+            MotmToPdbMap(293, "8eiq"),
+
+            // Molecule 294
+            MotmToPdbMap(294, "1le5"),
+            MotmToPdbMap(294, "6ggr"),
+            MotmToPdbMap(294, "6pep"),
+            MotmToPdbMap(294, "7ah9"),
+
+            // Molecule 295
+            MotmToPdbMap(295, "1fjg"),
+            MotmToPdbMap(295, "4v4a"),
+            MotmToPdbMap(295, "4v6x"),
+            MotmToPdbMap(295, "5a2q"),
+            MotmToPdbMap(295, "5lmv"),
+            MotmToPdbMap(295, "5mmj"),
+            MotmToPdbMap(295, "6rw4"),
+            MotmToPdbMap(295, "6tmf"),
+            MotmToPdbMap(295, "8auv"),
+            MotmToPdbMap(295, "8oz0"),
+
+            // Molecule 296
+            MotmToPdbMap(296, "3frt"),
+            MotmToPdbMap(296, "6ap1"),
+            MotmToPdbMap(296, "6tz4"),
+            MotmToPdbMap(296, "7o3w"),
+            MotmToPdbMap(296, "7o3z"),
+            MotmToPdbMap(296, "7zcg"),
+
+            // Molecule 297
+            MotmToPdbMap(297, "6bhp"),
+            MotmToPdbMap(297, "6ki1"),
+            MotmToPdbMap(297, "6ki2"),
+            MotmToPdbMap(297, "6tjv"),
+            MotmToPdbMap(297, "7cyf"),
+            MotmToPdbMap(297, "7egk"),
+            MotmToPdbMap(297, "7egl"),
+            MotmToPdbMap(297, "7yyo"),
+            MotmToPdbMap(297, "8b12"),
+            MotmToPdbMap(297, "8thm"),
+            MotmToPdbMap(297, "8wxb"),
+
+            // Molecule 298
+            MotmToPdbMap(298, "1n9u"),
+            MotmToPdbMap(298, "1o86"),
+            MotmToPdbMap(298, "2c6n"),
+            MotmToPdbMap(298, "2v0z"),
+            MotmToPdbMap(298, "2x0b"),
+            MotmToPdbMap(298, "3vcm"),
+            MotmToPdbMap(298, "6m17"),
+            MotmToPdbMap(298, "6os0"),
+
+            // Molecule 299
+            MotmToPdbMap(299, "3ul3"),
+            MotmToPdbMap(299, "6e10"),
+            MotmToPdbMap(299, "6e11"),
+            MotmToPdbMap(299, "7jgh"),
+            MotmToPdbMap(299, "7nnh"),
+
+            // Molecule 300
+            MotmToPdbMap(300, "1f4v"),
+            MotmToPdbMap(300, "2zvy"),
+            MotmToPdbMap(300, "6ykm"),
+            MotmToPdbMap(300, "7cgo"),
+            MotmToPdbMap(300, "8brd"),
+            MotmToPdbMap(300, "8ucs"),
+            MotmToPdbMap(300, "8uox"),
+            MotmToPdbMap(300, "8upl"),
+
+            // Molecule 301
+            MotmToPdbMap(301, "7m7f"),
+            MotmToPdbMap(301, "7m7j"),
+            MotmToPdbMap(301, "7s6b"),
+            MotmToPdbMap(301, "7s6c"),
+
+            // Molecule 302
+            MotmToPdbMap(302, "1jsn"),
+            MotmToPdbMap(302, "1rvt"),
+            MotmToPdbMap(302, "2wnb"),
+            MotmToPdbMap(302, "2wnf"),
+            MotmToPdbMap(302, "4k63"),
+            MotmToPdbMap(302, "4k64"),
+            MotmToPdbMap(302, "4k66"),
+            MotmToPdbMap(302, "4k67"),
+            MotmToPdbMap(302, "6qvt"),
+
+            // Molecule 303
+            MotmToPdbMap(303, "6na3"),
+            MotmToPdbMap(303, "6na4"),
+            MotmToPdbMap(303, "6na5"),
+            MotmToPdbMap(303, "6na6"),
+            MotmToPdbMap(303, "6owe"),
+
+            // Molecule 304
+            MotmToPdbMap(304, "1n7d"),
+            MotmToPdbMap(304, "9bdt"),
+            MotmToPdbMap(304, "9eag"),
+
+            // Molecule 305
+            MotmToPdbMap(305, "6v05"),
+            MotmToPdbMap(305, "7vcf"),
+            MotmToPdbMap(305, "8xqx"),
+
+            // Molecule 306
+            MotmToPdbMap(306, "6mx4"),
+            MotmToPdbMap(306, "6odf"),
+            MotmToPdbMap(306, "8ufc"),
+
+            // Molecule 307
+            MotmToPdbMap(307, "6b5x"),
+            MotmToPdbMap(307, "6b68"),
+            MotmToPdbMap(307, "6b69"),
+            MotmToPdbMap(307, "8ebi"),
+            MotmToPdbMap(307, "8ebr"),
+            MotmToPdbMap(307, "8ec4"),
+
+            // Molecule 308
+            MotmToPdbMap(308, "3j3q"),
+            MotmToPdbMap(308, "6r24"),
+            MotmToPdbMap(308, "6tap"),
+            MotmToPdbMap(308, "6tar"),
+            MotmToPdbMap(308, "7urn"),
+
+            // Molecule 309
+            MotmToPdbMap(309, "3jrq"),
+            MotmToPdbMap(309, "3jrs"),
+            MotmToPdbMap(309, "3kay"),
+            MotmToPdbMap(309, "3kb3"),
+            MotmToPdbMap(309, "3nef"),
+            MotmToPdbMap(309, "3ujg"),
+            MotmToPdbMap(309, "4lg5"),
+
+            // Molecule 310
+            MotmToPdbMap(310, "6b3j"),
+            MotmToPdbMap(310, "7lll"),
+            MotmToPdbMap(310, "7ra3"),
+
+            // Molecule 311
+            MotmToPdbMap(311, "6ln2"),
+            MotmToPdbMap(311, "6x18"),
+            MotmToPdbMap(311, "6x1a"),
+            MotmToPdbMap(311, "6xox"),
+            MotmToPdbMap(311, "7fim"),
+            MotmToPdbMap(311, "7ki0"),
+            MotmToPdbMap(311, "7lll"),
+            MotmToPdbMap(311, "8yw3"),
+
+            // Molecule 312
+            MotmToPdbMap(312, "3qrf"),
+            MotmToPdbMap(312, "7tdw"),
+            MotmToPdbMap(312, "7tdx"),
+            MotmToPdbMap(312, "9d2l"),
+
+            // Molecule 313
+            MotmToPdbMap(313, "9j6y"),
+            MotmToPdbMap(313, "9l0r"),
+            MotmToPdbMap(313, "9lcr"),
+            MotmToPdbMap(313, "9lee"),
+            MotmToPdbMap(313, "9m78"),
+            MotmToPdbMap(313, "9mcw"),
+            MotmToPdbMap(313, "9mds"),
+            MotmToPdbMap(313, "9mee"),
