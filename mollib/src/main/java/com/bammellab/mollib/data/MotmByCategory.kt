@@ -285,24 +285,19 @@ object MotmByCategory {
             "307",  // Capturing Beta-Lactamase in Action
 
             "Drugs and the Brain",
-            "71",
-            "54",
-            "100",
-            "235",
-            "51",
-            "250",
-            "58",
-            "191",
-            "247",
-            "171",
-            "217",
-            "223",
-            "38",
-            "147",
-            "164",
-            "167",
-            "118",
+            "71",   // Acetylcholine Receptor
+            "54",   // Acetylcholinesterase
+            "100",  // Adrenergic Receptors
+            "235",  // AMPA Receptor
             "308",  // Arc
+            "51",   // Calcium Pump
+            "250",  // Capsaicin Receptor TRPV1
+            "58",   // G Proteins
+            "247",  // Myelin-associated Glycoprotein
+            "217",  // Opioid Receptors
+            "223",  // Piezo1 Mechanosensitive Channel
+            "118",  // Sodium-Potassium Pump
+            "243",  // Voltage-gated Sodium Channels
 
             "Coronavirus",
             "242",
@@ -314,22 +309,77 @@ object MotmByCategory {
             "278",  // SARS-CoV-2 Nucleocapsid and Home Tests
 
             "Infectious Disease",
+            "146",  // Aminoglycoside Antibiotics
+            "226",  // Aminoglycoside Antibiotics and Resistance
+            "28",   // Anthrax Toxin
+            "69",   // Cholera Toxin
+            "97",   // Circadian Clock Proteins
+            "302",  // H5 Hemagglutinin
             "294",  // Injectisome
             "299",  // Malaria Parasite PTEX
-            "302",  // H5 Hemagglutinin
+            "187",  // New Delhi Metallo-Beta-Lactamase
+            "29",   // Penicillin-binding Proteins
+            "211",  // Pilus Machine
+            "143",  // Toll-like Receptors
+            "192",  // Vancomycin
 
             "Peak Performance",
             "263",  // Acetohydroxyacid Synthase
-            "269",  // Nicotine, Cancer, and Addiction
-            "273",  // Respiratory Supercomplex
-            "282",  // Odorant Receptors
-            "288",  // Vitamins
+            "100",  // Adrenergic Receptors
+            "13",   // Alcohol Dehydrogenase
+            "92",   // Anabolic Steroids
             "298",  // Angiotensin and Blood Pressure
+            "72",   // ATP Synthase
+            "51",   // Calcium Pump
+            "49",   // Carbonic Anhydrase
+            "57",   // Catalase
+            "97",   // Circadian Clock Proteins
+            "154",  // Citrate Synthase
+            "144",  // Cytochrome c
+            "5",    // Cytochrome c Oxidase
+            "45",   // Estrogen Receptor
+            "90",   // Fatty Acid Synthase
+            "24",   // Glycolytic Enzymes
+            "50",   // Glutamine Synthetase
+            "52",   // Growth Hormone
+            "41",   // Hemoglobin
+            "240",  // Hypoxia-Inducible Factors
+            "102",  // Lac Repressor
+            "196",  // Lead Poisoning
+            "149",  // Leptin
+            "199",  // Monellin
+            "18",   // Myosin
+            "269",  // Nicotine, Cancer, and Addiction
+            "282",  // Odorant Receptors
+            "217",  // Opioid Receptors
+            "96",   // Pepsin-like Aspartic Proteases
+            "153",  // Proteasome
+            "273",  // Respiratory Supercomplex
+            "147",  // Rhodopsin
+            "233",  // S-Nitrosylated Hemoglobin
+            "164",  // Serotonin Receptor
+            "118",  // Sodium-Potassium Pump
+            "94",   // Thrombin
+            "155",  // Vitamin D Receptor
+            "288",  // Vitamins
 
             "Vaccines",
+            "132",  // Adenovirus
+            "170",  // Broadly Neutralizing Antibodies
+            "103",  // Designer Insulin
+            "306",  // Eastern Equine Encephalitis Virus
             "262",  // Fifty Years of Open Access to PDB Structures
+            "169",  // HIV Envelope Glycoprotein
+            "6",    // HIV-1 Protease
+            "221",  // Human Papillomavirus and Vaccines
+            "113",  // Influenza Neuraminidase
+            "231",  // Nanobodies
+            "125",  // Parvoviruses
+            "20",   // Poliovirus and Rhinovirus
+            "161",  // Ricin
             "286",  // RSV Fusion Glycoprotein
-            "306"   // Eastern Equine Encephalitis Virus
+            "246",  // SARS-CoV-2 Spike
+            "256"   // SARS-CoV-2 Spike and Antibodies
 
     )
 
@@ -387,6 +437,7 @@ object MotmByCategory {
             "84",
             "60",
             "87",
+            "253",  // Expressome
             "260",  // Ribonuclease P
             "266",  // Oligosaccharyltransferase
             "289",  // Mediator
@@ -555,34 +606,33 @@ object MotmByCategory {
             "225",
 
             "Biology of Plants",
-            "110",
-            "27",
-            "49",
-            "66",
-            "254",
-            "124",
-            "137",
-            "218",
-            "90",
-            "42",
-            "201",
-            "199",
-            "26",
-            "244",
-            "22",
-            "59",
-            "183",
-            "248",
-            "8",
-            "161",
-            "11",
-            "180",
-            "263",  // Acetohydroxyacid Synthase
-            "274",  // Phytohormone Receptor DWARF14
-            "287",  // ZAR1 Resistosome
-            "297",  // Carbon Capture Mechanisms
-            "305",  // TOC-TIC Translocon
             "309",  // Abscisic Acid Receptor
+            "263",  // Acetohydroxyacid Synthase
+            "110",  // Auxin and TIR1 Ubiquitin Ligase
+            "27",   // Bacteriorhodopsin
+            "297",  // Carbon Capture Mechanisms
+            "49",   // Carbonic Anhydrase
+            "66",   // Carbonic Anhydrase II
+            "254",  // Cellulose Synthase
+            "124",  // Concanavalin A and Circular Permutation
+            "137",  // Cytochrome bc1
+            "218",  // EPSP Synthase and Weedkillers
+            "90",   // Fatty Acid Synthase
+            "42",   // Green Fluorescent Protein (GFP)
+            "201",  // Isoprene Synthase
+            "199",  // Monellin
+            "26",   // Nitrogenase
+            "244",  // Phycobilisome
+            "22",   // Photosystem I
+            "59",   // Photosystem II
+            "183",  // Phytochrome
+            "274",  // Phytohormone Receptor DWARF14
+            "248",  // Phototropin
+            "161",  // Ricin
+            "11",   // Rubisco
+            "180",  // TAL Effectors
+            "305",  // TOC-TIC Translocon
+            "287",  // ZAR1 Resistosome
 
             "Molecular Motors",
             "72",
@@ -595,90 +645,84 @@ object MotmByCategory {
             "305",  // TOC-TIC Translocon
 
             "Cellular Signaling",
-            "71",
-            "54",
-            "100",
-            "235",
-            "92",
-            "110",
-            "51",
-            "44",
-            "152",
-            "250",
-            "236",
-            "17",
-            "194",
-            "202",
-            "126",
-            "45",
-            "58",
-            "184",
-            "191",
-            "52",
-            "14",
-            "182",
-            "128",
-            "149",
-            "107",
-            "171",
-            "68",
-            "133",
-            "217",
-            "204",
-            "207",
-            "183",
-            "248",
-            "223",
-            "38",
-            "195",
-            "148",
-            "186",
-            "147",
-            "164",
-            "167",
-            "43",
-            "75",
-            "190",
-            "258",  // Glucocorticoid Receptor and Dexamethasone
-            "267",  // VEGF and Angiogenesis
-            "268",  // HER2/neu and Trastuzumab
-            "269",  // Nicotine, Cancer, and Addiction
-            "274",  // Phytohormone Receptor DWARF14
+            "71",   // Acetylcholine Receptor
+            "54",   // Acetylcholinesterase
+            "251",  // Adenylyl Cyclase
+            "100",  // Adrenergic Receptors
+            "235",  // AMPA Receptor
+            "92",   // Anabolic Steroids
             "279",  // Anaphase-Promoting Complex / Cyclosome
-            "282",  // Odorant Receptors
-            "283",  // c-Abl Protein Kinase and Imatinib
-            "284",  // ATM and ATR Kinases
             "298",  // Angiotensin and Blood Pressure
+            "284",  // ATM and ATR Kinases
+            "110",  // Auxin and TIR1 Ubiquitin Ligase
+            "283",  // c-Abl Protein Kinase and Imatinib
+            "51",   // Calcium Pump
+            "44",   // Calmodulin
+            "152",  // Caspase-Activated DNase
+            "250",  // Capsaicin Receptor TRPV1
+            "236",  // Cyclin and Cyclin-dependent Kinase
+            "17",   // Cytochrome P450
+            "194",  // Designer Insulins
+            "202",  // Dipeptidyl Peptidase 4
+            "126",  // Epidermal Growth Factor
+            "45",   // Estrogen Receptor
+            "58",   // G Proteins
+            "184",  // Glucagon
+            "258",  // Glucocorticoid Receptor and Dexamethasone
+            "191",  // GPCR Kinases
+            "52",   // Growth Hormone
+            "268",  // HER2/neu and Trastuzumab
             "310",  // Incretins
+            "14",   // Insulin
+            "182",  // Insulin Receptor
+            "128",  // Interferons
+            "149",  // Leptin
+            "107",  // Lipid-linked Oligosaccharide
+            "171",  // Neurotransmitter Transporters
+            "68",   // Nitric Oxide Synthase
+            "269",  // Nicotine, Cancer, and Addiction
+            "133",  // Nuclear Receptors
+            "282",  // Odorant Receptors
+            "217",  // Opioid Receptors
+            "204",  // PD-1 (Programmed Cell Death Protein 1)
+            "207",  // Photoactive Yellow Protein
+            "183",  // Phytochrome
+            "274",  // Phytohormone Receptor DWARF14
+            "248",  // Phototropin
+            "223",  // Piezo1 Mechanosensitive Channel
+            "38",   // Potassium Channels
+            "195",  // RAF Protein Kinases
+            "148",  // Ras Protein
+            "186",  // Receptor for Advanced Glycation End Products
+            "147",  // Rhodopsin
+            "164",  // Serotonin Receptor
+            "167",  // Ser/Thr Protein Phosphatases
+            "43",   // Src Tyrosine Kinase
+            "75",   // Tumor Necrosis Factor
+            "190",  // Ubiquitin
+            "267",  // VEGF and Angiogenesis
+            "155",  // Vitamin D Receptor
+            "243",  // Voltage-gated Sodium Channels
 
             "Nucleic Acids",
-            "71",
-            "54",
-            "210",
-            "100",
-            "51",
-            "119",
-            "23",
-            "229",
-            "58",
-            "191",
-            "171",
-            "217",
-            "223",
-            "38",
-            "147",
-            "10",
-            "121",
-            "130",
-            "65",
-            "164",
-            "98",
-            "167",
-            "118",
-            "227",
-            "91",
-            "15",
-            "157",
+            "7",    // Nucleosome
+            "8",    // Restriction Enzymes
+            "10",   // Ribosomal Subunits
+            "15",   // Transfer RNA
+            "23",   // DNA
+            "65",   // Self-splicing RNA
+            "91",   // Thymine Dimers
+            "98",   // Small Interfering RNA (siRNA)
+            "119",  // Designed DNA Crystal
+            "121",  // Ribosome
+            "130",  // Riboswitches
+            "155",  // Vitamin D Receptor
+            "157",  // Transfer-Messenger RNA
+            "172",  // RecA and Rad51
+            "210",  // Adenine Riboswitch in Action
+            "227",  // Telomerase
+            "229",  // Fluorescent RNA Aptamers
+            "245",  // Spliceosomes
             "260",  // Ribonuclease P
             "284",  // ATM and ATR Kinases
             "312",  // FOXP3
@@ -708,23 +752,34 @@ object MotmByCategory {
             "308",  // Arc
 
             "Central Dogma",
-            "16",
-            "255",
-            "23",
-            "3",
-            "121",
-            "40",
-            "249",
-            "245",
-            "15",
-            "271",  // Non-Homologous End Joining Supercomplexes
+            "16",   // Aminoacyl-tRNA Synthetases
+            "255",  // Cisplatin and DNA
+            "23",   // DNA
+            "3",    // DNA Polymerase
+            "253",  // Expressome
             "285",  // Histone Deacetylases
             "289",  // Mediator
+            "271",  // Non-Homologous End Joining Supercomplexes
+            "121",  // Ribosome
+            "40",   // RNA Polymerase
+            "249",  // SARS-CoV-2 RNA-dependent RNA Polymerase
+            "245",  // Spliceosomes
+            "15",   // Transfer RNA
 
             "Molecules for a Sustainable Future",
+            "216",  // Biodegradable Plastic
+            "297",  // Carbon Capture Mechanisms
+            "254",  // Cellulose Synthase
+            "220",  // Dehalogenases
+            "212",  // Glutathione Transferases
+            "201",  // Isoprene Synthase
+            "179",  // Methyl-coenzyme M Reductase
+            "26",   // Nitrogenase
+            "22",   // Photosystem I
+            "59",   // Photosystem II
+            "225",  // Phytase
             "274",  // Phytohormone Receptor DWARF14
-            "277",  // Plastic-eating Enzymes
-            "297"   // Carbon Capture Mechanisms
+            "277"   // Plastic-eating Enzymes
     )
 
     val MotmCategoryBiotech = arrayOf(
@@ -739,22 +794,23 @@ object MotmByCategory {
             "8",
 
             "Biotechnology",
-            "13",
-            "74",
-            "120",
-            "110",
-            "216",
-            "214",
-            "228",
-            "3",
-            "218",
-            "174",
-            "77",
-            "42",
-            "199",
-            "12",
-            "225",
+            "13",   // Alcohol Dehydrogenase
+            "74",   // Alpha-amylase
+            "120",  // Antifreeze Proteins
+            "110",  // Auxin and TIR1 Ubiquitin Ligase
+            "216",  // Biodegradable Plastic
+            "181",  // Cascade and CRISPR
+            "214",  // Chimeric Antigen Receptors
+            "228",  // Directed Evolution of Enzymes
+            "3",    // DNA Polymerase
             "261",  // DNA-Sequencing Nanopores
+            "218",  // EPSP Synthase and Weedkillers
+            "174",  // GFP-like Proteins
+            "77",   // Glucose Oxidase
+            "42",   // Green Fluorescent Protein (GFP)
+            "199",  // Monellin
+            "12",   // Pepsin
+            "225",  // Phytase
             "277",  // Plastic-eating Enzymes
 
             "Nanotechnology",
@@ -791,19 +847,20 @@ object MotmByCategory {
             "Section Structures and Structure Determination",
 
             "Biomolecules",
-            "89",
-            "210",
-            "215",
-            "4",
-            "124",
-            "127",
-            "23",
-            "206",
-            "41",
-            "14",
-            "200",
+            "89",   // Aconitase and Iron Regulatory Protein 1
+            "210",  // Adenine Riboswitch in Action
+            "215",  // Albumin
+            "97",   // Circadian Clock Proteins
+            "4",    // Collagen
+            "124",  // Concanavalin A and Circular Permutation
+            "127",  // Dengue Virus
             "259",  // Designed Proteins and Citizen Science
+            "23",   // DNA
             "262",  // Fifty Years of Open Access to PDB Structures
+            "206",  // Globin Evolution
+            "41",   // Hemoglobin
+            "14",   // Insulin
+            "200",  // Zika Virus
 
             "Biomolecular Structural Biology",
             "210",
@@ -838,40 +895,44 @@ object MotmByCategory {
             "219",
 
             "Nobel Prizes and PDB Structures",
-            "100",
-            "203",
-            "21",
-            "173",
-            "72",
-            "27",
-            "181",
-            "97",
-            "228",
-            "23",
-            "58",
-            "41",
-            "252", // DEC 2020 HepC
-            "240",
-            "1",
-            "142",
-            "22",
-            "59",
-            "38",
-            "105",
-            "10",
-            "121",
-            "40",
-            "245",
-            "227",
-            "109",
+            "100",  // Adrenergic Receptors
+            "251",  // Adenylyl Cyclase
+            "203",  // Aminopeptidase 1 and Autophagy
+            "21",   // Antibodies
+            "173",  // Aquaporin
+            "72",   // ATP Synthase
+            "27",   // Bacteriorhodopsin
+            "181",  // Cascade and CRISPR
+            "250",  // Capsaicin Receptor TRPV1
+            "97",   // Circadian Clock Proteins
             "276",  // Click Chemistry
+            "228",  // Directed Evolution of Enzymes
+            "23",   // DNA
             "312",  // FOXP3
+            "58",   // G Proteins
+            "41",   // Hemoglobin
+            "252",  // Hepatitis C Virus Protease/Helicase
+            "240",  // Hypoxia-Inducible Factors
+            "1",    // Myoglobin
+            "142",  // PDB Pioneers
+            "22",   // Photosystem I
+            "59",   // Photosystem II
+            "223",  // Piezo1 Mechanosensitive Channel
+            "38",   // Potassium Channels
+            "105",  // Ribonuclease A
+            "10",   // Ribosomal Subunits
+            "121",  // Ribosome
+            "40",   // RNA Polymerase
+            "245",  // Spliceosomes
+            "227",  // Telomerase
+            "109",  // Tobacco Mosaic Virus
 
             "PDB Data",
             "262",  // Fifty Years of Open Access to PDB Structures
 
             "Protein Structure Prediction",
             "259",  // Designed Proteins and Citizen Science
+            "70",   // Designer Proteins
             "287"   // ZAR1 Resistosome
 
     )
