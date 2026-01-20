@@ -30,5 +30,5 @@ a PNG file with transparency.  Then it will write the thumbnail PNG image to the
 `Thumbs` folder.
 
 
-[Kotmol image repo]:https://github.com/kotmol/KotmolMotmImages
+[motm image repo]:https://github.com/jimandreas/MotmImages
 

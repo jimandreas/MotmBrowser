@@ -21,15 +21,16 @@ package com.bammellab.mollib.data
 /**
  * The paths to:
  *
- * Motm Images (created by the captureimages app in this repo, and uploaded to KotmolMotmImages
+ * Motm Images (created by the captureimages app in this repo, and uploaded to
+ * https://github.com/jimandreas/MotmImages
  *
  * RCSB Molecule Of The Month resources
  */
 object URLs {
 
-    const val PDB_IMAGE_WEB_PREFIX = "https://github.com/kotmol/KotmolMotmImages/blob/master/docs/img/"
-    const val PDB_MOTM_PNG_WEB_PREFIX = "https://github.com/kotmol/KotmolMotmImages/blob/master/docs/motm_png/"
-    const val PDB_MOTM_THUMB_WEB_PREFIX = "https://github.com/kotmol/KotmolMotmImages/blob/master/docs/motm_thumbnail/"
+    const val PDB_IMAGE_WEB_PREFIX = "https://github.com/jimandreas/MotmImages/blob/master/docs/img/"
+    const val PDB_MOTM_PNG_WEB_PREFIX = "https://github.com/jimandreas/MotmImages/blob/master/docs/motm_png/"
+    const val PDB_MOTM_THUMB_WEB_PREFIX = "https://github.com/jimandreas/MotmImages/blob/master/docs/motm_thumbnail/"
 
     const val PDB_MOTM_PREFIX = "https://pdb101.rcsb.org/motm/"
     const val PDB_MOTM_SUFFIX = "#sub-navbar"
