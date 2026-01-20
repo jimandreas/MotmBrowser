@@ -77,7 +77,7 @@ Rajawali: Math functions leveraged from [Rajawali]
 
 [Rajawali]:https://github.com/Rajawali/Rajawali
 
-[KotmolMotmImages]:https://github.com/kotmol/KotmolMotmImages
+[MotmImages]:https://github.com/jimandreas/MotmImages
 
 ## Other apps:
 

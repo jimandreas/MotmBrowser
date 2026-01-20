@@ -40,7 +40,7 @@ class MotmImageProvider : MuzeiArtProvider() {
                     .byline(motm.motmTagLine)
                     .persistentUri(
                             Uri.parse(
-                        "https://github.com/kotmol/KotmolMotmImages/raw/master/docs/motm_png/${motm.motmGraphicName}.png"))
+                        "https://github.com/jimandreas/MotmImages/raw/master/docs/motm_png/${motm.motmGraphicName}.png"))
                     .webUri(Uri.parse("https://pdb101.rcsb.org/motm/${motm.motmNumber}"))
                     .attribution("Molecular Landscapes by David S. Goodsell CC-BY-4.0 license")
                     // .metadata("this is metadata")  // not used by Muzei

@@ -70,7 +70,7 @@
 
     <!--images from github kotmol repo-->
 
-    <string name="images_url_kotmol_repo">https://github.com/kotmol/KotmolMotmImages/blob/master/docs/img/</string>
+    <string name="images_url_kotmol_repo">https://github.com/jimandreas/MotmImages/blob/master/docs/img/</string>
 
     <!--  Search fragment strings -->
     <string name="search_recent_header">Recent searches:</string>
