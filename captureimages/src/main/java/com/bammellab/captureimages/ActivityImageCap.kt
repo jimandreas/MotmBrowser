@@ -61,7 +61,7 @@ class ActivityImageCap : AppCompatActivity() {
                 renderer,
                 nextNameIndex = 0,
 //                pdbFileNames = MotmPdbNames.pdbNames,
-                pdbFileNames = MotmPdbNames.pdbNames2021,
+                pdbFileNames = MotmPdbNames.pdbNames2026,
                 loadPdbFrom = FROM_SDCARD_AND_CAPTURE)
 
         //processPdbs.startProcessing(captureImages = true)

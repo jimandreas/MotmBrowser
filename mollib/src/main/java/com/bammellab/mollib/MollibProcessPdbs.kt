@@ -246,7 +246,8 @@ class MollibProcessPdbs(
                 }
                 val myFile = File(internalSDcard, "Thumbs/$pdbName.png")
                 val fileOutputStream = FileOutputStream(myFile)
-                val bm = renderer.readGlBufferToBitmap(350, 580, 400, 400)
+//                val bm = renderer.readGlBufferToBitmap(350, 580, 400, 400)
+                val bm = renderer.readGlBufferToBitmap(350, 1000, 400, 400)
                 if (bm != null) {
                     bm.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
                     fileOutputStream.flush()
