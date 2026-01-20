@@ -800,7 +800,7 @@ object Corpus {
         return initList.toTypedArray()
     }
 
-    private const val numMonths = 313
+    const val numMonths = 313
 
     // grep the href in the motm-by-date file
 

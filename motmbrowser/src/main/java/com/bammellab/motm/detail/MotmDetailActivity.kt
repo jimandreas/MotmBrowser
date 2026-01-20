@@ -29,6 +29,7 @@ import androidx.cardview.widget.CardView
 import com.bammellab.motm.R
 import com.bammellab.mollib.data.Corpus
 import com.bammellab.mollib.data.Corpus.motmTitleGet
+import com.bammellab.mollib.data.Corpus.numMonths
 import com.bammellab.mollib.data.MotmImageDownload
 import com.bammellab.mollib.data.PDBs
 import com.bammellab.mollib.data.URLs.PDB_IMAGE_WEB_PREFIX
@@ -76,7 +77,7 @@ class MotmDetailActivity : AppCompatActivity() {
                 Timber.e("MotmDetailActivity: Error on name as a number $motmNumberString")
                 motmNumber = 1
             } finally {
-                if (motmNumber < 0 || motmNumber > 300) {
+                if (motmNumber < 0 || motmNumber > numMonths) {
                     Timber.e("motmNumber out of range, %d, should be between 0 and 300", motmNumber)
                     motmNumber = 0
                 }
