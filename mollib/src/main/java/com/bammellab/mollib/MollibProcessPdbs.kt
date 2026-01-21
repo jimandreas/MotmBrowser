@@ -16,7 +16,10 @@
 package com.bammellab.mollib
 
 import android.graphics.Bitmap
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
+import kotlin.math.max
+import kotlin.math.min
 import com.bammellab.mollib.LoadFromSource.*
 import com.bammellab.mollib.Utility.parsePdbFileFromAsset
 import com.bammellab.mollib.Utility.parsePdbInputStream
@@ -114,7 +117,7 @@ class MollibProcessPdbs(
      */
     private val jobCaptureImages = Job()
     private fun loadSequentialData() = GlobalScope.launch(Dispatchers.IO + jobCaptureImages) {
-        renderer.allocateReadBitmapArrays()
+        renderer.allocateReadBitmapArrays(500, 500)
 
         loadNextPdbFile()
     }
@@ -231,6 +234,76 @@ class MollibProcessPdbs(
         }
     }
 
+    /**
+     * Find the bounding box of non-transparent pixels in a bitmap.
+     * Returns a Rect with the molecule extents, or null if no molecule pixels found.
+     */
+    private fun findMoleculeBounds(bitmap: Bitmap): Rect? {
+        var minX = bitmap.width
+        var minY = bitmap.height
+        var maxX = 0
+        var maxY = 0
+        var foundPixel = false
+
+        for (y in 0 until bitmap.height) {
+            for (x in 0 until bitmap.width) {
+                val pixel = bitmap.getPixel(x, y)
+                // Non-transparent pixel (alpha > 0) indicates molecule
+                if ((pixel ushr 24) > 0) {
+                    foundPixel = true
+                    if (x < minX) minX = x
+                    if (x > maxX) maxX = x
+                    if (y < minY) minY = y
+                    if (y > maxY) maxY = y
+                }
+            }
+        }
+
+        return if (foundPixel) {
+            Rect(minX, minY, maxX, maxY)
+        } else {
+            null
+        }
+    }
+
+    /**
+     * Calculate the optimal x, y origin for a capture that centers the molecule.
+     * The scan bitmap was captured at (scanX, scanY) in GL coordinates.
+     * Returns Pair(glX, glY) for the final 500x500 capture.
+     */
+    private fun calculateCenteredOrigin(
+        bounds: Rect,
+        scanX: Int,
+        scanY: Int,
+        scanWidth: Int,
+        scanHeight: Int,
+        captureSize: Int,
+        screenWidth: Int,
+        screenHeight: Int
+    ): Pair<Int, Int> {
+        // Molecule center in the scan bitmap coordinate system
+        val moleculeCenterXInBitmap = (bounds.left + bounds.right) / 2
+        val moleculeCenterYInBitmap = (bounds.top + bounds.bottom) / 2
+
+        // Convert bitmap Y to GL Y (bitmap Y is flipped from GL Y)
+        // In the bitmap, Y=0 is top, but in GL, Y=0 is bottom
+        val moleculeCenterYInBitmapFlipped = scanHeight - 1 - moleculeCenterYInBitmap
+
+        // Convert to GL screen coordinates
+        val moleculeCenterXInGL = scanX + moleculeCenterXInBitmap
+        val moleculeCenterYInGL = scanY + moleculeCenterYInBitmapFlipped
+
+        // Calculate the origin to center the molecule in a captureSize x captureSize capture
+        var newX = moleculeCenterXInGL - captureSize / 2
+        var newY = moleculeCenterYInGL - captureSize / 2
+
+        // Clamp to screen bounds
+        newX = max(0, min(newX, screenWidth - captureSize))
+        newY = max(0, min(newY, screenHeight - captureSize))
+
+        return Pair(newX, newY)
+    }
+
     fun writeCurrentImage(pdbName: String) {
         glSurfaceView.queueEvent {
             val internalSDcard = activity.externalCacheDir
@@ -244,14 +317,57 @@ class MollibProcessPdbs(
                         Timber.e("********************************************")
                     }
                 }
+
+                val captureSize = 500
+                val screenWidth = renderer.getScreenWidth()
+                val screenHeight = renderer.getScreenHeight()
+
+                // Default capture position (fallback if molecule bounds can't be found)
+                var captureX = 250
+                var captureY = 900
+
+                // First, do a scan capture to find the molecule bounds
+                // Capture a larger region centered on the screen
+                val scanWidth = min(screenWidth, 800)
+                val scanHeight = min(screenHeight, 800)
+                val scanX = max(0, (screenWidth - scanWidth) / 2)
+                val scanY = max(0, (screenHeight - scanHeight) / 2)
+
+                // Allocate buffers for the scan capture
+                renderer.allocateReadBitmapArrays(scanWidth, scanHeight)
+                val scanBitmap = renderer.readGlBufferToBitmap(scanX, scanY, scanWidth, scanHeight)
+
+                if (scanBitmap != null) {
+                    val bounds = findMoleculeBounds(scanBitmap)
+                    if (bounds != null) {
+                        Timber.d("Molecule bounds in scan: left=${bounds.left}, top=${bounds.top}, " +
+                                "right=${bounds.right}, bottom=${bounds.bottom}")
+
+                        val (newX, newY) = calculateCenteredOrigin(
+                            bounds, scanX, scanY, scanWidth, scanHeight,
+                            captureSize, screenWidth, screenHeight
+                        )
+                        captureX = newX
+                        captureY = newY
+                        Timber.d("Adjusted capture origin: x=$captureX, y=$captureY")
+                    } else {
+                        Timber.w("No molecule pixels found in scan, using default position")
+                    }
+                    scanBitmap.recycle()
+                }
+
+                // Reallocate buffers for the final capture size
+                renderer.allocateReadBitmapArrays(captureSize, captureSize)
+
+                // Capture the final centered image
                 val myFile = File(internalSDcard, "Thumbs/$pdbName.png")
                 val fileOutputStream = FileOutputStream(myFile)
-                val bm = renderer.readGlBufferToBitmap(350, 580, 400, 400)
+                val bm = renderer.readGlBufferToBitmap(captureX, captureY, captureSize, captureSize)
                 if (bm != null) {
                     bm.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
                     fileOutputStream.flush()
                     fileOutputStream.close()
-                    Timber.e("write OK: $myFile")
+                    Timber.e("write OK: $myFile (origin: $captureX, $captureY)")
                 }
 
             } catch (e: FileNotFoundException) {

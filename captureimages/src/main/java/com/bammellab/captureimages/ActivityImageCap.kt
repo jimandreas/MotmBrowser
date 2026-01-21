@@ -50,7 +50,8 @@ class ActivityImageCap : AppCompatActivity() {
         renderer = RendererDisplayPdbFile(this, glSurfaceView)
         glSurfaceView.setRenderer(renderer, config.densityDpi)
         //renderer.setUpdateListener(this)
-        renderer.overrideInitialScale(.6f) // thumbnail size
+//        renderer.overrideInitialScale(.6f) // thumbnail size
+        renderer.overrideInitialScale(.8f) // thumbnail size
 
         // This freezes the updates, now adjusted in GLSurfaceView
         // gLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -61,7 +62,7 @@ class ActivityImageCap : AppCompatActivity() {
                 renderer,
                 nextNameIndex = 0,
 //                pdbFileNames = MotmPdbNames.pdbNames,
-                pdbFileNames = MotmPdbNames.pdbNames2021,
+                pdbFileNames = MotmPdbNames.pdbNames2026,
                 loadPdbFrom = FROM_SDCARD_AND_CAPTURE)
 
         //processPdbs.startProcessing(captureImages = true)

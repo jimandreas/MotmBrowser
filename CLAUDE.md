@@ -15,7 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Clean build
 ./gradlew.bat clean build
 
-# Build release (requires gradle/signing.properties)
+# Build release (requires gradle/signing.properties with STORE_FILE, STORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD)
 ./gradlew.bat :motmbrowser:assembleRelease
 
 # Build release AAB (for Google Play)
@@ -90,6 +90,14 @@ This is a multi-module Android project written in Kotlin that displays 3D molecu
 - Networking: OkHttp3 + Retrofit2
 - Image loading: Glide
 - Dependencies managed via Gradle version catalog (`gradle/libs.versions.toml`)
+
+### Rendering Pipeline
+
+The OpenGL rendering uses an MVP (Model-View-Projection) matrix architecture:
+- `RendererDisplayPdbFile` - Main GLSurfaceView.Renderer handling frame drawing
+- `BufferManager` - Manages vertex buffer objects for molecule geometry
+- Shaders: Per-vertex (Lesson 2) and per-pixel (Lesson 3) lighting modes
+- Touch input controls rotation (deltaX/Y) and pinch-to-zoom (scaleCurrentF)
 
 ### Test PDB Files
 
