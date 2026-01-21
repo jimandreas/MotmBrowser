@@ -15,7 +15,6 @@ package com.bammellab.motm.detail
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -47,6 +46,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import timber.log.Timber
+import androidx.core.net.toUri
 
 class MotmDetailActivity : AppCompatActivity() {
 
@@ -77,7 +77,7 @@ class MotmDetailActivity : AppCompatActivity() {
                 Timber.e("MotmDetailActivity: Error on name as a number $motmNumberString")
                 motmNumber = 1
             } finally {
-                if (motmNumber < 0 || motmNumber > numMonths) {
+                if (motmNumber !in 0..numMonths) {
                     Timber.e("motmNumber out of range, %d, should be between 0 and 300", motmNumber)
                     motmNumber = 0
                 }
@@ -114,10 +114,9 @@ class MotmDetailActivity : AppCompatActivity() {
         descRaw = sb.toString()
 
         descRaw = descRaw.replace("\n", "<br>")
-        val desc: CharSequence
 
         // painful fromHtml version handling
-        desc = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        val desc = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             Html.fromHtml(descRaw,
                     Html.FROM_HTML_MODE_LEGACY)
         } else {
@@ -240,10 +239,8 @@ class MotmDetailActivity : AppCompatActivity() {
     private fun startPdbViewActivity(v: View) {
         val pdbOfInterest = v.tag as String
         val intentRCSB = Intent(Intent.ACTION_VIEW)
-        intentRCSB.data = Uri.parse(
-                RCSB_PDB_INFO_PREFIX
-                        + pdbOfInterest + RCSB_PDB_INFO_SUFFIX
-        )
+        intentRCSB.data = (RCSB_PDB_INFO_PREFIX
+                + pdbOfInterest + RCSB_PDB_INFO_SUFFIX).toUri()
 
         try {
             Timber.i("start activity intent: $intentRCSB, $intentRCSB.data")
@@ -258,11 +255,9 @@ class MotmDetailActivity : AppCompatActivity() {
         try {
             val intent = Intent(Intent.ACTION_VIEW)
 
-            intent.data = Uri.parse(
-                    PDB_MOTM_PREFIX
-                            + motmNumber
-                            + PDB_MOTM_SUFFIX
-            )
+            intent.data = (PDB_MOTM_PREFIX
+                    + motmNumber
+                    + PDB_MOTM_SUFFIX).toUri()
             startActivity(intent)
         } catch (e: Exception) {
             Timber.e(e, "exception on Motm Web View Activity")

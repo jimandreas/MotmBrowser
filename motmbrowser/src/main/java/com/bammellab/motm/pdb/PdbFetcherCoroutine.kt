@@ -11,7 +11,7 @@
  *  limitations under the License
  */
 
-@file:Suppress("UNUSED_VARIABLE")
+@file:Suppress("UNUSED_VARIABLE", "PropertyName")
 
 package com.bammellab.motm.pdb
 

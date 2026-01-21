@@ -123,7 +123,7 @@ class SearchAdapter(
                     layoutId = R.layout.fragment_search_list_item
                 }
             }
-            val view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
             return ViewHolderMotm(view, viewType)
         } else {
             throw RuntimeException("Not bound to RecyclerView")
@@ -331,7 +331,7 @@ class SearchAdapter(
      * Basically a mapping from the type of thing in the recyler list
      * to set of view variables that can be manipulated.
      */
-    inner class ViewHolderMotm(val v: View, viewType: Int) : RecyclerView.ViewHolder(v),
+    class ViewHolderMotm(val v: View, viewType: Int) : RecyclerView.ViewHolder(v),
         View.OnClickListener {
 
         lateinit var searchHeaderTitleText: TextView

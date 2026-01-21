@@ -13,10 +13,10 @@
 
 package com.bammellab.screensaver
 
-import android.net.Uri
 import com.bammellab.mollib.data.MotmImageDownload.buildMotmImageList
 import com.google.android.apps.muzei.api.provider.Artwork
 import com.google.android.apps.muzei.api.provider.MuzeiArtProvider
+import androidx.core.net.toUri
 
 class MotmImageProvider : MuzeiArtProvider() {
     /**
@@ -39,9 +39,8 @@ class MotmImageProvider : MuzeiArtProvider() {
                     .title(motm.motmTitle)
                     .byline(motm.motmTagLine)
                     .persistentUri(
-                            Uri.parse(
-                        "https://github.com/jimandreas/MotmImages/raw/master/docs/motm_png/${motm.motmGraphicName}.png"))
-                    .webUri(Uri.parse("https://pdb101.rcsb.org/motm/${motm.motmNumber}"))
+                        "https://github.com/jimandreas/MotmImages/raw/master/docs/motm_png/${motm.motmGraphicName}.png".toUri())
+                    .webUri("https://pdb101.rcsb.org/motm/${motm.motmNumber}".toUri())
                     .attribution("Molecular Landscapes by David S. Goodsell CC-BY-4.0 license")
                     // .metadata("this is metadata")  // not used by Muzei
                     .build()

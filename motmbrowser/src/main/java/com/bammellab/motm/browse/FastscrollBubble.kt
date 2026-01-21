@@ -77,7 +77,7 @@ class FastscrollBubble(
     var numMonths : Int = monthList.size
 
     // Instance state (moved from companion object to avoid shared state issues)
-    private var currentState = BOTTOMSTATE.POSITION_IS_IN_MIDDLE_SECTION
+    private var currentState = POSITION_IS_IN_MIDDLE_SECTION
     private var bottomAddedScrollValue = 0
     private var topAddedScrollValue = 0
 
@@ -284,7 +284,7 @@ class FastscrollBubble(
              *  Region handling - the thumb must stop at boundaries but scrolling
              *  continues to show correct values. Uses mutually exclusive state transitions.
              */
-            var str = ""
+            var str: String
             val bottomThreshold = recyclerView.height.toFloat() - thumbImageView.height.toFloat()
             val topThreshold = thumbImageView.height.toFloat()
 

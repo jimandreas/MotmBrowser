@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-@file:Suppress("UNUSED_ANONYMOUS_PARAMETER", "UNUSED_VARIABLE", "VARIABLE_WITH_REDUNDANT_INITIALIZER")
+@file:Suppress("UNUSED_ANONYMOUS_PARAMETER", "UNUSED_VARIABLE", "VARIABLE_WITH_REDUNDANT_INITIALIZER",
+    "unused"
+)
 
 package com.bammellab.screensaver
 
@@ -91,7 +93,7 @@ class MotmImageRedirectActivity : ComponentActivity() {
             return
         }
 
-        var isMuzeiInstalled = false
+        var isMuzeiInstalled: Boolean
         try {
             val results = packageManager.getPackageInfo(MUZEI_PACKAGE_NAME, PackageManager.GET_ACTIVITIES)
             isMuzeiInstalled = true

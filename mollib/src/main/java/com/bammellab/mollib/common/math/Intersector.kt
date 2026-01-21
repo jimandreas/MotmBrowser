@@ -18,7 +18,9 @@
         "deprecation",
         "ConstantConditionIf",
         "LocalVariableName",
-        "ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE")
+        "ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE", "AssignedValueIsNeverRead", "VariableNeverRead",
+    "JoinDeclarationAndAssignment"
+)
 
 package com.bammellab.mollib.common.math
 

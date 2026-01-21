@@ -30,16 +30,14 @@ object MathUtil {
     private const val PRECISION_S = PRECISION - 1
     private val sinTable = FloatArray(PRECISION)
     private val tanTable = FloatArray(PRECISION)
-    private val isInitialized = initialize()
 
-    private fun initialize(): Boolean {
+    private fun initialize() {
         var rad: Float
         for (i in 0 until PRECISION) {
             rad = i * RAD_SLICE
             sinTable[i] = kotlin.math.sin(rad)
             tanTable[i] = kotlin.math.tan(rad)
         }
-        return true
     }
 
     private fun radToIndex(radians: Float): Int {
@@ -93,5 +91,5 @@ object MathUtil {
         return ++x
     }
 
-    const val PIFLOAT = 3.14159265358979323846f
+    const val PIFLOAT = 3.1415927f
 }

@@ -11,7 +11,9 @@
  *  limitations under the License
  */
 
-@file:Suppress("UnnecessaryVariable", "SwitchIntDef")
+@file:Suppress("UnnecessaryVariable", "SwitchIntDef", "RedundantSuppression",
+    "RedundantSuppression", "RedundantSuppression", "RedundantSuppression"
+)
 
 package com.bammellab.motm.browse
 
@@ -38,7 +40,7 @@ import com.google.android.material.tabs.TabLayout.MODE_SCROLLABLE
 import com.google.android.material.tabs.TabLayoutMediator
 
 
-class BrowseFragment : androidx.fragment.app.Fragment() {
+class BrowseFragment : Fragment() {
 
     private lateinit var browseViewModel: BrowseViewModel
     private lateinit var binding: FragmentBrowseBinding
@@ -54,7 +56,7 @@ class BrowseFragment : androidx.fragment.app.Fragment() {
             savedInstanceState: Bundle?
     ): View {
         binding = FragmentBrowseBinding.inflate(inflater)
-        browseViewModel = ViewModelProvider(this).get(BrowseViewModel::class.java)
+        browseViewModel = ViewModelProvider(this)[BrowseViewModel::class.java]
         binding.viewModel = browseViewModel
         binding.lifecycleOwner = this
         contextb = binding.root.context

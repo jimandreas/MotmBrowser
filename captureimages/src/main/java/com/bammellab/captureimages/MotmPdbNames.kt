@@ -20,6 +20,7 @@ object MotmPdbNames {
     val pdbNames2026 = listOf(
 
         "1qys",
+        "4v4q", // NO PDB
         "7jzl",
         "3r2x",
         "6mrr",

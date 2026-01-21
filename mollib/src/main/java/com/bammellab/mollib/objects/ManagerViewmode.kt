@@ -16,7 +16,9 @@
         "MemberVisibilityCanBePrivate",
         "CanBeVal",
         "UNUSED_PARAMETER",
-        "CanBeParameter")
+        "CanBeParameter", "KotlinConstantConditions", "KotlinConstantConditions",
+    "KotlinConstantConditions"
+)
 
 package com.bammellab.mollib.objects
 
