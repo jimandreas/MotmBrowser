@@ -114,7 +114,7 @@ class MollibProcessPdbs(
      */
     private val jobCaptureImages = Job()
     private fun loadSequentialData() = GlobalScope.launch(Dispatchers.IO + jobCaptureImages) {
-        renderer.allocateReadBitmapArrays()
+        renderer.allocateReadBitmapArrays(500, 500)
 
         loadNextPdbFile()
     }
@@ -247,7 +247,7 @@ class MollibProcessPdbs(
                 val myFile = File(internalSDcard, "Thumbs/$pdbName.png")
                 val fileOutputStream = FileOutputStream(myFile)
 //                val bm = renderer.readGlBufferToBitmap(350, 580, 400, 400)
-                val bm = renderer.readGlBufferToBitmap(350, 1000, 400, 400)
+                val bm = renderer.readGlBufferToBitmap(250, 900, 500, 500)
                 if (bm != null) {
                     bm.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
                     fileOutputStream.flush()

@@ -50,7 +50,8 @@ class ActivityImageCap : AppCompatActivity() {
         renderer = RendererDisplayPdbFile(this, glSurfaceView)
         glSurfaceView.setRenderer(renderer, config.densityDpi)
         //renderer.setUpdateListener(this)
-        renderer.overrideInitialScale(.6f) // thumbnail size
+//        renderer.overrideInitialScale(.6f) // thumbnail size
+        renderer.overrideInitialScale(.8f) // thumbnail size
 
         // This freezes the updates, now adjusted in GLSurfaceView
         // gLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);

@@ -968,9 +968,9 @@ class RendererDisplayPdbFile(
     private lateinit var bt: IntArray
     private lateinit var ib: IntBuffer
 
-    fun allocateReadBitmapArrays() {
-        b = IntArray(400 * 400)
-        bt = IntArray(400 * 400)
+    fun allocateReadBitmapArrays(w: Int, h: Int) {
+        b = IntArray(w * h)
+        bt = IntArray(w * h)
         ib = IntBuffer.wrap(b)
     }
 
