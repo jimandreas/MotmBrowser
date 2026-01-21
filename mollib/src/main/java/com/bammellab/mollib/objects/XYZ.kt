@@ -228,7 +228,7 @@ End Function
             return T
         }
 
-        const val PIFLOAT = 3.14159265358979323846f
+        const val PIFLOAT = 3.1415927f
     }
 
 }

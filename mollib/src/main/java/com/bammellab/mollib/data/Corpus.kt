@@ -11,7 +11,7 @@
  *  limitations under the License
  */
 
-@file:Suppress("UnnecessaryVariable", "unused", "UNUSED_VARIABLE")
+@file:Suppress("UnnecessaryVariable", "unused", "UNUSED_VARIABLE", "ConstPropertyName")
 
 package com.bammellab.mollib.data
 
@@ -793,7 +793,7 @@ object Corpus {
     fun generateMonthList(): Array<String> {
         val initList = mutableListOf<String>()
 
-        var j = 0
+        val j = 0
         for (i in numMonths downTo 1) {
             initList.add(monthStringByKey(i))
         }

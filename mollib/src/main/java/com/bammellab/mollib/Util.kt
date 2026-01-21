@@ -118,8 +118,7 @@ object Utility {
 
     private fun isAppInstalled(uri: String, context: Context): Boolean {
         val pm = context.packageManager
-        val installed: Boolean
-        installed = try {
+        val installed: Boolean = try {
             pm.getPackageInfo(uri, GET_ACTIVITIES)
             true
         } catch (e: NameNotFoundException) {

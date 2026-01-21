@@ -48,6 +48,7 @@ pdbparser = "1.0.5"
 muzei = "3.4.2"
 
 # Testing
+#noinspection NewerVersionAvailable
 junit5 = "5.11.4"
 truth = "1.4.5"
 jetbrainsAnnotations = "26.0.2-1"

@@ -17,7 +17,8 @@
         "unused_parameter",
         "ConstantConditionIf",
         "LocalVariableName",
-        "SameParameterValue")
+        "SameParameterValue", "ConstPropertyName", "ConstPropertyName", "ConstPropertyName"
+)
 
 package com.bammellab.mollib.objects
 

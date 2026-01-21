@@ -11,7 +11,9 @@
  *  limitations under the License
  */
 
-@file:Suppress("UNUSED_VARIABLE", "FunctionName", "MemberVisibilityCanBePrivate")
+@file:Suppress("UNUSED_VARIABLE", "FunctionName", "MemberVisibilityCanBePrivate", "unused",
+    "unused"
+)
 
 package com.bammellab.mollib
 
@@ -186,18 +188,19 @@ class MollibProcessPdbs(
                     startRendering()
                 }
                 FROM_SDCARD_AND_CAPTURE -> {
+                    var loadSuccess = false
                     try {
                         val cacheDir = activity.externalCacheDir
                         val myFile = File(cacheDir, "PDB/$name.pdb")
                         if (!myFile.exists()) {
-                            Timber.e("nope $myFile does not exist")
+                            Timber.e("nope $myFile does not exist, skipping to next")
                         } else {
                             Timber.v("Yay $name exists")
+                            val fileStream = FileInputStream(myFile)
+                            parsePdbInputStream(fileStream, mol, name)
+                            fileStream.close()
+                            loadSuccess = true
                         }
-                        val fileStream = FileInputStream(myFile)
-
-                        parsePdbInputStream(fileStream, mol, name)
-                        fileStream.close()
 
                     } catch (e: AccessDeniedException) {
                         Timber.e(e, "$name ACCESS DENIED!!!!!!!!!!!!")
@@ -207,7 +210,13 @@ class MollibProcessPdbs(
                         Timber.e(e, "$name IO Exception")
                     }
 
-                    startRendering()
+                    if (loadSuccess) {
+                        startRendering()
+                    } else {
+                        // Skip to next file if this one couldn't be loaded
+                        Timber.w("Skipping $name, moving to next PDB")
+                        loadNextPdbFile()
+                    }
                 }
                 FROM_RCSB_OR_CACHE -> {
                     pdbDownload.downloadPdb(name)

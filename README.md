@@ -45,7 +45,8 @@ Note: RCSB = Research Collaboratory for Structural Bioinformatics
 
 Image credits:<br>
 
-* [Launch icon]:<br>
+* [Launch icon]:
+
 The H+3 cation is one of the most abundant ions in the universe. It was first detected in 1993.
 
 * The [MotM images] are derived from the pdp101 website and are used under the [CC-BY-4.0 license].

@@ -31,5 +31,5 @@ Wikipedia article on [Trihydrogen cation][cation].
 
 ## Color theme
 
-The color theme is based on the [Android Green][android green] color.
+The color theme is based on the Android Green color.
 [android green]: https://en.wikipedia.org/wiki/Android_green

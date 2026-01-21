@@ -74,7 +74,7 @@ class MotmCategoryFragment : Fragment() {
         override fun getItemViewType(position: Int): Int {
             val entry = motmList[position]
 
-            return if (entry[0] < '0' || entry[0] > '9')
+            return if (entry[0] !in '0'..'9')
                 VIEW_TYPE_HEADER
             else
                 VIEW_TYPE_MOTM
@@ -125,7 +125,7 @@ class MotmCategoryFragment : Fragment() {
                 }
 
 
-                val view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
                 view.isFocusable = false
                 return ViewHolderMotm(view, viewType)
 
@@ -219,7 +219,7 @@ class MotmCategoryFragment : Fragment() {
                 return false
             }
             for (i in str.indices) {
-                if (str[i] < '0' || str[i] > '9') {
+                if (str[i] !in '0'..'9') {
                     return false
                 }
             }

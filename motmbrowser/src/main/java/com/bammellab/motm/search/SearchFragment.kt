@@ -57,7 +57,7 @@ class SearchFragment :
         toolbar.setNavigationOnClickListener(View.OnClickListener { hideSoftKeyboard(toolbar) })
 
         searchViewModel =
-            ViewModelProvider(this).get(SearchViewModel::class.java)
+            ViewModelProvider(this)[SearchViewModel::class.java]
 
         // two sub-tiles - one for previous searches and one for search matches
         val childFragmentManager = childFragmentManager

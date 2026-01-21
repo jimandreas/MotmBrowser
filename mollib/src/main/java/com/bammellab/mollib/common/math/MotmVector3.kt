@@ -845,7 +845,7 @@ class MotmVector3 {
         return abs(obj.x - x) <= error && abs(obj.y - y) <= error && abs(obj.z - z) <= error
     }
 
-    /*
+    /**
      * Fills x, y, z values into first three positions in the
      * supplied array, if it is large enough to accommodate
      * them.

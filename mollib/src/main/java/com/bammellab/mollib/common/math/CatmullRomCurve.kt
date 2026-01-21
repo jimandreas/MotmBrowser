@@ -12,7 +12,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-@file:Suppress("unused")
+@file:Suppress("unused", "ReplaceWithOperatorAssignment", "ReplaceWithOperatorAssignment")
 
 package com.bammellab.mollib.common.math
 

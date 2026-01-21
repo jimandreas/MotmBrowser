@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "SameParameterValue")
+@file:Suppress("unused", "SameParameterValue", "CascadeIf")
 
 package com.bammellab.mollib.common.math
 
@@ -379,7 +379,7 @@ object MatrixDoublePrecision {
         m[offset + 15] = 0.0f
     }
 
-    /*
+    /**
      * Define a projection matrix in terms of a field of view angle, an
      * aspect ratio, and z clip planes
      * @param m the double array that holds the perspective matrix

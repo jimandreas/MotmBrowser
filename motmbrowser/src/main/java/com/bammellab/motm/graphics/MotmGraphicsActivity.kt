@@ -130,6 +130,9 @@ class MotmGraphicsActivity : AppCompatActivity() {
                 pdbFileNames = pdbList!!.toList(),
                 loadPdbFrom = FROM_RCSB_OR_CACHE)
 
+        // Enable the toolbar Up button
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         /*
         * Go to next PDB in the list
         */
@@ -233,6 +236,12 @@ class MotmGraphicsActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+
+        // Handle toolbar back/up button - call finish() to match system back button behavior
+        if (id == android.R.id.home) {
+            finish()
+            return true
+        }
 
         if (id == R.id.action_wireframe) {
             toggleWireframe()
