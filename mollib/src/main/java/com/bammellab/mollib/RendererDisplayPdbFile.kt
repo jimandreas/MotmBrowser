@@ -974,6 +974,9 @@ class RendererDisplayPdbFile(
         ib = IntBuffer.wrap(b)
     }
 
+    fun getScreenWidth(): Int = width
+    fun getScreenHeight(): Int = height
+
     fun readGlBufferToBitmap(x: Int, y: Int, w: Int, h: Int): Bitmap? {
 
 
