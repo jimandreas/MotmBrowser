@@ -52,25 +52,15 @@ class CorpusTest {
     fun motmImageListGet() {
 
         for (iter in motmThumbnailImageList.withIndex()) {
-            val listSize = motmThumbnailImageList.size
             val entry = iter.value
             val num = entry.substringBefore('-')
-            when (iter.index+1) {
-                243 -> assertEquals("242", num)
-                242 -> assertEquals("243", num)
-
-                204 -> assertEquals("203", num)
-                203 -> assertEquals("204", num)
-                else -> {
-                    try {
-                        Integer.parseInt(num)
-                    } catch (e: NumberFormatException) {
-                        fail("bad value $num for integer at index ${motmThumbnailImageList.size - iter.index}")
-                    }
-
-                    assertEquals(num.toInt(), iter.index+1)
-                }
+            try {
+                Integer.parseInt(num)
+            } catch (e: NumberFormatException) {
+                fail("bad value $num for integer at index ${motmThumbnailImageList.size - iter.index}")
             }
+            // Each entry should be numbered to match its 1-based position in the list
+            assertEquals(num.toInt(), iter.index + 1)
         }
     }
 }
