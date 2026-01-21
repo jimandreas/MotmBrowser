@@ -53,15 +53,15 @@ internal class MotmImageDownloadTest {
                 match)
     }
 
-    // the MotM list is now 253 entries  plus 3 featured images - so 256 total
+    // the MotM list is now 313 entries plus 3 featured images - so 316 total
     @Test
     @DisplayName("test basic screensaver list function")
     fun buildMotmImageList() {
         val foo : List<MotmImageDownload.ScreensaverMotmImage> = MotmImageDownload.buildMotmImageList()
         assertNotEquals(0, foo.size)
 
-        // right now there are 253 months of the Molecule of the Month.
-        //  So there should be 252 entries in the image list
-        assertEquals(256, foo.size)
+        // right now there are 313 months of the Molecule of the Month.
+        //  Plus 3 featured images - so 316 total
+        assertEquals(316, foo.size)
     }
 }
