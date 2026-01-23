@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("UNUSED_PARAMETER", "CanBeParameter")
-
 package com.bammellab.motm.search
 
 import android.os.Bundle
@@ -25,6 +23,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bammellab.motm.R
+import androidx.core.view.isVisible
 
 
 class SearchMatchesFragment : Fragment() {
@@ -71,7 +70,7 @@ class SearchMatchesFragment : Fragment() {
     }
 
     fun isShowing(): Boolean {
-        return searchResultsDisplay.visibility == VISIBLE
+        return searchResultsDisplay.isVisible
     }
 
     fun startSearch(searchTerm: String) {

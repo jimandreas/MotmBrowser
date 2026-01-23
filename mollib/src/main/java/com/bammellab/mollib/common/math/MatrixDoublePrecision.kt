@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 
-@file:Suppress("unused", "SameParameterValue", "CascadeIf")
-
 package com.bammellab.mollib.common.math
 
 import kotlin.math.cos

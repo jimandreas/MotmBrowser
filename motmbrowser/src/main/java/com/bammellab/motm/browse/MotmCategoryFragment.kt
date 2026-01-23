@@ -10,8 +10,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-@file:Suppress("unused", "unused_variable", "unused_parameter", "deprecation")
-
 package com.bammellab.motm.browse
 
 import android.content.Context

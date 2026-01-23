@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("UNUSED_PARAMETER", "unused")
-
 package com.bammellab.motm.search
 
 import androidx.lifecycle.LiveData

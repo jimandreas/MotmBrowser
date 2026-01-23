@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("ReplaceCallWithBinaryOperator", "UnnecessaryVariable", "UnnecessaryVariable")
-
 package com.bammellab.mollib.data
 
 import java.util.*

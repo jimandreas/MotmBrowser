@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("LiftReturnOrAssignment", "UnnecessaryVariable", "DEPRECATION", "unused")
-
 package com.bammellab.motm.search
 
 import android.content.Context

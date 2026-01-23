@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("unused", "MemberVisibilityCanBePrivate")
-
 package com.bammellab.captureimages
 
 object MotmPdbNames {

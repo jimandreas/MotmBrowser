@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("UnnecessaryVariable", "unused", "UNUSED_VARIABLE", "ConstPropertyName")
-
 package com.bammellab.mollib.data
 
 import java.util.*

@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("unused", "unused_variable", "unused_parameter", "DEPRECATION")
-
 package com.bammellab.motm.browse
 
 import android.content.Context

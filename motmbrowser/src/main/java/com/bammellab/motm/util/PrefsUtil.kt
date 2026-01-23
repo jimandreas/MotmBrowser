@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("UnnecessaryVariable", "MoveVariableDeclarationIntoWhen", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
-
 package com.bammellab.motm.util
 
 import android.content.Context

@@ -11,9 +11,6 @@
  *  limitations under the License
  */
 
-//@file:Suppress("unused", "FunctionName", "IllegalIdentifier")
-@file:Suppress("unused")
-
 package com.bammellab.standalone
 
 import android.os.Bundle

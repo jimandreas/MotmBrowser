@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("unused", "unused_variable", "unused_parameter", "deprecation")
-
 package com.bammellab.mollib.pdbDownload
 
 import android.app.Activity
@@ -120,7 +118,7 @@ class PdbDownload(private val activity: Activity) {
 
                     Timber.i("downloading the PDB in GZIP form: pdbid $pdbid")
                     val responseBody = response.body
-                    inputStream = GZIPInputStream(responseBody!!.byteStream())
+                    inputStream = GZIPInputStream(responseBody.byteStream())
                     downloadPdbFromHttp(inputStream, pdbid)
                     response.close()
                 }

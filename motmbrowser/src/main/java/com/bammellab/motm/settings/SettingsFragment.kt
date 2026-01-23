@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("UNUSED_VARIABLE", "MoveVariableDeclarationIntoWhen")
-
 package com.bammellab.motm.settings
 
 import android.content.SharedPreferences

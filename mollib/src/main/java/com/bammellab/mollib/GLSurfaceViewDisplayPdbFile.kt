@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("unused", "unused_variable", "unused_parameter", "deprecation")
-
 package com.bammellab.mollib
 
 import android.animation.ValueAnimator
@@ -173,8 +171,8 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                         deltay = (y1 + y2) / 2.0f
                         deltay -= oldY
 
-                        renderer.deltaTranslateX = renderer.deltaTranslateX + deltax / (density * MOVE_SCALE_FACTOR)
-                        renderer.deltaTranslateY = renderer.deltaTranslateY - deltay / (density * MOVE_SCALE_FACTOR)
+                        renderer.deltaTranslateX += deltax / (density * MOVE_SCALE_FACTOR)
+                        renderer.deltaTranslateY -= deltay / (density * MOVE_SCALE_FACTOR)
 
                         oldX = (x1 + x2) / 2.0f
                         oldY = (y1 + y2) / 2.0f
@@ -191,20 +189,20 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                             // TODO: adjust this exponent.
                             //   for now, hack into buckets
                             if (renderer.scaleCurrentF < 0.1f) {
-                                renderer.scaleCurrentF = renderer.scaleCurrentF + -deltaSpacing / 1000f
+                                renderer.scaleCurrentF += -deltaSpacing / 1000f
                             } else if (renderer.scaleCurrentF < 0.1f) {
-                                renderer.scaleCurrentF = renderer.scaleCurrentF + -deltaSpacing / 500f
+                                renderer.scaleCurrentF += -deltaSpacing / 500f
                             } else if (renderer.scaleCurrentF < 0.5f) {
-                                renderer.scaleCurrentF = renderer.scaleCurrentF + -deltaSpacing / 200f
+                                renderer.scaleCurrentF += -deltaSpacing / 200f
                             } else if (renderer.scaleCurrentF < 1f) {
-                                renderer.scaleCurrentF = renderer.scaleCurrentF + -deltaSpacing / 50f
+                                renderer.scaleCurrentF += -deltaSpacing / 50f
                             } else if (renderer.scaleCurrentF < 2f) {
-                                renderer.scaleCurrentF = renderer.scaleCurrentF + -deltaSpacing / 10f
+                                renderer.scaleCurrentF += -deltaSpacing / 10f
                             } else if (renderer.scaleCurrentF < 5f) {
-                                renderer.scaleCurrentF = renderer.scaleCurrentF + -deltaSpacing / 10f
+                                renderer.scaleCurrentF += -deltaSpacing / 10f
                             } else if (renderer.scaleCurrentF > 5f) {
                                 if (deltaSpacing > 0) {
-                                    renderer.scaleCurrentF = renderer.scaleCurrentF + -deltaSpacing / 10f
+                                    renderer.scaleCurrentF += -deltaSpacing / 10f
                                 }
                             }
                         }
@@ -244,8 +242,8 @@ class GLSurfaceViewDisplayPdbFile : GLSurfaceView {
                         val deltaX = (x - previousX) / density * ROTATION_SCALE_FACTOR
                         val deltaY = (y - previousY) / density * ROTATION_SCALE_FACTOR
 
-                        renderer.deltaX = renderer.deltaX + deltaX
-                        renderer.deltaY = renderer.deltaY + deltaY
+                        renderer.deltaX += deltaX
+                        renderer.deltaY += deltaY
                     }
                 }
                 previousX = x

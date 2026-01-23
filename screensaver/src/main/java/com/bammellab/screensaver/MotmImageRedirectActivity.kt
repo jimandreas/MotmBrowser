@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("UNUSED_ANONYMOUS_PARAMETER", "UNUSED_VARIABLE", "VARIABLE_WITH_REDUNDANT_INITIALIZER",
-    "unused"
-)
+@file:OptIn(DelicateCoroutinesApi::class)
 
 package com.bammellab.screensaver
 
@@ -32,9 +30,11 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.google.android.apps.muzei.api.MuzeiContract
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
 
 /**
  * This activity's sole purpose is to redirect users to Muzei, which is where they should
@@ -112,7 +112,7 @@ class MotmImageRedirectActivity : ComponentActivity() {
                         .setPositiveButton(getString(com.bammellab.mollib.R.string.affirmative_respose))
                         { _, _ ->
                             //finish()
-                            val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(PLAY_STORE_LINK))
+                            val intent = Intent(Intent.ACTION_VIEW).setData(PLAY_STORE_LINK.toUri())
                             requestLauncher.launch(intent)
                         }.show()
             }
@@ -131,7 +131,7 @@ class MotmImageRedirectActivity : ComponentActivity() {
                         to R.string.toast_enable_motmimage,
                 launchIntent
                         to R.string.toast_enable_motmimage_source,
-                Intent(Intent.ACTION_VIEW).setData(Uri.parse(PLAY_STORE_LINK))
+                Intent(Intent.ACTION_VIEW).setData(PLAY_STORE_LINK.toUri())
                         to R.string.toast_muzei_missing_error)
 
 

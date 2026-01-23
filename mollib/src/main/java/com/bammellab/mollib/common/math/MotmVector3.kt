@@ -12,8 +12,6 @@
  * specific language governing permissions and limitations under the License.
  */
 
-@file:Suppress("unused")
-
 package com.bammellab.mollib.common.math
 
 import com.kotmol.pdbParser.KotmolVector3

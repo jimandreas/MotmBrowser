@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("DEPRECATION", "unused")
-
 package com.bammellab.mollib.common.util
 
 import android.content.BroadcastReceiver

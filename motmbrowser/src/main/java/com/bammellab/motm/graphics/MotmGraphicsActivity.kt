@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("unused", "unused_variable", "unused_parameter")
-
 package com.bammellab.motm.graphics
 
 import android.os.Bundle
