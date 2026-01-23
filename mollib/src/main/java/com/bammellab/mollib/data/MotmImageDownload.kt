@@ -95,7 +95,7 @@ object MotmImageDownload {
                     }
                 }
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             // oops
             println("OOPS $i ${imageList.size}")
         }

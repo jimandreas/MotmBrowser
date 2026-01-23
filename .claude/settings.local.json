@@ -9,7 +9,9 @@
       "Bash(do grep -q \"\"\"$pdb\"\"\" mollib/src/main/java/com/bammellab/mollib/data/PdbInfoArray.kt)",
       "Bash(echo:*)",
       "Bash(done)",
-      "Bash(comm:*)"
+      "Bash(comm:*)",
+      "Bash(./gradlew.bat:*)",
+      "Bash(unzip:*)"
     ]
   }
 }

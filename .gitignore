@@ -51,3 +51,6 @@ gradle/signing.properties
 # random cruft
 stdout
 
+# Claude - not tracked
+.claude
+
