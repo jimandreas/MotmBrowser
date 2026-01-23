@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("unused")
-
 package com.bammellab.standalone
 
 import android.app.Application

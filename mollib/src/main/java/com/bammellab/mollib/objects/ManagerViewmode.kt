@@ -11,15 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress(
-        "unused",
-        "MemberVisibilityCanBePrivate",
-        "CanBeVal",
-        "UNUSED_PARAMETER",
-        "CanBeParameter", "KotlinConstantConditions", "KotlinConstantConditions",
-    "KotlinConstantConditions", "SameReturnValue"
-)
-
 package com.bammellab.mollib.objects
 
 import android.app.Activity

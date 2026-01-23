@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("MoveVariableDeclarationIntoWhen", "LiftReturnOrAssignment")
-
 /*
 CLAUDE OPUS 4.5 changes:
 

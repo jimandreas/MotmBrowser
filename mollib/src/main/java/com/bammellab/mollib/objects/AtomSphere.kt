@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("unused", "always_false", "UNUSED_VARIABLE")
-
 package com.bammellab.mollib.objects
 
 import android.app.Activity

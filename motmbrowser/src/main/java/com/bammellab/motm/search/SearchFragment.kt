@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("RedundantSamConstructor", "UNUSED_ANONYMOUS_PARAMETER")
-
 package com.bammellab.motm.search
 
 import android.os.Bundle

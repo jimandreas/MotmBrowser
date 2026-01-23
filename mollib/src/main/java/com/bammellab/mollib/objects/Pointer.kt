@@ -14,8 +14,6 @@
  * limitations under the License
  */
 
-@file:Suppress("unused")
-
 package com.bammellab.mollib.objects
 
 import android.opengl.GLES20

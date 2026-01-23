@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-@file:Suppress("UNUSED_ANONYMOUS_PARAMETER", "UNUSED_VARIABLE", "VARIABLE_WITH_REDUNDANT_INITIALIZER",
-    "unused", "KotlinConstantConditions"
-)
 @file:OptIn(DelicateCoroutinesApi::class)
 
 package com.bammellab.screensaver

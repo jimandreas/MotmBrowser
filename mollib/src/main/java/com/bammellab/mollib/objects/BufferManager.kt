@@ -12,14 +12,6 @@
  */
 
 
-@file:Suppress(
-        "unused",
-        "unused_variable",
-        "unused_parameter",
-        "deprecation",
-        "ConstantConditionIf",
-        "LocalVariableName")
-
 package com.bammellab.mollib.objects
 
 import android.opengl.GLES20

@@ -11,15 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress(
-        "unused",
-        "unused_variable",
-        "unused_parameter",
-        "deprecation",
-        "ConstantConditionIf",
-        "LocalVariableName", "SameParameterValue", "ConstPropertyName"
-)
-
 package com.bammellab.mollib.objects
 
 import android.annotation.SuppressLint

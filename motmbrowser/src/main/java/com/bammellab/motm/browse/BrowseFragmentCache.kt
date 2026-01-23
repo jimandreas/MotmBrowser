@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("MemberVisibilityCanBePrivate", "unused")
-
 package com.bammellab.motm.browse
 
 import android.view.View

@@ -11,10 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("unused", "unused_variable", "unused_parameter", "deprecation",
-    "UsePropertyAccessSyntax"
-)
-
 package com.bammellab.mollib
 
 import android.animation.ValueAnimator

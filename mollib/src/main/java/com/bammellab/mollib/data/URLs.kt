@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("deprecation", "unused")
-
 package com.bammellab.mollib.data
 
 //import retrofit2.Retrofit

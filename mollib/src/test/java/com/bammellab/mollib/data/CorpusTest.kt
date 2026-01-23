@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("UNUSED_VARIABLE")
-
 package com.bammellab.mollib.data
 
 import com.bammellab.mollib.data.Corpus.corpus

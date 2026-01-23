@@ -11,9 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("UNUSED_VARIABLE", "FunctionName", "MemberVisibilityCanBePrivate", "unused",
-    "unused"
-)
 @file:OptIn(DelicateCoroutinesApi::class)
 
 package com.bammellab.mollib

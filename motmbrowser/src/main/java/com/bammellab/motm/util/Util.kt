@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("LiftReturnOrAssignment", "unused")
-
 package com.bammellab.motm.util
 
 import android.content.Context

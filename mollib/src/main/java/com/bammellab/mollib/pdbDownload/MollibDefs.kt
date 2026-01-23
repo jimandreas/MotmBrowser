@@ -11,8 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress("unused")
-
 package com.bammellab.mollib.pdbDownload
 
 import android.os.Build

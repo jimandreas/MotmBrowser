@@ -11,16 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress(
-        "unused",
-        "unused_variable",
-        "unused_parameter",
-        "unused_property",
-        "deprecation",
-        "ConstantConditionIf",
-        "LocalVariableName",
-        "PropertyName")
-
 package com.bammellab.mollib
 
 import android.app.Activity

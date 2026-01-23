@@ -11,15 +11,6 @@
  *  limitations under the License
  */
 
-@file:Suppress(
-        "unused",
-        "unused_variable",
-        "unused_parameter",
-        "ConstantConditionIf",
-        "LocalVariableName",
-        "SameParameterValue", "ConstPropertyName", "ConstPropertyName", "ConstPropertyName"
-)
-
 package com.bammellab.mollib.objects
 
 import com.bammellab.mollib.common.math.MotmVector3
