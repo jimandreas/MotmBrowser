@@ -23,8 +23,8 @@ plugins {
 
 val versionMajor = 2
 val versionMinor = 9
-val versionPatch = 0
-val versionBuild = 2901
+val versionPatch = 3
+val versionBuild = 2903
 
 android {
     namespace = "com.bammellab.motm"
