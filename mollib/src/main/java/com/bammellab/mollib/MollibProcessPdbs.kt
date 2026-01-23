@@ -14,6 +14,7 @@
 @file:Suppress("UNUSED_VARIABLE", "FunctionName", "MemberVisibilityCanBePrivate", "unused",
     "unused"
 )
+@file:OptIn(DelicateCoroutinesApi::class)
 
 package com.bammellab.mollib
 
@@ -32,6 +33,7 @@ import com.kotmol.pdbParser.Molecule
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.io.*
+import androidx.core.graphics.get
 
 enum class LoadFromSource {
     FROM_ASSETS,
@@ -256,7 +258,7 @@ class MollibProcessPdbs(
 
         for (y in 0 until bitmap.height) {
             for (x in 0 until bitmap.width) {
-                val pixel = bitmap.getPixel(x, y)
+                val pixel = bitmap[x, y]
                 // Non-transparent pixel (alpha > 0) indicates molecule
                 if ((pixel ushr 24) > 0) {
                     foundPixel = true
@@ -346,24 +348,22 @@ class MollibProcessPdbs(
                 renderer.allocateReadBitmapArrays(scanWidth, scanHeight)
                 val scanBitmap = renderer.readGlBufferToBitmap(scanX, scanY, scanWidth, scanHeight)
 
-                if (scanBitmap != null) {
-                    val bounds = findMoleculeBounds(scanBitmap)
-                    if (bounds != null) {
-                        Timber.d("Molecule bounds in scan: left=${bounds.left}, top=${bounds.top}, " +
-                                "right=${bounds.right}, bottom=${bounds.bottom}")
+                val bounds = findMoleculeBounds(scanBitmap)
+                if (bounds != null) {
+                    Timber.d("Molecule bounds in scan: left=${bounds.left}, top=${bounds.top}, " +
+                            "right=${bounds.right}, bottom=${bounds.bottom}")
 
-                        val (newX, newY) = calculateCenteredOrigin(
-                            bounds, scanX, scanY, scanWidth, scanHeight,
-                            captureSize, screenWidth, screenHeight
-                        )
-                        captureX = newX
-                        captureY = newY
-                        Timber.d("Adjusted capture origin: x=$captureX, y=$captureY")
-                    } else {
-                        Timber.w("No molecule pixels found in scan, using default position")
-                    }
-                    scanBitmap.recycle()
+                    val (newX, newY) = calculateCenteredOrigin(
+                        bounds, scanX, scanY, scanWidth, scanHeight,
+                        captureSize, screenWidth, screenHeight
+                    )
+                    captureX = newX
+                    captureY = newY
+                    Timber.d("Adjusted capture origin: x=$captureX, y=$captureY")
+                } else {
+                    Timber.w("No molecule pixels found in scan, using default position")
                 }
+                scanBitmap.recycle()
 
                 // Reallocate buffers for the final capture size
                 renderer.allocateReadBitmapArrays(captureSize, captureSize)
@@ -372,12 +372,10 @@ class MollibProcessPdbs(
                 val myFile = File(internalSDcard, "Thumbs/$pdbName.png")
                 val fileOutputStream = FileOutputStream(myFile)
                 val bm = renderer.readGlBufferToBitmap(captureX, captureY, captureSize, captureSize)
-                if (bm != null) {
-                    bm.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
-                    fileOutputStream.flush()
-                    fileOutputStream.close()
-                    Timber.e("write OK: $myFile (origin: $captureX, $captureY)")
-                }
+                bm.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+                fileOutputStream.flush()
+                fileOutputStream.close()
+                Timber.e("write OK: $myFile (origin: $captureX, $captureY)")
 
             } catch (e: FileNotFoundException) {
                 Timber.e("FileNotFound")

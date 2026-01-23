@@ -11,7 +11,9 @@
  *  limitations under the License
  */
 
-@file:Suppress("UnnecessaryVariable", "MoveVariableDeclarationIntoWhen", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
+@file:Suppress("UnnecessaryVariable", "MoveVariableDeclarationIntoWhen", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER",
+    "unused"
+)
 
 package com.bammellab.motm.util
 

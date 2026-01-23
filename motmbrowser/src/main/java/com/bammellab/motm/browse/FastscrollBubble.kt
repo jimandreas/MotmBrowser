@@ -70,6 +70,7 @@ class FastscrollBubble(
     : LifecycleEventObserver, OneShotTimer.Callback, View.OnTouchListener {
 
     private lateinit var thumbImageView: ImageView
+    private lateinit var t2020: View
     private lateinit var t2015: View
     private lateinit var t2010: View
     private lateinit var t2005: View
@@ -93,6 +94,7 @@ class FastscrollBubble(
         viewLifecycleOwner.lifecycle.addObserver(this)
 
         thumbImageView = constraintLayout.findViewById(R.id.thumbFastscrollerImageview)
+        t2020 = constraintLayout.findViewById(R.id.t2020)
         t2015 = constraintLayout.findViewById(R.id.t2015)
         t2010 = constraintLayout.findViewById(R.id.t2010)
         t2005 = constraintLayout.findViewById(R.id.t2005)
@@ -105,6 +107,7 @@ class FastscrollBubble(
     }
 
     private fun showDateLine() {
+        t2020.show()
         t2015.show()
         t2010.show()
         t2005.show()
@@ -112,6 +115,7 @@ class FastscrollBubble(
     }
 
     private fun hideAll() {
+        t2020.visibility = View.INVISIBLE
         t2015.visibility = View.INVISIBLE
         t2010.visibility = View.INVISIBLE
         t2005.visibility = View.INVISIBLE
@@ -130,6 +134,7 @@ class FastscrollBubble(
     }
 
     private fun fadeOutDates() {
+        t2020.fade()
         t2015.fade()
         t2010.fade()
         t2005.fade()

@@ -98,7 +98,7 @@ class MotmDetailActivity : AppCompatActivity() {
 //        collapsingToolbar.title = motmName
         motmTitle.text = motmName
 
-        motmDescription.text = Corpus.motmTagLinesGet(this.motmNumber-1)
+        motmDescription.text = Corpus.motmTagLinesGet(this.motmNumber - 1)
 
 
         /*
@@ -117,8 +117,10 @@ class MotmDetailActivity : AppCompatActivity() {
 
         // painful fromHtml version handling
         val desc = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            Html.fromHtml(descRaw,
-                    Html.FROM_HTML_MODE_LEGACY)
+            Html.fromHtml(
+                descRaw,
+                Html.FROM_HTML_MODE_LEGACY
+            )
         } else {
             @Suppress("DEPRECATION")
             Html.fromHtml(descRaw)
@@ -133,33 +135,31 @@ class MotmDetailActivity : AppCompatActivity() {
     }
 
 
-
     private fun loadBackdrop() {
         val imageView = findViewById<ImageView>(R.id.backdrop)
-        var pngURL: String
 
 //        val image = Corpus.motmImageListGet(motmNumber)
 //        val url = RCSB_MOTM_IMAGE_PREFIX + image
 
         val motmPngUrl = PDB_MOTM_PNG_WEB_PREFIX
-        pngURL = MotmImageDownload.motmTiffImageName(motmNumber)
+        var pngURL: String = MotmImageDownload.motmTiffImageName(motmNumber)
         pngURL = "$motmPngUrl$pngURL.png?raw=true"
-        if (pngURL == "") {
-            val image = Corpus.motmImageListGet(motmNumber)
-            pngURL = RCSB_MOTM_IMAGE_PREFIX + image
-        }
+//        if (pngURL == "") {
+//            val image = Corpus.motmImageListGet(motmNumber)
+//            pngURL = RCSB_MOTM_IMAGE_PREFIX + image
+//        }
 //        Glide.with(this)
 //                .load(pngURL)
 //                .fitCenter()
 //                .into(imageView)
 
-                Picasso.get()
-                        .load(pngURL)
-                        .centerInside()
-                        .resize(400, 400)
-        //                .error(R.drawable.ic_no_wifi)
-        //                .placeholder(R.drawable.ic_message_24px)
-                        .into(imageView)
+        Picasso.get()
+            .load(pngURL)
+            .centerInside()
+            .resize(400, 400)
+            //                .error(R.drawable.ic_no_wifi)
+            //                .placeholder(R.drawable.ic_message_24px)
+            .into(imageView)
 
         /*
          * populate the Motm detail recyclerview with the PDB entries discussed
@@ -169,7 +169,7 @@ class MotmDetailActivity : AppCompatActivity() {
         val pdbsStringArray = pdbs.toTypedArray()
         for (pdbId in pdbs) {
             val view = LayoutInflater.from(this)
-                    .inflate(R.layout.pdb_card, pdbLayout, false) as CardView
+                .inflate(R.layout.pdb_card, pdbLayout, false) as CardView
 
             pdbLayout.addView(view)
 
@@ -195,9 +195,9 @@ class MotmDetailActivity : AppCompatActivity() {
             Timber.v("image url is %s", imageUrl)
 
             Glide.with(this)
-                    .load(imageUrl)
-                    .fitCenter()
-                    .into(im)
+                .load(imageUrl)
+                .fitCenter()
+                .into(im)
 
             pdbLink.tag = pdbId
             im.tag = pdbId
@@ -294,11 +294,14 @@ class MotmDetailActivity : AppCompatActivity() {
     private fun start3DviewerActivity(pdbsStringArray: Array<String>, i: Int) {
         try {
             val intent = Intent(
-                    this@MotmDetailActivity, MotmGraphicsActivity::class.java)
+                this@MotmDetailActivity, MotmGraphicsActivity::class.java
+            )
             intent.putExtra(
-                    MotmGraphicsActivity.PDB_NAME_LIST, pdbsStringArray)
+                MotmGraphicsActivity.PDB_NAME_LIST, pdbsStringArray
+            )
             intent.putExtra(
-                    MotmGraphicsActivity.PDB_NAME_LIST_INDEX, i)
+                MotmGraphicsActivity.PDB_NAME_LIST_INDEX, i
+            )
             startActivity(intent)
         } catch (e: Exception) {
             Timber.e("Error starting 3D Viewer")

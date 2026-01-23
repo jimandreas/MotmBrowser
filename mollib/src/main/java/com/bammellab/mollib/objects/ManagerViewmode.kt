@@ -17,7 +17,7 @@
         "CanBeVal",
         "UNUSED_PARAMETER",
         "CanBeParameter", "KotlinConstantConditions", "KotlinConstantConditions",
-    "KotlinConstantConditions"
+    "KotlinConstantConditions", "SameReturnValue"
 )
 
 package com.bammellab.mollib.objects

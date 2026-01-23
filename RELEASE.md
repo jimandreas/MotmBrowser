@@ -29,11 +29,11 @@
 
 ## Output Locations
 
-| Build Type | Output Path |
-|------------|-------------|
-| Debug APK | `motmbrowser/build/outputs/apk/debug/` |
-| Release APK | `motmbrowser/build/outputs/apk/release/` |
-| Release AAB | `motmbrowser/build/outputs/bundle/release/` |
+| Build Type   | Output Path                                             |
+|--------------|---------------------------------------------------------|
+| Debug APK    | `motmbrowser/build/outputs/apk/debug/`                  |
+| Release APK  | `motmbrowser/build/outputs/apk/release/`                |
+| Release AAB  | `motmbrowser/build/outputs/bundle/release/`             |
 | Mapping File | `motmbrowser/build/outputs/mapping/release/mapping.txt` |
 
 ## R8 Obfuscation

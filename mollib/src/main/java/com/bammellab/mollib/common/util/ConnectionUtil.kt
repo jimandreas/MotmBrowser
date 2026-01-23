@@ -11,7 +11,7 @@
  *  limitations under the License
  */
 
-@file:Suppress("DEPRECATION", "unused")
+@file:Suppress("DEPRECATION", "unused", "UnusedVariable")
 
 package com.bammellab.mollib.common.util
 

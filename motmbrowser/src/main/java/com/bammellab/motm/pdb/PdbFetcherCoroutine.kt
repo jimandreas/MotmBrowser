@@ -73,10 +73,10 @@ class PdbFetcherCoroutine(
                         try {
                             if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-                            val body = response.body?.string()
+                            val body = response.body.string()
                             //println(body)
                             val gson = GsonBuilder().create()
-                            val result = gson.fromJson(body!!, PDBstruct::class.java)
+                            val result = gson.fromJson(body, PDBstruct::class.java)
 
                             if (result == null) {
                                 setTextCoroutine("Failed Description Download.  Please report.")

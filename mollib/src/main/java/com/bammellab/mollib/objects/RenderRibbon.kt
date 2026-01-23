@@ -17,7 +17,8 @@
         "unused_parameter",
         "deprecation",
         "ConstantConditionIf",
-        "LocalVariableName", "SameParameterValue")
+        "LocalVariableName", "SameParameterValue", "ConstPropertyName"
+)
 
 package com.bammellab.mollib.objects
 
@@ -48,12 +49,11 @@ class RenderRibbon(private val molecule: Molecule) {
     private val ibo = IntArray(1)
 
     private val cache1: FloatArray = FloatArray((RIBBON_INITIAL_SLICES + 1) * 3)
-    private val cache2: FloatArray
+    private val cache2: FloatArray = FloatArray((RIBBON_INITIAL_SLICES + 1) * 3)
 
     private val debugWhiteStripe = false
 
     init {
-        cache2 = FloatArray((RIBBON_INITIAL_SLICES + 1) * 3)
         cache2_valid = false
     }
 

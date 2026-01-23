@@ -31,6 +31,7 @@ import com.kotmol.pdbParser.ParserPdbFile
 import timber.log.Timber
 import java.io.IOException
 import java.io.InputStream
+import androidx.core.net.toUri
 
 object Utility {
 
@@ -130,7 +131,7 @@ object Utility {
 
     fun viewUrl(url: String, context: Context) {
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(url)
+        intent.data = url.toUri()
         context.startActivity(intent)
     }
 
@@ -140,14 +141,14 @@ object Utility {
      */
     fun watchYoutubeVideo(id: String, context: Context) {
         try {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
+            val intent = Intent(Intent.ACTION_VIEW, "vnd.youtube:$id".toUri())
             if (isAppInstalled("com.google.android.youtube", context)) {
                 intent.setClassName("com.google.android.youtube", "com.google.android.youtube.WatchActivity")
             }
             context.startActivity(intent)
         } catch (ex: ActivityNotFoundException) {
             val intent = Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://www.youtube.com/watch?v=$id"))
+                "http://www.youtube.com/watch?v=$id".toUri())
             context.startActivity(intent)
         }
     }
