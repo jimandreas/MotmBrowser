@@ -42,14 +42,22 @@ ProGuard rules are in `motmbrowser/src/main/proguard-motmbrowser.pro`.
 # Run mollib unit tests only
 ./gradlew.bat :mollib:test
 
+# Run motmbrowser unit tests only
+./gradlew.bat :motmbrowser:testDebugUnitTest
+
 # Run a single test class
 ./gradlew.bat :mollib:test --tests "com.bammellab.mollib.data.CorpusTest"
 
 # Run a single test method
 ./gradlew.bat :mollib:test --tests "com.bammellab.mollib.data.CorpusTest.testCorpusSize"
+
+# Run release build verification tests (requires bundleRelease first)
+./gradlew.bat :motmbrowser:testDebugUnitTest --tests "com.bammellab.motm.release.ReleaseBuildTest"
 ```
 
-Tests use JUnit 5 (Jupiter) with Truth assertions. Test files are in `mollib/src/test/java/`.
+Tests use JUnit 5 (Jupiter) with Truth assertions. Test files are in `mollib/src/test/java/` and `motmbrowser/src/test/java/`.
+
+See [TESTING.md](TESTING.md) for complete testing documentation.
 
 ## Linting
 

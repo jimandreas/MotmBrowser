@@ -80,4 +80,5 @@ dependencies {
     testImplementation(libs.jetbrains.annotations)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.truth)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
