@@ -97,6 +97,7 @@ muzei-api = { module = "com.google.android.apps.muzei:muzei-api", version.ref = 
 
 # Testing
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "1.11.4" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotations" }
 

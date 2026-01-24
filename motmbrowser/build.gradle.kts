@@ -106,6 +106,10 @@ android {
     }
 }
 
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
 dependencies {
     implementation(project(":mollib"))
     implementation(libs.kotlin.stdlib)
@@ -135,4 +139,5 @@ dependencies {
     testImplementation(libs.jetbrains.annotations)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.truth)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }

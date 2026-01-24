@@ -55,6 +55,23 @@ When uploading to Google Play:
 For local debugging of obfuscated crash logs, use the mapping file at:
 `motmbrowser/build/outputs/mapping/release/mapping.txt`
 
+## Verifying Release Build Configuration
+
+After building a release AAB, run the release build verification tests:
+
+```bash
+./gradlew.bat :motmbrowser:bundleRelease
+./gradlew.bat :motmbrowser:testDebugUnitTest --tests "com.bammellab.motm.release.ReleaseBuildTest"
+```
+
+These tests verify:
+- The mapping file exists in the AAB at the correct location
+- The mapping file contains valid R8 obfuscation data
+- The mapping file format is compatible with Google Play Console
+- The bundle contains minified DEX files
+
+See [TESTING.md](TESTING.md) for complete testing documentation.
+
 ## Version Management
 
 Version numbers are configured in `motmbrowser/build.gradle.kts`:
