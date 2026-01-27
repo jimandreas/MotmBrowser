@@ -11,20 +11,25 @@
  *  limitations under the License
  */
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.ksp)
 }
 
 val versionMajor = 2
 val versionMinor = 9
 val versionPatch = 3
 val versionBuild = 2903
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+}
 
 android {
     namespace = "com.bammellab.motm"
@@ -41,6 +46,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         dataBinding = true
         viewBinding = true
     }
@@ -79,14 +85,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_11
-        }
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     lint {
@@ -134,7 +134,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.picasso)
     implementation(libs.glide)
-    kapt(libs.glide.compiler)
+    ksp(libs.glide.ksp)
 
     testImplementation(libs.jetbrains.annotations)
     testImplementation(libs.junit.jupiter)

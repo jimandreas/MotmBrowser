@@ -54,3 +54,7 @@ stdout
 # Claude - not tracked
 .claude
 
+# Claude - plan files (temps) - not tracked
+
+_claude*
+

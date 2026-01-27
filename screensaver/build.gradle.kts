@@ -11,7 +11,6 @@
  *  limitations under the License
  */
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -24,6 +23,12 @@ val versionMajor = 1
 val versionMinor = 2
 val versionPatch = 0
 val versionBuild = 120
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+}
 
 android {
     namespace = "com.bammellab.screensaver"
@@ -78,15 +83,10 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_11
-        }
-    }
     lint {
         abortOnError = false
         checkDependencies = true

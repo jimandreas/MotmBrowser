@@ -8,7 +8,7 @@ minSdk = "23"
 targetSdk = "36"
 
 # Plugin versions
-agp = "8.13.2"
+agp = "9.0.0"
 kotlin = "2.3.0"
 
 # Kotlin
@@ -86,7 +86,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 
 # Image loading
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
-glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
+glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 
 # Utilities
@@ -105,4 +105,4 @@ jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "j
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin" }
