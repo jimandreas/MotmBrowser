@@ -1,0 +1,1 @@
+# Screensaver module ProGuard rules
