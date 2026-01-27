@@ -16,6 +16,12 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+}
+
 android {
     namespace = "com.bammellab.mollib"
     compileSdk = libs.versions.compileSdk.get().toInt()

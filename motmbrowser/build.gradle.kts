@@ -25,6 +25,12 @@ val versionMinor = 9
 val versionPatch = 3
 val versionBuild = 2903
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+}
+
 android {
     namespace = "com.bammellab.motm"
     compileSdk = libs.versions.compileSdk.get().toInt()

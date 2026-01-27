@@ -24,6 +24,12 @@ val versionMinor = 2
 val versionPatch = 0
 val versionBuild = 120
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+}
+
 android {
     namespace = "com.bammellab.screensaver"
     compileSdk = libs.versions.compileSdk.get().toInt()
