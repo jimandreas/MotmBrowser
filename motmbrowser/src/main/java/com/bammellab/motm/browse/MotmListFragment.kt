@@ -16,7 +16,7 @@ package com.bammellab.motm.browse
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Html
+import androidx.core.text.HtmlCompat
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -162,24 +162,23 @@ class MotmListFragment(private val cl: ConstraintLayout) : androidx.fragment.app
             }
 
             if (position == 0) {
-                val spannedString = Html.fromHtml("<strong><big>"
+                val spannedString = HtmlCompat.fromHtml("<strong><big>"
                         + "Molecule of the Month<br>Dec 2020 - Jan 2000"
-                        + "</big></strong><br><i>"
-                )
+                        + "</big></strong><br><i>",
+                        HtmlCompat.FROM_HTML_MODE_LEGACY)
 
                 holder.textViewHeader.text = spannedString
             }
 
             if (position > 0) {
-                @Suppress("DEPRECATION")
-                val spannedString = Html.fromHtml("<strong><big>"
+                val spannedString = HtmlCompat.fromHtml("<strong><big>"
                         + motmTitleGet(invertPosition + 1)
                         + "</big></strong><br><i>"
 //                    + Corpus.motmDateByKey[position + 1]
                         + Corpus.motmDateByKey(invertPosition + 1)
                         + "</i><br>"
 //                    + Corpus.motmDescByKey[position + 1])
-                        + motmTagLinesGet(invertPosition))
+                        + motmTagLinesGet(invertPosition), HtmlCompat.FROM_HTML_MODE_LEGACY)
 
                 holder.textView.text = spannedString
                 holder.textView2.visibility = View.GONE

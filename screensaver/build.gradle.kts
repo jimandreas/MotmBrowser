@@ -16,7 +16,6 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
 }
 
 val versionMajor = 1
@@ -40,7 +39,6 @@ android {
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
         versionName = "$versionMajor.$versionMinor.$versionPatch"
-        resourceConfigurations += listOf("en")
         vectorDrawables.useSupportLibrary = true
 
         val motmImageAuthorityValue = "com.bammellab.screensaver"
@@ -101,6 +99,10 @@ android {
         lintConfig = file("lint.xml")
         textOutput = file("stdout")
         textReport = true
+    }
+
+    androidResources {
+        localeFilters += listOf("en")
     }
 
     buildFeatures {

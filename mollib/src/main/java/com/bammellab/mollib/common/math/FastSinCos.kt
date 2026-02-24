@@ -32,11 +32,11 @@ object FastSinCos {
         }
     }
 
-    inline fun sin(radians: Float): Float {
+    fun sin(radians: Float): Float {
         return sinTable[((radians * PRECISION_DIV_2PI).toInt() and PRECISION_S)]
     }
 
-    inline fun cos(radians: Float): Float {
+    fun cos(radians: Float): Float {
         return sinTable[(((HALF_PI - radians) * PRECISION_DIV_2PI).toInt() and PRECISION_S)]
     }
 }
