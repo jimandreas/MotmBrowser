@@ -16,7 +16,7 @@ ksp = "2.3.6"
 kotlinCoroutines = "1.10.2"
 
 # AndroidX
-androidxActivity = "1.12.2"
+androidxActivity = "1.12.4"
 androidxAnnotation = "1.9.1"
 androidxAppcompat = "1.7.1"
 androidxCardview = "1.0.0"
@@ -24,12 +24,12 @@ androidxConstraintlayout = "2.2.1"
 androidxCore = "1.17.0"
 androidxFragment = "1.8.9"
 androidxLifecycle = "2.10.0"
-androidxNavigation = "2.9.6"
+androidxNavigation = "2.9.7"
 androidxPreference = "1.2.1"
 androidxRecyclerview = "1.4.0"
 androidxTestRunner = "1.7.0"
 androidxViewpager2 = "1.1.0"
-androidxWork = "2.11.0"
+androidxWork = "2.11.1"
 
 # Google
 material = "1.13.0"
@@ -52,7 +52,7 @@ muzei = "3.4.2"
 #noinspection NewerVersionAvailable
 junit5 = "5.11.4"
 truth = "1.4.5"
-jetbrainsAnnotations = "26.0.2-1"
+jetbrainsAnnotations = "26.1.0"
 
 [libraries]
 # Kotlin
@@ -98,7 +98,7 @@ muzei-api = { module = "com.google.android.apps.muzei:muzei-api", version.ref = 
 
 # Testing
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "1.11.4" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "6.0.3" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotations" }
 
