@@ -15,7 +15,7 @@ package com.bammellab.motm.browse
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Html
+import androidx.core.text.HtmlCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -170,14 +170,14 @@ class MotmCategoryFragment : Fragment() {
                 // note:  the "Corpus" is zero based,
                 //    but the indexing scheme on motm is one based - so
                 //    we need to pull back by one index for corpus indexes
-                val spannedString = Html.fromHtml("<strong><big>"
+                val spannedString = HtmlCompat.fromHtml("<strong><big>"
                         + motmTitleGet(imageIndex)
                         + "</big></strong><br><i>"
 //                        + Corpus.motmDateByKey[imageIndex]
                         + Corpus.motmDateByKey(imageIndex)
                         + "</i><br>"
 //                        + Corpus.motmDescByKey[imageIndex])
-                        + Corpus.motmTagLinesGet(imageIndex-1))
+                        + Corpus.motmTagLinesGet(imageIndex-1), HtmlCompat.FROM_HTML_MODE_LEGACY)
 
                 holder.textView.text = spannedString
                 holder.textView2.visibility = View.GONE
@@ -196,13 +196,10 @@ class MotmCategoryFragment : Fragment() {
 
             } else {
                 //Timber.i("not numeric: %s", motm)
-                val spannedString = Html.fromHtml("<strong><big>"
+                val spannedString = HtmlCompat.fromHtml("<strong><big>"
                         + motmList[position]
-                        + "</big></strong><br><i>"
-                        //                            + Corpus.motmDateByKey.get(position + 1)
-                        //                            + "</i><br>"
-                        //                            + Corpus.motmDescByKey.get(position + 1)
-                )
+                        + "</big></strong><br><i>",
+                        HtmlCompat.FROM_HTML_MODE_LEGACY)
 
                 holder.textViewHeader.text = spannedString
                 //                float old_size = holder.textView.getTextSize();
