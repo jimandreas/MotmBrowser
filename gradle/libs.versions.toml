@@ -8,8 +8,9 @@ minSdk = "23"
 targetSdk = "36"
 
 # Plugin versions
-agp = "9.0.0"
-kotlin = "2.3.0"
+agp = "9.0.1"
+kotlin = "2.3.10"
+ksp = "2.3.6"
 
 # Kotlin
 kotlinCoroutines = "1.10.2"
@@ -105,4 +106,4 @@ jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "j
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

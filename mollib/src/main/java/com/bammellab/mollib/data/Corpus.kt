@@ -1110,7 +1110,7 @@ object Corpus {
         /* //motm/305 */ "TOC-TIC Translocon",  // MAY 2025
         /* //motm/306 */ "Eastern Equine Encephalitis Virus",  // JUN 2025
         /* //motm/307 */ "Capturing Beta-Lactamase in Action",  // JUL 2025
-        /* //motm/308 */ "Arc",  // AUG 2025
+        /* //motm/308 */ "Activity-regulated cytoskeleton-associated protein (Arc)",  // AUG 2025
         /* //motm/309 */ "Abscisic Acid Receptor",  // SEP 2025
         /* //motm/310 */ "Incretins",  // OCT 2025
         /* //motm/311 */ "GLP-1 Receptor Agonists",  // NOV 2025
