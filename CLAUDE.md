@@ -11,6 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Build specific module
 ./gradlew.bat :motmbrowser:assembleDebug
 ./gradlew.bat :mollib:build
+./gradlew.bat :pdbparser:build
 
 # Clean build
 ./gradlew.bat clean build
@@ -62,6 +63,12 @@ Update these before creating a new release.
 # Run a single test method
 ./gradlew.bat :mollib:test --tests "com.bammellab.mollib.data.CorpusTest.testCorpusSize"
 
+# Run pdbparser unit tests only
+./gradlew.bat :pdbparser:test
+
+# Run a single pdbparser test class
+./gradlew.bat :pdbparser:test --tests "com.kotmol.pdbParser.AtomCoordTest01"
+
 # Run release build verification tests (requires bundleRelease first)
 ./gradlew.bat :motmbrowser:testDebugUnitTest --tests "com.bammellab.motm.release.ReleaseBuildTest"
 ```
@@ -98,6 +105,12 @@ This is a multi-module Android project written in Kotlin that displays 3D molecu
   - `common/math/` - 3D math utilities (Matrix4, Quaternion, MotmVector3)
   - `pdbDownload/` - Network download with OkHttp3
 
+- **pdbparser/** - Local copy of the KotmolPdbParser library (pure Kotlin/JVM module)
+  - Package: `com.kotmol.pdbParser`
+  - Core classes: `ParserPdbFile` (Builder pattern), `Molecule` (output container), `PdbAtom`, `BondInfo`, `AtomInformationTable`, `ChainRenderingDescriptor`
+  - 23 unit tests covering atom coords, bond tables, secondary structure, insertion codes
+  - Upstream source: `C:\a\j\kotlinIdea\KotmolPdbParser`; see [README-pdbparser.md](README-pdbparser.md)
+
 - **standalone/** - Test app for graphics development (loads PDB files from `/storage/emulated/0/PDB/`)
 
 - **captureimages/** - Utility for generating PDB thumbnail images (output uploaded to `jimandreas/MotmImages` on GitHub)
@@ -107,7 +120,7 @@ This is a multi-module Android project written in Kotlin that displays 3D molecu
 ### Key Technical Details
 
 - OpenGL ES 2.0/3.0 for 3D molecule rendering
-- PDB file parsing via `kotmolpdbparser` library
+- PDB file parsing via the local `:pdbparser` module (`com.kotmol.pdbParser`)
 - Target SDK 36, min SDK 23, Java 17
 - Networking: OkHttp3 + Retrofit2
 - Image loading: Glide (with KSP annotation processing) and Picasso

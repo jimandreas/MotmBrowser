@@ -80,7 +80,11 @@ Rajawali: Math functions leveraged from [Rajawali]
 
 [MotmImages]:https://github.com/jimandreas/MotmImages
 
-## Other apps:
+## Modules
+
+* [PDB Parser] — Kotlin/JVM library that parses RCSB PDB files into atoms, bonds, and secondary structure
+
+## Other apps
 
 * [Capture Images]
 
@@ -88,6 +92,7 @@ Rajawali: Math functions leveraged from [Rajawali]
 
 * [Screensaver]
 
+[PDB Parser]:README-pdbparser.md
 [Capture Images]:README-captureimages.md
 [Standalone]:README-standalone.md
 [Screensaver]:README-screensaver.md
