@@ -129,7 +129,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.gson)
 
-    implementation(libs.pdbparser)
+    implementation(project(":pdbparser"))
     implementation(libs.timber)
     implementation(libs.picasso)
     implementation(libs.glide)

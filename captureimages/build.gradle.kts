@@ -111,7 +111,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
     implementation(libs.timber)
-    implementation(libs.pdbparser)
+    implementation(project(":pdbparser"))
 
     testImplementation(libs.jetbrains.annotations)
     testImplementation(libs.junit.jupiter)
