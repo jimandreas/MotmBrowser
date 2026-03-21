@@ -139,6 +139,7 @@ object MotmByCategory {
         "164",  // Serotonin Receptor
         "188",  // Tetrahydrobiopterin Biosynthesis
         "192",  // Vancomycin
+        "315",  // Lenacapavir
 
 
         "Drugs and the Brain",
@@ -164,6 +165,7 @@ object MotmByCategory {
         "33",   // HIV Reverse Transcriptase
         "6",    // HIV-1 Protease
         "135",  // Integrase
+        "315",  // Lenacapavir
         "63",   // T-Cell Receptor
 
         "Immune System",
@@ -677,6 +679,7 @@ object MotmByCategory {
         "312",  // FOXP3
         "313",  // Natural RNA-Only Assemblies
         "7",    // Nucleosome
+        "314",  // Histones Across the Tree of Life
         "172",  // RecA and Rad51
         "8",    // Restriction Enzymes
         "260",  // Ribonuclease P
@@ -877,6 +880,7 @@ object MotmByCategory {
         "310",  // Incretins
         "311",  // GLP-1 Receptor Agonists
         "313",  // Natural RNA-Only Assemblies
+        "314",  // Histones Across the Tree of Life
 
         "Hybrid Methods",
         "189",

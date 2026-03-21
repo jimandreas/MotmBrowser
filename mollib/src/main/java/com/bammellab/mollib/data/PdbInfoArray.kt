@@ -3005,6 +3005,7 @@ object PdbInfo {
             "Ligand-bound structure of adenine riboswitch aptamer domain converted in crystal from its ligand-free state using ligand mixing serial femtosecond crystallography"
         ),
         PdbEntryInfo("5t46", "Crystal structure of the human eIF4E-eIF4G complex"),
+        PdbEntryInfo("5t5k", "Structure of histone-based chromatin in Archaea"),
         PdbEntryInfo(
             "5t6o",
             "Structure of the catalytic domain of the class I polyhydroxybutyrate synthase from Cupriavidus necator"
@@ -3548,6 +3549,7 @@ object PdbInfo {
             PdbEntryInfo("6tmf", "Structure of an archaeal ABCE1-bound ribosomal post-splitting complex"),
             PdbEntryInfo("6tz4", "CryoEM reconstruction of membrane-bound ESCRT-III filament composed of CHMP1B+IST1 (right-handed)"),
             PdbEntryInfo("6v05", "Cryo-EM structure of a substrate-engaged Bam complex"),
+            PdbEntryInfo("6v2f", "Crystal structure of the HIV capsid hexamer bound to the small molecule long-acting inhibitor, GS-6207"),
             PdbEntryInfo("6w1s", "Atomic model of the mammalian Mediator complex"),
             PdbEntryInfo("6wji", "2.05 Angstrom Resolution Crystal Structure of C-terminal Dimerization Domain of Nucleocapsid Phosphoprotein from SARS-CoV-2"),
             PdbEntryInfo("6wv5", "Human VKOR C43S mutant with vitamin K1 epoxide"),
@@ -3627,6 +3629,7 @@ object PdbInfo {
             PdbEntryInfo("8eiq", "The complex of phosphorylated human delta F508 cystic fibrosis transmembrane conductance regulator (CFTR) with Trikafta [elexacaftor (VX-445), tezacaftor (VX-661), ivacaftor (VX-770)] and ATP/Mg"),
             PdbEntryInfo("8f76", "Human olfactory receptor OR51E2 bound to propionate in complex with miniGs399"),
             PdbEntryInfo("8fnx", "Crystal structure of Hyaluronate lyase B from Cutibacterium acnes"),
+            PdbEntryInfo("8fw7", "Histone from Bdellovibrio bacteriovorus bound to dsDNA"),
             PdbEntryInfo("8fyg", "Crystal structure of Hyaluronate lyase A from Cutibacterium acnes"),
             PdbEntryInfo("8g02", "YES Complex - E. coli MraY, Protein E PhiX174, E. coli SlyD"),
             PdbEntryInfo("8gxs", "PIC-Mediator in complex with +1 nucleosome (T40N) in H-binding state"),
@@ -3642,6 +3645,8 @@ object PdbInfo {
             PdbEntryInfo("9bdt", "Apolipoprotein B 100 bound to LDL receptor and legobody"),
             PdbEntryInfo("9d2l", "FoxP3 multimers bridge four T2G repeat DNAs"),
             PdbEntryInfo("9eag", "The Structure of ApoB100 from Human Low-Density Lipoprotein"),
+            PdbEntryInfo("9ezz", "Bacterial histone protein HBb from Bdellovibrio bacteriovorus bound to DNA"),
+            PdbEntryInfo("9f0e", "Bacterial histone protein HBb from Bdellovibrio bacteriovorus bound to DNA"),
             PdbEntryInfo("9j6y", "Lactobacillus salivarius ROOL RNA hexamer"),
             PdbEntryInfo("9l0r", "Streptococcus agalactiae GOLLD RNA dodecamer"),
             PdbEntryInfo("9lcr", "Clostridium botulinum OLE RNA dimer"),
@@ -3650,6 +3655,14 @@ object PdbInfo {
             PdbEntryInfo("9mcw", "OLE RNA dimer (Clostridium acetobutylicum)"),
             PdbEntryInfo("9mds", "ROOL RNA nanocage (env-120)"),
             PdbEntryInfo("9mee", "GOLLD RNA nanocage (env-38)"),
+            PdbEntryInfo("9pgs", "HIV Capsid Hexamer bound to Compound 6"),
+            PdbEntryInfo("9pgt", "HIV Capsid Hexamer bound to Compound 12"),
+            PdbEntryInfo("9pgu", "HIV Capsid Hexamer bound to Compound 40"),
+            PdbEntryInfo("9pgv", "HIV Capsid Hexamer bound to Compound 24"),
+            PdbEntryInfo("9pry", "HIV-1 CA hexamer from purified viral cores, C1 symmetry"),
+            PdbEntryInfo("9qt1", "Bacterial histone HLp from Leptospira perolatii bound to DNA"),
+            PdbEntryInfo("9qt2", "Bacterial histone HLp from Leptospira perolatii bound to DNA"),
+            PdbEntryInfo("9y7j", "HIV-1 CA hexamer from purified viral cores bound to lenacapavir, C6 symmetry"),
 
     )
 }

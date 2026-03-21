@@ -1868,7 +1868,25 @@ object PDBs {
             MotmToPdbMap(313, "9m78"),
             MotmToPdbMap(313, "9mcw"),
             MotmToPdbMap(313, "9mds"),
-            MotmToPdbMap(313, "9mee")
+            MotmToPdbMap(313, "9mee"),
+
+            // MotM 314 - Histones Across the Tree of Life (Feb 2026)
+            MotmToPdbMap(314, "1aoi"),
+            MotmToPdbMap(314, "5t5k"),
+            MotmToPdbMap(314, "8fw7"),
+            MotmToPdbMap(314, "9ezz"),
+            MotmToPdbMap(314, "9f0e"),
+            MotmToPdbMap(314, "9qt1"),
+            MotmToPdbMap(314, "9qt2"),
+
+            // MotM 315 - Lenacapavir (Mar 2026)
+            MotmToPdbMap(315, "6v2f"),
+            MotmToPdbMap(315, "9pry"),
+            MotmToPdbMap(315, "9y7j"),
+            MotmToPdbMap(315, "9pgs"),
+            MotmToPdbMap(315, "9pgt"),
+            MotmToPdbMap(315, "9pgu"),
+            MotmToPdbMap(315, "9pgv")
 
             )
 

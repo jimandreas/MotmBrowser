@@ -363,6 +363,8 @@ object Corpus {
         "311-agonists-tn.png",
         "312-7dtw_7dtx-tn.png",
         "313-homepage_9mee-tn.png",
+        "314-histones-tn.png",
+        "315-lenacapavir-tn.png",
 
 
         )
@@ -717,7 +719,9 @@ object Corpus {
         "GLP-1 and GIP are hormones that are released soon after you eat a meal.", // Oct 2025
         "Popular and effective drugs for the treatment of obesity and diabetes.", // Nov 2025
         "A master transcriptional regulator of immune tolerance.", // Dec 2025
-        "Large and intricate naturally occurring structures composed exclusively of RNA." // Jan 2026
+        "Large and intricate naturally occurring structures composed exclusively of RNA.", // Jan 2026
+        "Uncovering the evolutionary diversity of histones", // Feb 2026
+        "A potent and long-acting drug that targets the HIV capsid" // Mar 2026
     )
 
     private val monthNames = arrayOf(
@@ -798,7 +802,7 @@ object Corpus {
         return initList.toTypedArray()
     }
 
-    const val numMonths = 313
+    const val numMonths = 315
 
     // grep the href in the motm-by-date file
 
@@ -1115,7 +1119,9 @@ object Corpus {
         /* //motm/310 */ "Incretins",  // OCT 2025
         /* //motm/311 */ "GLP-1 Receptor Agonists",  // NOV 2025
         /* //motm/312 */ "FOXP3",  // DEC 2025
-        /* //motm/313 */ "Natural RNA-Only Assemblies"  // JAN 2026
+        /* //motm/313 */ "Natural RNA-Only Assemblies",  // JAN 2026
+        /* //motm/314 */ "Histones Across the Tree of Life",  // FEB 2026
+        /* //motm/315 */ "Lenacapavir"  // MAR 2026
     )
 
     /**
