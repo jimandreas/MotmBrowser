@@ -111,7 +111,7 @@ dependencies {
     implementation(libs.androidx.preference.ktx)
 
     implementation(libs.okhttp)
-    implementation(libs.pdbparser)
+    implementation(project(":pdbparser"))
     implementation(libs.timber)
     implementation(libs.picasso)
 }

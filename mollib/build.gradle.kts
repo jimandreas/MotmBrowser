@@ -72,7 +72,7 @@ dependencies {
 
     implementation(libs.timber)
     implementation(libs.okhttp)
-    implementation(libs.pdbparser)
+    implementation(project(":pdbparser"))
 
     testImplementation(libs.jetbrains.annotations)
     testImplementation(libs.junit.jupiter)

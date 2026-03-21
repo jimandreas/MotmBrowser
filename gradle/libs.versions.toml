@@ -45,7 +45,6 @@ picasso = "2.71828"
 # Utilities
 gson = "2.13.2"
 timber = "5.0.1"
-pdbparser = "1.0.5"
 muzei = "3.4.2"
 
 # Testing
@@ -93,7 +92,6 @@ picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 # Utilities
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
-pdbparser = { module = "com.kotmol.kotmolpdbparser:kotmolpdbparser", version.ref = "pdbparser" }
 muzei-api = { module = "com.google.android.apps.muzei:muzei-api", version.ref = "muzei" }
 
 # Testing

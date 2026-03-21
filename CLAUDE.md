@@ -26,12 +26,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Release builds use R8 for code shrinking and obfuscation. R8 scrambles function names (e.g., `calculateUserScore()` becomes `a()`) to reduce file size and protect intellectual property.
 
-**Mapping files** are automatically included in the AAB under `BUNDLE-METADATA/` (AGP 8.13.2+). Google Play uses these to deobfuscate crash reports automatically - no manual upload required.
+**Mapping files** are automatically included in the AAB under `BUNDLE-METADATA/` (AGP 9.0.1). Google Play uses these to deobfuscate crash reports automatically - no manual upload required.
 
 For local debugging, mapping files are generated at:
 - `motmbrowser/build/outputs/mapping/release/mapping.txt`
 
 ProGuard rules are in `motmbrowser/src/main/proguard-motmbrowser.pro`.
+
+## Version Management
+
+Version numbers are in `motmbrowser/build.gradle.kts`:
+```kotlin
+val versionMajor = 2
+val versionMinor = 9
+val versionPatch = 3
+val versionBuild = 2903
+```
+Update these before creating a new release.
 
 ## Testing
 
@@ -57,6 +68,8 @@ ProGuard rules are in `motmbrowser/src/main/proguard-motmbrowser.pro`.
 
 Tests use JUnit 5 (Jupiter) with Truth assertions. Test files are in `mollib/src/test/java/` and `motmbrowser/src/test/java/`.
 
+Some tests in `CorpusTest` and `MotmByCategoryTest` make live network calls to `pdb101.rcsb.org` to verify local data is in sync with the website — they skip gracefully if the network is unavailable.
+
 See [TESTING.md](TESTING.md) for complete testing documentation.
 
 ## Linting
@@ -75,18 +88,19 @@ This is a multi-module Android project written in Kotlin that displays 3D molecu
 
 - **motmbrowser/** - Main Android application
   - MVVM architecture with ViewModels and Fragments
-  - AndroidX Navigation for fragment navigation
+  - AndroidX Navigation for fragment navigation (bottom nav: Browse / Search / Settings)
+  - Molecule detail opens `MotmDetailActivity`; 3D viewer opens `MotmGraphicsActivity`
   - Key packages: `browse/`, `search/`, `detail/`, `graphics/`, `settings/`
 
 - **mollib/** - Core library (shared across all apps)
   - `objects/` - OpenGL ES rendering (RendererDisplayPdbFile, BufferManager, RenderRibbon, etc.)
-  - `data/` - Static molecule data (PDBs.kt, Corpus.kt, MotmByCategory.kt)
+  - `data/` - Static molecule data bundled with the app (PDBs.kt, Corpus.kt, MotmByCategory.kt)
   - `common/math/` - 3D math utilities (Matrix4, Quaternion, MotmVector3)
   - `pdbDownload/` - Network download with OkHttp3
 
 - **standalone/** - Test app for graphics development (loads PDB files from `/storage/emulated/0/PDB/`)
 
-- **captureimages/** - Utility for generating PDB thumbnail images
+- **captureimages/** - Utility for generating PDB thumbnail images (output uploaded to `jimandreas/MotmImages` on GitHub)
 
 - **screensaver/** - Muzei live wallpaper plugin
 
@@ -94,10 +108,17 @@ This is a multi-module Android project written in Kotlin that displays 3D molecu
 
 - OpenGL ES 2.0/3.0 for 3D molecule rendering
 - PDB file parsing via `kotmolpdbparser` library
-- Target SDK 36, min SDK 23, Java 11
+- Target SDK 36, min SDK 23, Java 17
 - Networking: OkHttp3 + Retrofit2
-- Image loading: Glide
+- Image loading: Glide (with KSP annotation processing) and Picasso
 - Dependencies managed via Gradle version catalog (`gradle/libs.versions.toml`)
+
+### Data Flow
+
+- **Static data** (bundled): `Corpus.kt` (MotM titles/dates), `PDBs.kt` (MOTM→PDB mappings), `MotmByCategory.kt` (categories)
+- **MotM article images**: fetched from `github.com/jimandreas/MotmImages` (self-hosted thumbnails)
+- **PDB structure files**: downloaded on demand from `files.rcsb.org/download/` via `PdbFetcherCoroutine`
+- **MotM article pages**: opened as WebView pointing to `pdb101.rcsb.org/motm/`
 
 ### Rendering Pipeline
 
