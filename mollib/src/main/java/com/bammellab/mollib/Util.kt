@@ -25,6 +25,7 @@ import android.content.res.AssetManager
 import android.net.Uri
 import androidx.appcompat.app.AlertDialog
 import com.kotmol.pdbParser.Molecule
+import com.kotmol.pdbParser.ParserMmCifFile
 import com.kotmol.pdbParser.ParserPdbFile
 import timber.log.Timber
 import java.io.IOException
@@ -45,6 +46,18 @@ object Utility {
         stream.close()
     }
 
+
+    fun parseMmCifInputStream(stream: InputStream, mol: Molecule, pdbName: String) {
+        val retainedMessages = mutableListOf<String>()
+        ParserMmCifFile
+                .Builder(mol)
+                .setMoleculeName(pdbName)
+                .setMessageStrings(retainedMessages)
+                .loadMmCifFromStream(stream)
+                .doBondProcessing(true)
+                .parse()
+        stream.close()
+    }
 
     fun parsePdbFileFromAsset(activity: Activity, pdbAssetName: String, mol: Molecule) {
         val name = "$pdbAssetName.pdb"

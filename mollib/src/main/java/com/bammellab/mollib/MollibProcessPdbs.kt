@@ -22,6 +22,7 @@ import kotlin.math.max
 import kotlin.math.min
 import com.bammellab.mollib.LoadFromSource.*
 import com.bammellab.mollib.Utility.parsePdbFileFromAsset
+import com.bammellab.mollib.Utility.parseMmCifInputStream
 import com.bammellab.mollib.Utility.parsePdbInputStream
 import com.bammellab.mollib.objects.ManagerViewmode
 import com.bammellab.mollib.pdbDownload.PdbCallback
@@ -418,7 +419,7 @@ class MollibProcessPdbs(
      * callback from PdbDownload when the pdb is in the cache or download is complete
      */
     override fun loadPdbFromStream(stream: InputStream) {
-        parsePdbInputStream(stream, mol, pdbFileNames[nextNameIndex])
+        parseMmCifInputStream(stream, mol, pdbFileNames[nextNameIndex])
         stream.close()
         startRendering()
     }
