@@ -17,6 +17,7 @@ import android.app.Activity
 import android.widget.Toast
 import com.bammellab.mollib.common.util.ConnectionUtil
 import com.bammellab.mollib.pdbDownload.MollibDefs.RCSB_DOWNLOAD_PATH
+import com.bammellab.mollib.pdbDownload.MollibDefs.RCSB_MMCIF_EXTENSION
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.*
@@ -54,7 +55,7 @@ class PdbDownload(private val activity: Activity) {
         try {
             val cacheDir = activity.externalCacheDir
             makeDirIfNotThere(cacheDir!!)
-            val file = File(cacheDir, "PDB/$pdbid.pdb")
+            val file = File(cacheDir, "PDB/$pdbid.cif")
             if (file.exists()) {
                 Timber.v("file already exists, reading")
                 val inputStream = FileInputStream(file)
@@ -95,7 +96,7 @@ class PdbDownload(private val activity: Activity) {
 
         val url = (RCSB_DOWNLOAD_PATH
                 + pdbid
-                + ".pdb.gz")
+                + RCSB_MMCIF_EXTENSION)
         val request = Request.Builder()
                 .url(url)
                 .build()
@@ -145,7 +146,7 @@ class PdbDownload(private val activity: Activity) {
         try {
             val cacheDir = activity.externalCacheDir
             makeDirIfNotThere(cacheDir!!)
-            val realFile = File(cacheDir, "PDB/$pdbid.pdb")
+            val realFile = File(cacheDir, "PDB/$pdbid.cif")
             val file = File(cacheDir, "PDB/xyzzy")
 
             val fileOutputStream = FileOutputStream(file)

@@ -321,6 +321,76 @@ Regression gate: all 23 existing pdbparser tests must remain green.
 
 ---
 
+---
+
+### Phase 6 — Download Layer: Switch from Legacy PDB to mmCIF
+
+This phase wires the completed mmCIF parser into the live download pipeline. The RCSB serves mmCIF files at `https://files.rcsb.org/download/<ID>.cif.gz` — the same base URL and gzip transport as the legacy `.pdb.gz` files. `GZIPInputStream` is already present in `PdbDownload.kt`, so no new decompression code is needed.
+
+#### Files to Change
+
+**`mollib/src/main/java/com/bammellab/mollib/pdbDownload/MollibDefs.kt`**
+
+Add a constant for the new extension (keep the old one until all callers are migrated):
+```kotlin
+const val RCSB_DOWNLOAD_PATH = "https://files.rcsb.org/download/"
+const val RCSB_MMCIF_EXTENSION = ".cif.gz"   // new
+// const val RCSB_PDB_EXTENSION = ".pdb.gz"  // legacy — remove when migration complete
+```
+
+**`mollib/src/main/java/com/bammellab/mollib/pdbDownload/PdbDownload.kt`**
+
+Three changes:
+
+1. **URL construction** — change suffix from `.pdb.gz` to `.cif.gz`:
+   ```kotlin
+   // before
+   val url = RCSB_DOWNLOAD_PATH + pdbid + ".pdb.gz"
+   // after
+   val url = RCSB_DOWNLOAD_PATH + pdbid + RCSB_MMCIF_EXTENSION
+   ```
+
+2. **Cache file naming** — store and look up as `.cif` (not `.pdb`):
+   ```kotlin
+   // checkCacheForPdb: "PDB/$pdbid.pdb"  →  "PDB/$pdbid.cif"
+   // downloadPdbFromHttp: File(cacheDir, "PDB/$pdbid.pdb")  →  File(cacheDir, "PDB/$pdbid.cif")
+   ```
+   > **Cache migration note:** Existing `.pdb` files already on device will simply not be found under the new `.cif` name — they will be re-downloaded as `.cif`. No explicit migration is required; old `.pdb` files in `externalCacheDir/PDB/` can be left to expire naturally.
+
+3. **Callback routing** — the `PdbCallback.loadPdbFromStream()` method name is kept as-is (renaming the interface is out of scope), but the implementation in `MollibProcessPdbs` must route to the mmCIF parser:
+   ```kotlin
+   // before (MollibProcessPdbs.kt line 421)
+   override fun loadPdbFromStream(stream: InputStream) {
+       parsePdbInputStream(stream, mol, pdbFileNames[nextNameIndex])
+       ...
+   }
+   // after
+   override fun loadPdbFromStream(stream: InputStream) {
+       parseMmCifInputStream(stream, mol, pdbFileNames[nextNameIndex])
+       ...
+   }
+   ```
+   `parseMmCifInputStream()` already exists in `mollib/Util.kt` (added in Phase 5).
+
+#### Caller Summary
+
+| File | Change needed |
+|------|---------------|
+| `MollibDefs.kt` | Add `RCSB_MMCIF_EXTENSION` constant |
+| `PdbDownload.kt` | URL suffix + cache filename: `.pdb` → `.cif` |
+| `MollibProcessPdbs.kt` | `parsePdbInputStream` → `parseMmCifInputStream` in callback |
+
+`MoleculeParserFactory.kt` (already routes by format detection) and `mollib/Util.kt` (already has `parseMmCifInputStream`) require no changes.
+
+#### Testing the Download Layer
+
+No new unit tests are needed (network I/O is not unit-tested). Verify manually with a connected device run:
+- Launch the app, navigate to any molecule, confirm the 3D structure renders correctly.
+- Check Logcat for `"downloading the PDB in GZIP form"` log line and confirm `.cif.gz` URL is used.
+- Kill the app, relaunch, navigate to the same molecule — confirm it loads from the `.cif` cache without a network request.
+
+---
+
 ## Implementation Sequence
 
 1. Write this file to project root as `CLAUDE-mmcif-plan.md`
@@ -332,4 +402,5 @@ Regression gate: all 23 existing pdbparser tests must remain green.
 7. `MmCifBondTest01.kt` + `MmCifRibbonTest01.kt` → green
 8. `MmCifFormatDetector` (in `MmCifParser.kt`) + `MoleculeParserFactory.kt` + `MmCifFormatDetectionTest.kt` → green
 9. Add `parseMmCifInputStream()` to `mollib/Util.kt`
-10. (Optional follow-up) Option B refactor: extract `MoleculePostProcessor.kt`, update `ParserPdbFile` to delegate
+10. **Phase 6**: Update download layer — `MollibDefs.kt` + `PdbDownload.kt` + `MollibProcessPdbs.kt`
+11. (Optional follow-up) Option B refactor: extract `MoleculePostProcessor.kt`, update `ParserPdbFile` to delegate

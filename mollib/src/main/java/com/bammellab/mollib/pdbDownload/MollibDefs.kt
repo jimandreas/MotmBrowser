@@ -20,6 +20,7 @@ object MollibDefs {
     // RCSB paths
 
     const val RCSB_DOWNLOAD_PATH = "https://files.rcsb.org/download/"
+    const val RCSB_MMCIF_EXTENSION = ".cif.gz"
 
     /*
      * API29 / Q / Android 10
