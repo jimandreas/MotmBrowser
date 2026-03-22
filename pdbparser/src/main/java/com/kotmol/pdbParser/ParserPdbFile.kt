@@ -103,14 +103,15 @@ class ParserPdbFile internal constructor( builder: Builder ) {
          */
         fun parseModels(parseModelFlag: Boolean) = apply {
             parseModelsSomeday = parseModelFlag
-            // TODO: optionally parse additional models if flag is set
             if (parseModelFlag) {
-                TODO() // well someday
+                throw UnsupportedOperationException("Multiple MODEL parsing is not yet implemented")
             }
-            messageStrings.add(
-                    String.format(
-                            "%sparsing: parsing of MODELs is not yet implemented.",
-                            messageMolName()))
+            if (this::messageStrings.isInitialized) {
+                messageStrings.add(
+                        String.format(
+                                "%sparsing: parsing of MODELs is not yet implemented.",
+                                messageMolName()))
+            }
         }
 
         /**
@@ -137,7 +138,7 @@ class ParserPdbFile internal constructor( builder: Builder ) {
          */
         fun parse() = apply {
             if (!this::inputStream.isInitialized) {
-                throw KotlinNullPointerException()
+                throw IllegalStateException("loadPdbFromStream() must be called before parse()")
             }
             if (!this::messageStrings.isInitialized) {
                 messageStrings = mutableListOf("")
@@ -188,22 +189,22 @@ class ParserPdbFile internal constructor( builder: Builder ) {
                         line = reader.readLine()
                         continue
                     }
-                    if (line.substring(0, 6) == "CONECT") {
+                    if (line.startsWith("CONECT")) {
                         parseConect(line)
                     } else if (skipToEnd) { // hit an ENDMDL, skipping to CONECTs
                         line = reader.readLine()
                         continue
-                    } else if (line.substring(0, 4) == "ATOM") {
+                    } else if (line.startsWith("ATOM")) {
                         parseAtom(line, PdbAtom.AtomType.IS_ATOM)
-                    } else if (line.substring(0, 6) == "HETATM") {
+                    } else if (line.startsWith("HETATM")) {
                         parseAtom(line, PdbAtom.AtomType.IS_HETATM)
-                    } else if (line.substring(0, 3) == "TER") {
+                    } else if (line.startsWith("TER")) {
                         parseTerRecord(line)
-                    } else if (line.substring(0, 5) == "HELIX") {
+                    } else if (line.startsWith("HELIX")) {
                         parseHelix(line)
-                    } else if (line.substring(0, 5) == "SHEET") {
+                    } else if (line.startsWith("SHEET")) {
                         parseBetaSheet(line)
-                    } else if (line.substring(0, 6) == "ENDMDL") {  // only do the 1st model
+                    } else if (line.startsWith("ENDMDL")) {  // only do the 1st model
                         // TODO: optionally parse additional models if flag is set
                         messageStrings.add(
                                 String.format(
@@ -456,7 +457,7 @@ class ParserPdbFile internal constructor( builder: Builder ) {
                 }
             }
             // no bond
-            return ("")
+            return ""
         }
 
 
@@ -689,7 +690,8 @@ class ParserPdbFile internal constructor( builder: Builder ) {
                     j = 0
                     while (j < list.size) {
                         val item = list[j]
-                        if (item.backboneAtom!!.chainId == initialChainIdChar && item.backboneAtom!!.residueSeqNumber == initialResidueNumber) {
+                        val backbone = item.backboneAtom
+                        if (backbone != null && backbone.chainId == initialChainIdChar && backbone.residueSeqNumber == initialResidueNumber) {
                             item.secondaryStructureType = ChainRenderingDescriptor.SecondaryStructureType.ALPHA_HELIX
                             found = true
                             break
@@ -719,7 +721,8 @@ class ParserPdbFile internal constructor( builder: Builder ) {
                 while (j < list!!.size - 1) {
                     nextItem = list[j + 1] as ChainRenderingDescriptor
                     nextItem.secondaryStructureType = ChainRenderingDescriptor.SecondaryStructureType.ALPHA_HELIX
-                    if (nextItem.backboneAtom!!.chainId == terminalChainIdChar && nextItem.backboneAtom!!.residueSeqNumber == terminalResidueNumber) {
+                    val backbone = nextItem.backboneAtom
+                    if (backbone != null && backbone.chainId == terminalChainIdChar && backbone.residueSeqNumber == terminalResidueNumber) {
                         nextItem.endOfSecondaryStructure = true
                         break
                     }
@@ -781,7 +784,8 @@ class ParserPdbFile internal constructor( builder: Builder ) {
                     j = 0
                     while (j < list.size) {
                         val item = list[j]
-                        if (item.backboneAtom!!.chainId == initialChainIdChar && item.backboneAtom!!.residueSeqNumber == initialResidueNumber) {
+                        val backbone = item.backboneAtom
+                        if (backbone != null && backbone.chainId == initialChainIdChar && backbone.residueSeqNumber == initialResidueNumber) {
                             item.secondaryStructureType = ChainRenderingDescriptor.SecondaryStructureType.BETA_SHEET
                             found = true
                             break
@@ -811,7 +815,8 @@ class ParserPdbFile internal constructor( builder: Builder ) {
                 while (j < list!!.size - 1) {
                     nextItem = list[j + 1] as ChainRenderingDescriptor
                     nextItem.secondaryStructureType = ChainRenderingDescriptor.SecondaryStructureType.BETA_SHEET
-                    if (nextItem.backboneAtom!!.chainId == terminalChainIdChar && nextItem.backboneAtom!!.residueSeqNumber == terminalResidueNumber) {
+                    val backbone = nextItem.backboneAtom
+                    if (backbone != null && backbone.chainId == terminalChainIdChar && backbone.residueSeqNumber == terminalResidueNumber) {
                         nextItem.endOfSecondaryStructure = true
                         break
                     }
@@ -885,7 +890,7 @@ class ParserPdbFile internal constructor( builder: Builder ) {
                 anAtom = mol.atomNumberToAtomInfoHash[mol.atomNumberList[i]]
                 if (anAtom == null) {
                     messageStrings.add(String.format(
-                            "centerMolecules: error - got null for %d", mol.atomNumberList[i]))
+                            "centerMolecule: error - got null for %d", mol.atomNumberList[i]))
                     continue
                 }
                 if (anAtom.atomType == PdbAtom.AtomType.IS_TER_RECORD) {
@@ -1277,7 +1282,8 @@ class ParserPdbFile internal constructor( builder: Builder ) {
                             count++
                             addBond(anAtom, lastAtom)
                         } else {
-                            val prettyPrint = String.format("%6.2f", totalDistance / count.toFloat())
+                            val avgDist = if (count > 0) totalDistance / count.toFloat() else 0f
+                            val prettyPrint = String.format("%6.2f", avgDist)
                             messageStrings.add(String.format(
                                     "connectResidues: excessive bond dist = %s from atom %s to %s",
                                     prettyPrint,
@@ -1299,10 +1305,9 @@ class ParserPdbFile internal constructor( builder: Builder ) {
         private fun parseFloat(s: String): Float {
             return try {
                 s.toFloat()
-            } catch (e: RuntimeException) {
-                0.toFloat()
+            } catch (e: NumberFormatException) {
+                0f
             }
-
         }
 
         private fun parseInteger(s: String): Int {
@@ -1310,18 +1315,18 @@ class ParserPdbFile internal constructor( builder: Builder ) {
                 return -1
             }
             return try {
-                Integer.parseInt(s)
-            } catch (e: RuntimeException) {
+                s.toInt()
+            } catch (e: NumberFormatException) {
 //            Timber.e("Bad Integer : $s")
                 0
             }
         }
 
         private fun messageMolName() : String {
-            if (mol.molName != "") {
+            if (mol.molName.isNotEmpty()) {
                 return String.format("%s: ", mol.molName)
             }
-            return("")
+            return ""
         }
     }
 }
