@@ -58,8 +58,30 @@ android {
     }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+// Default: exclude long-running tagged tests from all standard Test tasks
+tasks.withType<Test>().configureEach {
+    if (name != "testLongRunning") {
+        useJUnitPlatform {
+            excludeTags("long-running")
+        }
+    }
+}
+
+// Explicit task to run only long-running tests (requires network).
+// Borrows classpath/testClassesDirs from testDebugUnitTest (registered by AGP).
+afterEvaluate {
+    val debugUnitTest = tasks.findByName("testDebugUnitTest") as? Test ?: return@afterEvaluate
+    tasks.register<Test>("testLongRunning") {
+        description = "Downloads and parses every PDB entry in PDBs.kt via mmCIF from RCSB (network required, ~10–30 min)"
+        group = "verification"
+        testClassesDirs = debugUnitTest.testClassesDirs
+        classpath = debugUnitTest.classpath
+        dependsOn(debugUnitTest.dependsOn)
+        maxHeapSize = "2g"
+        useJUnitPlatform {
+            includeTags("long-running")
+        }
+    }
 }
 
 dependencies {
